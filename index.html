@@ -212,6 +212,17 @@ tr.gc:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
 .tipbtn{flex:none;background:var(--accent);color:var(--accent-ink);font-weight:600;text-decoration:none;padding:10px 18px;border-radius:999px;font-size:15px}
 .tipbtn:hover{filter:brightness(1.08)}.tipbtn:focus-visible,.tiplink:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .tiplink{font-size:12px;color:var(--accent);text-decoration:none;font-weight:600}.tiplink:hover{text-decoration:underline}
+.start summary{list-style:none;cursor:pointer;display:flex;align-items:baseline;gap:12px}
+.start summary::-webkit-details-marker{display:none}
+.start summary .sumq{display:none;font-size:14px;color:var(--ink);font-weight:500}
+.start summary::after{content:"";margin-left:auto}
+.start:not([open]){padding:9px 16px}
+.start:not([open]) .sumq{display:inline}
+.start:not([open]) summary::after{content:"Show ▾";font-size:13px;color:var(--accent);font-weight:600}
+.start[open] summary::after{content:"Hide ▴";font-size:13px;color:var(--muted)}
+.start summary:focus-visible,.gotit:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.gotit{justify-self:start;font:inherit;font-size:13px;font-weight:600;padding:5px 14px;border-radius:999px;border:1px solid var(--line);background:var(--bg);color:var(--ink);cursor:pointer;margin-top:4px}
+.gotit:hover{border-color:var(--faint)}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
 </style>
 
@@ -273,11 +284,12 @@ tr.gc:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
 
 
   <section class="sec page" data-page="rankings" id="start-sec" aria-label="Start here">
-    <div class="start">
-      <span class="lbl">Start here</span>
+    <details class="start" id="startd" open>
+      <summary><span class="lbl">Start here</span><span class="sumq">What is the DAWG Index?</span></summary>
       <p><b>The DAWG Index grades every Power 4 game on whether a team showed up:</b> beat the spread, finished drives, kept pulling away with a lead, cashed in after defensive stops and answered when the other team scored. Garbage time doesn't count, and road, night, packed-stadium and ranked-opponent games count more.</p>
       <p class="sm"><a href="dawg-index-games.csv" download style="color:var(--accent)">Download every graded game</a> to check the work. It describes how teams played. It doesn't predict who wins or covers. For how a team is likely to play, see Tendencies. Tap any game to see how it graded.</p>
-    </div>
+      <button type="button" class="gotit" id="gotit">Got it</button>
+    </details>
   </section>
 
   <section class="sec page" data-page="rankings" id="chart-sec" aria-labelledby="chart-h">
@@ -1188,4 +1200,11 @@ var TRK = {"season":2026,"baseBlown":0.19864940911648846,"baseCash":0.5229621125
   drawAll();
   showPage((location.hash || "").replace("#","") || "rankings", true);
 })();
+</script>
+<script>
+(function(){var d=document.getElementById("startd"),b=document.getElementById("gotit");if(!d)return;
+var seen=false;try{seen=localStorage.getItem("dawg-intro-seen")==="1";}catch(e){}
+if(seen)d.removeAttribute("open");
+try{localStorage.setItem("dawg-intro-seen","1");}catch(e){}
+b.addEventListener("click",function(){d.removeAttribute("open");});})();
 </script>
