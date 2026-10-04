@@ -313,7 +313,7 @@ tr.gc:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
     </div>
     <p class="note">Right = better than expected in routine games · Up = better in big games <button type="button" class="ib" id="chart-why" aria-expanded="false" aria-label="More about this chart" title="More about this chart">i</button></p>
     <div class="modenote" id="chart-why-t" hidden>
-      <p>Zero is a typical team in that kind of game that season, since big games are harder for everyone. Bigger dots played more big games. The scale adjusts to each season; full seasons sit closer to zero because a dozen-plus games average out the extremes.</p>
+      <p>Zero is an average team. Bigger dots have played more big games. Teams are spread out early in the season, and by December a dozen games pulls most of them toward the middle.</p>
       <p id="modenote" hidden>Coach Career follows the current head coach, not the school. It blends every season he's been a head coach since 2019, including previous jobs (Jon Sumrall's Troy and Tulane years count for Florida). Recent seasons count more (each year back is worth 80%), and short careers are pulled toward zero. Zero is a typical current Power 4 coach, since most of them were hired after beating expectations somewhere else. Dawg and Soft start at ±0.8 in this view instead of ±3.</p>
     </div>
     <div class="chartbox">
@@ -349,7 +349,7 @@ tr.gc:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
 
   <section class="sec page" data-page="rankings" id="top-sec" aria-labelledby="top-h">
     <div class="sechead"><h2 id="top-h">Top 10 Games</h2><span class="note" id="top-note">Single-game grade · hover a header for its formula</span></div>
-    <p class="note">The best single-game performances of the selected season. The game grade rewards beating the spread, finishing drives, growing a lead, cashing in after stops and answering when the opponent scores, counts only competitive plays (no garbage time), and scales up for road, night, full-house and ranked-opponent games. Tap a game to see how it graded. <b>Hindsight</b> swaps the closing spread for one rebuilt from every <i>other</i> result that season, then re-grades the game; the number in parentheses is the change. The spread is only one of five parts and the grade isn't in points, so a 10-point change in the spread moves the grade about 1 to 2 points, not 10. Early-season hindsight is noisy.</p>
+    <p class="note">The best single games of the season. Tap one to see how it graded. <b>Hindsight</b> re-grades each game based on how good the opponent turned out to be, using every other game they've played this year. The number in parentheses is how much the grade moved. It's shaky this early in the season.</p>
     <div class="tablewrap">
       <table id="topgames">
         <thead><tr><th class="l rank">#</th><th class="l">Team</th><th class="l" data-tip="tgame">Game</th><th data-tip="wl">Score</th><th data-tip="line">Spread</th><th data-tip="thline">Hindsight Spread</th><th data-tip="tgrade">Game Grade</th><th data-tip="thgrade">Hindsight Grade</th></tr></thead>
@@ -360,7 +360,7 @@ tr.gc:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
 
   <section class="sec page" data-page="tend" id="tend-sec" aria-labelledby="tend-h">
     <div class="sechead"><h2 id="tend-h">Team Tendencies</h2><span class="note">Season projection · through Week 5 · hover a header for its formula · tap to sort</span></div>
-    <p class="note">The game grade tells you how a team played. These tell you how it's likely to play. Each trait made the list only because it carries over from one season to the next (tested on 2021–2024, then checked on 2025). Each number starts from last season, discounted by how well that trait carries over (more for a new coach), then updates with this season's games.</p>
+    <p class="note">The game grade tells you how a team played. These are habits that tend to stick from one year to the next, so they say more about how a team will play. Early in the season each number leans on last year (less so with a new coach) and moves as this season's games come in.</p>
     <div class="modebar" style="justify-content:flex-start"><select id="tendconf" aria-label="Conference"><option value="">All Conferences</option><option>SEC</option><option>Big Ten</option><option>Big 12</option><option>ACC</option><option value="Independent">Notre Dame</option></select></div>
     <div class="tablewrap">
       <table id="tend">
@@ -374,13 +374,13 @@ tr.gc:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
       </table>
     </div>
     <h3>What made the cut, and what didn't</h3>
-    <p class="note">Carryover is the correlation between a trait one season and the next (0 = none; team quality is about 0.5). "Predicts" is whether the trait told us anything about the next season's results beyond team quality.</p>
+    <p class="note">Carryover is how closely a habit one year matches the next: 0 is not at all, 1 is perfectly. For reference, how good a team is carries over at about 0.5. "Predicts" is whether the habit told us anything about next season's results.</p>
     <div class="tablewrap"><table id="tendtest"><thead><tr><th class="l">Trait</th><th>Carryover 2021–24</th><th>Checked on 2025</th><th>Same coach</th><th class="l">Predicts next season</th><th class="l">Verdict</th></tr></thead><tbody></tbody></table></div>
   </section>
 
   <section class="sec page" data-page="trackers" id="trk-sec" aria-labelledby="trk-h">
     <div class="sechead"><h2 id="trk-h">Trackers</h2><span class="note">2026 season · through Week 5 · hover a header for its formula · tap to sort</span></div>
-    <p class="note">Two plain counts behind the DAWG idea: who lets games get away after building a lead, and who takes advantage when its defense gets a stop.</p>
+    <p class="note">Who lets games get away after building a lead, and who makes it count when the defense gets a stop.</p>
     <div class="trk">
       <div>
         <h3>Blown Leads</h3>
@@ -431,7 +431,7 @@ tr.gc:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
 
   <section class="sec page" data-page="coaches" id="coaches-sec" aria-labelledby="coach-h">
     <div class="sechead"><h2 id="coach-h">Coach Résumés</h2><span class="note">Every head-coaching stop since 2019, including Group of Five jobs · coaches with three or more full seasons · 2020 left out</span></div>
-    <p class="note">How each coach's teams have done against expectations, season by season. Career and At School averages use full seasons (8+ games); This Season shows the current year on its own. Read it as a résumé, not a forecast: we tested whether a coach's average or his trend predicts his next season, and neither does (r ≈ 0). It also measures expectations, not wins. A coach whose teams win a lot but keep falling short of the spread, like Lincoln Riley's early Oklahoma teams, grades lower than his record.</p>
+    <p class="note">How each coach's teams have done against expectations, season by season. Career and At School only count full seasons (8+ games). It's a track record, not a prediction: we checked, and a coach's past numbers say nothing about how his next season will go. It also measures expectations, not wins. A coach whose teams win a lot but keep falling short of the spread, like Lincoln Riley's early Oklahoma teams, grades lower than his record.</p>
     <div class="tablewrap">
       <table id="coaches">
         <thead><tr>
@@ -445,7 +445,7 @@ tr.gc:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
 
   <section class="sec page" data-page="real" id="real-sec" aria-labelledby="real-h">
     <h2 id="real-h">Is DAWG Real?</h2>
-    <p class="note">If grit is a trait, a team's grade should carry over: good this year, good next year. If it's mostly luck, it should reset. These are correlations across 2019–2025 (0 means no carryover, 1 means perfect).</p>
+    <p class="note">If grit is a trait, a team's grade should carry over: good this year, good next year. If it's mostly luck, it should reset. Each number below runs from 0 (no carryover at all) to 1 (perfect). For reference, how good a team is carries over at about 0.5.</p>
     <div class="real" id="real"></div>
     <div class="verdictbox" id="verdict"></div>
   </section>
@@ -456,14 +456,14 @@ tr.gc:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
       <div><h3>Big Games</h3><p>Each game gets a stage score, the same for both teams except where noted: ranked opponent +15 (top 10 +25), ranked vs. ranked +10, rivalry +20, national TV (ABC, CBS, NBC, FOX, ESPN) +10, primetime on national TV +10 more, bowl, playoff or title game +30, neutral-site showcase +20, non-conference Power 4 matchup +10, packed stadium (90%+ of its biggest crowd, night crowds count 1.25×) +10, and an opponent that won 10+ games the season before +10. 25 or more is a big game, so it takes at least two of those. Contenders in big conferences play more of them, and that's intended.</p></div>
 
       <div><h3>Garbage time is out</h3><p>Only competitive plays count. A play is garbage time when the lead before it is more than 38 in the 2nd quarter, 28 in the 3rd or 22 in the 4th. If the lead shrinks back under the line, plays count again, so a collapse still shows up.</p></div>
-      <div><h3>vs spread</h3><p>Did they beat the expectation set before kickoff? Home field is already priced in.</p><span class="formula">competitive margin + closing line</span></div>
-      <div><h3>Finishing</h3><p>Did the scoreboard match the yardage? The yards-to-points rate is fit to each season's games. Out-gaining a team and losing is a finishing gap.</p><span class="formula">competitive margin − expected margin from yards</span></div>
+      <div><h3>vs spread</h3><p>Did they beat the expectation set before kickoff? Home field is already priced in.</p><span class="formula">margin (no garbage time) + closing line</span></div>
+      <div><h3>Finishing</h3><p>Did the scoreboard match the yardage? Out-gaining a team and losing is a finishing gap.</p><span class="formula">margin − the margin those yards usually produce</span></div>
       <div><h3>Knife twist</h3><p>Once up 9 or more, does the lead grow? Net points from that moment until garbage time, compared with what's normal for that matchup.</p></div>
       <div><h3>Cash-in</h3><p>Points on the very next drive after the defense gets a stop or a takeaway, compared with what's normal for a team favored by that much. The national average is about 45% of those drives scoring.</p></div>
       <div><h3>Answers</h3><p>When the opponent scores to make it a one-score game, how often does the next drive score?</p></div>
-      <div><h3>The game grade</h3><p>Each part is measured in standard deviations against every Power 4 game since 2019, so there's no ceiling: a 30-point cover counts for more than a 14-point one. Answers rests on a handful of drives, so it counts half as much as the other four. A game needs at least three of the five parts. The average is scaled so about two-thirds of games land between −5 and +5.</p><span class="formula">weighted average of part SDs × 7 × setting</span></div>
+      <div><h3>The game grade</h3><p>Each part is scored by how rare it is compared with every Power 4 game since 2019, so there's no ceiling: a 30-point cover counts for more than a 14-point one. Answers rests on a handful of drives, so it counts half as much as the other four. A game needs at least three of the five parts. The average is scaled so about two-thirds of games land between −5 and +5.</p><span class="formula">average of the five parts × setting</span></div>
       <div><h3>Setting</h3><p>Bigger stages magnify the grade, good or bad: road +10%, night +5%, full road stadium (90%+, night crowds count 1.25×) +10%, ranked opponent +10% (top 10 +20%), postseason +10%. A good grade against a Group of 5 team shrinks 15%, against an FCS team 40%; a bad grade against them is never softened.</p></div>
-      <div><h3>Season DAWG and big-stage drop</h3><p>A season's DAWG is the average game grade. Big-game and routine grades use the grade before the setting adjustment, so a big stage doesn't make a team look like it rose just because the stakes were higher. Those averages are pulled slightly toward the season average (as if one average game were mixed in), so a single game can't put a team at the far edge of the chart; the pull fades as teams play more games. Season DAWG is centered so the average Power 4 team is 0. +3 or better for a season is Dawg, −3 or worse is Soft.</p><span class="formula">big-stage drop = big-game grade − routine grade</span></div>
+      <div><h3>Season DAWG and big-stage drop</h3><p>A season's DAWG is the average of its game grades, with 0 as an average Power 4 team. +3 or better is Dawg, −3 or worse is Soft. Big-game and routine averages leave out the setting boost, so a team doesn't look like it rose just because the stage was bigger. With only a game or two, those averages are nudged toward the team's overall number so one game can't put a team at the edge of the chart.</p><span class="formula">big-stage drop = big-game grade − routine grade</span></div>
       <div><h3>Luck</h3><p>Wins minus expected wins, where expected wins come from each game's yardage. +2 means two more wins than the box scores earned. Teams with high luck tend to come back to earth.</p></div>
     </div>
     <p class="note">Data: ESPN box scores, drive logs and closing lines (ESPN BET and DraftKings) for every game involving a current Power 4 team or Notre Dame since 2019, including bowls and playoffs. Coaches from Wikipedia's list of current FBS coaches. Attendance is missing for some games; those use a 75% default.</p>
@@ -754,7 +754,7 @@ var TRK = {"season":2026,"baseBlown":0.19864940911648846,"baseCash":0.5229621125
     })();
     var cs = coachStats(m.id);
     var tenure = 2026 - m.since + 1;
-    $("coachline").textContent = m.coach + ", head coach since " + m.since + (m.since >= 2026 ? " (first season)" : " · " + tenure + " seasons") + (cs.n ? " · career since 2019" + (cs.schools.length > 1 ? " (" + cs.schools.join(", ") + ")" : "") + ": " + cs.w + "–" + cs.l + (cs.avg !== null ? ", avg DAWG " + signed(cs.avg) : "") + (cs.slope !== null ? ", trend " + signed(cs.slope) + "/yr" : "") : "");
+    $("coachline").textContent = m.coach + ", head coach since " + m.since + (m.since >= 2026 ? " (first season)" : " · " + tenure + " seasons") + (cs.n ? " · career since 2019" + (cs.schools.length > 1 ? " (" + cs.schools.join(", ") + ")" : "") + ": " + cs.w + "–" + cs.l + (cs.avg !== null ? ", avg DAWG " + signed(cs.avg) : "") : "");
     if (!s){ $("teamstats").innerHTML = '<p class="note">No games for this team in ' + state.season + '.</p>'; $("log").tBodies[0].innerHTML = ""; $("log-h").textContent = ""; drawTrend(); return; }
     var T = seasonTeams(state.season).sort(function(a,b){ return (b.dawg === null ? -99 : b.dawg) - (a.dawg === null ? -99 : a.dawg); });
     var rk = T.findIndex(function(t){ return t.id === m.id; }) + 1;
@@ -849,7 +849,7 @@ var TRK = {"season":2026,"baseBlown":0.19864940911648846,"baseCash":0.5229621125
       [R.dawgYoY, "DAWG, year to year", "Does a team's season grade carry into the next season?"],
       [R.dropYoY, "Big-stage drop, year to year", "Do teams that shrink one year shrink the next?"],
       [R.dropYoYSameCoach, "Big-stage drop, same coach", "Only seasons under the current head coach."],
-      [R.dawgHalf, "DAWG, within a season", "Odd-numbered games vs. even-numbered games."],
+      [R.dawgHalf, "DAWG, within a season", "Does a team's grade in half its games match the other half?"],
       [R.atsYoY, "Covering the spread alone", "For comparison: plain against-the-spread record, year to year."],
       [R.luckYoY, "Luck, year to year", "Wins above what the box scores earned."]
     ];
@@ -858,10 +858,10 @@ var TRK = {"season":2026,"baseBlown":0.19864940911648846,"baseCash":0.5229621125
       [pct(R.persist2) + "%", "Streaks hold up, same coach", "Teams whose big-stage drop pointed the same way two straight seasons kept it the next season " + R.persist2[0] + " of " + R.persist2[1] + " times, and any team kept its direction from one season to the next " + R.nextSame[0] + " of " + R.nextSame[1] + " times. A coin flip would be 50%."],
       [pct(R.careerMove) + "%", "Does it follow coaches to new jobs?", "When a coach changed schools, his first season at the new job pointed the same way as his last season at the old one " + R.careerMove[0] + " of " + R.careerMove[1] + " times. No sign of it yet, though 20 moves is a small sample."],
       [pct(R.bt) + "%", "Beating Vegas with it", "Betting the model's lean against the spread, 2022–2025, using only data available beforehand: " + R.bt[0] + " of " + R.bt[1] + ". You need 52.4% to break even."],
-      [pct(R.btPersist) + "%", "Beating Vegas with streaks", "Betting streaky teams to keep their streak in big games: " + R.btPersist[0] + " of " + R.btPersist[1] + ", within normal noise of the 52.4% break-even (about ±3 points on this many bets). The market already prices it in."]
+      [pct(R.btPersist) + "%", "Beating Vegas with streaks", "Betting streaky teams to keep their streak in big games: " + R.btPersist[0] + " of " + R.btPersist[1] + ", close enough to the 52.4% break-even to be luck. Vegas already accounts for it."]
     ];
-    $("real").innerHTML = cards.map(function(c){ return '<div><span class="lbl">' + c[1] + '</span><span class="r ' + (c[0][0] >= 0.1 ? "pos" : c[0][0] <= -0.1 ? "neg" : "") + '">r = ' + c[0][0].toFixed(2) + '</span><p>' + c[2] + ' ' + c[0][1] + ' pairs.</p></div>'; }).join("") + extra.map(function(c){ return '<div><span class="lbl">' + c[1] + '</span><span class="r">' + c[0] + '</span><p>' + c[2] + '</p></div>'; }).join("");
-    $("verdict").innerHTML = "<p><b>Short answer: it describes games well; it predicts very little.</b> A team's season DAWG carries into the next season only weakly (r = " + R.dawgYoY[0].toFixed(2) + "), and big-stage drop barely at all (r = " + R.dropYoY[0].toFixed(2) + "). Plain against-the-spread results don't carry over either (r = " + R.atsYoY[0].toFixed(2) + ").</p><p>Use the game grade to judge who showed up and how big the moment was. For what a team is likely to do next, use the Tendencies page: it only shows habits that carry over from season to season, like penalties, 4th-down aggressiveness and how a team plays with a lead.</p><p><b>It doesn't beat Vegas.</b> Betting on the index has landed right about 50% of the time. The market already prices in what's real.</p>";
+    $("real").innerHTML = cards.map(function(c){ return '<div><span class="lbl">' + c[1] + '</span><span class="r ' + (c[0][0] >= 0.1 ? "pos" : c[0][0] <= -0.1 ? "neg" : "") + '">' + c[0][0].toFixed(2) + '</span><p>' + c[2] + ' (' + c[0][1] + ' team-seasons)</p></div>'; }).join("") + extra.map(function(c){ return '<div><span class="lbl">' + c[1] + '</span><span class="r">' + c[0] + '</span><p>' + c[2] + '</p></div>'; }).join("");
+    $("verdict").innerHTML = "<p><b>Short version: it's good at describing games and bad at predicting them.</b> A team's season grade barely carries into the next year (" + R.dawgYoY[0].toFixed(2) + "), and how it handles big games carries over even less (" + R.dropYoY[0].toFixed(2) + "). For comparison, covering the spread doesn't carry over either (" + R.atsYoY[0].toFixed(2) + ").</p><p>Use the game grade to judge who showed up and how big the moment was. For what a team is likely to do next, use the Tendencies page: it only shows habits that carry over from season to season, like penalties, 4th-down aggressiveness and how a team plays with a lead.</p><p><b>It doesn't beat Vegas.</b> Betting on the index has landed right about 50% of the time. Vegas already accounts for whatever's real here.</p>";
   })();
 
   // ---------- matchup builder ----------
@@ -984,9 +984,9 @@ var TRK = {"season":2026,"baseBlown":0.19864940911648846,"baseCash":0.5229621125
       tsit: ["Sits on a lead", "How much a team's early-down pass rate drops when it leads by 9–24 in the second half, compared with close games. Bigger drop = runs the clock harder. Weakest of the five (carryover about 0.15).", "pass rate with lead − pass rate in close games"],
       tpass: ["Pass-first", "Early-down pass rate in close games (within 8 points). This is identity, not grit, but it's one of the most stable things about a team.", "passes ÷ (passes + runs), 1st and 2nd down, score within 8"],
       tgame: ["Game and setting", "Opponent, week and the setting that scales the grade: Road +10%, Night +5%, Full house (road stadium 90%+ full, night crowds count 1.25×) +10%, Ranked opponent +10% (top 10 +20%), Postseason +10%. A Group of 5 opponent −15% and FCS −40%, applied only to good grades."],
-      tgrade: ["Game grade", "Five parts, each measured in standard deviations against every Power 4 game since 2019: vs spread, finishing, knife twist, cash-in after stops and takeaways, and answers. Only competitive plays count (lead of 38 or less in Q2, 28 in Q3, 22 in Q4). Needs 3+ parts. No ceiling: about two-thirds of games land between −5 and +5.", "weighted avg(part SDs) × 7 × setting"],
-      thline: ["Hindsight spread", "What the spread would have been knowing every other 2026 result. Team strength is rebuilt from competitive margins in all other games (home field 2.5, small samples pulled toward average), leaving out this game so a win isn't marked down for being a surprise. Negative means this team should have been favored.", "−(team rating − opponent rating ± 2.5)"],
-      thgrade: ["Hindsight grade", "The game grade re-run with the hindsight spread in place of the closing line. Only the vs-spread part changes, and the grade isn't measured in points: the spread gap is divided by about 14.5 (one standard deviation), weighted as one of the parts, then scaled by 7 and the setting. So a 10-point move in the spread changes the grade by roughly 1 to 2 points. The change is in parentheses. A drop of 1+ is tagged Opp. overrated; a rise of 1+, Opp. underrated.", "change ≈ (hindsight spread − spread) ÷ 14.5 ÷ parts × 7 × setting"],
+      tgrade: ["Game grade", "Five parts, each compared with every Power 4 game since 2019: vs spread, finishing, knife twist, cash-in after stops, and answers. Garbage time is removed and a game needs at least 3 parts. No ceiling: about two-thirds of games land between −5 and +5.", "average of the five parts × setting"],
+      thline: ["Hindsight spread", "What the spread would have been if we knew then what we know now. Each team's strength is rebuilt from all its other games this season, leaving this one out so a win isn't marked down for being a surprise. Negative means this team should have been favored."],
+      thgrade: ["Hindsight grade", "The game grade re-run with the hindsight spread. Only the spread part changes, so a 10-point swing in the spread moves the grade about 1 to 2 points. The change is in parentheses. A drop of 1+ is tagged Opp. overrated; a rise of 1+, Opp. underrated."],
       ats: ["Against the spread", "Wins and losses against the closing betting line. Beating the spread counts as a win even in a loss."],
       dawg: ["DAWG grade", "Average game grade for the season. Each game grade combines five parts, all measured against every Power 4 game since 2019: vs spread, finishing, knife twist, cash-in after stops and answers. Only competitive plays count (no garbage time), and road, night, full-house and ranked-opponent games weigh more. +3 or better is Dawg, −3 or worse is Soft.", "average of game grades"],
       big: ["Big games", "Game grade (before the setting adjustment) in games with a stage score of 25 or more: ranked opponents, rivalries, national and primetime TV, bowls and title games, neutral-site showcases, packed stadiums, marquee opponents. Pulled slightly toward the season average when a team has played only a few.", "average core grade in big games"],
@@ -995,14 +995,14 @@ var TRK = {"season":2026,"baseBlown":0.19864940911648846,"baseCash":0.5229621125
       luck: ["Luck", "Wins above what the box scores earned. Each game's yardage gives a win chance; add them up for expected wins. Also shows the record in one-score games.", "Wins − expected wins"],
       env: ["Stage", "How big the game was, from 0 up: ranked opponent +15 (top 10 +25), ranked vs. ranked +10, rivalry +20, national TV +10, primetime national +10, bowl or title game +30, neutral showcase +20, non-conference Power 4 +10, packed stadium +10, 10-win opponent last season +10. 25+ is a big game."],
       line: ["Line", "This team's closing spread. Negative means it was favored."],
-      vs: ["vs Spread", "How much the team beat or missed the closing spread by, using the score on competitive plays only (garbage time removed).", "competitive margin + line"],
-      fin: ["Finishing", "Did the scoreboard match the yardage? Competitive margin compared with what the competitive yardage usually produces (fit to each season). Out-gaining a team and losing shows up negative.", "competitive margin − expected margin from yards"],
+      vs: ["vs Spread", "How much the team beat or missed the closing spread by, with garbage time removed.", "margin + line"],
+      fin: ["Finishing", "Did the scoreboard match the yardage? Out-gaining a team and losing shows up negative. Garbage time removed.", "margin − the margin those yards usually produce"],
       ppt: ["Points per takeaway", "Points scored on the drive right after a takeaway, plus return touchdowns. Takeaways in parentheses. About 3 is normal."],
       knife: ["Knife twist", "Once up 9 or more, net points added from that moment until garbage time, compared with what's normal for a team favored by that much. Positive means the lead kept growing.", "net points after first 9+ lead − expected"],
       cash: ["Cash-in", "Points on the very next drive after a stop or takeaway (punt, turnover, downs, missed field goal), outside garbage time. Number of chances in parentheses. Color compares it with what's normal for a team favored by that much."],
       ans: ["Answers", "When the opponent scored to make it a one-score game, how often the next drive scored. About 40% is normal."],
-      gdawg: ["Game grade", "Five parts in standard deviations against every Power 4 game since 2019 (vs spread, finishing, knife twist, cash-in, answers), averaged (Answers counts half), then scaled up for road +10%, night +5%, full house +10%, ranked opponent +10% (top 10 +20%) and postseason +10%; Group of 5 and FCS opponents shrink good grades. No ceiling. +5 or better is Dawg, −5 or worse is Soft. Hover a grade for its setting.", "weighted avg(part SDs) × 7 × setting"],
-      cavg: ["Career average", "Average season DAWG across this coach's full seasons (8+ games) at every head-coaching stop since 2019, leaving out 2020. Measures how his teams did against expectations, not wins. It does not predict his next season (tested: r ≈ 0)."],
+      gdawg: ["Game grade", "Five parts (vs spread, finishing, knife twist, cash-in, answers), each scored against every Power 4 game since 2019, then boosted for road +10%, night +5%, full house +10%, ranked opponent +10% (top 10 +20%) and postseason +10%. Good grades against Group of 5 and FCS teams shrink. +5 or better is a Dawg game, −5 or worse is Soft. Hover a grade for its setting.", "average of the five parts × setting"],
+      cavg: ["Career average", "Average season DAWG across this coach's full seasons (8+ games) at every head-coaching stop since 2019, leaving out 2020. Measures how his teams did against expectations, not wins. It doesn't predict his next season (we checked)."],
       cschool: ["At school", "Same average, only full seasons at his current school. Number of seasons in parentheses."],
       ccur: ["This season", "Season DAWG so far this year, with the record. Not counted in the career numbers until the season reaches 8 games."],
       cdrop: ["Avg drop", "Average big-stage drop across those seasons. Negative means his teams tend to shrink in big games.", "avg of (Big games − Routine)"],
@@ -1131,11 +1131,11 @@ var TRK = {"season":2026,"baseBlown":0.19864940911648846,"baseCash":0.5229621125
   function zOf(k, v){ if (v === null || v === undefined) return null; return (v - GC.MU[k]) / GC.SD[k]; }
   function gameSummary(g){
     var bits = [], final = g.pf - g.pa;
-    if (g.pats !== null && g.pats !== undefined) bits.push((g.pats >= 0 ? "beat the spread by " : "missed the spread by ") + Math.abs(g.pats).toFixed(1) + (g.comp !== null && g.comp !== final ? " on competitive plays" : ""));
+    if (g.pats !== null && g.pats !== undefined) bits.push((g.pats >= 0 ? "beat the spread by " : "missed the spread by ") + Math.abs(g.pats).toFixed(1) + (g.comp !== null && g.comp !== final ? " (garbage time removed)" : ""));
     if (g.pknife !== null && g.pknife !== undefined) bits.push(g.pknife >= 6 ? "kept pulling away after going up 9+" : g.pknife <= -6 ? "let the other team back in after going up 9+" : "held its 9+ lead about as expected");
     if (g.pfin !== null && g.pfin !== undefined && Math.abs(g.pfin) >= 7) bits.push(g.pfin > 0 ? "scored more than its yardage usually buys" : "left points on the field compared with its yardage");
     if (g.cashN) bits.push("scored " + g.cashPts + " points on " + g.cashN + " drive" + (g.cashN === 1 ? "" : "s") + " after defensive stops");
-    if (g.ansN) bits.push("answered " + g.ans + " of " + g.ansN + " time" + (g.ansN === 1 ? "" : "s") + " the other team cut it to one score");
+    if (g.ansN) bits.push("answered " + g.ans + " of " + g.ansN + " time" + (g.ansN === 1 ? "" : "s") + " right after the other team scored in a one-score game");
     if (!bits.length) return "Not enough happened in this game to grade it.";
     var s = bits.join("; "); return s.charAt(0).toUpperCase() + s.slice(1) + ".";
   }
@@ -1149,19 +1149,19 @@ var TRK = {"season":2026,"baseBlown":0.19864940911648846,"baseCash":0.5229621125
     var mg = g.pf - g.pa;
     $("gc-big").innerHTML = '<b class="' + cls(g.dawg) + '">' + (g.dawg === null ? "–" : signed(g.dawg)) + '</b><span>' + (mg > 0 ? "W " : mg < 0 ? "L " : "T ") + g.pf + "–" + g.pa + (g.line === null ? "" : " · line " + (g.line === 0 ? "PK" : signed(g.line))) + '</span>' + (g.dawg !== null ? verdict(g.dawg, 5) : "");
     $("gc-sum").textContent = gameSummary(g);
-    var P = [["p_ats","vs Spread", g.pats, signed(g.pats) + " pts", "competitive margin + line"],
+    var P = [["p_ats","vs Spread", g.pats, signed(g.pats) + " pts", "margin + line, no garbage time"],
              ["p_fin","Finishing", g.pfin, signed(g.pfin) + " pts", "margin vs what the yardage buys"],
              ["p_knife","Knife twist", g.pknife, signed(g.pknife) + " pts", "net points after first 9+ lead, vs expected"],
              ["p_cash","Cash-in", g.pcash, g.cashN ? g.cashPts + " pts on " + g.cashN : "–", "points after defensive stops, vs expected"],
-             ["p_ans","Answers", g.pans === null || g.pans === undefined ? null : g.pans / 100, g.ansN ? g.ans + " of " + g.ansN : "–", "scored after the opponent cut it to one score"]];
+             ["p_ans","Answers", g.pans === null || g.pans === undefined ? null : g.pans / 100, g.ansN ? g.ans + " of " + g.ansN : "–", "scored right back in a one-score game"]];
     $("gc-parts").innerHTML = P.map(function(p){
       var z = zOf(p[0], p[2]), w = z === null ? 0 : Math.max(-1, Math.min(1, z / 3)) * 50;
       var bar = '<div class="zb">' + (z === null ? "" : '<i style="' + (w >= 0 ? "left:50%;width:" + w : "right:50%;width:" + (-w)) + '%;background:' + (w >= 0 ? "var(--good)" : "var(--bad)") + '"></i>') + '</div>';
       return '<div class="gp"><div class="n"><b>' + p[1] + '</b><span>' + p[4] + '</span></div><div class="v">' + (p[2] === null || p[2] === undefined ? '<span class="dim">not in play</span>' : p[3]) + '</div>' + bar + '</div>';
     }).join("");
     var notes = [];
-    if (g.comp !== null && g.comp !== undefined && g.comp !== mg) notes.push("Garbage time removed: competitive margin " + signed(g.comp, 0) + ", final " + signed(mg, 0) + ".");
-    notes.push("Grade = weighted average of the parts (Answers counts half; bars show standard deviations, edge = 3) × " + GC.K.toFixed(2) + " × setting" + (g.set ? " (" + g.set + ", ×" + g.mult + ")" : " (none)") + ".");
+    if (g.comp !== null && g.comp !== undefined && g.comp !== mg) notes.push("Garbage time removed: margin " + signed(g.comp, 0) + " before it, final " + signed(mg, 0) + ".");
+    notes.push("Grade = average of the five parts (Answers counts half) × setting" + (g.set ? " (" + g.set + ", ×" + g.mult + ")" : "") + ". Bars show how rare each part is; a full bar is about a 1-in-700 game.");
     $("gc-form").textContent = notes.join(" ");
     gcLast = document.activeElement; $("gcard").hidden = false; $("gc-x").focus();
   }
