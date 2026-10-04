@@ -580,7 +580,7 @@ var TRK = {"season":2026,"baseBlown":0.19864940911648846,"baseCash":0.5229621125
     });
     txt(svg, (sx(XL)+sx(XH))/2, H - 12, "Routine games: worse ← → better than expected", {"text-anchor":"middle"});
     var my = (sy(lo)+sy(hi))/2; txt(svg, 16, my, ({big:"Big games", bigR:"Big road games", bigH:"Big home games"})[state.bigKey] + ": worse ← → better than expected", {"text-anchor":"middle", transform:"rotate(-90 16 " + my + ")"});
-    function hiOf(t){ return t.id === state.sel ? 1 : 0; }
+    function hiOf(t){ return (state.picked && t.id === state.sel) ? 1 : 0; }
     var dots = plotted.map(function(t){ return {t:t, x:sx(clampX(t.other)), y:sy(clamp(t.big)), r:3 + Math.min(t.nBig, 8) * 0.45}; });
     var boxes = [];
     function hits(b){
@@ -595,7 +595,7 @@ var TRK = {"season":2026,"baseBlown":0.19864940911648846,"baseCash":0.5229621125
       var g = el("g", {tabindex:0, role:"button", "aria-label": t.full + ": big games " + signed(t.big) + ", routine " + signed(t.other)}, svg);
       g.style.cursor = "pointer";
       el("circle", {cx:cx, cy:cy, r:r+2, fill:"var(--surface)"}, g);
-      el("circle", {cx:cx, cy:cy, r:r, fill: on ? "var(--dot-hi)" : "var(--dot)", "fill-opacity": 0.95, stroke: t.id === state.sel ? "var(--ink)" : "none", "stroke-width":2}, g);
+      el("circle", {cx:cx, cy:cy, r:r, fill: on ? "var(--dot-hi)" : "var(--dot)", "fill-opacity": 0.95, stroke: (state.picked && t.id === state.sel) ? "var(--ink)" : "none", "stroke-width":2}, g);
       el("circle", {cx:cx, cy:cy, r:Math.max(r+6, 14), fill:"transparent"}, g);
       function show(){ showTip(t, cx, cy); }
       g.addEventListener("mouseenter", show); g.addEventListener("focus", show);
@@ -616,7 +616,7 @@ var TRK = {"season":2026,"baseBlown":0.19864940911648846,"baseCash":0.5229621125
     order.forEach(function(d){ d.crowd = dots.filter(function(o){ return Math.abs(o.x - d.x) < 40 && Math.abs(o.y - d.y) < 24; }).length; });
     order.sort(function(a,b){ return (hiOf(b.t) - hiOf(a.t)) || (b.crowd - a.crowd); });
     order.forEach(function(d){
-      var sel = d.t.id === state.sel, fs = sel ? 13 : 11, w = d.t.abbr.length * (sel ? 8.4 : 7.1) + 2, hgt = sel ? 14 : 12, pick = null, far = false;
+      var sel = state.picked && d.t.id === state.sel, fs = sel ? 13 : 11, w = d.t.abbr.length * (sel ? 8.4 : 7.1) + 2, hgt = sel ? 14 : 12, pick = null, far = false;
       var rings = [d.r + 3, d.r + 10, d.r + 18, d.r + 28, d.r + 40];
       outer: for (var ri = 0; ri < rings.length; ri++){
         for (var k = 0; k < 12; k++){
@@ -666,7 +666,7 @@ var TRK = {"season":2026,"baseBlown":0.19864940911648846,"baseCash":0.5229621125
     var list = teamsFor(state.season).filter(function(t){ return !state.conf || t.conf === state.conf; }).sort(function(a,b){ var av = a[k], bv = b[k]; if (av === null) return 1; if (bv === null) return -1; return (av - bv) * dir; });
     document.querySelectorAll("#board th[data-k]").forEach(function(th){ th.className = th.getAttribute("data-k") === k ? "on" : ""; });
     $("board").tBodies[0].innerHTML = list.map(function(t, i){
-      return '<tr class="trow' + (t.id === state.sel ? ' sel' : '') + '" data-id="' + t.id + '" tabindex="0">' +
+      return '<tr class="trow' + (state.picked && t.id === state.sel ? ' sel' : '') + '" data-id="' + t.id + '" tabindex="0">' +
         '<td class="l rank">' + (i+1) + '</td><td class="l"><b>' + esc(t.name) + '</b>' + (state.mode === "proven" ? ' <span class="dim">' + esc(t.coach) + ' · ' + t.seasons + ' yr' + (t.seasons === 1 ? '' : 's') + (t.schools && t.schools.length > 1 ? ' · ' + esc(t.schools.join(", ")) : '') + '</span>' : '') + '</td>' +
         (state.conf ? '' : '<td class="l conf hide-sm">' + esc(t.conf === "Independent" ? "Ind." : t.conf) + '</td>') +
         '<td class="num">' + t.w + '–' + t.l + '</td>' +
@@ -800,7 +800,7 @@ var TRK = {"season":2026,"baseBlown":0.19864940911648846,"baseCash":0.5229621125
       spark += '<polyline points="' + pts.map(function(p){ return p.join(","); }).join(" ") + '" fill="none" stroke="var(--ink)" stroke-width="1.5"/>';
       var lp = pts[pts.length-1]; if (lp) spark += '<circle cx="' + lp[0] + '" cy="' + lp[1] + '" r="3" fill="' + ((r.ys.length && r.ys[r.ys.length-1][1] >= (r.avg || 0)) ? "var(--good)" : "var(--bad)") + '"/>';
       spark += '</svg>';
-      return '<tr class="trow' + (r.id === state.sel ? ' sel' : '') + '" data-id="' + r.id + '" tabindex="0"><td class="l"><b>' + esc(r.coach) + '</b></td><td class="l">' + esc(r.name) + (r.schools && r.schools.length > 1 ? ' <span class="dim">via ' + esc(r.schools.filter(function(a){ return a !== r.abbr; }).join(", ")) + '</span>' : '') + '</td><td class="num">' + r.since + '</td><td class="num">' + r.n + '</td><td class="num">' + r.w + '–' + r.l + '</td>' +
+      return '<tr class="trow' + (state.picked && r.id === state.sel ? ' sel' : '') + '" data-id="' + r.id + '" tabindex="0"><td class="l"><b>' + esc(r.coach) + '</b></td><td class="l">' + esc(r.name) + (r.schools && r.schools.length > 1 ? ' <span class="dim">via ' + esc(r.schools.filter(function(a){ return a !== r.abbr; }).join(", ")) + '</span>' : '') + '</td><td class="num">' + r.since + '</td><td class="num">' + r.n + '</td><td class="num">' + r.w + '–' + r.l + '</td>' +
         '<td class="num ' + cls(r.avg) + '">' + signed(r.avg) + '</td><td class="num ' + cls(r.school) + '">' + (r.school === null ? '<span class="dim">first year</span>' : signed(r.school) + ' <span class="dim">(' + r.nSchool + ')</span>') + '</td>' +
         '<td class="num ' + cls(r.cur) + '">' + (r.cur === null ? "–" : signed(r.cur) + ' <span class="dim">' + r.curW + '–' + r.curL + '</span>') + '</td><td class="num ' + cls(r.drop) + '">' + signed(r.drop) + '</td><td class="l">' + spark + '</td></tr>';
     }).join("");
@@ -1048,7 +1048,7 @@ var TRK = {"season":2026,"baseBlown":0.19864940911648846,"baseCash":0.5229621125
   document.querySelectorAll(".topnav a").forEach(function(a){ a.addEventListener("click", function(e){ e.preventDefault(); showPage(a.getAttribute("data-p")); }); });
 
   function select(id, scroll){
-    state.sel = id; try { localStorage.setItem("dawg-sel", id); } catch(e){}
+    state.sel = id; state.picked = true; try { localStorage.setItem("dawg-sel", id); } catch(e){}
     drawChart(); drawBoard(); drawTeam(); drawCoaches();
     if (scroll) showPage("team");
   }
