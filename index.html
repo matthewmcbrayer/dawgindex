@@ -16,7 +16,7 @@
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='18' fill='%23d9a24a'/><text x='50' y='72' font-size='64' font-family='Arial Black,Arial' font-weight='900' text-anchor='middle' fill='%2315171a'>D</text></svg>">
 <title>DAWG Index</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@600;800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,500;0,600;0,700;0,800;0,900;1,700;1,800;1,900&family=Barlow:wght@400;500;600;700&display=swap">
 <style>
 /* Layout: scouting sheet. Season picker up top; thesis chart; leaderboard; team file (trend + game log); coaches; "is it real" verdict; method. */
 :root{
@@ -247,6 +247,69 @@ tr.gc:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
 .show-sm{display:none}
 @media (max-width:640px){.show-sm{display:inline}#poll th,#poll td{padding:8px 4px}#poll td.l b{font-size:14px}#poll .verdict{font-size:10px;padding:2px 6px;letter-spacing:.03em}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+
+/* ===== Theme: Saturday night broadcast (Barlow Condensed black italics, stadium yellow, hard edges) ===== */
+html:root:not(#x){
+  --bg:#0a0b0d; --surface:#111317; --ink:#f4f4f1; --muted:#a9adb4; --faint:#6d727a; --line:#262a31; --grid:#191c21;
+  --accent:#FFD400; --accent-ink:#0a0b0d; --dot:#8b9099; --dot-hi:#FFD400;
+  --quad-good:transparent; --quad-bad:transparent; --q-dawg:rgba(255,212,0,.08); --q-soft:rgba(255,59,48,.10); --q-rise:rgba(255,255,255,.025); --q-front:rgba(255,255,255,.025); --era:rgba(255,212,0,.07);
+  --good:#FFD400; --good-bg:#FFD400; --bad:#FF4136; --bad-bg:#FF4136; --mid:#c9ccd1; --mid-bg:#20242a;
+  --display:"Barlow Condensed","Arial Narrow",Impact,sans-serif; --body:"Barlow",system-ui,-apple-system,sans-serif; --mono:"Barlow Condensed","Arial Narrow",sans-serif;
+  color-scheme:dark;
+}
+body{font-size:15.5px;line-height:1.55;background:var(--bg) linear-gradient(180deg,#13161b 0,#0a0b0d 420px) no-repeat}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:50;opacity:.07;mix-blend-mode:screen;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+*,*::before,*::after{border-radius:0!important}
+header{border-bottom:6px solid var(--accent)!important;padding-bottom:18px}
+h1{font-family:var(--display)!important;font-weight:900!important;font-style:italic;text-transform:uppercase!important;font-size:clamp(64px,13vw,136px)!important;line-height:.8!important;letter-spacing:-.01em}
+h1 span{display:inline-block;background:var(--accent);color:var(--accent-ink)!important;padding:0 .14em 0 .1em;margin-left:.04em;transform:skewX(-10deg)}
+.sub{font-family:var(--display);font-weight:700;font-style:italic;font-size:20px;text-transform:uppercase;letter-spacing:.03em;color:var(--ink)}
+h2{font-family:var(--display)!important;font-weight:900!important;font-style:italic;text-transform:uppercase!important;letter-spacing:0!important;font-size:clamp(34px,5vw,50px)!important;line-height:.95;padding-left:16px;border-left:8px solid var(--accent)}
+h3{font-family:var(--display);font-weight:800;font-style:italic;text-transform:uppercase;font-size:22px;letter-spacing:.01em}
+.lbl,th{font-family:var(--display)!important;font-weight:700!important;letter-spacing:.08em!important;font-size:12.5px!important;color:var(--muted)}
+.asof{font-family:var(--display);font-weight:600;font-size:15px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted)}
+b,strong{font-weight:700}
+select{background:#16191e!important;border:2px solid var(--line)!important;font-family:var(--display);font-weight:700;font-size:17px;text-transform:uppercase}
+.topnav{border-bottom:2px solid var(--line)!important;gap:2px!important}
+.topnav a{font-family:var(--display);font-weight:800;font-style:italic;font-size:17px;letter-spacing:.03em;text-transform:uppercase;color:var(--muted)!important;background:none!important;padding:6px 14px!important}
+.topnav a.on{color:var(--accent-ink)!important;background:var(--accent)!important;transform:skewX(-10deg)}
+.topnav a:hover:not(.on){color:var(--ink)!important}
+.tablewrap,.chartbox,.verdictbox,.mu,#gcard .box{background:var(--surface)!important;border:2px solid var(--line)!important}
+.start{background:var(--surface)!important;border:2px solid var(--line)!important;border-left:8px solid var(--accent)!important}
+.real,.wk{background:var(--line)!important;border:2px solid var(--line)!important}
+.real>div,.wk>div{background:var(--surface)!important}
+th{background:#0d0f12!important;border-bottom:3px solid var(--accent)!important;color:var(--ink)!important}
+td{border-bottom:1px solid var(--line)!important}
+.trow:hover td,tr.gc:hover td{background:#171a20!important}
+.trow.sel td{background:rgba(255,212,0,.10)!important}
+td.num,.num{font-family:var(--display);font-weight:700;font-size:17px;letter-spacing:.02em}
+td b{font-weight:700}
+.verdict{display:inline-block;transform:skewX(-10deg);font-family:var(--display)!important;font-weight:800!important;font-style:italic;letter-spacing:.06em!important;font-size:13px!important;padding:2px 9px!important}
+.v-dawg{background:var(--accent)!important;color:#0a0b0d!important}
+.v-soft{background:var(--bad)!important;color:#fff!important}
+.v-mid{background:#2a2e35!important;color:#c9ccd1!important}
+.v-sleep{background:#fff!important;color:#0a0b0d!important}
+.wk .big,.kv .v,.real .r,#gcard .big b,.score .pts,.wk .pc b{font-family:var(--display)!important;font-weight:900!important;font-style:italic;letter-spacing:-.01em}
+.wk .big{font-size:52px!important;line-height:.95}.wk .pc b{font-size:44px!important}.kv .v{font-size:40px!important}.real .r{font-size:48px!important}#gcard .big b{font-size:72px!important}
+.wk .t{font-family:var(--display);font-weight:800;font-style:italic;text-transform:uppercase;font-size:24px!important;letter-spacing:.01em}
+.teamname{font-family:var(--display)!important;font-weight:900!important;font-style:italic;font-size:clamp(48px,8vw,84px)!important;line-height:.85!important}
+#gcard h3{font-family:var(--display)!important;font-weight:900!important;font-style:italic;font-size:38px!important;line-height:.95;color:var(--ink)}
+#gcard .box{border-top:6px solid var(--accent)!important}
+.pos{color:var(--accent)!important}.neg{color:var(--bad)!important}
+.tipbtn{background:var(--accent)!important;color:#0a0b0d!important;font-family:var(--display);font-weight:900;font-style:italic;text-transform:uppercase;letter-spacing:.04em;font-size:18px!important;padding:10px 22px!important;transform:skewX(-10deg)}
+.tiplink{color:var(--accent)!important;font-family:var(--display);font-weight:700;font-size:15px;text-transform:uppercase;letter-spacing:.04em}
+.sitefoot{border-top:6px solid var(--accent)!important}
+.gotit,.chip,.offchart button{font-family:var(--display);font-weight:800;text-transform:uppercase;letter-spacing:.04em;border:2px solid var(--line)!important}
+.ib{border-width:2px}
+.zb i,.dt i{opacity:1}
+#htip,.tip{background:var(--accent)!important;color:#0a0b0d!important;font-family:var(--body);font-weight:500}
+#htip b,.tip b{font-family:var(--display);font-weight:800;font-style:italic;text-transform:uppercase;font-size:16px}
+#chart text{font-family:var(--display);font-weight:700}
+#chart text[font-family="var(--display)"]{font-weight:900!important;font-style:italic;font-size:30px;letter-spacing:0!important}
+@media (max-width:640px){#chart text[font-family="var(--display)"]{font-size:19px}h1{font-size:76px!important}body{font-size:15px}}
+.formula,.mth{font-family:var(--display);font-weight:600;font-size:15px;letter-spacing:.02em}
+.note{color:var(--muted)}
 </style>
 
 <div id="htip" role="tooltip" hidden></div>
@@ -1186,22 +1249,22 @@ var TRK = {"season":2026,"baseBlown":0.19864940911648846,"baseCash":0.5229621125
   function cardImage(cb){
     var S = gcShare; if (!S) return;
     var W = 1080, H = 1350, c = document.createElement("canvas"); c.width = W; c.height = H; var x = c.getContext("2d");
-    var BG="#15171a", INK="#ecebe6", MUT="#a3a7ad", FNT="#7d8187", LINE="#33373c", GOLD="#d9a24a", GOOD="#7fcf97", BAD="#ef8f7c";
-    var D = "'Saira Condensed', 'Arial Narrow', sans-serif", B = "'IBM Plex Sans', system-ui, sans-serif", M = "'IBM Plex Mono', ui-monospace, monospace";
+    var BG="#0a0b0d", INK="#f4f4f1", MUT="#a9adb4", FNT="#6d727a", LINE="#262a31", GOLD="#FFD400", GOOD="#FFD400", BAD="#FF4136";
+    var D = "'Barlow Condensed', 'Arial Narrow', sans-serif", B = "'Barlow', system-ui, sans-serif", M = "'Barlow Condensed', 'Arial Narrow', sans-serif";
     function txt(t, X, Y, f, col, al){ x.font = f; x.fillStyle = col; x.textAlign = al || "left"; x.fillText(t, X, Y); }
     function wrap(t, X, Y, maxW, lh, f, col){ x.font = f; x.fillStyle = col; x.textAlign = "left"; var words = t.split(" "), line = "", yy = Y;
       for (var i = 0; i < words.length; i++){ var test = line ? line + " " + words[i] : words[i]; if (x.measureText(test).width > maxW && line){ x.fillText(line, X, yy); line = words[i]; yy += lh; } else line = test; }
       if (line) x.fillText(line, X, yy); return yy; }
     x.fillStyle = BG; x.fillRect(0, 0, W, H);
-    txt("DAWG", 72, 150, "800 96px " + D, INK); var dw = x.measureText("DAWG ").width; txt("INDEX", 72 + dw, 150, "800 96px " + D, GOLD);
+    txt("DAWG", 72, 150, "italic 900 104px " + D, INK); var dw = x.measureText("DAWG ").width, iw = (x.font = "italic 900 104px " + D, x.measureText("INDEX").width); x.save(); x.transform(1, 0, -0.18, 1, 0, 0); x.fillStyle = GOLD; x.fillRect(72 + dw - 4 + 0.18 * 150, 70, iw + 22, 92); x.restore(); txt("INDEX", 72 + dw + 6, 150, "italic 900 104px " + D, BG);
     txt("Game grade", W - 72, 110, "500 22px " + M, MUT, "right"); txt(fmtDate(S.g.date) + ", " + S.g.date.slice(0,4), W - 72, 142, "500 22px " + M, MUT, "right");
     x.fillStyle = INK; x.fillRect(72, 176, W - 144, 4);
     var done = function(){
-      txt(S.m.name.toUpperCase(), 250, 285, "800 72px " + D, INK);
+      txt(S.m.name.toUpperCase(), 250, 285, "italic 900 76px " + D, INK);
       var g = S.g, mg = g.pf - g.pa;
       txt((g.site === "away" ? "at " : "vs ") + (g.oppRank ? "No. " + g.oppRank + " " : "") + g.oppName + " · " + (mg > 0 ? "W " : mg < 0 ? "L " : "T ") + g.pf + "–" + g.pa, 250, 330, "400 30px " + B, MUT);
-      var gc = g.dawg > 0 ? GOOD : g.dawg < 0 ? BAD : INK; txt(signed(g.dawg), 72, 510, "500 150px " + M, gc);
-      var gw = x.measureText(signed(g.dawg)).width;
+      var gc = g.dawg > 0 ? GOOD : g.dawg < 0 ? BAD : INK; txt(signed(g.dawg), 72, 510, "italic 900 160px " + D, gc);
+      var gw = (x.font = "italic 900 160px " + D, x.measureText(signed(g.dawg)).width);
       if (g.line !== null && g.line !== undefined) txt("Closing line " + (g.line === 0 ? "PK" : signed(g.line)), 72 + gw + 30, 470, "400 26px " + B, MUT);
       if (g.set) txt(g.set, 72 + gw + 30, 506, "600 24px " + B, GOLD);
       var yy = wrap(S.sum, 72, 600, W - 144, 38, "400 27px " + B, INK);
