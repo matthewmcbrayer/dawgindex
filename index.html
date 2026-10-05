@@ -423,6 +423,15 @@ select{-webkit-appearance:none;appearance:none;padding:7px 42px 7px 16px!importa
 .gotit,.chip,.offchart button,.tipbtn{line-height:1.2!important}
 .gotit{padding:6px 16px!important}
 .topnav a{line-height:1.2!important;padding:6px 16px!important}
+/* share buttons */
+.xbtn{font-family:var(--display);font-weight:800;text-transform:uppercase;letter-spacing:.05em;font-size:14px;line-height:1;color:var(--ink);background:transparent;border:2px solid var(--ink);border-radius:999px;padding:6px 12px 6px 30px;cursor:pointer;position:relative;white-space:nowrap}
+.xbtn::before{content:"";position:absolute;left:11px;top:50%;width:12px;height:12px;margin-top:-7px;background:no-repeat center/contain url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M6 8V1.5M3 4l3-3 3 3M1.5 7v3.5h9V7' fill='none' stroke='%23F4EAD2' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")}
+.xbtn:hover{background:var(--chipbg)}.xbtn:disabled{opacity:.6;cursor:wait}
+.xbtn:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.xrow{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.sechead .xbtn{margin-left:auto}
+#team .teamhead > div:first-child{position:relative}
+#team .teamhead > div:first-child > .xbtn{margin-top:10px}
 /* ===== No scroll-inside-a-scroll ===== */
 .tablewrap{max-height:none!important;overflow:visible!important;scroll-margin-top:70px}
 .tablewrap th{top:64px!important}
@@ -433,8 +442,10 @@ select{-webkit-appearance:none;appearance:none;padding:7px 42px 7px 16px!importa
 .tablewrap:has(#log){overflow-x:auto!important;overflow-y:hidden!important}
 @media (max-width:640px){
   .tablewrap{overflow-x:auto!important;overflow-y:hidden!important}
+  .tablewrap th{position:static!important}
+  .tbt td.l{white-space:normal!important}
   .tablewrap:has(#board){overflow:visible!important}
-  .tablewrap:has(#board) th{top:58px!important}
+  .tablewrap:has(#board) th{position:sticky!important;top:58px!important}
 }
 /* ===== Legibility pass ===== */
 html:root:not(#x){--muted:#d3c8b2;--faint:#a3977f;--qc-dawg:#4FC488;--qc-soft:#FF6B5E;--qc-rise:#78A6F5;--qc-front:#E3C27A;--quiet:#4a4238}
@@ -671,8 +682,8 @@ th{font-size:15px!important}
       <span><i class="sw" style="background:var(--era);border:1px solid var(--line);border-radius:2px"></i>Current Coach's Tenure</span>
     </div>
     <div class="tbwrap">
-      <div><h3>Best Games Since 2019</h3><div class="tablewrap"><table class="tbt"><thead><tr><th class="l">Game</th><th class="l">Date</th><th data-tip="wl">Score</th><th data-tip="tgrade">Game Grade</th></tr></thead><tbody id="tb-top"></tbody></table></div></div>
-      <div><h3>Worst Games Since 2019</h3><div class="tablewrap"><table class="tbt"><thead><tr><th class="l">Game</th><th class="l">Date</th><th data-tip="wl">Score</th><th data-tip="tgrade">Game Grade</th></tr></thead><tbody id="tb-bot"></tbody></table></div></div>
+      <div><h3>Best Games Since 2019</h3><div class="tablewrap"><table class="tbt"><thead><tr><th class="l">Game</th><th class="l hide-sm">Date</th><th data-tip="wl">Score</th><th data-tip="tgrade"><span class="hide-sm">Game </span>Grade</th></tr></thead><tbody id="tb-top"></tbody></table></div></div>
+      <div><h3>Worst Games Since 2019</h3><div class="tablewrap"><table class="tbt"><thead><tr><th class="l">Game</th><th class="l hide-sm">Date</th><th data-tip="wl">Score</th><th data-tip="tgrade"><span class="hide-sm">Game </span>Grade</th></tr></thead><tbody id="tb-bot"></tbody></table></div></div>
     </div>
     <h3 id="log-h"></h3>
     <div class="tablewrap">
@@ -1011,8 +1022,8 @@ var TRK = {"season":2026,"baseBlown":0.19864940911648846,"baseCash":0.5229621125
         if (!L.length) return '<tr><td class="l" colspan="4"><span class="dim">Not enough graded games yet.</span></td></tr>';
         return L.map(function(g){
           var pre = g.site === "away" ? "at " : g.site === "neutral" ? "vs " : "vs ";
-          return '<tr class="gc" tabindex="0" data-gid="' + g.id + '" data-t="' + m.id + '" data-y="' + g.y + '"><td class="l">' + pre + (g.rk ? '<span class="dim">#' + g.rk + '</span> ' : '') + esc(g.opp) + (g.set ? '<div class="dim">' + esc(g.set) + '</div>' : '') + '</td>' +
-            '<td class="l">' + fmtDate(g.d) + ', ' + g.d.slice(0,4) + '</td><td class="num">' + (g.pf > g.pa ? "W " : g.pf < g.pa ? "L " : "T ") + g.pf + "–" + g.pa + '</td>' +
+          return '<tr class="gc" tabindex="0" data-gid="' + g.id + '" data-t="' + m.id + '" data-y="' + g.y + '"><td class="l">' + pre + (g.rk ? '<span class="dim">#' + g.rk + '</span> ' : '') + esc(g.opp) + '<div class="dim"><span class="show-sm">' + fmtDate(g.d) + ', ' + g.d.slice(0,4) + (g.set ? ' · ' : '') + '</span>' + esc(g.set || '') + '</div></td>' +
+            '<td class="l hide-sm">' + fmtDate(g.d) + ', ' + g.d.slice(0,4) + '</td><td class="num">' + (g.pf > g.pa ? "W " : g.pf < g.pa ? "L " : "T ") + g.pf + "–" + g.pa + '</td>' +
             '<td class="num ' + cls(g.g) + '"><b>' + signed(g.g) + '</b></td></tr>';
         }).join("");
       }
@@ -1596,6 +1607,86 @@ var TRK = {"season":2026,"baseBlown":0.19864940911648846,"baseCash":0.5229621125
       new MutationObserver(update).observe(tb.tBodies[0], {childList:true}); update();
     });
   }
+
+  // ---------- share any section as a formatted image ----------
+  function shareBlob(blob, name, text, msgEl){
+    var file = null; try { file = new File([blob], name, {type:"image/png"}); } catch(e){}
+    if (file && navigator.canShare && navigator.canShare({files:[file]})){
+      navigator.share({files:[file], text:text}).then(function(){ if (msgEl) msgEl.textContent = ""; }).catch(function(){ if (msgEl) msgEl.textContent = ""; });
+    } else {
+      var a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = name; document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(function(){ URL.revokeObjectURL(a.href); }, 4000); if (msgEl) msgEl.textContent = "Saved";
+    }
+  }
+  function exportImage(o, btn){
+    var css = Array.prototype.map.call(document.querySelectorAll("style"), function(s){ return s.textContent; }).join("\n");
+    var links = Array.prototype.map.call(document.querySelectorAll('link[rel="stylesheet"]'), function(l){ return l.href; });
+    if (!exportImage.fontCSS){ exportImage.fontCSS = Promise.all(links.map(function(h){ return fetch(h).then(function(r){ return r.text(); }).catch(function(){ return ""; }); })).then(function(a){ return a.join("\n"); }); }
+    var btnOld = btn.textContent; btn.textContent = "Making…"; btn.disabled = true;
+    exportImage.fontCSS.then(function(fontCSS){ buildExport(o, btn, css, fontCSS, btnOld); });
+  }
+  function buildExport(o, btn, css, fontCSS, old){
+    var fonts = "<style>" + fontCSS + "</style>";
+    var body = o.nodes().map(function(n){ var c = n.cloneNode(true); c.removeAttribute("id"); c.querySelectorAll(".xbtn,.moreb,select,.ib,label").forEach(function(e){ e.remove(); }); return c.outerHTML; }).join("");
+    var slug = o.slug ? o.slug() : "", sub = (o.sub ? o.sub() : "") || "";
+    var html = '<!doctype html><html><head><meta charset="utf-8"><base href="' + location.href.split("#")[0].split("?")[0].replace(/[^/]*$/, "") + '">' + fonts + '<style>' + css + XCSS + '</style></head><body class="xbody"><div class="xf" id="xf">' +
+      '<div class="xh"><h1>DAWG <span>Index</span></h1><div class="xk">' + esc(String(state.season)) + ' season<br>' + esc(DATA.asOfLabel || "") + '</div></div>' +
+      '<div class="xtitle"><h2>' + esc(o.title()) + '</h2>' + (sub ? '<p>' + esc(sub) + '</p>' : '') + '</div>' +
+      '<div class="xbodyin">' + body + '</div>' +
+      '<div class="xfoot"><span>dawgindex.com' + (slug ? "/" + slug : "") + '</span><span>Who gets up for big games, and who shrinks.</span></div></div>' +
+      '<script src="https://cdn.jsdelivr.net/npm/modern-screenshot@4.7.0/dist/index.js"><\/script></body></html>';
+    var f = document.createElement("iframe"); f.setAttribute("aria-hidden", "true"); f.style.cssText = "position:fixed;left:-12000px;top:0;width:1080px;height:3000px;border:0;opacity:0;pointer-events:none";
+    function done(msg){ btn.disabled = false; btn.textContent = msg || old; if (msg) setTimeout(function(){ btn.textContent = old; }, 1800); f.remove(); }
+    f.onload = function(){
+      var w = f.contentWindow, tries = 0;
+      (function go(){
+        if (!w.modernScreenshot){ if (tries++ < 60) return setTimeout(go, 100); return done("Couldn't load"); }
+        w.document.fonts.ready.then(function(){
+          var el = w.document.getElementById("xf");
+          return w.modernScreenshot.domToBlob(el, {scale:2, backgroundColor:"#131210", type:"image/png", width:1080, height:el.offsetHeight});
+        }).then(function(blob){ shareBlob(blob, "dawg-" + (o.file || "share") + ".png", "dawgindex.com" + (slug ? "/" + slug : "")); done("Saved"); })
+          .catch(function(){ done("Couldn't make it"); });
+      })();
+    };
+    document.body.appendChild(f); f.srcdoc = html;
+  }
+  var XCSS = '.xbody{margin:0;background:#131210;width:1080px}.xf{width:1080px;padding:60px 60px 46px;background:#131210;display:flex;flex-direction:column;gap:26px;position:relative}' +
+    '.xf::after{content:"";position:absolute;inset:0;pointer-events:none;opacity:.5;mix-blend-mode:soft-light;background-image:url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%27300%27 height=%27300%27%3E%3Cfilter id=%27n%27%3E%3CfeTurbulence type=%27fractalNoise%27 baseFrequency=%27.8%27 numOctaves=%273%27/%3E%3CfeColorMatrix values=%270 0 0 0 1  0 0 0 0 .95  0 0 0 0 .85  0 0 0 .5 0%27/%3E%3C/filter%3E%3Crect width=%27300%27 height=%27300%27 filter=%27url(%23n)%27/%3E%3C/svg%3E")}' +
+    '.xh{display:flex;justify-content:space-between;align-items:center;padding-bottom:30px;position:relative}.xh::after{content:"";position:absolute;left:0;right:0;bottom:0;height:16px;background:linear-gradient(#2F64C0 0 30%,#131210 0 42%,#E5463A 0 70%,#131210 0 82%,#F08A2C 0);border-top:2.5px solid #F4EAD2;border-bottom:2.5px solid #F4EAD2}' +
+    '.xh h1{font-size:64px!important;-webkit-text-stroke:2.5px #0c0b0a!important;text-shadow:4px 4px 0 #E5463A!important}.xk{font-family:var(--display);font-weight:800;text-transform:uppercase;letter-spacing:.08em;font-size:18px;line-height:1.3;text-align:right;border:2.5px solid #F4EAD2;border-radius:10px;padding:8px 14px;color:#F4EAD2}' +
+    '.xtitle h2{font-size:44px!important;line-height:1.05}.xtitle p{margin:8px 0 0;color:var(--muted);font-size:20px}' +
+    '.xbodyin{display:flex;flex-direction:column;gap:18px}.xbodyin .tablewrap{box-shadow:none!important;overflow:visible!important}.xbodyin th{position:static!important}.xbodyin th *,.xbodyin th{text-decoration:none!important}' +
+    '.xbodyin td,.xbodyin th{font-size:17px}.xbodyin td.num{font-size:20px}.xbodyin #log td.gg,.xbodyin td.gg{font-size:26px!important}' +
+    '.xfoot{display:flex;justify-content:space-between;border-top:3px dashed rgba(244,234,210,.45);padding:16px 0 0 40px;position:relative;font-family:var(--display);font-weight:800;text-transform:uppercase;letter-spacing:.07em;font-size:19px;color:#F4EAD2}' +
+    '.xfoot span+span{color:var(--muted);font-weight:700}.xfoot::before{content:"";position:absolute;left:0;top:16px;width:22px;height:22px;background:repeating-linear-gradient(-45deg,#F08A2C 0 6px,transparent 6px 12px);border:2px solid #F4EAD2;border-radius:4px}' +
+    '.xbodyin .teamhead{gap:14px 40px}.xbodyin .chartbox{padding:14px!important}.xlog .xn{display:none}' +
+    '.xbodyin #log th:nth-child(5),.xbodyin #log td:nth-child(5),.xbodyin #log th:nth-child(12),.xbodyin #log td:nth-child(12){display:none}';
+  function addShare(anchor, o, inH3){
+    if (!anchor) return; var b = document.createElement("button"); b.type = "button"; b.className = "xbtn"; b.textContent = "Share";
+    b.title = "Save this as an image"; b.addEventListener("click", function(){ exportImage(o, b); });
+    if (inH3){ var row = document.createElement("div"); row.className = "xrow"; anchor.parentNode.insertBefore(row, anchor); row.appendChild(anchor); row.appendChild(b); }
+    else anchor.appendChild(b);
+  }
+  function teamName(){ return META[state.sel] ? META[state.sel].name : ""; }
+  function wrapOf(id){ var t = $(id); return t ? t.closest(".tablewrap") : null; }
+  function h3s(text){ return Array.prototype.filter.call(document.querySelectorAll("h3"), function(h){ return h.textContent.trim() === text; })[0]; }
+  (function(){
+    var sh = function(id){ return $(id) ? $(id).closest(".sechead") : null; };
+    addShare(sh("week-h"), {title:function(){ return $("week-h").textContent; }, nodes:function(){ return [$("wk")]; }, file:"highlights"});
+    addShare(sh("chart-h"), {title:function(){ return $("chart-h").textContent; }, sub:function(){ return "Right = better than expected in routine games · Up = better in big games"; }, nodes:function(){ return [document.querySelector("#chart-sec .chartbox")]; }, file:"big-vs-routine"});
+    addShare(sh("board-h"), {title:function(){ return $("board-h").textContent; }, sub:function(){ return "Season DAWG: how each team played vs expectations, adjusted for the stage"; }, nodes:function(){ return [wrapOf("board")]; }, file:"leaderboard"});
+    addShare(sh("poll-h"), {title:function(){ return "Poll Check"; }, sub:function(){ return $("poll-note").textContent; }, nodes:function(){ return [wrapOf("poll")]; }, file:"poll-check"});
+    addShare(sh("conf-h"), {title:function(){ return "Conference Rankings"; }, nodes:function(){ return [document.querySelector("#conf-sec .tablewrap")]; }, file:"conferences"});
+    addShare(sh("top-h"), {title:function(){ return $("top-h").textContent; }, nodes:function(){ return [wrapOf("topgames")]; }, file:"top-10-games"});
+    addShare(sh("tend-h"), {title:function(){ return "Team Tendencies"; }, nodes:function(){ return [wrapOf("tend")]; }, file:"tendencies"});
+    addShare(sh("coach-h"), {title:function(){ return "Coach Résumés"; }, nodes:function(){ return [document.querySelector("#coaches-sec .tablewrap")]; }, file:"coaches"});
+    ["Blown Leads", "Biggest Blown Leads", "Cash-In After Stops"].forEach(function(n){ var h = h3s(n); if (h) addShare(h, {title:function(){ return n; }, nodes:function(){ return [h.closest(".xrow").nextElementSibling]; }, file:n.toLowerCase().replace(/[^a-z]+/g, "-")}, true); });
+    addShare(document.querySelector("#team .teamhead > div"), {title:function(){ return teamName() + " · " + state.season; }, sub:function(){ return $("coachline").textContent; }, nodes:function(){ return [$("teamstats"), document.querySelector("#team .chartbox"), document.querySelector("#team .legend")]; }, slug:function(){ return slugOf(state.sel); }, file:"team"});
+    var bh = h3s("Best Games Since 2019"), wh = h3s("Worst Games Since 2019");
+    if (bh) addShare(bh, {title:function(){ return teamName() + ": best games since 2019"; }, nodes:function(){ return [bh.closest(".xrow").nextElementSibling]; }, slug:function(){ return slugOf(state.sel); }, file:"best-games"}, true);
+    if (wh) addShare(wh, {title:function(){ return teamName() + ": worst games since 2019"; }, nodes:function(){ return [wh.closest(".xrow").nextElementSibling]; }, slug:function(){ return slugOf(state.sel); }, file:"worst-games"}, true);
+    addShare($("log-h"), {title:function(){ return teamName() + " · " + $("log-h").textContent; }, nodes:function(){ return [wrapOf("log")]; }, slug:function(){ return slugOf(state.sel); }, file:"game-log"}, true);
+  })();
   function drawAll(){ drawAsOf(); drawChips(); drawChart(); drawBoard(); drawConfs(); drawTeam(); drawCoaches(); drawTend(); drawTrackers(); drawTop(); capTables(); }
   var WEEK = {"label": "Week 5", "pollName": "AP Poll Week 6", "n": 68, "best": {"id": "401856817", "t": "239", "y": 2026, "team": "Baylor", "opp": "Arizona State", "rk": null, "site": "away", "pf": 55, "pa": 19, "grade": 13.5, "srank": 1}, "worst": {"id": "401856821", "t": "38", "y": 2026, "team": "Colorado", "opp": "Texas Tech", "rk": 12, "site": "home", "pf": 7, "pa": 29, "grade": -10.6, "srank": 314}, "collapse": {"opp": "Houston", "site": "away", "lead": 17, "at": [17, 0], "pf": 17, "pa": 27, "date": "2026-10-03", "id": "401856819", "team": "UCF", "tid": "2116"}, "gap": {"id": "145", "name": "Ole Miss", "ap": 9, "drank": 44}, "poll": [{"id": "251", "ap": 1, "w": 4, "l": 0, "drank": 29, "dawg": 0.8, "luck": 1.2, "flag": "fraud"}, {"id": "61", "ap": 2, "w": 5, "l": 0, "drank": 5, "dawg": 3.9, "luck": 0.4, "flag": "legit"}, {"id": "87", "ap": 3, "w": 5, "l": 0, "drank": 17, "dawg": 1.8, "luck": 0.2, "flag": ""}, {"id": "2390", "ap": 4, "w": 5, "l": 0, "drank": 7, "dawg": 3.1, "luck": 0.3, "flag": "legit"}, {"id": "194", "ap": 5, "w": 4, "l": 1, "drank": 33, "dawg": 0.4, "luck": -0.7, "flag": ""}, {"id": "333", "ap": 6, "w": 5, "l": 0, "drank": 2, "dawg": 6.9, "luck": 0.2, "flag": "legit"}, {"id": "84", "ap": 7, "w": 5, "l": 0, "drank": 35, "dawg": 0.3, "luck": 0.2, "flag": ""}, {"id": "252", "ap": 8, "w": 4, "l": 0, "drank": 13, "dawg": 2.2, "luck": 1.0, "flag": ""}, {"id": "145", "ap": 9, "w": 3, "l": 1, "drank": 44, "dawg": -0.7, "luck": 1.1, "flag": "fraud"}, {"id": "99", "ap": 10, "w": 4, "l": 1, "drank": 23, "dawg": 1.1, "luck": -0.5, "flag": ""}, {"id": "2641", "ap": 11, "w": 5, "l": 0, "drank": 50, "dawg": -1.8, "luck": 1.0, "flag": "fraud"}, {"id": "254", "ap": 12, "w": 4, "l": 0, "drank": 8, "dawg": 3.1, "luck": 0.0, "flag": "legit"}, {"id": "2483", "ap": 13, "w": 3, "l": 1, "drank": 46, "dawg": -1.2, "luck": 0.1, "flag": "fraud"}, {"id": "142", "ap": 14, "w": 4, "l": 1, "drank": 14, "dawg": 2.2, "luck": -0.2, "flag": ""}, {"id": "2633", "ap": 15, "w": 4, "l": 1, "drank": 25, "dawg": 1.0, "luck": 0.5, "flag": ""}, {"id": "57", "ap": 16, "w": 4, "l": 1, "drank": 11, "dawg": 2.5, "luck": 0.4, "flag": "legit"}, {"id": "344", "ap": 17, "w": 4, "l": 1, "drank": 6, "dawg": 3.2, "luck": 0.5, "flag": "legit"}, {"id": "197", "ap": 18, "w": 3, "l": 1, "drank": 38, "dawg": -0.3, "luck": 0.1, "flag": "fraud"}, {"id": "30", "ap": 19, "w": 5, "l": 1, "drank": 30, "dawg": 0.6, "luck": 0.8, "flag": ""}, {"id": "2294", "ap": 20, "w": 4, "l": 1, "drank": 27, "dawg": 0.8, "luck": 1.2, "flag": "fraud"}, {"id": "26", "ap": 21, "w": 4, "l": 0, "drank": 3, "dawg": 6.2, "luck": 0.3, "flag": "legit"}, {"id": "248", "ap": 22, "w": 4, "l": 1, "drank": 24, "dawg": 1.0, "luck": 0.0, "flag": ""}, {"id": "2567", "ap": 24, "w": 4, "l": 1, "drank": 52, "dawg": -2.0, "luck": 0.6, "flag": "fraud"}, {"id": "221", "ap": 25, "w": 5, "l": 0, "drank": 20, "dawg": 1.6, "luck": 0.5, "flag": ""}, {"id": "77", "ap": null, "w": 3, "l": 1, "drank": 1, "dawg": 8.1, "luck": -0.0, "flag": "sleeper"}, {"id": "154", "ap": null, "w": 4, "l": 1, "drank": 4, "dawg": 4.2, "luck": 0.4, "flag": "sleeper"}, {"id": "158", "ap": null, "w": 5, "l": 0, "drank": 9, "dawg": 2.7, "luck": 0.4, "flag": "sleeper"}, {"id": "96", "ap": null, "w": 4, "l": 1, "drank": 10, "dawg": 2.5, "luck": 0.4, "flag": "sleeper"}, {"id": "239", "ap": null, "w": 4, "l": 1, "drank": 12, "dawg": 2.3, "luck": 0.3, "flag": "sleeper"}, {"id": "2132", "ap": null, "w": 4, "l": 1, "drank": 15, "dawg": 2.1, "luck": 0.5, "flag": "sleeper"}]};
   function ord(n){ var v = n % 100, s = ["th","st","nd","rd"]; return n + (s[(v - 20) % 10] || s[v] || s[0]); }
