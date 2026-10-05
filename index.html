@@ -378,6 +378,8 @@ tr.big td:first-child{box-shadow:inset 4px 0 0 var(--red)}
   .verdict{font-size:12.5px!important;padding:1px 8px!important}
 }
 #log .tag{white-space:nowrap}
+.vstk{display:inline-block;font-family:var(--chunk);font-size:.46em;letter-spacing:.04em;color:var(--cream);border:3px solid var(--dark);border-radius:999px;padding:.1em .6em .16em;box-shadow:4px 4px 0 var(--cream);vertical-align:.22em;margin-left:.3em;line-height:1;white-space:nowrap}
+.vstk.vg{background:var(--green);transform:rotate(-5deg)}.vstk.vs{background:var(--red);transform:rotate(4deg)}
 /* ===== Round 3: alignment, bars, game grades, controls ===== */
 .verdict{min-width:6.4em;text-align:center;box-sizing:border-box}
 td.num,.num,.wk .big,.kv .v{font-variant-numeric:tabular-nums lining-nums}
@@ -973,7 +975,7 @@ var TRK = {"season":2026,"baseBlown":0.19864940911648846,"baseCash":0.5229621125
   $("teampick").addEventListener("change", function(){ select(this.value, false); });
   function drawTeam(){
     var m = META[state.sel], s = SEASONIDX[state.season] && SEASONIDX[state.season][state.sel];
-    $("teampick").value = m.id; $("team-h").textContent = m.full;
+    $("teampick").value = m.id; $("team-h").innerHTML = esc(m.full) + (s && s.dawg !== null && s.dawg >= 3 ? ' <span class="vstk vg" title="Season DAWG +3 or better">DAWG</span>' : s && s.dawg !== null && s.dawg <= -3 ? ' <span class="vstk vs" title="Season DAWG −3 or worse">SOFT</span>' : "");
     (function(){
       var tb = TB[m.id] || {top:[], bot:[]};
       function rows(L){
@@ -1380,45 +1382,91 @@ var TRK = {"season":2026,"baseBlown":0.19864940911648846,"baseCash":0.5229621125
   }
   var gcLast = null;
   var gcShare = null;
+  function seasonRankOf(y, id, t){
+    var all = [], me = null; Object.keys(DATA.ts[String(y)] || {}).forEach(function(k){ (DATA.ts[String(y)][k].games || []).forEach(function(g){ if (g.dawg === null || g.dawg === undefined) return; all.push(g.dawg); if (k === t && g.id === id) me = g.dawg; }); });
+    if (me === null) return null; var n = 1; all.forEach(function(v){ if (v > me) n++; }); return [n, all.length];
+  }
   function cardImage(cb){
     var S = gcShare; if (!S) return;
     var W = 1080, H = 1350, c = document.createElement("canvas"); c.width = W; c.height = H; var x = c.getContext("2d");
-    var BG="#131210", INK="#F4EAD2", MUT="#b8ad98", FNT="#857a68", LINE="#3a342c", GOLD="#F08A2C", GOOD="#4DBB7E", BAD="#F0574A", CREAM="#F4EAD2", BLUE="#2F64C0", DARK="#0c0b0a", RED="#E5463A", CHIP="#26221d";
-    var D = "'Big Shoulders Display', 'Arial Narrow', sans-serif", B = "'Barlow', system-ui, sans-serif", M = "'Big Shoulders Display', 'Arial Narrow', sans-serif", K = "'Bowlby One', 'Arial Black', sans-serif";
-    function txt(t, X, Y, f, col, al){ x.font = f; x.fillStyle = col; x.textAlign = al || "left"; x.fillText(t, X, Y); }
+    var BG = "#131210", PAPER = "#EFE3C6", INK = "#1b1712", MUT = "#6b5f4c", RED = "#D8342A", BLUE = "#1F4E9C", GREEN = "#1E7046", ORANGE = "#E2711D", TRACK = "#e4d6b4";
+    var D = "'Big Shoulders Display', 'Arial Narrow', sans-serif", B = "'Barlow', system-ui, sans-serif", K = "'Bowlby One', 'Arial Black', sans-serif";
+    function ls(px){ try { x.letterSpacing = px + "px"; } catch(e){} }
+    function txt(t, X, Y, f, col, al, sp){ x.font = f; x.fillStyle = col; x.textAlign = al || "left"; ls(sp || 0); x.fillText(t, X, Y); ls(0); }
+    function rr(X, Y, w, h, r){ x.beginPath(); x.moveTo(X + r, Y); x.arcTo(X + w, Y, X + w, Y + h, r); x.arcTo(X + w, Y + h, X, Y + h, r); x.arcTo(X, Y + h, X, Y, r); x.arcTo(X, Y, X + w, Y, r); x.closePath(); }
     function wrap(t, X, Y, maxW, lh, f, col){ x.font = f; x.fillStyle = col; x.textAlign = "left"; var words = t.split(" "), line = "", yy = Y;
       for (var i = 0; i < words.length; i++){ var test = line ? line + " " + words[i] : words[i]; if (x.measureText(test).width > maxW && line){ x.fillText(line, X, yy); line = words[i]; yy += lh; } else line = test; }
       if (line) x.fillText(line, X, yy); return yy; }
+    var g = S.g, m = S.m, mg = g.pf - g.pa, TX = 60, TY = 55, TW = 960, TH = 1240, PY = 1105, L = 104, R = 976;
     x.fillStyle = BG; x.fillRect(0, 0, W, H);
-    x.font = "96px " + K; x.lineJoin = "round"; x.fillStyle = RED; x.fillText("DAWG", 77, 155); x.lineWidth = 6; x.strokeStyle = DARK; x.strokeText("DAWG", 72, 150); x.fillStyle = CREAM; x.fillText("DAWG", 72, 150);
-    var dw = x.measureText("DAWG").width; x.font = "40px " + K; var iw = x.measureText("INDEX").width; x.save(); x.translate(72 + dw + 30 + (iw + 56) / 2, 110); x.rotate(-0.07);
-    function pill(ox, oy, f){ var w = iw + 56, h = 64, r = 32; x.beginPath(); x.moveTo(-w/2 + r + ox, -h/2 + oy); x.arcTo(w/2 + ox, -h/2 + oy, w/2 + ox, h/2 + oy, r); x.arcTo(w/2 + ox, h/2 + oy, -w/2 + ox, h/2 + oy, r); x.arcTo(-w/2 + ox, h/2 + oy, -w/2 + ox, -h/2 + oy, r); x.arcTo(-w/2 + ox, -h/2 + oy, w/2 + ox, -h/2 + oy, r); x.closePath(); x.fillStyle = f; x.fill(); }
-    pill(5, 5, CREAM); pill(0, 0, BLUE); x.lineWidth = 4; x.strokeStyle = DARK; x.stroke(); x.fillStyle = CREAM; x.textAlign = "center"; x.fillText("INDEX", 0, 15); x.restore(); x.textAlign = "left";
-    txt("Game grade", W - 72, 110, "500 22px " + M, MUT, "right"); txt(fmtDate(S.g.date) + ", " + S.g.date.slice(0,4), W - 72, 142, "500 22px " + M, MUT, "right");
-    x.fillStyle = INK; x.fillRect(72, 176, W - 144, 4);
-    var done = function(){
-      txt(S.m.name.toUpperCase(), 250, 285, "60px " + K, INK);
-      var g = S.g, mg = g.pf - g.pa;
-      txt((g.site === "away" ? "at " : "vs ") + (g.oppRank ? "No. " + g.oppRank + " " : "") + g.oppName + " · " + (mg > 0 ? "W " : mg < 0 ? "L " : "T ") + g.pf + "–" + g.pa, 250, 330, "400 30px " + B, MUT);
-      var gc = g.dawg > 0 ? GOOD : g.dawg < 0 ? BAD : INK; txt(signed(g.dawg), 72, 535, "900 160px " + D, gc);
-      var gw = (x.font = "900 170px " + D, x.measureText(signed(g.dawg)).width);
-      if (g.line !== null && g.line !== undefined) txt("Closing line " + (g.line === 0 ? "PK" : signed(g.line)), 72 + gw + 30, 470, "400 26px " + B, MUT);
-      if (g.set) txt(g.set, 72 + gw + 30, 506, "600 24px " + B, GOLD);
-      var yy = wrap(S.sum, 72, 600, W - 144, 38, "400 27px " + B, INK);
-      var y0 = Math.max(yy + 50, 740), RH = Math.min(96, (H - 130 - y0) / 5);
-      S.P.forEach(function(p, i){
-        var Y = y0 + i * RH; txt(p[1], 72, Y + 8, "600 27px " + B, INK); txt(p[4], 72, Y + 40, "400 18px " + B, FNT);
-        txt(p[2] === null || p[2] === undefined ? "not in play" : p[3], 600, Y + 22, "500 25px " + M, p[2] === null || p[2] === undefined ? FNT : INK, "right");
-        var bx = 630, bw = W - 72 - bx, by = Y + 6, bh = 18; x.fillStyle = CHIP; x.fillRect(bx, by, bw, bh); x.lineWidth = 2; x.strokeStyle = INK; x.strokeRect(bx, by, bw, bh);
-        var z = zOf(p[0], p[2]); if (z !== null){ var w = Math.max(-1, Math.min(1, z / 3)) * bw / 2; x.fillStyle = w >= 0 ? GOOD : BAD; x.fillRect(w >= 0 ? bx + bw/2 : bx + bw/2 + w, by, Math.abs(w), bh); }
-        x.fillStyle = FNT; x.fillRect(bx + bw/2 - 1, by - 5, 2, bh + 10);
-        x.fillStyle = LINE; x.fillRect(72, Y + RH - 34, W - 144, 1);
-      });
-      txt("Garbage time removed · dawgindex.com/" + slugOf(S.t), 72, H - 56, "400 22px " + B, FNT);
-      c.toBlob(cb, "image/png");
-    };
-    var img = new Image(); img.onload = function(){ var r = Math.min(150 / img.width, 150 / img.height); x.drawImage(img, 72, 222, img.width * r, img.height * r); done(); };
-    img.onerror = done; img.src = "logos/" + S.t + "-dark.png";
+    x.save(); rr(TX, TY, TW, TH, 22); x.clip(); x.fillStyle = PAPER; x.fillRect(TX, TY, TW, TH);
+    var seed = 7; function rnd(){ seed = (seed * 16807) % 2147483647; return seed / 2147483647; }
+    for (var n = 0; n < 9000; n++){ x.fillStyle = "rgba(90,70,40," + (0.03 + rnd() * 0.06).toFixed(3) + ")"; x.fillRect(TX + rnd() * TW, TY + rnd() * TH, 1.6, 1.6); }
+    // header
+    x.font = "40px " + K; x.lineJoin = "round"; x.fillStyle = RED; x.fillText("DAWG", L + 3, 128); x.lineWidth = 5; x.strokeStyle = INK; x.strokeText("DAWG", L, 125); x.fillStyle = PAPER; x.fillText("DAWG", L, 125);
+    var dw = x.measureText("DAWG").width; x.font = "17px " + K; ls(1); var iw = x.measureText("INDEX").width; ls(0);
+    x.save(); x.translate(L + dw + 14 + (iw + 28) / 2, 112); x.rotate(-0.07); rr(-(iw + 28) / 2 + 2, -15 + 2, iw + 28, 30, 15); x.fillStyle = INK; x.fill(); rr(-(iw + 28) / 2, -15, iw + 28, 30, 15); x.fillStyle = BLUE; x.fill(); x.lineWidth = 2.5; x.strokeStyle = INK; x.stroke(); txt("INDEX", 0, 6, "17px " + K, PAPER, "center", 1); x.restore();
+    txt("ADMIT ONE", R, 110, "900 22px " + D, INK, "right", 3.5); txt("GAME GRADE · " + S.y + " SEASON", R, 131, "800 15px " + D, MUT, "right", 3);
+    // stripes
+    var sy = 152, sh = 22; x.fillStyle = INK; x.fillRect(TX, sy, TW, sh); var iy = sy + 3, ih = sh - 6;
+    [[BLUE, 0, .3], [PAPER, .3, .1], [RED, .4, .3], [PAPER, .7, .1], [ORANGE, .8, .2]].forEach(function(b){ x.fillStyle = b[0]; x.fillRect(TX, iy + ih * b[1], TW, ih * b[2] + .5); });
+    // stub hazard strip and perforation notches
+    x.save(); x.beginPath(); x.rect(TX, PY + 46, 26, TY + TH - PY - 46); x.clip(); x.strokeStyle = ORANGE; x.lineWidth = 12; for (var k = -40; k < 300; k += 24){ x.beginPath(); x.moveTo(TX - 10, PY + 46 + k + 40); x.lineTo(TX + 40, PY + 46 + k - 10); x.stroke(); } x.restore();
+    x.fillStyle = INK; x.fillRect(TX + 26, PY + 46, 3, TY + TH - PY - 46); x.fillRect(TX, PY + 44, 29, 3);
+    x.restore();
+    x.fillStyle = BG; [TX, TX + TW].forEach(function(cx){ x.beginPath(); x.arc(cx, PY, 28, 0, Math.PI * 2); x.fill(); });
+    x.strokeStyle = INK; x.lineWidth = 4; x.setLineDash([12, 8]); x.beginPath(); x.moveTo(TX + 34, PY); x.lineTo(TX + TW - 34, PY); x.stroke(); x.setLineDash([]);
+    // team
+    var nm = m.name.toUpperCase(), nfs = m.name.length <= 12 ? 74 : m.name.length <= 15 ? 60 : 50;
+    txt(nm, 258, 262, nfs + "px " + K, INK);
+    txt(((g.site === "away" ? "at " : "vs ") + (g.oppRank ? "No. " + g.oppRank + " " : "") + g.oppName).toUpperCase(), 258, 312, "800 36px " + D, MUT, "left", 1);
+    // fields
+    var fy = 343, fh = 86, cw = (R - L) / 4, site = {home:"Home", away:"Road", neutral:"Neutral"}[g.site] + " · " + (g.night ? "Night" : "Day");
+    var dd = new Date(g.date + "T12:00:00"), DOW = ["SUN","MON","TUE","WED","THU","FRI","SAT"];
+    var F = [["DATE", DOW[dd.getDay()] + " " + fmtDate(g.date).toUpperCase()], ["SITE", site.toUpperCase()], ["LINE", g.line === null || g.line === undefined ? "–" : g.line === 0 ? "PK" : signed(g.line)], ["FINAL", (mg > 0 ? "W " : mg < 0 ? "L " : "T ") + g.pf + "–" + g.pa]];
+    rr(L, fy, R - L, fh, 10); x.lineWidth = 3; x.strokeStyle = INK; x.stroke();
+    F.forEach(function(f, i){ var fx = L + i * cw; if (i){ x.fillStyle = INK; x.fillRect(fx - 1.5, fy, 3, fh); } txt(f[0], fx + 16, fy + 27, "800 16px " + D, MUT, "left", 2.2); var fs = 35; x.font = "900 " + fs + "px " + D; while (x.measureText(f[1]).width > cw - 26 && fs > 22){ fs--; x.font = "900 " + fs + "px " + D; } txt(f[1], fx + 16, fy + 68, "900 " + fs + "px " + D, INK); });
+    // grade + sticker
+    var gc = g.dawg > 0 ? GREEN : g.dawg < 0 ? RED : INK;
+    txt("GAME GRADE", L, 468, "900 20px " + D, MUT, "left", 3.2);
+    txt(signed(g.dawg), L - 4, 634, "900 200px " + D, gc);
+    if (g.dawg >= 5 || g.dawg <= -5){
+      var good = g.dawg >= 5, word = good ? "DAWG" : "SOFT"; x.font = "66px " + K; ls(2.5); var sw = x.measureText(word).width + 76, shh = 88; ls(0);
+      x.save(); x.translate(R - sw / 2 - 8, 520); x.rotate(good ? -0.12 : 0.1);
+      rr(-sw / 2 + 7, -shh / 2 + 7, sw, shh, shh / 2); x.fillStyle = INK; x.fill();
+      rr(-sw / 2, -shh / 2, sw, shh, shh / 2); x.fillStyle = good ? "#23885A" : "#E5463A"; x.fill(); x.lineWidth = 5; x.strokeStyle = INK; x.stroke();
+      txt(word, 0, 24, "66px " + K, PAPER, "center", 2.5); x.restore();
+    }
+    // why
+    var yy = wrap(S.sum, L, 688, R - L, 35, "500 25px " + B, INK);
+    // parts
+    var py0 = Math.max(yy + 30, 790); x.fillStyle = INK; x.fillRect(L, py0, R - L, 3);
+    var rh = Math.min(52, (PY - 40 - py0) / 5);
+    S.P.forEach(function(p, i){
+      var Y = py0 + 3 + i * rh, mid = Y + rh / 2;
+      txt(p[1].toUpperCase(), L, mid + 9, "900 25px " + D, INK, "left", .8);
+      var none = p[2] === null || p[2] === undefined, v = none ? (p[0] === "p_knife" ? "never up 9" : "–") : p[3].replace(" pts on ", " on ").replace(" pts", "");
+      txt(v, 500, mid + 9, "800 27px " + D, INK, "right");
+      var bx = 520, bw = R - bx, by = mid - 8, bh = 16; rr(bx, by, bw, bh, 8); x.fillStyle = TRACK; x.fill();
+      var z = zOf(p[0], p[2]); if (z !== null){ var w = Math.max(-1, Math.min(1, z / 3)) * bw / 2; x.save(); rr(bx, by, bw, bh, 8); x.clip(); x.fillStyle = w >= 0 ? GREEN : RED; x.fillRect(w >= 0 ? bx + bw / 2 : bx + bw / 2 + w, by, Math.abs(w), bh); x.restore(); }
+      x.fillStyle = INK; x.fillRect(bx + bw / 2 - 1, by, 2, bh); rr(bx, by, bw, bh, 8); x.lineWidth = 2; x.strokeStyle = INK; x.stroke();
+      x.strokeStyle = "rgba(27,23,18,.35)"; x.lineWidth = 1.5; x.setLineDash([4, 4]); x.beginPath(); x.moveTo(L, Y + rh); x.lineTo(R, Y + rh); x.stroke(); x.setLineDash([]);
+    });
+    // stub
+    var rk = seasonRankOf(S.y, g.id, S.t);
+    txt("TICKET NO.", 122, 1160, "800 16px " + D, MUT, "left", 2.5);
+    var no = rk ? ("00" + rk[0]).slice(-3) : "—"; txt(no, 120, 1240, "900 92px " + D, RED); x.font = "900 92px " + D; var nw = x.measureText(no).width;
+    if (rk) txt("/ " + rk[1], 126 + nw, 1240, "800 22px " + D, INK, "left", 1);
+    var mx = 126 + nw + 90;
+    txt(S.y + " SEASON", mx, 1172, "800 16px " + D, MUT, "left", 2.5);
+    var sn = m.name.toUpperCase(), sfs = 30; x.font = sfs + "px " + K; while (x.measureText(sn).width > 640 - mx && sfs > 18){ sfs--; x.font = sfs + "px " + K; }
+    txt(sn, mx, 1208, sfs + "px " + K, INK); txt(rk ? "#" + rk[0] + " of " + rk[1] + " games graded" : "Game grade", mx, 1236, "600 20px " + B, MUT);
+    var bseed = +g.id % 100000 || 3; function br(){ bseed = (bseed * 48271) % 2147483647; return bseed / 2147483647; }
+    var bxx = 676; x.fillStyle = INK; while (bxx < 976){ var bw2 = [2, 2, 3, 4, 6][Math.floor(br() * 5)]; x.fillRect(bxx, 1135, Math.min(bw2, 976 - bxx), 96); bxx += bw2 + [2, 3, 4][Math.floor(br() * 3)]; }
+    txt("DAWGINDEX.COM/" + slugOf(S.t).toUpperCase(), 826, 1260, "800 19px " + D, INK, "center", 2);
+    var done = function(){ c.toBlob(cb, "image/png"); };
+    var img = new Image(); img.onload = function(){ var r = Math.min(128 / img.width, 128 / img.height); x.drawImage(img, L + (128 - img.width * r) / 2, 198 + (128 - img.height * r) / 2, img.width * r, img.height * r); done(); };
+    img.onerror = function(){ img.onerror = done; img.src = "logos/" + S.t + "-dark.png"; }; img.src = "logos/" + S.t + ".png";
   }
   $("gc-share").addEventListener("click", function(){
     var btn = this, msg = $("gc-share-msg"); btn.disabled = true; msg.textContent = "Making the image…";
