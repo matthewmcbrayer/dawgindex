@@ -439,6 +439,13 @@ select{-webkit-appearance:none;appearance:none;padding:7px 42px 7px 16px!importa
 .xbtn::before{filter:invert(1) brightness(.2)}
 .sitefoot{padding-bottom:64px}
 @media print{#fab,#fabmenu,#fabtip{display:none}}
+/* bigger popups */
+.tip{font-size:16px!important;max-width:300px!important;padding:12px 14px!important;line-height:1.4!important}
+.tip b{font-size:20px!important}
+.tip .m{font-family:var(--body)!important;font-size:15px!important;font-weight:600}
+#htip{font-size:15.5px!important;max-width:340px!important;padding:12px 14px!important;line-height:1.45!important}
+#htip b{font-size:19px!important}
+#htip code{font-family:var(--body)!important;font-size:14px!important;opacity:.8}
 /* share buttons */
 .xbtn{font-family:var(--display);font-weight:800;text-transform:uppercase;letter-spacing:.05em;font-size:14px;line-height:1;color:var(--ink);background:transparent;border:2px solid var(--ink);border-radius:999px;padding:6px 12px 6px 30px;cursor:pointer;position:relative;white-space:nowrap}
 .xbtn::before{content:"";position:absolute;left:11px;top:50%;width:12px;height:12px;margin-top:-7px;background:no-repeat center/contain url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M6 8V1.5M3 4l3-3 3 3M1.5 7v3.5h9V7' fill='none' stroke='%23F4EAD2' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")}
@@ -449,17 +456,23 @@ select{-webkit-appearance:none;appearance:none;padding:7px 42px 7px 16px!importa
 #team .teamhead > div:first-child{position:relative}
 #team .teamhead > div:first-child > .xbtn{margin-top:10px}
 /* ===== No scroll-inside-a-scroll ===== */
-.tablewrap{max-height:none!important;overflow:visible!important;scroll-margin-top:70px}
-.tablewrap th{top:64px!important}
+/* default: a table that is too wide swipes sideways inside its box (never up and down); headers stay put */
+.tablewrap{max-height:none!important;overflow-x:auto!important;overflow-y:hidden!important;scroll-margin-top:70px}
+.tablewrap th{position:static!important}
+/* long tables that fit: let the page scroll them, with the header pinned under the nav */
+@media (min-width:641px){
+  .tablewrap:has(#board),.tablewrap:has(#tend),.tablewrap:has(#blown),.tablewrap:has(#cashtab),.tablewrap:has(#biggest),.tablewrap:has(#poll),.tablewrap:has(#topgames),#coaches-sec .tablewrap{overflow:visible!important}
+  .tablewrap:has(#board) th,.tablewrap:has(#tend) th,.tablewrap:has(#blown) th,.tablewrap:has(#cashtab) th,.tablewrap:has(#biggest) th,.tablewrap:has(#poll) th,.tablewrap:has(#topgames) th,#coaches-sec .tablewrap th{position:sticky!important;top:64px!important}
+}
+.tablewrap.wide:is(#z,*){overflow-x:auto!important;overflow-y:hidden!important}.tablewrap.wide:is(#z,*) th{position:static!important}
 .tablewrap table:not(.all) > tbody > tr:nth-child(n+26){display:none}
 .tablewrap thead th:first-child{border-top-left-radius:14px}.tablewrap thead th:last-child{border-top-right-radius:14px}
 .moreb{display:block;margin:2px auto 0!important}
 #log th,#log td{padding-left:7px!important;padding-right:7px!important}#log td.l{white-space:normal}
-.tablewrap:has(#log){overflow-x:auto!important;overflow-y:hidden!important}
+.tbt td.l{white-space:normal!important}.tbt td.l:nth-child(2){white-space:nowrap!important}
+.tbwrap{grid-template-columns:repeat(auto-fit,minmax(420px,1fr))!important}
 @media (max-width:640px){
-  .tablewrap{overflow-x:auto!important;overflow-y:hidden!important}
-  .tablewrap th{position:static!important}
-  .tbt td.l{white-space:normal!important}
+  .tbwrap{grid-template-columns:minmax(0,1fr)!important}
   .tablewrap:has(#board){overflow:visible!important}
   .tablewrap:has(#board) th{position:sticky!important;top:58px!important}
 }
@@ -1375,6 +1388,7 @@ var TRK = {"season":2026,"baseBlown":0.19864940911648846,"baseCash":0.5229621125
       history.replaceState(null, "", web ? (pg === "team" && state.sel ? "/" + slugOf(state.sel) + "#team" : "/#" + pg) : "#" + pg); } catch(e){}
     try { localStorage.setItem("dawg-page", pg); } catch(e){}
     if (!keepScroll) window.scrollTo(0, 0);
+    setTimeout(function(){ if (typeof fitTables === "function") fitTables(); }, 0);
   }
   document.querySelectorAll(".topnav a").forEach(function(a){ a.addEventListener("click", function(e){ e.preventDefault(); showPage(a.getAttribute("data-p")); }); });
 
@@ -1614,11 +1628,13 @@ var TRK = {"season":2026,"baseBlown":0.19864940911648846,"baseCash":0.5229621125
     document.querySelector("#topgames tbody").innerHTML = TOPS[y] || '<tr><td class="l" colspan="8"><span class="dim">No graded games for this season.</span></td></tr>';
   }
   // No scroll boxes: long tables show 25 rows plus a Show-all button, and the page does the scrolling.
+  function fitTables(){ document.querySelectorAll(".tablewrap").forEach(function(w){ var tb = w.querySelector("table"); if (!tb || !w.offsetParent) return; w.classList.remove("wide"); if (tb.offsetWidth > w.clientWidth + 2) w.classList.add("wide"); }); }
+  window.addEventListener("resize", function(){ clearTimeout(fitTables.t); fitTables.t = setTimeout(fitTables, 120); });
   function capTables(){
     document.querySelectorAll(".tablewrap > table").forEach(function(tb){
       if (tb.id === "topgames" || tb.id === "log" || !tb.tBodies[0] || tb._capped) return; tb._capped = true;
       var wrap = tb.parentNode, btn = document.createElement("button"); btn.type = "button"; btn.className = "gotit moreb"; btn.hidden = true; wrap.after(btn);
-      function update(){ var n = tb.tBodies[0].rows.length; btn.hidden = n <= 25; btn.textContent = tb.classList.contains("all") ? "Show top 25" : "Show all " + n; }
+      function update(){ setTimeout(fitTables, 0); var n = tb.tBodies[0].rows.length; btn.hidden = n <= 25; btn.textContent = tb.classList.contains("all") ? "Show top 25" : "Show all " + n; }
       btn.addEventListener("click", function(){ var open = tb.classList.toggle("all"); update(); if (!open) wrap.scrollIntoView({block:"start"}); });
       new MutationObserver(update).observe(tb.tBodies[0], {childList:true}); update();
     });
@@ -1726,7 +1742,7 @@ var TRK = {"season":2026,"baseBlown":0.19864940911648846,"baseCash":0.5229621125
     if (!seen){ var tip = document.createElement("div"); tip.id = "fabtip"; tip.textContent = "Like something? Share it as an image"; document.body.appendChild(tip);
       setTimeout(function(){ tip.classList.add("on"); }, 2500); setTimeout(function(){ tip.classList.remove("on"); setTimeout(function(){ tip.remove(); }, 400); try { localStorage.setItem("dawg-share-tip", "1"); } catch(e){} }, 9500); }
   })();
-  function drawAll(){ drawAsOf(); drawChips(); drawChart(); drawBoard(); drawConfs(); drawTeam(); drawCoaches(); drawTend(); drawTrackers(); drawTop(); capTables(); }
+  function drawAll(){ drawAsOf(); drawChips(); drawChart(); drawBoard(); drawConfs(); drawTeam(); drawCoaches(); drawTend(); drawTrackers(); drawTop(); capTables(); fitTables(); }
   var WEEK = {"label": "Week 5", "pollName": "AP Poll Week 6", "n": 68, "best": {"id": "401856817", "t": "239", "y": 2026, "team": "Baylor", "opp": "Arizona State", "rk": null, "site": "away", "pf": 55, "pa": 19, "grade": 13.5, "srank": 1}, "worst": {"id": "401856821", "t": "38", "y": 2026, "team": "Colorado", "opp": "Texas Tech", "rk": 12, "site": "home", "pf": 7, "pa": 29, "grade": -10.6, "srank": 314}, "collapse": {"opp": "Houston", "site": "away", "lead": 17, "at": [17, 0], "pf": 17, "pa": 27, "date": "2026-10-03", "id": "401856819", "team": "UCF", "tid": "2116"}, "gap": {"id": "145", "name": "Ole Miss", "ap": 9, "drank": 44}, "poll": [{"id": "251", "ap": 1, "w": 4, "l": 0, "drank": 29, "dawg": 0.8, "luck": 1.2, "flag": "fraud"}, {"id": "61", "ap": 2, "w": 5, "l": 0, "drank": 5, "dawg": 3.9, "luck": 0.4, "flag": "legit"}, {"id": "87", "ap": 3, "w": 5, "l": 0, "drank": 17, "dawg": 1.8, "luck": 0.2, "flag": ""}, {"id": "2390", "ap": 4, "w": 5, "l": 0, "drank": 7, "dawg": 3.1, "luck": 0.3, "flag": "legit"}, {"id": "194", "ap": 5, "w": 4, "l": 1, "drank": 33, "dawg": 0.4, "luck": -0.7, "flag": ""}, {"id": "333", "ap": 6, "w": 5, "l": 0, "drank": 2, "dawg": 6.9, "luck": 0.2, "flag": "legit"}, {"id": "84", "ap": 7, "w": 5, "l": 0, "drank": 35, "dawg": 0.3, "luck": 0.2, "flag": ""}, {"id": "252", "ap": 8, "w": 4, "l": 0, "drank": 13, "dawg": 2.2, "luck": 1.0, "flag": ""}, {"id": "145", "ap": 9, "w": 3, "l": 1, "drank": 44, "dawg": -0.7, "luck": 1.1, "flag": "fraud"}, {"id": "99", "ap": 10, "w": 4, "l": 1, "drank": 23, "dawg": 1.1, "luck": -0.5, "flag": ""}, {"id": "2641", "ap": 11, "w": 5, "l": 0, "drank": 50, "dawg": -1.8, "luck": 1.0, "flag": "fraud"}, {"id": "254", "ap": 12, "w": 4, "l": 0, "drank": 8, "dawg": 3.1, "luck": 0.0, "flag": "legit"}, {"id": "2483", "ap": 13, "w": 3, "l": 1, "drank": 46, "dawg": -1.2, "luck": 0.1, "flag": "fraud"}, {"id": "142", "ap": 14, "w": 4, "l": 1, "drank": 14, "dawg": 2.2, "luck": -0.2, "flag": ""}, {"id": "2633", "ap": 15, "w": 4, "l": 1, "drank": 25, "dawg": 1.0, "luck": 0.5, "flag": ""}, {"id": "57", "ap": 16, "w": 4, "l": 1, "drank": 11, "dawg": 2.5, "luck": 0.4, "flag": "legit"}, {"id": "344", "ap": 17, "w": 4, "l": 1, "drank": 6, "dawg": 3.2, "luck": 0.5, "flag": "legit"}, {"id": "197", "ap": 18, "w": 3, "l": 1, "drank": 38, "dawg": -0.3, "luck": 0.1, "flag": "fraud"}, {"id": "30", "ap": 19, "w": 5, "l": 1, "drank": 30, "dawg": 0.6, "luck": 0.8, "flag": ""}, {"id": "2294", "ap": 20, "w": 4, "l": 1, "drank": 27, "dawg": 0.8, "luck": 1.2, "flag": "fraud"}, {"id": "26", "ap": 21, "w": 4, "l": 0, "drank": 3, "dawg": 6.2, "luck": 0.3, "flag": "legit"}, {"id": "248", "ap": 22, "w": 4, "l": 1, "drank": 24, "dawg": 1.0, "luck": 0.0, "flag": ""}, {"id": "2567", "ap": 24, "w": 4, "l": 1, "drank": 52, "dawg": -2.0, "luck": 0.6, "flag": "fraud"}, {"id": "221", "ap": 25, "w": 5, "l": 0, "drank": 20, "dawg": 1.6, "luck": 0.5, "flag": ""}, {"id": "77", "ap": null, "w": 3, "l": 1, "drank": 1, "dawg": 8.1, "luck": -0.0, "flag": "sleeper"}, {"id": "154", "ap": null, "w": 4, "l": 1, "drank": 4, "dawg": 4.2, "luck": 0.4, "flag": "sleeper"}, {"id": "158", "ap": null, "w": 5, "l": 0, "drank": 9, "dawg": 2.7, "luck": 0.4, "flag": "sleeper"}, {"id": "96", "ap": null, "w": 4, "l": 1, "drank": 10, "dawg": 2.5, "luck": 0.4, "flag": "sleeper"}, {"id": "239", "ap": null, "w": 4, "l": 1, "drank": 12, "dawg": 2.3, "luck": 0.3, "flag": "sleeper"}, {"id": "2132", "ap": null, "w": 4, "l": 1, "drank": 15, "dawg": 2.1, "luck": 0.5, "flag": "sleeper"}]};
   function ord(n){ var v = n % 100, s = ["th","st","nd","rd"]; return n + (s[(v - 20) % 10] || s[v] || s[0]); }
   function drawWeek(){
