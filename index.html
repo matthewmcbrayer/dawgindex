@@ -1868,8 +1868,6 @@ var TRK = {"season":2026,"baseBlown":0.19864940911648846,"baseCash":0.5229621125
     var h = gtile("Best game", W.best, "pos") + gtile("Worst game", W.worst, "neg");
     if (W.collapse){ var c = W.collapse; h += '<div tabindex="0" data-id="' + c.tid + '"><span class="lbl">Biggest collapse</span><span class="big neg">' + c.at[0] + "–" + c.at[1] + '</span><span class="t">' + esc(c.team) + '</span><span class="s">led ' + (c.site === "away" ? "at " : "vs ") + esc(c.opp) + ", lost " + c.pf + "–" + c.pa + "</span></div>"; }
     if (W.gap){ var p = W.gap; h += '<div tabindex="0" data-id="' + p.id + '"><span class="lbl">Biggest poll disparity</span><span class="pc"><span><b>#' + p.ap + '</b>AP Poll</span><span><b class="neg">#' + p.drank + '</b>DAWG Index</span></span><span class="t">' + esc(p.name) + '</span><span class="s">' + ord(p.ap) + " in the AP poll, " + ord(p.drank) + " of " + W.n + " in how it's actually played</span></div>"; }
-    var D = dueRows().sort(function(a,b){ return b.luck - a.luck; })[0];
-    if (D && D.luck >= 0.7) h += '<div tabindex="0" data-id="' + D.id + '"><span class="lbl">Most due for a fall</span><span class="big neg">' + signed(D.luck) + '</span><span class="t">' + esc(META[D.id].name) + '</span><span class="s">' + D.w + "–" + D.l + ", but played like a " + D.xw + "–" + D.xl + " team</span></div>";
     el.innerHTML = h;
   }
   function drawPoll(){
