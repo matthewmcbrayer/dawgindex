@@ -231,8 +231,6 @@ tr.gc:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
   #seasonbox{flex-direction:row;align-items:center;gap:10px}
   .asof{text-align:left}
   .chartbox{overflow-x:auto;-webkit-overflow-scrolling:touch}
-  #chart{min-width:540px}
-  #chart-sec .scrollhint{display:block}
 }
 .wk{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1px;background:var(--line);border:1px solid var(--line)}
 .wk>div{background:var(--surface);padding:14px 16px;display:flex;flex-direction:column;gap:4px;min-width:0}
@@ -613,7 +611,12 @@ var TRK = {"season":2026,"baseBlown":0.19864940911648846,"baseCash":0.5229621125
   function sy(v){ return H - M.b - (v - lo) / (hi - lo) * (H - M.t - M.b); }
   function clamp(v){ return Math.max(lo, Math.min(hi, v)); }
   var svg = $("chart");
+  var MOB = false;
   function drawChart(){
+    MOB = window.matchMedia("(max-width:640px)").matches;
+    if (MOB){ W = 380; H = 560; M = {l:30, r:6, t:8, b:40}; } else { W = 900; H = 720; M = {l:64, r:24, t:24, b:58}; }
+    svg.setAttribute("viewBox", "0 0 " + W + " " + H);
+    var FS = MOB ? 10 : 13;
     var T = teamsFor(state.season), plotted = T.filter(function(t){ return t.big !== null && t.other !== null && (!state.conf || t.conf === state.conf); });
     var off = T.filter(function(t){ return (t.big === null || t.other === null) && (!state.conf || t.conf === state.conf); }).sort(function(a,b){ return a.name < b.name ? -1 : 1; });
     var oc = $("offchart"); oc.hidden = !off.length;
@@ -626,31 +629,31 @@ var TRK = {"season":2026,"baseBlown":0.19864940911648846,"baseCash":0.5229621125
     while (svg.firstChild) svg.removeChild(svg.firstChild);
     var x0 = sx(0), y0 = sy(0);
     var Q = [
-      {x:x0, y:sy(hi), w:sx(XH)-x0, h:y0-sy(hi), fill:"var(--q-dawg)", t:"DAWGS", s:"Beat expectations everywhere", c:"var(--good)", ax:"end", tx:sx(XH)-14, ty:sy(hi)+24, f:function(t){ return t.other >= 0 && t.big >= 0; }},
-      {x:sx(XL), y:sy(hi), w:x0-sx(XL), h:y0-sy(hi), fill:"var(--q-rise)", t:"GETS UP FOR GAMEDAY", s:"Flat in routine games, shows up when it's loud", c:"var(--ink)", ax:"start", tx:sx(XL)+14, ty:sy(hi)+24, f:function(t){ return t.other < 0 && t.big >= 0; }},
-      {x:x0, y:y0, w:sx(XH)-x0, h:sy(lo)-y0, fill:"var(--q-front)", t:"TO BE DESIRED", s:"Handles routine games, shrinks in big ones", c:"var(--ink)", ax:"end", tx:sx(XH)-14, ty:sy(lo)-30, f:function(t){ return t.other >= 0 && t.big < 0; }},
-      {x:sx(XL), y:y0, w:x0-sx(XL), h:sy(lo)-y0, fill:"var(--q-soft)", t:"SOFT", s:"Below expectations everywhere", c:"var(--bad)", ax:"start", tx:sx(XL)+14, ty:sy(lo)-30, f:function(t){ return t.other < 0 && t.big < 0; }}
+      {x:x0, y:sy(hi), w:sx(XH)-x0, h:y0-sy(hi), fill:"var(--q-dawg)", t:"DAWGS", s:"Beat expectations everywhere", c:"var(--good)", ax:"end", tx:sx(XH)-(MOB?8:14), ty:sy(hi)+(MOB?18:24), f:function(t){ return t.other >= 0 && t.big >= 0; }},
+      {x:sx(XL), y:sy(hi), w:x0-sx(XL), h:y0-sy(hi), fill:"var(--q-rise)", t:"GETS UP FOR GAMEDAY", s:"Flat in routine games, shows up when it's loud", c:"var(--ink)", ax:"start", tx:sx(XL)+(MOB?8:14), ty:sy(hi)+(MOB?18:24), f:function(t){ return t.other < 0 && t.big >= 0; }},
+      {x:x0, y:y0, w:sx(XH)-x0, h:sy(lo)-y0, fill:"var(--q-front)", t:"TO BE DESIRED", s:"Handles routine games, shrinks in big ones", c:"var(--ink)", ax:"end", tx:sx(XH)-(MOB?8:14), ty:sy(lo)-(MOB?20:30), f:function(t){ return t.other >= 0 && t.big < 0; }},
+      {x:sx(XL), y:y0, w:x0-sx(XL), h:sy(lo)-y0, fill:"var(--q-soft)", t:"SOFT", s:"Below expectations everywhere", c:"var(--bad)", ax:"start", tx:sx(XL)+(MOB?8:14), ty:sy(lo)-(MOB?20:30), f:function(t){ return t.other < 0 && t.big < 0; }}
     ];
     Q.forEach(function(q){ el("rect", {x:q.x, y:q.y, width:q.w, height:q.h, fill:q.fill}, svg); });
     for (var xv = XL; xv <= XH + 1e-9; xv += XS){
       el("line", {x1:sx(xv), x2:sx(xv), y1:sy(lo), y2:sy(hi), stroke:"var(--grid)", "stroke-opacity":0.6}, svg);
-      txt(svg, sx(xv), H - M.b + 20, signed(xv,0), {"text-anchor":"middle"});
+      txt(svg, sx(xv), H - M.b + (MOB?14:20), signed(xv,0), {"text-anchor":"middle", "font-size":FS});
     }
     for (var v = lo; v <= hi + 1e-9; v += step){
       el("line", {x1:sx(XL), x2:sx(XH), y1:sy(v), y2:sy(v), stroke:"var(--grid)", "stroke-opacity":0.6}, svg);
-      txt(svg, M.l - 10, sy(v) + 4, signed(v,0), {"text-anchor":"end"});
+      txt(svg, M.l - (MOB?5:10), sy(v) + 4, signed(v,0), {"text-anchor":"end", "font-size":FS});
     }
     el("line", {x1:x0, x2:x0, y1:sy(lo), y2:sy(hi), stroke:"var(--faint)", "stroke-width":1.5}, svg);
     el("line", {x1:sx(XL), x2:sx(XH), y1:y0, y2:y0, stroke:"var(--faint)", "stroke-width":1.5}, svg);
     Q.forEach(function(q){
       var n = plotted.filter(q.f).length;
-      txt(svg, q.tx, q.ty, q.t, {"text-anchor":q.ax, "font-family":"var(--display)", "font-size":22, "font-weight":800, fill:q.c, "letter-spacing":".04em"});
-      txt(svg, q.tx, q.ty + 18, q.s + " · " + n + " team" + (n === 1 ? "" : "s"), {"text-anchor":q.ax, "font-size":12.5, fill:"var(--muted)"});
+      txt(svg, q.tx, q.ty, MOB && q.t === "GETS UP FOR GAMEDAY" ? "GETS UP FOR IT" : q.t, {"text-anchor":q.ax, "font-family":"var(--display)", "font-size":MOB ? 15 : 22, "font-weight":800, fill:q.c, "letter-spacing":".04em"});
+      txt(svg, q.tx, q.ty + (MOB ? 12 : 18), (MOB ? "" : q.s + " · ") + n + " team" + (n === 1 ? "" : "s"), {"text-anchor":q.ax, "font-size":MOB ? 9.5 : 12.5, fill:"var(--muted)"});
     });
-    txt(svg, (sx(XL)+sx(XH))/2, H - 12, "Routine games: worse ← → better than expected", {"text-anchor":"middle"});
-    var my = (sy(lo)+sy(hi))/2; txt(svg, 16, my, ({big:"Big games", bigR:"Big road games", bigH:"Big home games"})[state.bigKey] + ": worse ← → better than expected", {"text-anchor":"middle", transform:"rotate(-90 16 " + my + ")"});
+    txt(svg, (sx(XL)+sx(XH))/2, H - (MOB?8:12), MOB ? "Routine games: worse ← → better" : "Routine games: worse ← → better than expected", {"text-anchor":"middle", "font-size":FS});
+    var my = (sy(lo)+sy(hi))/2, ax = MOB ? 9 : 16; txt(svg, ax, my, MOB ? "Big games: worse ← → better" : ({big:"Big games", bigR:"Big road games", bigH:"Big home games"})[state.bigKey] + ": worse ← → better than expected", {"text-anchor":"middle", "font-size":FS, transform:"rotate(-90 " + ax + " " + my + ")"});
     function hiOf(t){ return (state.picked && t.id === state.sel) ? 1 : 0; }
-    var dots = plotted.map(function(t){ return {t:t, x:sx(clampX(t.other)), y:sy(clamp(t.big)), r:3 + Math.min(t.nBig, 8) * 0.45}; });
+    var dots = plotted.map(function(t){ return {t:t, x:sx(clampX(t.other)), y:sy(clamp(t.big)), r:(MOB ? 2.5 : 3) + Math.min(t.nBig, 8) * (MOB ? 0.3 : 0.45)}; });
     var boxes = [];
     function hits(b){
       if (b.x1 < M.l || b.x2 > W - M.r || b.y1 < M.t || b.y2 > H - M.b) return true;
@@ -674,9 +677,9 @@ var TRK = {"season":2026,"baseBlown":0.19864940911648846,"baseCash":0.5229621125
     });
     // keep labels off the quadrant titles
     Q.forEach(function(q){
-      var w = Math.max(q.t.length * 14, (q.s.length + 12) * 6.6);
+      var w = MOB ? (q.t === "GETS UP FOR GAMEDAY" ? 14 : q.t.length) * 9 : Math.max(q.t.length * 14, (q.s.length + 12) * 6.6);
       var x1 = q.ax === "end" ? q.tx - w : q.tx;
-      boxes.push({x1:x1 - 4, x2:x1 + w + 4, y1:q.ty - 22, y2:q.ty + 24});
+      boxes.push({x1:x1 - 4, x2:x1 + w + 4, y1:q.ty - (MOB ? 15 : 22), y2:q.ty + (MOB ? 15 : 24)});
     });
     // label every team: try spots at growing distances around the dot, draw a leader line when it lands away from the dot
     var lg = el("g", {"pointer-events":"none"}, svg);
@@ -685,8 +688,8 @@ var TRK = {"season":2026,"baseBlown":0.19864940911648846,"baseCash":0.5229621125
     order.forEach(function(d){ d.crowd = dots.filter(function(o){ return Math.abs(o.x - d.x) < 40 && Math.abs(o.y - d.y) < 24; }).length; });
     order.sort(function(a,b){ return (hiOf(b.t) - hiOf(a.t)) || (b.crowd - a.crowd); });
     order.forEach(function(d){
-      var sel = state.picked && d.t.id === state.sel, fs = sel ? 13 : 11, w = d.t.abbr.length * (sel ? 8.4 : 7.1) + 2, hgt = sel ? 14 : 12, pick = null, far = false;
-      var rings = [d.r + 3, d.r + 10, d.r + 18, d.r + 28, d.r + 40];
+      var sel = state.picked && d.t.id === state.sel, fs = MOB ? (sel ? 11 : 9.5) : (sel ? 13 : 11), w = d.t.abbr.length * (MOB ? (sel ? 7.2 : 6.2) : (sel ? 8.4 : 7.1)) + 2, hgt = MOB ? (sel ? 12 : 10.5) : (sel ? 14 : 12), pick = null, far = false;
+      var rings = MOB ? [d.r + 2, d.r + 7, d.r + 13, d.r + 20, d.r + 28] : [d.r + 3, d.r + 10, d.r + 18, d.r + 28, d.r + 40];
       outer: for (var ri = 0; ri < rings.length; ri++){
         for (var k = 0; k < 12; k++){
           var ang = [0, 180, 90, 270, 30, 150, 210, 330, 60, 120, 240, 300][k] * Math.PI / 180;
@@ -700,7 +703,7 @@ var TRK = {"season":2026,"baseBlown":0.19864940911648846,"baseCash":0.5229621125
       if (!pick) return;
       boxes.push(pick);
       if (far){ var lx = Math.max(pick.x1, Math.min(d.x, pick.x2)), ly = Math.max(pick.y1, Math.min(d.y, pick.y2)); el("line", {x1:d.x, y1:d.y, x2:lx, y2:ly, stroke:"var(--faint)", "stroke-width":0.75}, lines); }
-      txt(lg, pick.x1 + 1, pick.y2 - (sel ? 2 : 2), d.t.abbr, {"font-size":fs, "font-weight": sel ? 700 : 600, fill: hiOf(d.t) ? "var(--accent)" : "var(--ink)", "paint-order":"stroke", stroke:"var(--surface)", "stroke-width":3});
+      txt(lg, pick.x1 + 1, pick.y2 - (sel ? 2 : 2), d.t.abbr, {"font-size":fs, "font-weight": sel ? 700 : 600, fill: hiOf(d.t) ? "var(--accent)" : "var(--ink)", "paint-order":"stroke", stroke:"var(--surface)", "stroke-width":MOB ? 2.5 : 3});
     });
   }
   function showTip(t, cx, cy){
@@ -1327,6 +1330,7 @@ var TRK = {"season":2026,"baseBlown":0.19864940911648846,"baseCash":0.5229621125
   $("wk").addEventListener("click", function(e){ var d = e.target.closest("[data-id]"); if (d && !d.hasAttribute("data-gid")) select(d.getAttribute("data-id"), true); });
   $("wk").addEventListener("keydown", function(e){ if (e.key !== "Enter") return; var d = e.target.closest("[data-id]"); if (d && !d.hasAttribute("data-gid")) select(d.getAttribute("data-id"), true); });
   drawWeek(); drawPoll();
+  var mq = window.matchMedia("(max-width:640px)"); (mq.addEventListener ? mq.addEventListener("change", drawChart) : mq.addListener(drawChart));
   $("season").addEventListener("change", drawPoll);
   drawAll();
   showPage(linkTeam ? "team" : ((location.hash || "").replace("#","") || "rankings"), true);
