@@ -647,7 +647,7 @@ var TRK = {"season":2026,"baseBlown":0.19864940911648846,"baseCash":0.5229621125
     el("line", {x1:sx(XL), x2:sx(XH), y1:y0, y2:y0, stroke:"var(--faint)", "stroke-width":1.5}, svg);
     Q.forEach(function(q){
       var n = plotted.filter(q.f).length;
-      txt(svg, q.tx, q.ty, MOB && q.t === "GETS UP FOR GAMEDAY" ? "GETS UP FOR IT" : q.t, {"text-anchor":q.ax, "font-family":"var(--display)", "font-size":MOB ? 15 : 22, "font-weight":800, fill:q.c, "letter-spacing":".04em"});
+      txt(svg, q.tx, q.ty, q.t, {"text-anchor":q.ax, "font-family":"var(--display)", "font-size":MOB ? 14 : 22, "font-weight":800, fill:q.c, "letter-spacing":".04em"});
       txt(svg, q.tx, q.ty + (MOB ? 12 : 18), (MOB ? "" : q.s + " · ") + n + " team" + (n === 1 ? "" : "s"), {"text-anchor":q.ax, "font-size":MOB ? 9.5 : 12.5, fill:"var(--muted)"});
     });
     txt(svg, (sx(XL)+sx(XH))/2, H - (MOB?8:12), MOB ? "Routine games: worse ← → better" : "Routine games: worse ← → better than expected", {"text-anchor":"middle", "font-size":FS});
@@ -677,7 +677,7 @@ var TRK = {"season":2026,"baseBlown":0.19864940911648846,"baseCash":0.5229621125
     });
     // keep labels off the quadrant titles
     Q.forEach(function(q){
-      var w = MOB ? (q.t === "GETS UP FOR GAMEDAY" ? 14 : q.t.length) * 9 : Math.max(q.t.length * 14, (q.s.length + 12) * 6.6);
+      var w = MOB ? q.t.length * 8 : Math.max(q.t.length * 14, (q.s.length + 12) * 6.6);
       var x1 = q.ax === "end" ? q.tx - w : q.tx;
       boxes.push({x1:x1 - 4, x2:x1 + w + 4, y1:q.ty - (MOB ? 15 : 22), y2:q.ty + (MOB ? 15 : 24)});
     });
