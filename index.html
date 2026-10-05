@@ -448,6 +448,21 @@ select{-webkit-appearance:none;appearance:none;padding:7px 42px 7px 16px!importa
 #htip code{font-family:var(--body)!important;font-size:14px!important;opacity:.8}
 .bigwins{display:flex;flex-direction:column;gap:8px}.bigwins .note{margin:-2px 0 4px}
 #bigw .env{width:56px;margin-right:8px}
+/* How it went (game cards) */
+.hiw{border:1.5px solid var(--quiet,#4a4238);border-radius:12px;padding:10px 14px}
+.hiw summary{cursor:pointer;font-family:var(--display);font-weight:900;text-transform:uppercase;letter-spacing:.06em;font-size:15px;color:var(--muted);list-style:none}
+.hiw summary::-webkit-details-marker{display:none}
+.hiw summary::after{content:" ▾"}.hiw[open] summary::after{content:" ▴"}
+.hq table{width:100%;border-collapse:collapse;margin-top:8px;font-variant-numeric:tabular-nums}
+.hq th{background:none!important;color:var(--faint)!important;font-size:12px!important;padding:2px 6px!important;text-align:center!important;border:0!important;position:static!important}
+.hq td{padding:3px 6px!important;text-align:center!important;font-family:var(--display);font-weight:800;font-size:18px;border:0!important;color:var(--muted)}
+.hq td.t{text-align:left!important}.hq td.f{font-weight:900}
+.hq tr.me td{color:var(--ink)}
+.hs{margin-top:10px;display:grid;gap:2px}.hs .row{display:grid;grid-template-columns:1.4fr 1fr 1fr;align-items:center}
+.hs .k{font-family:var(--display);font-weight:800;font-size:13px;text-transform:uppercase;letter-spacing:.05em;color:var(--faint)}
+.hs .h{font-size:12px;color:var(--faint);text-align:center;text-transform:uppercase;font-family:var(--display);font-weight:700}
+.hs .t{font-family:var(--display);font-weight:800;color:var(--muted)}.hs .v{text-align:center;font-family:var(--display);font-weight:800;font-size:18px;color:var(--muted)}.hs .v.me{color:var(--ink)}
+.hx{margin:10px 0 0;font-size:14.5px;color:var(--muted);line-height:1.4}.hx b{color:var(--ink)}
 /* share buttons */
 .xbtn{font-family:var(--display);font-weight:800;text-transform:uppercase;letter-spacing:.05em;font-size:14px;line-height:1;color:var(--ink);background:transparent;border:2px solid var(--ink);border-radius:999px;padding:6px 12px 6px 30px;cursor:pointer;position:relative;white-space:nowrap}
 .xbtn::before{content:"";position:absolute;left:11px;top:50%;width:12px;height:12px;margin-top:-7px;background:no-repeat center/contain url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M6 8V1.5M3 4l3-3 3 3M1.5 7v3.5h9V7' fill='none' stroke='%23F4EAD2' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")}
@@ -1578,6 +1593,22 @@ var TRK = {"season":2026,"baseBlown":0.19864940911648846,"baseCash":0.5229621125
     var mg = g.pf - g.pa;
     $("gc-big").innerHTML = '<b class="' + cls(g.dawg) + '">' + (g.dawg === null ? "–" : signed(g.dawg)) + '</b><span>' + (mg > 0 ? "W " : mg < 0 ? "L " : "T ") + g.pf + "–" + g.pa + (g.line === null ? "" : " · line " + (g.line === 0 ? "PK" : signed(g.line))) + '</span>' + (g.dawg !== null ? verdict(g.dawg, 5) : "");
     $("gc-sum").textContent = gameSummary(g);
+    loadHIW().then(function(){
+      if (gcShare && gcShare.g !== g) return;
+      var old = document.querySelector("#gcard .hiw"); if (old) old.remove();
+      var h = HIW[g.id]; if (!h) return;
+      var n = Math.max(h.q[0].length, h.q[1].length), hd = "", rows = "";
+      for (var i = 0; i < n; i++) hd += "<th>" + (i < 4 ? "Q" + (i + 1) : (n > 5 ? "OT" + (i - 3) : "OT")) + "</th>";
+      [0, 1].forEach(function(k){ var me = h.t[k][0] === t; rows += '<tr' + (me ? ' class="me"' : '') + '><td class="t">' + esc(h.t[k][1]) + '</td>' + h.q[k].map(function(v){ return "<td>" + v + "</td>"; }).join("") + '<td class="f">' + h.q[k].reduce(function(a, b){ return a + b; }, 0) + "</td></tr>"; });
+      var ord = h.t[0][0] === t ? [0, 1] : [1, 0], sr = "";
+      if (h.sr[0][0] !== null || h.sr[1][0] !== null) sr = '<div class="hs"><div class="row"><span class="k">Success rate</span><span class="h">1st half</span><span class="h">2nd half</span></div>' +
+        ord.map(function(k, j){ var c = j === 0 ? " me" : ""; return '<div class="row"><span class="t">' + esc(h.t[k][1]) + '</span><span class="v' + c + '">' + (h.sr[k][0] === null ? "–" : h.sr[k][0] + "%") + '</span><span class="v' + c + '">' + (h.sr[k][1] === null ? "–" : h.sr[k][1] + "%") + "</span></div>"; }).join("") + "</div>";
+      var s = h.s[t] || "", m1 = s.match(/^(Played like an? \d+% winner\.)\s*(.*)$/);
+      var sent = m1 ? "<b>" + esc(m1[1]) + "</b> " + esc(m1[2]) : esc(s);
+      var el = document.createElement("details"); el.className = "hiw";
+      el.innerHTML = '<summary>How it went</summary><div class="hq"><table><thead><tr><th></th>' + hd + '<th>F</th></tr></thead><tbody>' + rows + '</tbody></table></div>' + sr + (sent ? '<p class="hx">' + sent + "</p>" : "");
+      $("gc-big").after(el);
+    });
     var P = [["p_ats","vs Spread", g.pats, signed(g.pats) + " pts", "margin + line, no garbage time"],
              ["p_fin","Finishing", g.pfin, signed(g.pfin) + " pts", "margin vs what the yardage buys"],
              ["p_knife","Knife twist", g.pknife, signed(g.pknife) + " pts", "net points after first 9+ lead, vs expected"],
@@ -1757,6 +1788,8 @@ var TRK = {"season":2026,"baseBlown":0.19864940911648846,"baseCash":0.5229621125
   })();
   function drawAll(){ drawAsOf(); drawChips(); drawChart(); drawBoard(); drawConfs(); drawTeam(); drawCoaches(); drawTend(); drawTrackers(); drawTop(); capTables(); fitTables(); }
   var WEEK = {"label": "Week 5", "pollName": "AP Poll Week 6", "n": 68, "best": {"id": "401856817", "t": "239", "y": 2026, "team": "Baylor", "opp": "Arizona State", "rk": null, "site": "away", "pf": 55, "pa": 19, "grade": 13.5, "srank": 1}, "worst": {"id": "401856821", "t": "38", "y": 2026, "team": "Colorado", "opp": "Texas Tech", "rk": 12, "site": "home", "pf": 7, "pa": 29, "grade": -10.6, "srank": 314}, "collapse": {"opp": "Houston", "site": "away", "lead": 17, "at": [17, 0], "pf": 17, "pa": 27, "date": "2026-10-03", "id": "401856819", "team": "UCF", "tid": "2116"}, "gap": {"id": "145", "name": "Ole Miss", "ap": 9, "drank": 44}, "poll": [{"id": "251", "ap": 1, "w": 4, "l": 0, "drank": 29, "dawg": 0.8, "luck": 1.2, "flag": "fraud"}, {"id": "61", "ap": 2, "w": 5, "l": 0, "drank": 5, "dawg": 3.9, "luck": 0.4, "flag": "legit"}, {"id": "87", "ap": 3, "w": 5, "l": 0, "drank": 17, "dawg": 1.8, "luck": 0.2, "flag": ""}, {"id": "2390", "ap": 4, "w": 5, "l": 0, "drank": 7, "dawg": 3.1, "luck": 0.3, "flag": "legit"}, {"id": "194", "ap": 5, "w": 4, "l": 1, "drank": 33, "dawg": 0.4, "luck": -0.7, "flag": ""}, {"id": "333", "ap": 6, "w": 5, "l": 0, "drank": 2, "dawg": 6.9, "luck": 0.2, "flag": "legit"}, {"id": "84", "ap": 7, "w": 5, "l": 0, "drank": 35, "dawg": 0.3, "luck": 0.2, "flag": ""}, {"id": "252", "ap": 8, "w": 4, "l": 0, "drank": 13, "dawg": 2.2, "luck": 1.0, "flag": ""}, {"id": "145", "ap": 9, "w": 3, "l": 1, "drank": 44, "dawg": -0.7, "luck": 1.1, "flag": "fraud"}, {"id": "99", "ap": 10, "w": 4, "l": 1, "drank": 23, "dawg": 1.1, "luck": -0.5, "flag": ""}, {"id": "2641", "ap": 11, "w": 5, "l": 0, "drank": 50, "dawg": -1.8, "luck": 1.0, "flag": "fraud"}, {"id": "254", "ap": 12, "w": 4, "l": 0, "drank": 8, "dawg": 3.1, "luck": 0.0, "flag": "legit"}, {"id": "2483", "ap": 13, "w": 3, "l": 1, "drank": 46, "dawg": -1.2, "luck": 0.1, "flag": "fraud"}, {"id": "142", "ap": 14, "w": 4, "l": 1, "drank": 14, "dawg": 2.2, "luck": -0.2, "flag": ""}, {"id": "2633", "ap": 15, "w": 4, "l": 1, "drank": 25, "dawg": 1.0, "luck": 0.5, "flag": ""}, {"id": "57", "ap": 16, "w": 4, "l": 1, "drank": 11, "dawg": 2.5, "luck": 0.4, "flag": "legit"}, {"id": "344", "ap": 17, "w": 4, "l": 1, "drank": 6, "dawg": 3.2, "luck": 0.5, "flag": "legit"}, {"id": "197", "ap": 18, "w": 3, "l": 1, "drank": 38, "dawg": -0.3, "luck": 0.1, "flag": "fraud"}, {"id": "30", "ap": 19, "w": 5, "l": 1, "drank": 30, "dawg": 0.6, "luck": 0.8, "flag": ""}, {"id": "2294", "ap": 20, "w": 4, "l": 1, "drank": 27, "dawg": 0.8, "luck": 1.2, "flag": "fraud"}, {"id": "26", "ap": 21, "w": 4, "l": 0, "drank": 3, "dawg": 6.2, "luck": 0.3, "flag": "legit"}, {"id": "248", "ap": 22, "w": 4, "l": 1, "drank": 24, "dawg": 1.0, "luck": 0.0, "flag": ""}, {"id": "2567", "ap": 24, "w": 4, "l": 1, "drank": 52, "dawg": -2.0, "luck": 0.6, "flag": "fraud"}, {"id": "221", "ap": 25, "w": 5, "l": 0, "drank": 20, "dawg": 1.6, "luck": 0.5, "flag": ""}, {"id": "77", "ap": null, "w": 3, "l": 1, "drank": 1, "dawg": 8.1, "luck": -0.0, "flag": "sleeper"}, {"id": "154", "ap": null, "w": 4, "l": 1, "drank": 4, "dawg": 4.2, "luck": 0.4, "flag": "sleeper"}, {"id": "158", "ap": null, "w": 5, "l": 0, "drank": 9, "dawg": 2.7, "luck": 0.4, "flag": "sleeper"}, {"id": "96", "ap": null, "w": 4, "l": 1, "drank": 10, "dawg": 2.5, "luck": 0.4, "flag": "sleeper"}, {"id": "239", "ap": null, "w": 4, "l": 1, "drank": 12, "dawg": 2.3, "luck": 0.3, "flag": "sleeper"}, {"id": "2132", "ap": null, "w": 4, "l": 1, "drank": 15, "dawg": 2.1, "luck": 0.5, "flag": "sleeper"}]};
+  var HIW = null, HIWP = null;   // How-it-went data, loaded the first time a game card opens
+  function loadHIW(){ if (!HIWP) HIWP = fetch("hiw.json").then(function(r){ return r.json(); }).then(function(j){ HIW = j; return j; }).catch(function(){ HIW = {}; return HIW; }); return HIWP; }
   function ord(n){ var v = n % 100, s = ["th","st","nd","rd"]; return n + (s[(v - 20) % 10] || s[v] || s[0]); }
   function drawWeek(){
     var W = WEEK, el = $("wk"); if (!W || !W.best){ $("week-sec").hidden = true; return; }
