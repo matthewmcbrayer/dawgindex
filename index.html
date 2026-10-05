@@ -13,7 +13,7 @@
 <meta name="twitter:title" content="DAWG Index">
 <meta name="twitter:description" content="Which college football teams show up when it matters, and which ones let teams hang around. Every Power 4 game since 2019, graded.">
 <meta name="twitter:image" content="https://dawgindex.com/og.png">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='18' fill='%23d9a24a'/><text x='50' y='72' font-size='64' font-family='Arial Black,Arial' font-weight='900' text-anchor='middle' fill='%2315171a'>D</text></svg>">
+<link rel="icon" type="image/png" sizes="32x32" href="/icon-32.png"><link rel="icon" type="image/png" sizes="64x64" href="/icon-64.png"><link rel="apple-touch-icon" href="/icon-180.png"><meta name="theme-color" content="#131210">
 <title>DAWG Index</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bowlby+One&family=Big+Shoulders+Display:wght@500;600;700;800;900&family=Barlow:wght@400;500;600;700&display=swap">
@@ -423,6 +423,22 @@ select{-webkit-appearance:none;appearance:none;padding:7px 42px 7px 16px!importa
 .gotit,.chip,.offchart button,.tipbtn{line-height:1.2!important}
 .gotit{padding:6px 16px!important}
 .topnav a{line-height:1.2!important;padding:6px 16px!important}
+#fab{position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:25;font-family:var(--chunk);font-size:18px;letter-spacing:.04em;text-transform:uppercase;color:#131210;background:var(--orange);border:3px solid #0c0b0a;border-radius:999px;padding:10px 20px 11px 46px;box-shadow:4px 4px 0 var(--cream);cursor:pointer;line-height:1}
+#fab::before{content:"";position:absolute;left:18px;top:50%;width:18px;height:18px;margin-top:-10px;background:no-repeat center/contain url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M6 8V1.5M3 4l3-3 3 3M1.5 7v3.5h9V7' fill='none' stroke='%23131210' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")}
+#fab:hover{transform:translate(-1px,-1px);box-shadow:5px 5px 0 var(--cream)}#fab:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+#fabmenu{position:fixed;right:16px;bottom:calc(84px + env(safe-area-inset-bottom,0px));z-index:26;width:min(320px,calc(100vw - 32px));max-height:min(70vh,520px);overflow:auto;background:var(--surface);border:2.5px solid var(--cream);border-radius:16px;box-shadow:5px 5px 0 var(--shade);padding:12px;display:flex;flex-direction:column;gap:6px}
+#fabmenu[hidden]{display:none!important}
+#fabmenu .fm-h{margin:2px 4px 4px;font-family:var(--display);font-weight:900;text-transform:uppercase;letter-spacing:.06em;font-size:15px;color:var(--muted)}
+#fabmenu .fm-s{margin:6px 4px 2px;font-size:13px;color:var(--faint);line-height:1.35}
+#fabmenu button{all:unset;cursor:pointer;font-family:var(--display);font-weight:800;font-size:18px;text-transform:uppercase;letter-spacing:.03em;color:var(--ink);padding:10px 12px;border-radius:10px;background:var(--chipbg)}
+#fabmenu button:hover,#fabmenu button:focus-visible{background:var(--orange);color:#131210}
+#fabtip{position:fixed;right:16px;bottom:calc(76px + env(safe-area-inset-bottom,0px));z-index:24;background:var(--cream);color:#131210;font-weight:700;font-size:14px;padding:8px 12px;border-radius:10px;box-shadow:3px 3px 0 #0c0b0a;opacity:0;transform:translateY(6px);transition:opacity .3s,transform .3s;pointer-events:none}
+#fabtip.on{opacity:1;transform:none}
+#fabtip::after{content:"";position:absolute;right:34px;bottom:-7px;border:7px solid transparent;border-bottom:0;border-top-color:var(--cream)}
+.xbtn{background:var(--orange)!important;color:#131210!important;border-color:#0c0b0a!important;box-shadow:2px 2px 0 var(--cream)}
+.xbtn::before{filter:invert(1) brightness(.2)}
+.sitefoot{padding-bottom:64px}
+@media print{#fab,#fabmenu,#fabtip{display:none}}
 /* share buttons */
 .xbtn{font-family:var(--display);font-weight:800;text-transform:uppercase;letter-spacing:.05em;font-size:14px;line-height:1;color:var(--ink);background:transparent;border:2px solid var(--ink);border-radius:999px;padding:6px 12px 6px 30px;cursor:pointer;position:relative;white-space:nowrap}
 .xbtn::before{content:"";position:absolute;left:11px;top:50%;width:12px;height:12px;margin-top:-7px;background:no-repeat center/contain url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M6 8V1.5M3 4l3-3 3 3M1.5 7v3.5h9V7' fill='none' stroke='%23F4EAD2' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")}
@@ -1661,9 +1677,10 @@ var TRK = {"season":2026,"baseBlown":0.19864940911648846,"baseCash":0.5229621125
     '.xfoot span+span{color:var(--muted);font-weight:700}.xfoot::before{content:"";position:absolute;left:0;top:16px;width:22px;height:22px;background:repeating-linear-gradient(-45deg,#F08A2C 0 6px,transparent 6px 12px);border:2px solid #F4EAD2;border-radius:4px}' +
     '.xbodyin .teamhead{gap:14px 40px}.xbodyin .chartbox{padding:14px!important}.xlog .xn{display:none}' +
     '.xbodyin #log th:nth-child(5),.xbodyin #log td:nth-child(5),.xbodyin #log th:nth-child(12),.xbodyin #log td:nth-child(12){display:none}';
+  var SHARES = [], SHLBL = {"highlights":"This week's highlights", "big-vs-routine":"Big games vs. routine chart", "leaderboard":"Leaderboard", "poll-check":"Poll Check", "conferences":"Conference rankings", "top-10-games":"Top 10 games", "tendencies":"Team tendencies", "coaches":"Coach résumés", "blown-leads":"Blown leads", "biggest-blown-leads":"Biggest blown leads", "cash-in-after-stops":"Cash-in after stops", "team":"team card", "best-games":"best games", "worst-games":"worst games", "game-log":"game log"};
   function addShare(anchor, o, inH3){
     if (!anchor) return; var b = document.createElement("button"); b.type = "button"; b.className = "xbtn"; b.textContent = "Share";
-    b.title = "Save this as an image"; b.addEventListener("click", function(){ exportImage(o, b); });
+    b.title = "Save this as an image"; b.addEventListener("click", function(){ exportImage(o, b); }); SHARES.push({o:o, btn:b});
     if (inH3){ var row = document.createElement("div"); row.className = "xrow"; anchor.parentNode.insertBefore(row, anchor); row.appendChild(anchor); row.appendChild(b); }
     else anchor.appendChild(b);
   }
@@ -1686,6 +1703,28 @@ var TRK = {"season":2026,"baseBlown":0.19864940911648846,"baseCash":0.5229621125
     if (bh) addShare(bh, {title:function(){ return teamName() + ": best games since 2019"; }, nodes:function(){ return [bh.closest(".xrow").nextElementSibling]; }, slug:function(){ return slugOf(state.sel); }, file:"best-games"}, true);
     if (wh) addShare(wh, {title:function(){ return teamName() + ": worst games since 2019"; }, nodes:function(){ return [wh.closest(".xrow").nextElementSibling]; }, slug:function(){ return slugOf(state.sel); }, file:"worst-games"}, true);
     addShare($("log-h"), {title:function(){ return teamName() + " · " + $("log-h").textContent; }, nodes:function(){ return [wrapOf("log")]; }, slug:function(){ return slugOf(state.sel); }, file:"game-log"}, true);
+  })();
+
+  // floating Share button: lists what can be shared on the current page
+  (function(){
+    var fab = document.createElement("button"); fab.type = "button"; fab.id = "fab"; fab.textContent = "Share"; fab.setAttribute("aria-haspopup", "true"); fab.setAttribute("aria-expanded", "false");
+    var menu = document.createElement("div"); menu.id = "fabmenu"; menu.hidden = true; menu.setAttribute("role", "menu");
+    document.body.appendChild(menu); document.body.appendChild(fab);
+    function open(){
+      var items = SHARES.filter(function(x){ return x.btn.offsetParent !== null; });
+      var team = META[state.sel] ? META[state.sel].name : "";
+      menu.innerHTML = '<p class="fm-h">Post an image of…</p>' + items.map(function(x, i){ var l = SHLBL[x.o.file] || x.o.title(); if (/^(team card|best games|worst games|game log)$/.test(l)) l = team + " " + l; return '<button type="button" role="menuitem" data-i="' + SHARES.indexOf(x) + '">' + esc(l) + '</button>'; }).join("") +
+        '<p class="fm-s">Makes a ready-to-post picture with the DAWG Index header and your team\'s link.</p>';
+      menu.hidden = false; fab.setAttribute("aria-expanded", "true"); var f = menu.querySelector("button"); if (f) f.focus();
+    }
+    function close(){ menu.hidden = true; fab.setAttribute("aria-expanded", "false"); }
+    fab.addEventListener("click", function(e){ e.stopPropagation(); if (menu.hidden) open(); else close(); });
+    menu.addEventListener("click", function(e){ var b = e.target.closest("button[data-i]"); if (!b) return; var x = SHARES[+b.getAttribute("data-i")]; close(); x.btn.scrollIntoView({block:"center", behavior:"smooth"}); exportImage(x.o, x.btn); });
+    document.addEventListener("click", function(e){ if (!menu.hidden && !e.target.closest("#fabmenu")) close(); });
+    document.addEventListener("keydown", function(e){ if (e.key === "Escape" && !menu.hidden){ close(); fab.focus(); } });
+    var seen = false; try { seen = localStorage.getItem("dawg-share-tip") === "1"; } catch(e){}
+    if (!seen){ var tip = document.createElement("div"); tip.id = "fabtip"; tip.textContent = "Like something? Share it as an image"; document.body.appendChild(tip);
+      setTimeout(function(){ tip.classList.add("on"); }, 2500); setTimeout(function(){ tip.classList.remove("on"); setTimeout(function(){ tip.remove(); }, 400); try { localStorage.setItem("dawg-share-tip", "1"); } catch(e){} }, 9500); }
   })();
   function drawAll(){ drawAsOf(); drawChips(); drawChart(); drawBoard(); drawConfs(); drawTeam(); drawCoaches(); drawTend(); drawTrackers(); drawTop(); capTables(); }
   var WEEK = {"label": "Week 5", "pollName": "AP Poll Week 6", "n": 68, "best": {"id": "401856817", "t": "239", "y": 2026, "team": "Baylor", "opp": "Arizona State", "rk": null, "site": "away", "pf": 55, "pa": 19, "grade": 13.5, "srank": 1}, "worst": {"id": "401856821", "t": "38", "y": 2026, "team": "Colorado", "opp": "Texas Tech", "rk": 12, "site": "home", "pf": 7, "pa": 29, "grade": -10.6, "srank": 314}, "collapse": {"opp": "Houston", "site": "away", "lead": 17, "at": [17, 0], "pf": 17, "pa": 27, "date": "2026-10-03", "id": "401856819", "team": "UCF", "tid": "2116"}, "gap": {"id": "145", "name": "Ole Miss", "ap": 9, "drank": 44}, "poll": [{"id": "251", "ap": 1, "w": 4, "l": 0, "drank": 29, "dawg": 0.8, "luck": 1.2, "flag": "fraud"}, {"id": "61", "ap": 2, "w": 5, "l": 0, "drank": 5, "dawg": 3.9, "luck": 0.4, "flag": "legit"}, {"id": "87", "ap": 3, "w": 5, "l": 0, "drank": 17, "dawg": 1.8, "luck": 0.2, "flag": ""}, {"id": "2390", "ap": 4, "w": 5, "l": 0, "drank": 7, "dawg": 3.1, "luck": 0.3, "flag": "legit"}, {"id": "194", "ap": 5, "w": 4, "l": 1, "drank": 33, "dawg": 0.4, "luck": -0.7, "flag": ""}, {"id": "333", "ap": 6, "w": 5, "l": 0, "drank": 2, "dawg": 6.9, "luck": 0.2, "flag": "legit"}, {"id": "84", "ap": 7, "w": 5, "l": 0, "drank": 35, "dawg": 0.3, "luck": 0.2, "flag": ""}, {"id": "252", "ap": 8, "w": 4, "l": 0, "drank": 13, "dawg": 2.2, "luck": 1.0, "flag": ""}, {"id": "145", "ap": 9, "w": 3, "l": 1, "drank": 44, "dawg": -0.7, "luck": 1.1, "flag": "fraud"}, {"id": "99", "ap": 10, "w": 4, "l": 1, "drank": 23, "dawg": 1.1, "luck": -0.5, "flag": ""}, {"id": "2641", "ap": 11, "w": 5, "l": 0, "drank": 50, "dawg": -1.8, "luck": 1.0, "flag": "fraud"}, {"id": "254", "ap": 12, "w": 4, "l": 0, "drank": 8, "dawg": 3.1, "luck": 0.0, "flag": "legit"}, {"id": "2483", "ap": 13, "w": 3, "l": 1, "drank": 46, "dawg": -1.2, "luck": 0.1, "flag": "fraud"}, {"id": "142", "ap": 14, "w": 4, "l": 1, "drank": 14, "dawg": 2.2, "luck": -0.2, "flag": ""}, {"id": "2633", "ap": 15, "w": 4, "l": 1, "drank": 25, "dawg": 1.0, "luck": 0.5, "flag": ""}, {"id": "57", "ap": 16, "w": 4, "l": 1, "drank": 11, "dawg": 2.5, "luck": 0.4, "flag": "legit"}, {"id": "344", "ap": 17, "w": 4, "l": 1, "drank": 6, "dawg": 3.2, "luck": 0.5, "flag": "legit"}, {"id": "197", "ap": 18, "w": 3, "l": 1, "drank": 38, "dawg": -0.3, "luck": 0.1, "flag": "fraud"}, {"id": "30", "ap": 19, "w": 5, "l": 1, "drank": 30, "dawg": 0.6, "luck": 0.8, "flag": ""}, {"id": "2294", "ap": 20, "w": 4, "l": 1, "drank": 27, "dawg": 0.8, "luck": 1.2, "flag": "fraud"}, {"id": "26", "ap": 21, "w": 4, "l": 0, "drank": 3, "dawg": 6.2, "luck": 0.3, "flag": "legit"}, {"id": "248", "ap": 22, "w": 4, "l": 1, "drank": 24, "dawg": 1.0, "luck": 0.0, "flag": ""}, {"id": "2567", "ap": 24, "w": 4, "l": 1, "drank": 52, "dawg": -2.0, "luck": 0.6, "flag": "fraud"}, {"id": "221", "ap": 25, "w": 5, "l": 0, "drank": 20, "dawg": 1.6, "luck": 0.5, "flag": ""}, {"id": "77", "ap": null, "w": 3, "l": 1, "drank": 1, "dawg": 8.1, "luck": -0.0, "flag": "sleeper"}, {"id": "154", "ap": null, "w": 4, "l": 1, "drank": 4, "dawg": 4.2, "luck": 0.4, "flag": "sleeper"}, {"id": "158", "ap": null, "w": 5, "l": 0, "drank": 9, "dawg": 2.7, "luck": 0.4, "flag": "sleeper"}, {"id": "96", "ap": null, "w": 4, "l": 1, "drank": 10, "dawg": 2.5, "luck": 0.4, "flag": "sleeper"}, {"id": "239", "ap": null, "w": 4, "l": 1, "drank": 12, "dawg": 2.3, "luck": 0.3, "flag": "sleeper"}, {"id": "2132", "ap": null, "w": 4, "l": 1, "drank": 15, "dawg": 2.1, "luck": 0.5, "flag": "sleeper"}]};
