@@ -380,6 +380,21 @@ tr.big td:first-child{box-shadow:inset 4px 0 0 var(--red)}
 #log .tag{white-space:nowrap}
 .vstk{display:inline-block;font-family:var(--chunk);font-size:.46em;letter-spacing:.04em;color:var(--cream);border:3px solid var(--dark);border-radius:999px;padding:.1em .6em .16em;box-shadow:4px 4px 0 var(--cream);vertical-align:.22em;margin-left:.3em;line-height:1;white-space:nowrap}
 .vstk.vg{background:var(--green);transform:rotate(-5deg)}.vstk.vs{background:var(--red);transform:rotate(4deg)}
+/* leaderboard on phones: no inner scroll, no sideways scroll */
+@media (max-width:640px){
+  .tablewrap:has(#board){max-height:none!important;overflow:visible!important}
+  #board .verdict,#board .c-drop{display:none!important}
+  #board th,#board td{padding:9px 4px!important}
+  #board th:first-child,#board td:first-child{padding-left:10px!important}#board th:last-child,#board td:last-child{padding-right:10px!important}
+  #board td.l{white-space:normal!important;line-height:1.2}
+  #board td.rank{width:1.8em}
+  #board td.dg{font-size:20px!important}
+  #board td.num{font-size:16px}
+  #board td .dim{display:none}
+  #board th{top:58px!important}
+  #board th{font-size:12.5px!important;letter-spacing:.03em!important}
+  .moreb{justify-self:center;align-self:center;margin-top:4px}
+}
 /* ===== Round 3: alignment, bars, game grades, controls ===== */
 .verdict{min-width:6.4em;text-align:center;box-sizing:border-box}
 td.num,.num,.wk .big,.kv .v{font-variant-numeric:tabular-nums lining-nums}
@@ -542,16 +557,17 @@ th{font-size:15px!important}
   </section>
 
   <section class="sec page" data-page="rankings" id="board-sec" aria-labelledby="board-h">
-    <div class="sechead"><h2 id="board-h">Leaderboard</h2><span class="note">Hover a header for its meaning · tap to sort</span></div>
+    <div class="sechead"><h2 id="board-h">Leaderboard</h2><span class="note"><span class="hide-sm">Hover a header for its meaning · tap to sort</span><span class="show-sm">Tap a header to sort · tap a team for its page</span></span></div>
     <div class="tablewrap">
       <table id="board">
         <thead><tr>
           <th class="l rank">#</th><th class="l">Team</th><th class="l hide-sm" id="confcol">Conf</th><th data-tip="wl">W–L</th>
-          <th data-k="dawg" data-tip="dawg"><button>DAWG</button></th><th data-k="big" data-tip="big"><button>Big Games</button></th><th data-k="other" data-tip="routine"><button>Routine</button></th><th data-k="drop" data-tip="drop"><button>Big-Stage Drop</button></th><th id="lastcol" data-k="consN" data-tip="pcons" hidden><button>Consistent</button></th>
+          <th data-k="dawg" data-tip="dawg"><button>DAWG</button></th><th data-k="big" data-tip="big"><button>Big<span class="hide-sm"> Games</span></button></th><th data-k="other" data-tip="routine"><button>Routine</button></th><th class="c-drop" data-k="drop" data-tip="drop"><button>Big-Stage Drop</button></th><th id="lastcol" data-k="consN" data-tip="pcons" hidden><button>Consistent</button></th>
         </tr></thead>
         <tbody></tbody>
       </table>
     </div>
+    <button type="button" class="gotit moreb" id="board-more" hidden></button>
   </section>
 
   <section class="sec page" data-page="rankings" id="poll-sec" aria-labelledby="poll-h">
@@ -935,7 +951,10 @@ var TRK = {"season":2026,"baseBlown":0.19864940911648846,"baseCash":0.5229621125
     $("board-h").textContent = state.conf ? (state.conf === "Independent" ? "Notre Dame" : state.conf) + " Leaderboard" : "Leaderboard";
     var k = state.sort, dir = state.dir;
     var list = teamsFor(state.season).filter(function(t){ return !state.conf || t.conf === state.conf; }).sort(function(a,b){ var av = a[k], bv = b[k]; if (av === null) return 1; if (bv === null) return -1; return (av - bv) * dir; });
-    document.querySelectorAll("#board th[data-k]").forEach(function(th){ th.className = th.getAttribute("data-k") === k ? "on" : ""; });
+    document.querySelectorAll("#board th[data-k]").forEach(function(th){ th.classList.toggle("on", th.getAttribute("data-k") === k); });
+    var mob = window.matchMedia("(max-width:640px)").matches, full = list.length, cut = mob && !state.boardAll && full > 25;
+    $("board-more").hidden = !(mob && full > 25); $("board-more").textContent = cut ? "Show all " + full + " teams" : "Show top 25";
+    if (cut) list = list.slice(0, 25);
     $("board").tBodies[0].innerHTML = list.map(function(t, i){
       return '<tr class="trow' + (state.picked && t.id === state.sel ? ' sel' : '') + '" data-id="' + t.id + '" tabindex="0">' +
         '<td class="l rank">' + (i+1) + '</td><td class="l"><b>' + esc(t.name) + '</b>' + (state.mode === "proven" ? ' <span class="dim">' + esc(t.coach) + ' · ' + t.seasons + ' yr' + (t.seasons === 1 ? '' : 's') + (t.schools && t.schools.length > 1 ? ' · ' + esc(t.schools.join(", ")) : '') + '</span>' : '') + '</td>' +
@@ -944,10 +963,12 @@ var TRK = {"season":2026,"baseBlown":0.19864940911648846,"baseCash":0.5229621125
         '<td class="num dg ' + cls(t.dawg) + '">' + signed(t.dawg) + ' ' + verdict(t.dawg, state.mode === "proven" ? 0.8 : 3) + '</td>' +
         '<td class="num">' + signed(t.big) + (state.mode === "proven" ? '' : ' <span class="dim">(' + t.nBig + ')</span>') + '</td>' +
         '<td class="num">' + signed(t.other) + '</td>' +
-        '<td class="num">' + signed(t.drop) + bar(t.drop) + '</td>' +
+        '<td class="num c-drop">' + signed(t.drop) + bar(t.drop) + '</td>' +
         (state.mode === "proven" ? '<td class="num">' + t.cons + ' <span class="dim">seasons</span></td>' : '') + '</tr>';
     }).join("");
   }
+  $("board-more").addEventListener("click", function(){ var wasAll = state.boardAll; state.boardAll = !state.boardAll; drawBoard(); if (wasAll) $("board-sec").scrollIntoView({block:"start"}); });
+  window.matchMedia("(max-width:640px)").addEventListener("change", function(){ drawBoard(); });
   document.querySelector("#board thead").addEventListener("click", function(e){ var th = e.target.closest("th[data-k]"); if (!th) return; var k = th.getAttribute("data-k"); if (state.sort === k) state.dir *= -1; else { state.sort = k; state.dir = -1; } drawBoard(); });
   $("board").tBodies[0].addEventListener("click", function(e){ var tr = e.target.closest("tr[data-id]"); if (tr) select(tr.getAttribute("data-id"), true); });
   $("board").tBodies[0].addEventListener("keydown", function(e){ if (e.key !== "Enter") return; var tr = e.target.closest("tr[data-id]"); if (tr) select(tr.getAttribute("data-id"), true); });
