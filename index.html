@@ -1843,14 +1843,14 @@ var TRK = {"season":2026,"baseBlown":0.19864940911648846,"baseCash":0.5229621125
   function dueRows(){
     var y = String(seasons[seasons.length-1]), T = (DATA.ts && DATA.ts[y]) || {};
     return Object.keys(T).filter(function(k){ return META[k] && T[k].luck !== null && T[k].luck !== undefined && T[k].n >= 3; }).map(function(k){
-      var s = T[k], xw = s.w - s.luck, n = s.w + s.l; return {id:k, luck:s.luck, w:s.w, l:s.l, xw:xw, xl:n - xw};
+      var s = T[k], xw = s.w - s.luck, n = s.w + s.l, rw = Math.round(xw); if (rw === s.w) rw = s.luck > 0 ? Math.floor(xw) : Math.ceil(xw); rw = Math.max(0, Math.min(n, rw)); return {id:k, luck:s.luck, w:s.w, l:s.l, xw:rw, xl:n - rw};
     });
   }
   function drawDue(){
     var L = dueRows(), y = seasons[seasons.length-1];
     $("due-sec").hidden = !L.length || String(state.season) !== String(y);
     $("due-note").textContent = (DATA.asOfLabel || "") ;
-    function row(r){ return '<tr class="trow" data-id="' + r.id + '" tabindex="0"><td class="l"><b>' + esc(META[r.id].name) + '</b><div class="dim">' + r.w + "–" + r.l + ', played like ' + r.xw.toFixed(1) + "–" + r.xl.toFixed(1) + '</div></td><td class="num ' + (r.luck > 0 ? "neg" : "pos") + '">' + signed(r.luck) + '<div class="dim">wins</div></td></tr>'; }
+    function row(r){ return '<tr class="trow" data-id="' + r.id + '" tabindex="0"><td class="l"><b>' + esc(META[r.id].name) + '</b><div class="dim">' + r.w + "–" + r.l + ', played like ' + r.xw + "–" + r.xl + '</div></td><td class="num ' + (r.luck > 0 ? "neg" : "pos") + '">' + signed(r.luck) + '<div class="dim">wins</div></td></tr>'; }
     $("due-hot").tBodies[0].innerHTML = L.filter(function(r){ return r.luck >= 0.5; }).sort(function(a,b){ return b.luck - a.luck; }).slice(0,5).map(row).join("") || '<tr><td class="l dim">No one is running hot yet.</td></tr>';
     $("due-cold").tBodies[0].innerHTML = L.filter(function(r){ return r.luck <= -0.5; }).sort(function(a,b){ return a.luck - b.luck; }).slice(0,5).map(row).join("") || '<tr><td class="l dim">No one is running cold yet.</td></tr>';
   }
@@ -1869,7 +1869,7 @@ var TRK = {"season":2026,"baseBlown":0.19864940911648846,"baseCash":0.5229621125
     if (W.collapse){ var c = W.collapse; h += '<div tabindex="0" data-id="' + c.tid + '"><span class="lbl">Biggest collapse</span><span class="big neg">' + c.at[0] + "–" + c.at[1] + '</span><span class="t">' + esc(c.team) + '</span><span class="s">led ' + (c.site === "away" ? "at " : "vs ") + esc(c.opp) + ", lost " + c.pf + "–" + c.pa + "</span></div>"; }
     if (W.gap){ var p = W.gap; h += '<div tabindex="0" data-id="' + p.id + '"><span class="lbl">Biggest poll disparity</span><span class="pc"><span><b>#' + p.ap + '</b>AP Poll</span><span><b class="neg">#' + p.drank + '</b>DAWG Index</span></span><span class="t">' + esc(p.name) + '</span><span class="s">' + ord(p.ap) + " in the AP poll, " + ord(p.drank) + " of " + W.n + " in how it's actually played</span></div>"; }
     var D = dueRows().sort(function(a,b){ return b.luck - a.luck; })[0];
-    if (D && D.luck >= 0.7) h += '<div tabindex="0" data-id="' + D.id + '"><span class="lbl">Most due for a fall</span><span class="big neg">' + signed(D.luck) + '</span><span class="t">' + esc(META[D.id].name) + '</span><span class="s">' + D.w + "–" + D.l + ", but played like a " + D.xw.toFixed(1) + "–" + D.xl.toFixed(1) + " team</span></div>";
+    if (D && D.luck >= 0.7) h += '<div tabindex="0" data-id="' + D.id + '"><span class="lbl">Most due for a fall</span><span class="big neg">' + signed(D.luck) + '</span><span class="t">' + esc(META[D.id].name) + '</span><span class="s">' + D.w + "–" + D.l + ", but played like a " + D.xw + "–" + D.xl + " team</span></div>";
     el.innerHTML = h;
   }
   function drawPoll(){
