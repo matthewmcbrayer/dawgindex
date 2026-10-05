@@ -537,6 +537,9 @@ th{font-size:15px!important}
 #log td.gg{font-weight:900!important}
 @media (max-width:640px){#log td.gg .verdict{display:none}#log td.l{white-space:normal}}
 .note{color:var(--muted)}
+h1.lg{-webkit-text-stroke:0!important;text-shadow:none!important;display:block!important;margin:-6px 0 -4px -6px!important}
+h1.lg img{display:block;height:clamp(96px,16vw,150px);width:auto}
+.xh h1.lg img{height:150px}
 </style>
 
 <div id="htip" role="tooltip" hidden></div>
@@ -544,7 +547,7 @@ th{font-size:15px!important}
 <div class="wrap">
   <header>
     <div>
-      <h1>DAWG <span>Index</span></h1>
+      <h1 class="lg"><img src="/logo.png" alt="DAWG Index" width="480" height="307"></h1>
       <p class="sub">Who gets up for big games, and who shrinks.</p>
     </div>
     <div class="hdr-r">
@@ -1513,6 +1516,7 @@ var TRK = {"season":2026,"baseBlown":0.19864940911648846,"baseCash":0.5229621125
   }
   var C128 = "11011001100 11001101100 11001100110 10010011000 10010001100 10001001100 10011001000 10011000100 10001100100 11001001000 11001000100 11000100100 10110011100 10011011100 10011001110 10111001100 10011101100 10011100110 11001110010 11001011100 11001001110 11011100100 11001110100 11101101110 11101001100 11100101100 11100100110 11101100100 11100110100 11100110010 11011011000 11011000110 11000110110 10100011000 10001011000 10001000110 10110001000 10001101000 10001100010 11010001000 11000101000 11000100010 10110111000 10110001110 10001101110 10111011000 10111000110 10001110110 11101110110 11010001110 11000101110 11011101000 11011100010 11011101110 11101011000 11101000110 11100010110 11101101000 11101100010 11100011010 11101111010 11001000010 11110001010 10100110000 10100001100 10010110000 10010000110 10000101100 10000100110 10110010000 10110000100 10011010000 10011000010 10000110100 10000110010 11000010010 11001010000 11110111010 11000010100 10001111010 10100111100 10010111100 10010011110 10111100100 10011110100 10011110010 11110100100 11110010100 11110010010 11011011110 11011110110 11110110110 10101111000 10100011110 10001011110 10111101000 10111100010 11110101000 11110100010 10111011110 10111101110 11101011110 11110101110 11010000100 11010010000 11010011100".split(" ");
   function code128(s){ var v = [], chk = 104; for (var i = 0; i < s.length; i++){ v.push(s.charCodeAt(i) - 32); chk += (i + 1) * v[i]; } return C128[104] + v.map(function(k){ return C128[k]; }).join("") + C128[chk % 103] + "1100011101011"; }
+  var LOGO = new Image(); LOGO.src = "/logo.png";
   function cardImage(cb){
     var S = gcShare; if (!S) return;
     var W = 1080, H = 1350, c = document.createElement("canvas"); c.width = W * 2; c.height = H * 2; var x = c.getContext("2d"); x.scale(2, 2);
@@ -1530,9 +1534,11 @@ var TRK = {"season":2026,"baseBlown":0.19864940911648846,"baseCash":0.5229621125
     var seed = 7; function rnd(){ seed = (seed * 16807) % 2147483647; return seed / 2147483647; }
     for (var n = 0; n < 9000; n++){ x.fillStyle = "rgba(90,70,40," + (0.03 + rnd() * 0.06).toFixed(3) + ")"; x.fillRect(TX + rnd() * TW, TY + rnd() * TH, 1.6, 1.6); }
     // header
+    if (LOGO.complete && LOGO.naturalWidth){ var lh = 96, lw = lh * LOGO.naturalWidth / LOGO.naturalHeight; x.drawImage(LOGO, L - 8, 58, lw, lh); } else {
     x.font = "42px " + K; x.textAlign = "left"; x.fillStyle = RED; x.fillText("DAWG", L + 3, 129); x.fillStyle = INK; x.fillText("DAWG", L, 126);
     var dw = x.measureText("DAWG").width; x.font = "14px " + K; ls(1); var iw = x.measureText("INDEX").width; ls(0);
     x.save(); x.translate(L + dw + 14 + (iw + 24) / 2, 112); x.rotate(-0.07); rr(-(iw + 24) / 2 + 2, -13 + 2, iw + 24, 26, 13); x.fillStyle = INK; x.fill(); rr(-(iw + 24) / 2, -13, iw + 24, 26, 13); x.fillStyle = BLUE; x.fill(); x.lineWidth = 2.5; x.strokeStyle = INK; x.stroke(); txt("INDEX", 0, 5, "14px " + K, PAPER, "center", 1); x.restore();
+    }
     txt("ADMIT ONE", R, 110, "900 22px " + D, INK, "right", 3.5); txt("GAME GRADE · " + S.y + " SEASON", R, 131, "800 15px " + D, MUT, "right", 3);
     // stripes
     var sy = 152, sh = 22; x.fillStyle = INK; x.fillRect(TX, sy, TW, sh); var iy = sy + 3, ih = sh - 6;
@@ -1733,7 +1739,7 @@ var TRK = {"season":2026,"baseBlown":0.19864940911648846,"baseCash":0.5229621125
     var body = o.nodes().map(function(n){ var c = n.cloneNode(true); c.removeAttribute("id"); c.querySelectorAll(".xbtn,.moreb,select,.ib,label").forEach(function(e){ e.remove(); }); return c.outerHTML; }).join("");
     var slug = o.slug ? o.slug() : "", sub = (o.sub ? o.sub() : "") || "";
     var html = '<!doctype html><html><head><meta charset="utf-8"><base href="' + location.href.split("#")[0].split("?")[0].replace(/[^/]*$/, "") + '">' + fonts + '<style>' + css + XCSS + '</style></head><body class="xbody"><div class="xf" id="xf">' +
-      '<div class="xh"><h1>DAWG <span>Index</span></h1><div class="xk">' + esc(String(state.season)) + ' season<br>' + esc(DATA.asOfLabel || "") + '</div></div>' +
+      '<div class="xh"><h1 class="lg"><img src="/logo.png" alt="DAWG Index"></h1><div class="xk">' + esc(String(state.season)) + ' season<br>' + esc(DATA.asOfLabel || "") + '</div></div>' +
       '<div class="xtitle"><h2>' + esc(o.title()) + '</h2>' + (sub ? '<p>' + esc(sub) + '</p>' : '') + '</div>' +
       '<div class="xbodyin">' + body + '</div>' +
       '<div class="xfoot"><span>dawgindex.com' + (slug ? "/" + slug : "") + '</span><span>Who gets up for big games, and who shrinks.</span></div></div>' +
@@ -1756,7 +1762,7 @@ var TRK = {"season":2026,"baseBlown":0.19864940911648846,"baseCash":0.5229621125
   var XCSS = '.xbody{margin:0;background:#131210;width:1080px}.xf{width:1080px;padding:60px 60px 46px;background:#131210;display:flex;flex-direction:column;gap:26px;position:relative}' +
     '.xf::after{content:"";position:absolute;inset:0;pointer-events:none;opacity:.5;mix-blend-mode:soft-light;background-image:url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%27300%27 height=%27300%27%3E%3Cfilter id=%27n%27%3E%3CfeTurbulence type=%27fractalNoise%27 baseFrequency=%27.8%27 numOctaves=%273%27/%3E%3CfeColorMatrix values=%270 0 0 0 1  0 0 0 0 .95  0 0 0 0 .85  0 0 0 .5 0%27/%3E%3C/filter%3E%3Crect width=%27300%27 height=%27300%27 filter=%27url(%23n)%27/%3E%3C/svg%3E")}' +
     '.xh{display:flex;justify-content:space-between;align-items:center;padding-bottom:30px;position:relative}.xh::after{content:"";position:absolute;left:0;right:0;bottom:0;height:16px;background:linear-gradient(#2F64C0 0 30%,#131210 0 42%,#E5463A 0 70%,#131210 0 82%,#F08A2C 0);border-top:2.5px solid #F4EAD2;border-bottom:2.5px solid #F4EAD2}' +
-    '.xh h1{font-size:64px!important;-webkit-text-stroke:2.5px #0c0b0a!important;text-shadow:4px 4px 0 #E5463A!important}.xk{font-family:var(--display);font-weight:800;text-transform:uppercase;letter-spacing:.08em;font-size:18px;line-height:1.3;text-align:right;border:2.5px solid #F4EAD2;border-radius:10px;padding:8px 14px;color:#F4EAD2}' +
+    '.xh h1.lg{-webkit-text-stroke:0!important;text-shadow:none!important;display:block!important;margin:-10px 0 -6px -8px}.xh h1.lg img{height:150px;display:block}.xh h1{font-size:64px!important;-webkit-text-stroke:2.5px #0c0b0a!important;text-shadow:4px 4px 0 #E5463A!important}.xk{font-family:var(--display);font-weight:800;text-transform:uppercase;letter-spacing:.08em;font-size:18px;line-height:1.3;text-align:right;border:2.5px solid #F4EAD2;border-radius:10px;padding:8px 14px;color:#F4EAD2}' +
     '.xtitle h2{font-size:44px!important;line-height:1.05}.xtitle p{margin:8px 0 0;color:var(--muted);font-size:20px}' +
     '.xbodyin{display:flex;flex-direction:column;gap:18px}.xbodyin .tablewrap{box-shadow:none!important;overflow:visible!important}.xbodyin th{position:static!important}.xbodyin th *,.xbodyin th{text-decoration:none!important}' +
     '.xbodyin td,.xbodyin th{font-size:17px}.xbodyin td.num{font-size:20px}.xbodyin #log td.gg,.xbodyin td.gg{font-size:26px!important}' +
