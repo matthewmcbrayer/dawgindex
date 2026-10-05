@@ -371,7 +371,7 @@ tr.gc:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
     <div class="sechead"><h2 id="conf-h">Conference Rankings</h2><span class="note">Average across each conference's teams · tap to filter</span></div>
     <div class="tablewrap">
       <table id="confs">
-        <thead><tr><th class="l rank">#</th><th class="l">Conference</th><th>Teams</th><th data-tip="dawg">DAWG</th><th data-tip="big">Big Games</th><th data-tip="routine">Routine</th><th data-tip="drop">Big-Stage Drop</th><th class="l">Dawgs · Soft</th></tr></thead>
+        <thead><tr><th class="l rank">#</th><th class="l">Conference</th><th>Teams</th><th data-tip="dawg">DAWG</th><th data-tip="big">Big Games</th><th data-tip="routine">Routine</th><th data-tip="drop">Big-Stage Drop</th><th class="l" data-tip="cquad">Dawgs · Soft</th></tr></thead>
         <tbody></tbody>
       </table>
     </div>
@@ -1029,6 +1029,7 @@ var TRK = {"season":2026,"baseBlown":0.19864940911648846,"baseCash":0.5229621125
       drop: ["Big-stage drop", "How much better or worse a team plays when the game gets big. Negative means it shrinks; positive means it rises.", "Big games − Routine"],
       pdrank: ["DAWG rank", "Where the team ranks among all Power 4 teams by how it has actually played this season (season DAWG grade)."],
       paprank: ["AP rank", "This week's AP Top 25. NR means not ranked."],
+      cquad: ["Dawgs · Soft", "How many of the conference's teams sit in the chart's Dawgs box (above expectations in both big and routine games) and Soft box (below in both). Teams without a big game yet aren't on the chart."],
       luck: ["Luck", "Wins above what the team's play earned. Each game gets a win chance from the play-by-play: how often plays succeeded, explosive plays, turnovers the team forced or gave away, penalties and field-goal tries. Who recovers a fumble, tipped interceptions, missed kicks and return touchdowns count as luck. Also shows the record in one-score games.", "wins − expected wins"],
       env: ["Stage", "How big the game was, from 0 up: ranked opponent +15 (top 10 +25), ranked vs. ranked +10, rivalry +20, national TV +10, primetime national +10, bowl or title game +30, neutral showcase +20, non-conference Power 4 +10, packed stadium +10, 10-win opponent last season +10. 25+ is a big game."],
       line: ["Line", "This team's closing spread. Negative means it was favored."],
@@ -1079,7 +1080,7 @@ var TRK = {"season":2026,"baseBlown":0.19864940911648846,"baseCash":0.5229621125
       var L = T.filter(function(t){ return t.conf === c; });
       function av(k){ var v = L.filter(function(t){ return t[k] !== null; }); return v.length ? v.reduce(function(a,t){ return a + t[k]; }, 0) / v.length : null; }
       return {c:c, n:L.length, dawg:av("dawg"), big:av("big"), other:av("other"), drop:av("drop"),
-        dg:L.filter(function(t){ return t.dawg !== null && t.dawg >= th; }).length, sf:L.filter(function(t){ return t.dawg !== null && t.dawg <= -th; }).length};
+        dg:L.filter(function(t){ return t.big !== null && t.other !== null && t.big >= 0 && t.other >= 0; }).length, sf:L.filter(function(t){ return t.big !== null && t.other !== null && t.big < 0 && t.other < 0; }).length};
     }).sort(function(a,b){ return (b.dawg || -99) - (a.dawg || -99); });
     $("confs").tBodies[0].innerHTML = rows.map(function(r, i){
       return '<tr class="trow' + (state.conf === r.c ? ' sel' : '') + '" data-c="' + r.c + '" tabindex="0"><td class="l rank">' + (i+1) + '</td><td class="l"><b>' + r.c + '</b></td><td class="num">' + r.n + '</td>' +
