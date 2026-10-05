@@ -463,6 +463,7 @@ select{-webkit-appearance:none;appearance:none;padding:7px 42px 7px 16px!importa
 .hs .h{font-size:12px;color:var(--faint);text-align:center;text-transform:uppercase;font-family:var(--display);font-weight:700}
 .hs .t{font-family:var(--display);font-weight:800;color:var(--muted)}.hs .v{text-align:center;font-family:var(--display);font-weight:800;font-size:18px;color:var(--muted)}.hs .v.me{color:var(--ink)}
 .hx{margin:10px 0 0;font-size:14.5px;color:var(--muted);line-height:1.4}.hx b{color:var(--ink)}
+#cc tr.dimrow td{opacity:.6}#cch td,#cch th{text-align:center}#cch td.l,#cch th.l{text-align:left}
 /* share buttons */
 .xbtn{font-family:var(--display);font-weight:800;text-transform:uppercase;letter-spacing:.05em;font-size:14px;line-height:1;color:var(--ink);background:transparent;border:2px solid var(--ink);border-radius:999px;padding:6px 12px 6px 30px;cursor:pointer;position:relative;white-space:nowrap}
 .xbtn::before{content:"";position:absolute;left:11px;top:50%;width:12px;height:12px;margin-top:-7px;background:no-repeat center/contain url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M6 8V1.5M3 4l3-3 3 3M1.5 7v3.5h9V7' fill='none' stroke='%23F4EAD2' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")}
@@ -489,6 +490,7 @@ select{-webkit-appearance:none;appearance:none;padding:7px 42px 7px 16px!importa
 .tbt td.l{white-space:normal!important}.tbt td.l:nth-child(2){white-space:nowrap!important}
 .tbwrap{grid-template-columns:repeat(auto-fit,minmax(420px,1fr))!important}
 @media (max-width:640px){
+  #cc th,#cc td,#cch th,#cch td{padding-left:6px!important;padding-right:6px!important}#cch td .dim{font-size:11px!important}#cch td.num{font-size:15px}
   .tbwrap{grid-template-columns:minmax(0,1fr)!important}
   .tablewrap:has(#board){overflow:visible!important}
   .tablewrap:has(#board) th{position:sticky!important;top:58px!important}
@@ -658,6 +660,20 @@ th{font-size:15px!important}
         <tbody></tbody>
       </table>
     </div>
+  </section>
+
+  <section class="sec page" data-page="rankings" id="cc-sec" aria-labelledby="cc-h">
+    <div class="sechead"><h2 id="cc-h">Conference Check</h2><span class="note">Is the conference actually better, or just the label?</span></div>
+    <p class="note">The only games that can settle it: Power 4 teams playing Power 4 teams from other conferences (nonconference games, bowls and the playoff), with each team in the conference it was in that season. <b>Record and margin</b> say who's better. <b>Vs Vegas</b> says whether the reputation is right: near zero means the conference is about as good as people already think.</p>
+    <div class="tablewrap">
+      <table id="cc">
+        <thead><tr><th class="l">Conference</th><th>Since 2019</th><th>Avg margin</th><th class="hide-sm">Vs Vegas</th><th class="hide-sm" data-tip="ccyrs">Winning years</th><th id="cc-now">This year</th><th class="hide-sm">Margin</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <h3 style="margin-top:6px">Head to head, 2019 to now</h3>
+    <div class="tablewrap"><table id="cch"><thead></thead><tbody></tbody></table></div>
+    <p class="note" style="font-size:13.5px">"Since 2019" leaves out 2020 and the current season; head to head includes this season. Winning years = seasons the conference outscored the other Power 4 conferences in these games. This year's numbers come from a dozen or so games per conference, so they swing a lot; the multi-year numbers are the ones to argue with. Read across a row: the row conference's record against the column conference.</p>
   </section>
 
   <section class="sec page" data-page="rankings" id="top-sec" aria-labelledby="top-h">
@@ -1323,6 +1339,7 @@ var TRK = {"season":2026,"baseBlown":0.19864940911648846,"baseCash":0.5229621125
       dawg: ["DAWG grade", "Average game grade for the season. Each game grade combines five parts, all measured against every Power 4 game since 2019: vs spread, finishing, knife twist, cash-in after stops and answers. Only competitive plays count (no garbage time), and road, night, full-house and ranked-opponent games weigh more. +3 or better is Dawg, −3 or worse is Soft.", "average of game grades"],
       big: ["Big games", "Game grade (before the setting adjustment) in games with a stage score of 25 or more: ranked opponents, rivalries, national and primetime TV, bowls and title games, neutral-site showcases, packed stadiums, marquee opponents. Pulled slightly toward the season average when a team has played only a few.", "average core grade in big games"],
       routine: ["Routine", "DAWG grade in every game that wasn't a big game."],
+      ccyrs: ["Winning years", "Seasons (2019 on, no 2020 or the current season) in which the conference outscored the other Power 4 conferences in nonconference and postseason games."],
       drop: ["Big-stage drop", "How much better or worse a team plays when the game gets big. Negative means it shrinks; positive means it rises.", "Big games − Routine"],
       pdrank: ["DAWG rank", "Where the team ranks among all Power 4 teams by how it has actually played this season (season DAWG grade)."],
       paprank: ["AP rank", "This week's AP Top 25. NR means not ranked."],
@@ -1735,7 +1752,7 @@ var TRK = {"season":2026,"baseBlown":0.19864940911648846,"baseCash":0.5229621125
     '.xfoot span+span{color:var(--muted);font-weight:700}.xfoot::before{content:"";position:absolute;left:0;top:16px;width:22px;height:22px;background:repeating-linear-gradient(-45deg,#F08A2C 0 6px,transparent 6px 12px);border:2px solid #F4EAD2;border-radius:4px}' +
     '.xbodyin .teamhead{gap:14px 40px}.xbodyin .chartbox{padding:14px!important}.xlog .xn{display:none}' +
     '.xbodyin #log th:nth-child(5),.xbodyin #log td:nth-child(5),.xbodyin #log th:nth-child(12),.xbodyin #log td:nth-child(12){display:none}';
-  var SHARES = [], SHLBL = {"highlights":"This week's highlights", "big-vs-routine":"Big games vs. routine chart", "leaderboard":"Leaderboard", "poll-check":"Poll Check", "conferences":"Conference rankings", "top-10-games":"Top 10 games", "tendencies":"Team tendencies", "coaches":"Coach résumés", "blown-leads":"Blown leads", "biggest-blown-leads":"Biggest blown leads", "cash-in-after-stops":"Cash-in after stops", "team":"team card", "biggest-wins":"biggest wins", "best-games":"best performances", "worst-games":"worst performances", "game-log":"game log"};
+  var SHARES = [], SHLBL = {"highlights":"This week's highlights", "big-vs-routine":"Big games vs. routine chart", "leaderboard":"Leaderboard", "poll-check":"Poll Check", "conferences":"Conference rankings", "conference-check":"Conference Check", "top-10-games":"Top 10 games", "tendencies":"Team tendencies", "coaches":"Coach résumés", "blown-leads":"Blown leads", "biggest-blown-leads":"Biggest blown leads", "cash-in-after-stops":"Cash-in after stops", "team":"team card", "biggest-wins":"biggest wins", "best-games":"best performances", "worst-games":"worst performances", "game-log":"game log"};
   function addShare(anchor, o, inH3){
     if (!anchor) return; var b = document.createElement("button"); b.type = "button"; b.className = "xbtn"; b.textContent = "Share";
     b.title = "Save this as an image"; b.addEventListener("click", function(){ exportImage(o, b); }); SHARES.push({o:o, btn:b});
@@ -1752,6 +1769,7 @@ var TRK = {"season":2026,"baseBlown":0.19864940911648846,"baseCash":0.5229621125
     addShare(sh("board-h"), {title:function(){ return $("board-h").textContent; }, sub:function(){ return "Season DAWG: how each team played vs expectations, adjusted for the stage"; }, nodes:function(){ return [wrapOf("board")]; }, file:"leaderboard"});
     addShare(sh("poll-h"), {title:function(){ return "Poll Check"; }, sub:function(){ return $("poll-note").textContent; }, nodes:function(){ return [wrapOf("poll")]; }, file:"poll-check"});
     addShare(sh("conf-h"), {title:function(){ return "Conference Rankings"; }, nodes:function(){ return [document.querySelector("#conf-sec .tablewrap")]; }, file:"conferences"});
+    addShare(sh("cc-h"), {title:function(){ return "Conference Check"; }, sub:function(){ return "Power 4 vs Power 4 across conferences, nonconference + postseason"; }, nodes:function(){ return [document.querySelector("#cc-sec .tablewrap"), document.querySelector("#cc-sec h3"), document.querySelector("#cch").closest(".tablewrap")]; }, file:"conference-check"});
     addShare(sh("top-h"), {title:function(){ return $("top-h").textContent; }, nodes:function(){ return [wrapOf("topgames")]; }, file:"top-10-games"});
     addShare(sh("tend-h"), {title:function(){ return "Team Tendencies"; }, nodes:function(){ return [wrapOf("tend")]; }, file:"tendencies"});
     addShare(sh("coach-h"), {title:function(){ return "Coach Résumés"; }, nodes:function(){ return [document.querySelector("#coaches-sec .tablewrap")]; }, file:"coaches"});
@@ -1786,8 +1804,32 @@ var TRK = {"season":2026,"baseBlown":0.19864940911648846,"baseCash":0.5229621125
     if (!seen){ var tip = document.createElement("div"); tip.id = "fabtip"; tip.textContent = "Like something? Share it as an image"; document.body.appendChild(tip);
       setTimeout(function(){ tip.classList.add("on"); }, 2500); setTimeout(function(){ tip.classList.remove("on"); setTimeout(function(){ tip.remove(); }, 400); try { localStorage.setItem("dawg-share-tip", "1"); } catch(e){} }, 9500); }
   })();
-  function drawAll(){ drawAsOf(); drawChips(); drawChart(); drawBoard(); drawConfs(); drawTeam(); drawCoaches(); drawTend(); drawTrackers(); drawTop(); capTables(); fitTables(); }
+  function drawCC(){
+    if (!CC || !CC.rows){ $("cc-sec").hidden = true; return; }
+    $("cc-sec").hidden = $("cc-sec").hidden || false;
+    $("cc-now").textContent = CC.cur;
+    function rec(s){ return s ? s.w + "–" + s.l + ' <span class="dim hide-sm">(' + Math.round(100 * s.w / Math.max(1, s.w + s.l)) + "%)</span>" : "–"; }
+    function mg(s){ return s ? '<span class="' + cls(s.m) + '">' + signed(s.m) + "</span>" : "–"; }
+    $("cc").tBodies[0].innerHTML = CC.rows.map(function(r){
+      return '<tr' + (r.gone ? ' class="dimrow"' : '') + '><td class="l"><b>' + esc(r.c) + '</b>' + (r.gone ? ' <span class="dim">through 2023</span>' : '') + '</td>' +
+        '<td class="num">' + rec(r.hist) + '</td><td class="num">' + mg(r.hist) + '</td>' +
+        '<td class="num hide-sm">' + (r.hist && r.hist.ats !== null ? signed(r.hist.ats) : "–") + '</td>' +
+        '<td class="num hide-sm">' + r.yrsUp + ' of ' + r.yrs + '</td>' +
+        '<td class="num">' + (r.now ? r.now.w + "–" + r.now.l : "–") + '</td><td class="num hide-sm">' + mg(r.now) + '</td></tr>';
+    }).join("");
+    var C = CC.rows.filter(function(r){ return !r.gone; }).map(function(r){ return r.c; });
+    $("cch").tHead.innerHTML = '<tr><th class="l"></th>' + C.map(function(c){ return "<th>vs " + esc({"Notre Dame":"ND", "Big Ten":"B1G", "Big 12":"B12"}[c] || c) + "</th>"; }).join("") + "</tr>";
+    $("cch").tBodies[0].innerHTML = C.map(function(a){
+      return '<tr><td class="l"><b><span class="hide-sm">' + esc(a) + '</span><span class="show-sm">' + esc({"Notre Dame":"ND", "Big Ten":"B1G", "Big 12":"B12"}[a] || a) + '</span></b></td>' + C.map(function(b){
+        if (a === b) return '<td class="num dim">·</td>';
+        var s = CC.h2h[a + "|" + b]; if (!s) return '<td class="num dim">–</td>';
+        return '<td class="num"><span class="' + (s.w > s.l ? "pos" : s.w < s.l ? "neg" : "") + '">' + s.w + "–" + s.l + '</span><div class="dim" style="font-size:12px">' + signed(s.m) + '<span class="hide-sm"> pts</span></div></td>';
+      }).join("") + "</tr>";
+    }).join("");
+  }
+  function drawAll(){ drawAsOf(); drawChips(); drawChart(); drawBoard(); drawConfs(); drawTeam(); drawCoaches(); drawTend(); drawTrackers(); drawTop(); drawCC(); capTables(); fitTables(); }
   var WEEK = {"label": "Week 5", "pollName": "AP Poll Week 6", "n": 68, "best": {"id": "401856817", "t": "239", "y": 2026, "team": "Baylor", "opp": "Arizona State", "rk": null, "site": "away", "pf": 55, "pa": 19, "grade": 13.5, "srank": 1}, "worst": {"id": "401856821", "t": "38", "y": 2026, "team": "Colorado", "opp": "Texas Tech", "rk": 12, "site": "home", "pf": 7, "pa": 29, "grade": -10.6, "srank": 314}, "collapse": {"opp": "Houston", "site": "away", "lead": 17, "at": [17, 0], "pf": 17, "pa": 27, "date": "2026-10-03", "id": "401856819", "team": "UCF", "tid": "2116"}, "gap": {"id": "145", "name": "Ole Miss", "ap": 9, "drank": 44}, "poll": [{"id": "251", "ap": 1, "w": 4, "l": 0, "drank": 29, "dawg": 0.8, "luck": 1.2, "flag": "fraud"}, {"id": "61", "ap": 2, "w": 5, "l": 0, "drank": 5, "dawg": 3.9, "luck": 0.4, "flag": "legit"}, {"id": "87", "ap": 3, "w": 5, "l": 0, "drank": 17, "dawg": 1.8, "luck": 0.2, "flag": ""}, {"id": "2390", "ap": 4, "w": 5, "l": 0, "drank": 7, "dawg": 3.1, "luck": 0.3, "flag": "legit"}, {"id": "194", "ap": 5, "w": 4, "l": 1, "drank": 33, "dawg": 0.4, "luck": -0.7, "flag": ""}, {"id": "333", "ap": 6, "w": 5, "l": 0, "drank": 2, "dawg": 6.9, "luck": 0.2, "flag": "legit"}, {"id": "84", "ap": 7, "w": 5, "l": 0, "drank": 35, "dawg": 0.3, "luck": 0.2, "flag": ""}, {"id": "252", "ap": 8, "w": 4, "l": 0, "drank": 13, "dawg": 2.2, "luck": 1.0, "flag": ""}, {"id": "145", "ap": 9, "w": 3, "l": 1, "drank": 44, "dawg": -0.7, "luck": 1.1, "flag": "fraud"}, {"id": "99", "ap": 10, "w": 4, "l": 1, "drank": 23, "dawg": 1.1, "luck": -0.5, "flag": ""}, {"id": "2641", "ap": 11, "w": 5, "l": 0, "drank": 50, "dawg": -1.8, "luck": 1.0, "flag": "fraud"}, {"id": "254", "ap": 12, "w": 4, "l": 0, "drank": 8, "dawg": 3.1, "luck": 0.0, "flag": "legit"}, {"id": "2483", "ap": 13, "w": 3, "l": 1, "drank": 46, "dawg": -1.2, "luck": 0.1, "flag": "fraud"}, {"id": "142", "ap": 14, "w": 4, "l": 1, "drank": 14, "dawg": 2.2, "luck": -0.2, "flag": ""}, {"id": "2633", "ap": 15, "w": 4, "l": 1, "drank": 25, "dawg": 1.0, "luck": 0.5, "flag": ""}, {"id": "57", "ap": 16, "w": 4, "l": 1, "drank": 11, "dawg": 2.5, "luck": 0.4, "flag": "legit"}, {"id": "344", "ap": 17, "w": 4, "l": 1, "drank": 6, "dawg": 3.2, "luck": 0.5, "flag": "legit"}, {"id": "197", "ap": 18, "w": 3, "l": 1, "drank": 38, "dawg": -0.3, "luck": 0.1, "flag": "fraud"}, {"id": "30", "ap": 19, "w": 5, "l": 1, "drank": 30, "dawg": 0.6, "luck": 0.8, "flag": ""}, {"id": "2294", "ap": 20, "w": 4, "l": 1, "drank": 27, "dawg": 0.8, "luck": 1.2, "flag": "fraud"}, {"id": "26", "ap": 21, "w": 4, "l": 0, "drank": 3, "dawg": 6.2, "luck": 0.3, "flag": "legit"}, {"id": "248", "ap": 22, "w": 4, "l": 1, "drank": 24, "dawg": 1.0, "luck": 0.0, "flag": ""}, {"id": "2567", "ap": 24, "w": 4, "l": 1, "drank": 52, "dawg": -2.0, "luck": 0.6, "flag": "fraud"}, {"id": "221", "ap": 25, "w": 5, "l": 0, "drank": 20, "dawg": 1.6, "luck": 0.5, "flag": ""}, {"id": "77", "ap": null, "w": 3, "l": 1, "drank": 1, "dawg": 8.1, "luck": -0.0, "flag": "sleeper"}, {"id": "154", "ap": null, "w": 4, "l": 1, "drank": 4, "dawg": 4.2, "luck": 0.4, "flag": "sleeper"}, {"id": "158", "ap": null, "w": 5, "l": 0, "drank": 9, "dawg": 2.7, "luck": 0.4, "flag": "sleeper"}, {"id": "96", "ap": null, "w": 4, "l": 1, "drank": 10, "dawg": 2.5, "luck": 0.4, "flag": "sleeper"}, {"id": "239", "ap": null, "w": 4, "l": 1, "drank": 12, "dawg": 2.3, "luck": 0.3, "flag": "sleeper"}, {"id": "2132", "ap": null, "w": 4, "l": 1, "drank": 15, "dawg": 2.1, "luck": 0.5, "flag": "sleeper"}]};
+  var CC = {"cur":2026,"rows":[{"c":"SEC","hist":{"w":95,"l":70,"m":4.3,"ats":0.5,"n":165},"now":{"w":10,"l":2,"m":9.6,"ats":3.5,"n":12},"yrsUp":5,"yrs":6,"gone":false},{"c":"Big Ten","hist":{"w":68,"l":65,"m":0.6,"ats":1.3,"n":133},"now":{"w":4,"l":10,"m":-5.4,"ats":-2.2,"n":14},"yrsUp":5,"yrs":6,"gone":false},{"c":"Big 12","hist":{"w":47,"l":46,"m":-0.2,"ats":1.2,"n":93},"now":{"w":5,"l":7,"m":-1.8,"ats":3.6,"n":12},"yrsUp":4,"yrs":6,"gone":false},{"c":"ACC","hist":{"w":62,"l":119,"m":-8.0,"ats":-3.9,"n":181},"now":{"w":6,"l":10,"m":-7.1,"ats":-3.2,"n":16},"yrsUp":0,"yrs":6,"gone":false},{"c":"Notre Dame","hist":{"w":48,"l":12,"m":16.6,"ats":6.8,"n":60},"now":{"w":4,"l":0,"m":23.8,"ats":-0.8,"n":4},"yrsUp":6,"yrs":6,"gone":false},{"c":"Pac-12","hist":{"w":27,"l":33,"m":-5.2,"ats":-0.8,"n":60},"now":null,"yrsUp":0,"yrs":4,"gone":true}],"h2h":{"SEC|Big Ten":{"w":23,"l":19,"m":3.5,"ats":-0.8,"n":42},"SEC|Big 12":{"w":20,"l":12,"m":3.5,"ats":0.7,"n":32},"SEC|ACC":{"w":50,"l":30,"m":6.8,"ats":2.4,"n":80},"SEC|Notre Dame":{"w":2,"l":4,"m":-11,"ats":-10.8,"n":6},"Big Ten|SEC":{"w":19,"l":23,"m":-3.5,"ats":0.8,"n":42},"Big Ten|Big 12":{"w":15,"l":11,"m":4.9,"ats":0.8,"n":26},"Big Ten|ACC":{"w":25,"l":21,"m":3.3,"ats":2.3,"n":46},"Big Ten|Notre Dame":{"w":4,"l":11,"m":-12.8,"ats":-3.9,"n":15},"Big 12|SEC":{"w":12,"l":20,"m":-3.5,"ats":-0.7,"n":32},"Big 12|Big Ten":{"w":11,"l":15,"m":-4.9,"ats":-0.8,"n":26},"Big 12|ACC":{"w":22,"l":13,"m":4.6,"ats":6.4,"n":35},"Big 12|Notre Dame":{"w":1,"l":1,"m":-11,"ats":-9.8,"n":2},"ACC|SEC":{"w":30,"l":50,"m":-6.8,"ats":-2.4,"n":80},"ACC|Big Ten":{"w":21,"l":25,"m":-3.3,"ats":-2.3,"n":46},"ACC|Big 12":{"w":13,"l":22,"m":-4.6,"ats":-6.4,"n":35},"ACC|Notre Dame":{"w":3,"l":29,"m":-21.5,"ats":-7.6,"n":32},"Notre Dame|SEC":{"w":4,"l":2,"m":11,"ats":10.8,"n":6},"Notre Dame|Big Ten":{"w":11,"l":4,"m":12.8,"ats":3.9,"n":15},"Notre Dame|Big 12":{"w":1,"l":1,"m":11,"ats":9.8,"n":2},"Notre Dame|ACC":{"w":29,"l":3,"m":21.5,"ats":7.6,"n":32}}};
   var HIW = null, HIWP = null;   // How-it-went data, loaded the first time a game card opens
   function loadHIW(){ if (!HIWP) HIWP = fetch("hiw.json").then(function(r){ return r.json(); }).then(function(j){ HIW = j; return j; }).catch(function(){ HIW = {}; return HIW; }); return HIWP; }
   function ord(n){ var v = n % 100, s = ["th","st","nd","rd"]; return n + (s[(v - 20) % 10] || s[v] || s[0]); }
