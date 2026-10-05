@@ -242,8 +242,12 @@ tr.gc:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
 .wk>div:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
 .v-sleep{background:var(--mid-bg);color:var(--accent)}
 .gcact{display:flex;align-items:center;gap:14px;flex-wrap:wrap}.gcact .tipbtn{border:0;cursor:pointer;font-family:inherit}
+
+.wk .pc{display:flex;gap:22px;margin:2px 0}.wk .pc span{display:flex;flex-direction:column;white-space:nowrap;font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;font-weight:600}.wk .pc b{font-family:var(--mono);font-size:30px;line-height:1.1;letter-spacing:0;color:var(--ink);font-weight:400}.wk .pc b.neg{color:var(--bad)}
+@media (max-width:640px){.wk .pc b{font-size:22px}.wk .pc{gap:14px}.wk .pc span{font-size:10px;letter-spacing:.04em}}
 @media (max-width:640px){.wk{grid-template-columns:1fr 1fr}.wk>div{padding:10px 12px}.wk .big{font-size:22px}.wk .t{font-size:14px}.wk .s{font-size:12px}}
-@media (max-width:640px){#poll th,#poll td{padding:8px 6px}#poll .verdict{font-size:10px;padding:2px 6px;letter-spacing:.03em}}
+.show-sm{display:none}
+@media (max-width:640px){.show-sm{display:inline}#poll th,#poll td{padding:8px 4px}#poll td.l b{font-size:14px}#poll .verdict{font-size:10px;padding:2px 6px;letter-spacing:.03em}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
 </style>
 
@@ -314,7 +318,7 @@ tr.gc:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
   </section>
 
   <section class="sec page" data-page="rankings" id="week-sec" aria-labelledby="week-h">
-    <div class="sechead"><h2 id="week-h">This Week</h2><span class="note" id="week-note"></span></div>
+    <div class="sechead"><h2 id="week-h">Highlights</h2><span class="note" id="week-note"></span></div>
     <div class="wk" id="wk"></div>
   </section>
 
@@ -354,10 +358,10 @@ tr.gc:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
 
   <section class="sec page" data-page="rankings" id="poll-sec" aria-labelledby="poll-h">
     <div class="sechead"><h2 id="poll-h">Poll Check</h2><span class="note" id="poll-note"></span></div>
-    <p class="note">The AP poll next to how teams have actually played. <b class="pos">Earned it</b>: ranked and a top-12 DAWG team. <b class="neg">Fraud Watch</b>: ranked, but grading in the bottom half, or winning on luck. <b style="color:var(--accent)">Sleeper</b>: unranked, but a top-15 DAWG team. Tap a team for its page.</p>
+    <p class="note">Where the AP poll ranks each team, next to where it ranks by how it's actually played (DAWG rank, out of every Power 4 team). <b class="pos">Earned it</b>: ranked and a top-12 DAWG team. <b class="neg">Fraud Watch</b>: ranked, but grading in the bottom half, or winning on luck. <b style="color:var(--accent)">Sleeper</b>: unranked, but a top-15 DAWG team. Tap a team for its page.</p>
     <div class="tablewrap">
       <table id="poll">
-        <thead><tr><th class="l rank">AP</th><th class="l">Team</th><th data-tip="wl">W–L</th><th data-tip="pdrank">DAWG</th><th class="hide-sm" data-tip="dawg">DAWG</th><th class="hide-sm" data-tip="luck">Luck</th><th class="l">Verdict</th></tr></thead>
+        <thead><tr><th class="l" data-tip="paprank"><span class="hide-sm">AP Rank</span><span class="show-sm">AP</span></th><th class="l">Team</th><th data-tip="wl">W–L</th><th data-tip="pdrank"><span class="hide-sm">DAWG Rank</span><span class="show-sm">DAWG</span></th><th class="hide-sm" data-tip="dawg">Season Grade</th><th class="hide-sm" data-tip="luck">Luck</th><th class="l">Verdict</th></tr></thead>
         <tbody></tbody>
       </table>
     </div>
@@ -1023,7 +1027,8 @@ var TRK = {"season":2026,"baseBlown":0.19864940911648846,"baseCash":0.5229621125
       big: ["Big games", "Game grade (before the setting adjustment) in games with a stage score of 25 or more: ranked opponents, rivalries, national and primetime TV, bowls and title games, neutral-site showcases, packed stadiums, marquee opponents. Pulled slightly toward the season average when a team has played only a few.", "average core grade in big games"],
       routine: ["Routine", "DAWG grade in every game that wasn't a big game."],
       drop: ["Big-stage drop", "How much better or worse a team plays when the game gets big. Negative means it shrinks; positive means it rises.", "Big games − Routine"],
-      pdrank: ["DAWG rank", "Where the team ranks among all Power 4 teams by season DAWG grade."],
+      pdrank: ["DAWG rank", "Where the team ranks among all Power 4 teams by how it has actually played this season (season DAWG grade)."],
+      paprank: ["AP rank", "This week's AP Top 25. NR means not ranked."],
       luck: ["Luck", "Wins above what the box scores earned. Each game's yardage gives a win chance; add them up for expected wins. Also shows the record in one-score games.", "Wins − expected wins"],
       env: ["Stage", "How big the game was, from 0 up: ranked opponent +15 (top 10 +25), ranked vs. ranked +10, rivalry +20, national TV +10, primetime national +10, bowl or title game +30, neutral showcase +20, non-conference Power 4 +10, packed stadium +10, 10-win opponent last season +10. 25+ is a big game."],
       line: ["Line", "This team's closing spread. Negative means it was favored."],
@@ -1298,13 +1303,14 @@ var TRK = {"season":2026,"baseBlown":0.19864940911648846,"baseCash":0.5229621125
   }
   function drawAll(){ drawAsOf(); drawChips(); drawChart(); drawBoard(); drawConfs(); drawTeam(); drawCoaches(); drawTend(); drawTrackers(); drawTop(); }
   var WEEK = {"label": "Week 5", "pollName": "AP Poll Week 6", "n": 68, "best": {"id": "401856817", "t": "239", "y": 2026, "team": "Baylor", "opp": "Arizona State", "rk": null, "site": "away", "pf": 55, "pa": 19, "grade": 13.5, "srank": 1}, "worst": {"id": "401856821", "t": "38", "y": 2026, "team": "Colorado", "opp": "Texas Tech", "rk": 12, "site": "home", "pf": 7, "pa": 29, "grade": -10.6, "srank": 314}, "collapse": {"opp": "Houston", "site": "away", "lead": 17, "at": [17, 0], "pf": 17, "pa": 27, "date": "2026-10-03", "id": "401856819", "team": "UCF", "tid": "2116"}, "gap": {"id": "145", "name": "Ole Miss", "ap": 9, "drank": 44}, "poll": [{"id": "251", "ap": 1, "w": 4, "l": 0, "drank": 29, "dawg": 0.8, "luck": 1.0, "flag": ""}, {"id": "61", "ap": 2, "w": 5, "l": 0, "drank": 5, "dawg": 3.9, "luck": 0.5, "flag": "legit"}, {"id": "87", "ap": 3, "w": 5, "l": 0, "drank": 17, "dawg": 1.8, "luck": 0.3, "flag": ""}, {"id": "2390", "ap": 4, "w": 5, "l": 0, "drank": 7, "dawg": 3.1, "luck": 0.5, "flag": "legit"}, {"id": "194", "ap": 5, "w": 4, "l": 1, "drank": 33, "dawg": 0.4, "luck": -0.4, "flag": ""}, {"id": "333", "ap": 6, "w": 5, "l": 0, "drank": 2, "dawg": 6.9, "luck": 0.5, "flag": "legit"}, {"id": "84", "ap": 7, "w": 5, "l": 0, "drank": 35, "dawg": 0.3, "luck": 0.5, "flag": ""}, {"id": "252", "ap": 8, "w": 4, "l": 0, "drank": 13, "dawg": 2.2, "luck": 0.9, "flag": ""}, {"id": "145", "ap": 9, "w": 3, "l": 1, "drank": 44, "dawg": -0.7, "luck": 0.4, "flag": "fraud"}, {"id": "99", "ap": 10, "w": 4, "l": 1, "drank": 23, "dawg": 1.1, "luck": -0.2, "flag": ""}, {"id": "2641", "ap": 11, "w": 5, "l": 0, "drank": 50, "dawg": -1.8, "luck": 2.1, "flag": "fraud"}, {"id": "254", "ap": 12, "w": 4, "l": 0, "drank": 8, "dawg": 3.1, "luck": 0.3, "flag": "legit"}, {"id": "2483", "ap": 13, "w": 3, "l": 1, "drank": 46, "dawg": -1.2, "luck": 0.3, "flag": "fraud"}, {"id": "142", "ap": 14, "w": 4, "l": 1, "drank": 14, "dawg": 2.2, "luck": 0.5, "flag": ""}, {"id": "2633", "ap": 15, "w": 4, "l": 1, "drank": 25, "dawg": 1.0, "luck": 0.4, "flag": ""}, {"id": "57", "ap": 16, "w": 4, "l": 1, "drank": 11, "dawg": 2.5, "luck": 0.3, "flag": "legit"}, {"id": "344", "ap": 17, "w": 4, "l": 1, "drank": 6, "dawg": 3.2, "luck": 0.7, "flag": "legit"}, {"id": "197", "ap": 18, "w": 3, "l": 1, "drank": 38, "dawg": -0.3, "luck": -0.5, "flag": "fraud"}, {"id": "30", "ap": 19, "w": 5, "l": 1, "drank": 30, "dawg": 0.6, "luck": 0.6, "flag": ""}, {"id": "2294", "ap": 20, "w": 4, "l": 1, "drank": 27, "dawg": 0.8, "luck": 1.2, "flag": "fraud"}, {"id": "26", "ap": 21, "w": 4, "l": 0, "drank": 3, "dawg": 6.2, "luck": 0.4, "flag": "legit"}, {"id": "248", "ap": 22, "w": 4, "l": 1, "drank": 24, "dawg": 1.0, "luck": -0.1, "flag": ""}, {"id": "2567", "ap": 24, "w": 4, "l": 1, "drank": 52, "dawg": -2.0, "luck": 0.1, "flag": "fraud"}, {"id": "221", "ap": 25, "w": 5, "l": 0, "drank": 20, "dawg": 1.6, "luck": 1.5, "flag": ""}, {"id": "77", "ap": null, "w": 3, "l": 1, "drank": 1, "dawg": 8.1, "luck": 0.4, "flag": "sleeper"}, {"id": "154", "ap": null, "w": 4, "l": 1, "drank": 4, "dawg": 4.2, "luck": 0.6, "flag": "sleeper"}, {"id": "158", "ap": null, "w": 5, "l": 0, "drank": 9, "dawg": 2.7, "luck": 0.4, "flag": "sleeper"}, {"id": "96", "ap": null, "w": 4, "l": 1, "drank": 10, "dawg": 2.5, "luck": 1.1, "flag": "sleeper"}, {"id": "239", "ap": null, "w": 4, "l": 1, "drank": 12, "dawg": 2.3, "luck": 0.2, "flag": "sleeper"}, {"id": "2132", "ap": null, "w": 4, "l": 1, "drank": 15, "dawg": 2.1, "luck": 1.4, "flag": "sleeper"}]};
+  function ord(n){ var v = n % 100, s = ["th","st","nd","rd"]; return n + (s[(v - 20) % 10] || s[v] || s[0]); }
   function drawWeek(){
     var W = WEEK, el = $("wk"); if (!W || !W.best){ $("week-sec").hidden = true; return; }
-    $("week-note").textContent = W.label + " · tap a game to see how it graded";
+    $("week-h").textContent = W.label + " Highlights"; $("week-note").textContent = "Tap a game to see how it graded";
     function gtile(lbl, g, cls){ return '<div tabindex="0" data-gid="' + g.id + '" data-t="' + g.t + '" data-y="' + g.y + '"><span class="lbl">' + lbl + '</span><span class="big ' + cls + '">' + signed(g.grade) + '</span><span class="t">' + esc(g.team) + '</span><span class="s">' + (g.site === "away" ? "at " : "vs ") + (g.rk ? "No. " + g.rk + " " : "") + esc(g.opp) + " · " + (g.pf > g.pa ? "W " : "L ") + g.pf + "–" + g.pa + " · #" + g.srank + " of the season</span></div>"; }
     var h = gtile("Best game", W.best, "pos") + gtile("Worst game", W.worst, "neg");
     if (W.collapse){ var c = W.collapse; h += '<div tabindex="0" data-id="' + c.tid + '"><span class="lbl">Biggest collapse</span><span class="big neg">' + c.at[0] + "–" + c.at[1] + '</span><span class="t">' + esc(c.team) + '</span><span class="s">led ' + (c.site === "away" ? "at " : "vs ") + esc(c.opp) + ", lost " + c.pf + "–" + c.pa + "</span></div>"; }
-    if (W.gap){ var p = W.gap; h += '<div tabindex="0" data-id="' + p.id + '"><span class="lbl">Poll check</span><span class="big">#' + p.ap + ' → #' + p.drank + '</span><span class="t">' + esc(p.name) + '</span><span class="s">AP top 10, but #' + p.drank + " of " + W.n + " by DAWG</span></div>"; }
+    if (W.gap){ var p = W.gap; h += '<div tabindex="0" data-id="' + p.id + '"><span class="lbl">Ranked higher than it plays</span><span class="pc"><span><b>#' + p.ap + '</b>AP Poll</span><span><b class="neg">#' + p.drank + '</b>DAWG Index</span></span><span class="t">' + esc(p.name) + '</span><span class="s">' + ord(p.ap) + " in the AP poll, " + ord(p.drank) + " of " + W.n + " in how it's actually played</span></div>"; }
     el.innerHTML = h;
   }
   function drawPoll(){
@@ -1313,7 +1319,7 @@ var TRK = {"season":2026,"baseBlown":0.19864940911648846,"baseCash":0.5229621125
     $("poll-note").textContent = W.pollName + " vs. DAWG rank · " + W.label;
     var V = {fraud:'<span class="verdict v-soft">Fraud Watch</span>', legit:'<span class="verdict v-dawg">Earned it</span>', sleeper:'<span class="verdict v-sleep">Sleeper</span>', "":'<span class="dim">–</span>'};
     $("poll").tBodies[0].innerHTML = W.poll.map(function(p){ var m = META[p.id];
-      return '<tr class="trow" data-id="' + p.id + '" tabindex="0"><td class="l rank">' + (p.ap || "NR") + '</td><td class="l"><b>' + esc(m.name) + '</b></td><td class="num">' + p.w + "–" + p.l + '</td><td class="num">#' + p.drank + '</td><td class="num hide-sm ' + cls(p.dawg) + '">' + signed(p.dawg) + '</td><td class="num hide-sm">' + (p.luck === null || p.luck === undefined ? "–" : signed(p.luck)) + '</td><td class="l">' + V[p.flag] + '</td></tr>'; }).join("");
+      return '<tr class="trow" data-id="' + p.id + '" tabindex="0"><td class="l num">' + (p.ap ? "#" + p.ap : '<span class="dim">NR</span>') + '</td><td class="l"><b>' + esc(m.name) + '</b></td><td class="num">' + p.w + "–" + p.l + '</td><td class="num">#' + p.drank + '</td><td class="num hide-sm ' + cls(p.dawg) + '">' + signed(p.dawg) + '</td><td class="num hide-sm">' + (p.luck === null || p.luck === undefined ? "–" : signed(p.luck)) + '</td><td class="l">' + V[p.flag] + '</td></tr>'; }).join("");
   }
   $("poll").tBodies[0].addEventListener("click", function(e){ var tr = e.target.closest("tr[data-id]"); if (tr) select(tr.getAttribute("data-id"), true); });
   $("poll").tBodies[0].addEventListener("keydown", function(e){ if (e.key !== "Enter") return; var tr = e.target.closest("tr[data-id]"); if (tr) select(tr.getAttribute("data-id"), true); });
