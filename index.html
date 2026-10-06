@@ -632,7 +632,10 @@ th{font-size:15px!important}
 .wkey i{font-style:normal;font-family:var(--display);font-weight:900;font-size:17px;color:#1b1712}.wkey i.pos{color:#1E7046}.wkey i.neg{color:#C22E25}
 .wex{margin:16px 0 0;border-top:2px dashed #1b1712;padding-top:12px;font-size:16px;line-height:1.38;color:#1b1712}
 .wex b{font-family:var(--display);font-weight:900;letter-spacing:.06em;text-transform:uppercase;font-size:14px;color:#1F4E9C;margin-right:6px}
-.whow{display:inline-block;margin-top:14px;font-family:var(--display);font-weight:900;font-size:17px;letter-spacing:.05em;text-transform:uppercase;color:#D8342A;text-decoration:none}
+.wact{display:flex;align-items:center;gap:18px;margin-top:16px;flex-wrap:wrap}
+.wgot{font-family:var(--display);font-weight:900;font-size:17px;letter-spacing:.05em;text-transform:uppercase;color:#EFE3C6;background:#1b1712;border:0;border-radius:999px;padding:8px 20px;cursor:pointer;box-shadow:3px 3px 0 #D8342A}
+.wopen{all:unset;cursor:pointer;color:var(--orange);font-weight:700;white-space:nowrap}
+.whow{display:inline-block;font-family:var(--display);font-weight:900;font-size:17px;letter-spacing:.05em;text-transform:uppercase;color:#D8342A;text-decoration:none}
 @media (max-width:640px){.what{padding:18px 18px 16px}.what .wh{font-size:22px!important;margin:10px 0 12px!important}.w3 li{font-size:15px}.wex{font-size:15px}}
 </style>
 
@@ -643,7 +646,7 @@ th{font-size:15px!important}
     <div>
       <h1>DAWG <span>Index</span></h1>
       <p class="sub">Who gets up for big games, and who shrinks.</p>
-      <p class="pitch" id="pitch">Every Power 4 game, graded on one question: did the team show up? <a href="#method" data-p="method">How it works →</a></p>
+      <p class="pitch" id="pitch">Every Power 4 game, graded on one question: did the team show up? <button type="button" class="wopen" id="what-open">What is this? →</button></p>
     </div>
     <div class="hdr-r">
       <div id="seasonbox" class="hdr-r"><label class="lbl" for="season">Season</label>
@@ -701,10 +704,11 @@ th{font-size:15px!important}
       <ol class="w3">
         <li><span><b>Not wins. Expectations.</b> Did they beat the Vegas line, finish drives, pull away with a lead, answer back?</span></li>
         <li><span><b>Big games count more.</b> Road games, night games, packed stadiums, ranked opponents.</span></li>
-        <li><span><b>Every team gets a grade.</b> <span class="wkey"><i>0</i> = what Vegas expected · <i class="pos">+3</i> season = DAWG · <i class="neg">−3</i> = SOFT</span></span></li>
+        <li><span><b>Every game gets a grade.</b> <span class="wkey"><i>0</i> = played exactly like Vegas expected · <i class="pos">+5</i> = a top-16% game · <i class="pos">+10</i> = top 4% · below zero = worse than expected</span></span></li>
+        <li><span><b>Every team gets a DAWG grade</b>: the average of its game grades. <span class="wkey"><i class="pos">+3</i> or better = DAWG · <i class="neg">−3</i> or worse = SOFT</span></span></li>
       </ol>
       <p class="wex" id="what-ex" hidden></p>
-      <a class="whow" href="#method" data-p="method">How it works →</a>
+      <div class="wact"><button type="button" class="wgot" id="what-x">Got it</button><a class="whow" href="#method" data-p="method">How it works →</a></div>
     </div>
   </section>
   <section class="sec page" data-page="rankings" id="find-sec" aria-labelledby="find-h">
@@ -2044,13 +2048,17 @@ var TRK = {"season":2026,"baseBlown":0.19864940911648846,"baseCash":0.5229621125
   ["due-hot","due-cold"].forEach(function(id){ $(id).tBodies[0].addEventListener("click", function(e){ var tr = e.target.closest("tr[data-id]"); if (tr) select(tr.getAttribute("data-id"), true); }); });
   function drawAll(){ drawAsOf(); drawChips(); drawChart(); drawBoard(); drawConfs(); drawTeam(); drawCoaches(); drawTend(); drawTrackers(); drawTop(); drawCC(); drawDue(); capTables(); fitTables(); }
   var WEEK = {"label": "Week 5", "pollName": "AP Poll Week 6", "n": 68, "best": {"id": "401856817", "t": "239", "y": 2026, "team": "Baylor", "opp": "Arizona State", "rk": null, "site": "away", "pf": 55, "pa": 19, "grade": 13.5, "srank": 1}, "worst": {"id": "401856821", "t": "38", "y": 2026, "team": "Colorado", "opp": "Texas Tech", "rk": 12, "site": "home", "pf": 7, "pa": 29, "grade": -10.6, "srank": 314}, "collapse": {"opp": "Houston", "site": "away", "lead": 17, "at": [17, 0], "pf": 17, "pa": 27, "date": "2026-10-03", "id": "401856819", "team": "UCF", "tid": "2116"}, "gap": {"id": "145", "name": "Ole Miss", "ap": 9, "drank": 44}, "poll": [{"id": "251", "ap": 1, "w": 4, "l": 0, "drank": 29, "dawg": 0.8, "luck": 1.2, "flag": "fraud"}, {"id": "61", "ap": 2, "w": 5, "l": 0, "drank": 5, "dawg": 3.9, "luck": 0.4, "flag": "legit"}, {"id": "87", "ap": 3, "w": 5, "l": 0, "drank": 17, "dawg": 1.8, "luck": 0.2, "flag": ""}, {"id": "2390", "ap": 4, "w": 5, "l": 0, "drank": 7, "dawg": 3.1, "luck": 0.3, "flag": "legit"}, {"id": "194", "ap": 5, "w": 4, "l": 1, "drank": 33, "dawg": 0.4, "luck": -0.7, "flag": ""}, {"id": "333", "ap": 6, "w": 5, "l": 0, "drank": 2, "dawg": 6.9, "luck": 0.2, "flag": "legit"}, {"id": "84", "ap": 7, "w": 5, "l": 0, "drank": 35, "dawg": 0.3, "luck": 0.2, "flag": ""}, {"id": "252", "ap": 8, "w": 4, "l": 0, "drank": 13, "dawg": 2.2, "luck": 1.0, "flag": ""}, {"id": "145", "ap": 9, "w": 3, "l": 1, "drank": 44, "dawg": -0.7, "luck": 1.1, "flag": "fraud"}, {"id": "99", "ap": 10, "w": 4, "l": 1, "drank": 23, "dawg": 1.1, "luck": -0.5, "flag": ""}, {"id": "2641", "ap": 11, "w": 5, "l": 0, "drank": 50, "dawg": -1.8, "luck": 1.0, "flag": "fraud"}, {"id": "254", "ap": 12, "w": 4, "l": 0, "drank": 8, "dawg": 3.1, "luck": 0.0, "flag": "legit"}, {"id": "2483", "ap": 13, "w": 3, "l": 1, "drank": 46, "dawg": -1.2, "luck": 0.1, "flag": "fraud"}, {"id": "142", "ap": 14, "w": 4, "l": 1, "drank": 14, "dawg": 2.2, "luck": -0.2, "flag": ""}, {"id": "2633", "ap": 15, "w": 4, "l": 1, "drank": 25, "dawg": 1.0, "luck": 0.5, "flag": ""}, {"id": "57", "ap": 16, "w": 4, "l": 1, "drank": 11, "dawg": 2.5, "luck": 0.4, "flag": "legit"}, {"id": "344", "ap": 17, "w": 4, "l": 1, "drank": 6, "dawg": 3.2, "luck": 0.5, "flag": "legit"}, {"id": "197", "ap": 18, "w": 3, "l": 1, "drank": 38, "dawg": -0.3, "luck": 0.1, "flag": "fraud"}, {"id": "30", "ap": 19, "w": 5, "l": 1, "drank": 30, "dawg": 0.6, "luck": 0.8, "flag": ""}, {"id": "2294", "ap": 20, "w": 4, "l": 1, "drank": 27, "dawg": 0.8, "luck": 1.2, "flag": "fraud"}, {"id": "26", "ap": 21, "w": 4, "l": 0, "drank": 3, "dawg": 6.2, "luck": 0.3, "flag": "legit"}, {"id": "248", "ap": 22, "w": 4, "l": 1, "drank": 24, "dawg": 1.0, "luck": 0.0, "flag": ""}, {"id": "2567", "ap": 24, "w": 4, "l": 1, "drank": 52, "dawg": -2.0, "luck": 0.6, "flag": "fraud"}, {"id": "221", "ap": 25, "w": 5, "l": 0, "drank": 20, "dawg": 1.6, "luck": 0.5, "flag": ""}, {"id": "77", "ap": null, "w": 3, "l": 1, "drank": 1, "dawg": 8.1, "luck": -0.0, "flag": "sleeper"}, {"id": "154", "ap": null, "w": 4, "l": 1, "drank": 4, "dawg": 4.2, "luck": 0.4, "flag": "sleeper"}, {"id": "158", "ap": null, "w": 5, "l": 0, "drank": 9, "dawg": 2.7, "luck": 0.4, "flag": "sleeper"}, {"id": "96", "ap": null, "w": 4, "l": 1, "drank": 10, "dawg": 2.5, "luck": 0.4, "flag": "sleeper"}, {"id": "239", "ap": null, "w": 4, "l": 1, "drank": 12, "dawg": 2.3, "luck": 0.3, "flag": "sleeper"}, {"id": "2132", "ap": null, "w": 4, "l": 1, "drank": 15, "dawg": 2.1, "luck": 0.5, "flag": "sleeper"}]};
-  // "What is this?" card: full explainer on a first visit, then the one-line pitch in the header
+  // "What is this?" card: shows until the reader taps "Got it" (or on the first visit only), then the one-line pitch takes over
   (function(){
     var seen = false; try { seen = localStorage.getItem("dawg-what-seen") === "1"; } catch(e){}
-    $("what-sec").classList.toggle("gone", seen); $("pitch").hidden = !seen;
+    function set(open){ $("what-sec").classList.toggle("gone", !open); $("pitch").hidden = open; }
+    set(!seen);
     var g = WEEK && WEEK.gap, ordn = function(n){ var v = n % 100, x = ["th","st","nd","rd"]; return n + (x[(v - 20) % 10] || x[v] || x[0]); };
     if (g && META[g.id]){ $("what-ex").innerHTML = "<b>Example</b>" + esc(META[g.id].name) + " is No. " + g.ap + " in the AP poll, but " + ordn(g.drank) + " of 68 at living up to expectations."; $("what-ex").hidden = false; }
-    try { localStorage.setItem("dawg-what-seen", "1"); } catch(e){}
+    $("what-x").addEventListener("click", function(){ set(false); try { localStorage.setItem("dawg-what-seen", "1"); } catch(e){} });
+    $("what-open").addEventListener("click", function(){ set(true); $("what-sec").scrollIntoView({block:"start", behavior:"smooth"}); });
+    // a reader who scrolls well past it has read it; don't make them dismiss it next time
+    var done = false; window.addEventListener("scroll", function(){ if (!done && window.scrollY > 1400){ done = true; try { localStorage.setItem("dawg-what-seen", "1"); } catch(e){} } }, {passive:true});
   })();
   var CC = {"cur":2026,"rows":[{"c":"SEC","hist":{"w":95,"l":70,"m":4.3,"ats":0.5,"n":165},"now":{"w":10,"l":2,"m":9.6,"ats":3.5,"n":12},"yrsUp":5,"yrs":6,"gone":false},{"c":"Big Ten","hist":{"w":68,"l":65,"m":0.6,"ats":1.3,"n":133},"now":{"w":4,"l":10,"m":-5.4,"ats":-2.2,"n":14},"yrsUp":5,"yrs":6,"gone":false},{"c":"Big 12","hist":{"w":47,"l":46,"m":-0.2,"ats":1.2,"n":93},"now":{"w":5,"l":7,"m":-1.8,"ats":3.6,"n":12},"yrsUp":4,"yrs":6,"gone":false},{"c":"ACC","hist":{"w":62,"l":119,"m":-8.0,"ats":-3.9,"n":181},"now":{"w":6,"l":10,"m":-7.1,"ats":-3.2,"n":16},"yrsUp":0,"yrs":6,"gone":false},{"c":"Notre Dame","hist":{"w":48,"l":12,"m":16.6,"ats":6.8,"n":60},"now":{"w":4,"l":0,"m":23.8,"ats":-0.8,"n":4},"yrsUp":6,"yrs":6,"gone":false},{"c":"Pac-12","hist":{"w":27,"l":33,"m":-5.2,"ats":-0.8,"n":60},"now":null,"yrsUp":0,"yrs":4,"gone":true}],"h2h":{"SEC|Big Ten":{"w":23,"l":19,"m":3.5,"ats":-0.8,"n":42},"SEC|Big 12":{"w":20,"l":12,"m":3.5,"ats":0.7,"n":32},"SEC|ACC":{"w":50,"l":30,"m":6.8,"ats":2.4,"n":80},"SEC|Notre Dame":{"w":2,"l":4,"m":-11,"ats":-10.8,"n":6},"Big Ten|SEC":{"w":19,"l":23,"m":-3.5,"ats":0.8,"n":42},"Big Ten|Big 12":{"w":15,"l":11,"m":4.9,"ats":0.8,"n":26},"Big Ten|ACC":{"w":25,"l":21,"m":3.3,"ats":2.3,"n":46},"Big Ten|Notre Dame":{"w":4,"l":11,"m":-12.8,"ats":-3.9,"n":15},"Big 12|SEC":{"w":12,"l":20,"m":-3.5,"ats":-0.7,"n":32},"Big 12|Big Ten":{"w":11,"l":15,"m":-4.9,"ats":-0.8,"n":26},"Big 12|ACC":{"w":22,"l":13,"m":4.6,"ats":6.4,"n":35},"Big 12|Notre Dame":{"w":1,"l":1,"m":-11,"ats":-9.8,"n":2},"ACC|SEC":{"w":30,"l":50,"m":-6.8,"ats":-2.4,"n":80},"ACC|Big Ten":{"w":21,"l":25,"m":-3.3,"ats":-2.3,"n":46},"ACC|Big 12":{"w":13,"l":22,"m":-4.6,"ats":-6.4,"n":35},"ACC|Notre Dame":{"w":3,"l":29,"m":-21.5,"ats":-7.6,"n":32},"Notre Dame|SEC":{"w":4,"l":2,"m":11,"ats":10.8,"n":6},"Notre Dame|Big Ten":{"w":11,"l":4,"m":12.8,"ats":3.9,"n":15},"Notre Dame|Big 12":{"w":1,"l":1,"m":11,"ats":9.8,"n":2},"Notre Dame|ACC":{"w":29,"l":3,"m":21.5,"ats":7.6,"n":32}}};
   var HIW = null, HIWP = null;   // How-it-went data, loaded the first time a game card opens
