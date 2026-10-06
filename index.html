@@ -538,6 +538,50 @@ th{font-size:15px!important}
 #log td.gg{font-weight:900!important}
 @media (max-width:640px){#log td.gg .verdict{display:none}#log td.l{white-space:normal}}
 .note{color:var(--muted)}
+
+/* newcomer pass: key, finder, my-team card, phone fixes */
+.key{display:flex;flex-wrap:wrap;gap:8px 10px;margin:12px 0 4px;align-items:center}
+.key span{font-size:14px;color:var(--muted);background:rgba(244,234,210,.06);border:1.5px solid var(--line);border-radius:999px;padding:4px 11px}
+.key span b{font-family:var(--display);font-weight:900;font-size:16px;color:var(--ink);margin-right:3px}
+.key .kt{background:none;border:0;padding:0 4px 0 0;font-family:var(--display);font-weight:900;text-transform:uppercase;letter-spacing:.08em;color:var(--ink);font-size:14px}
+.keyline{font-size:13.5px;color:var(--muted);margin:10px 0 0}.keyline b{font-family:var(--display);font-weight:900;font-size:15px;color:var(--ink)}
+#board-sec .keyline{margin:-2px 0 12px}
+.golink{color:var(--accent)!important}
+.findq{width:100%;max-width:520px;font:inherit;font-size:17px;color:var(--ink);background:var(--bg2,#1d1b18);border:2.5px solid var(--edge,#F4EAD2);border-radius:999px;padding:11px 18px;margin:4px 0 12px;box-shadow:3px 3px 0 var(--red,#E5463A)}
+.findq::placeholder{color:var(--muted)}
+.fconfs{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
+.fconfs button{font-family:var(--display);font-weight:800;text-transform:uppercase;letter-spacing:.04em;font-size:15px;color:var(--ink);background:transparent;border:2px solid var(--line);border-radius:999px;padding:6px 14px;cursor:pointer}
+.fconfs button[aria-pressed="true"]{background:var(--ink);color:#131210;border-color:var(--ink)}
+.fgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:10px}
+.fgrid a{display:flex;flex-direction:column;align-items:center;gap:6px;text-decoration:none;color:var(--ink);background:rgba(244,234,210,.05);border:2px solid var(--line);border-radius:14px;padding:12px 6px 10px;font-family:var(--display);font-weight:800;font-size:14px;text-transform:uppercase;text-align:center;line-height:1.1}
+.fgrid a:hover,.fgrid a:focus-visible{border-color:var(--ink)}
+.fgrid img{width:44px;height:44px;object-fit:contain}
+.fgrid .none{grid-column:1/-1;color:var(--muted);font-size:15px}
+#myteam{margin:0 0 22px}
+.mt{display:grid;grid-template-columns:64px 1fr;gap:16px;align-items:center;background:#EFE3C6;color:#1b1712;border-radius:18px;padding:16px 18px;box-shadow:5px 5px 0 #0c0b0a;text-decoration:none}
+.mt img{width:64px;height:64px;object-fit:contain}
+.mt .k{font-family:var(--display);font-weight:900;font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:#6b5f4c}
+.mt .n{font-family:var(--chunk);font-size:26px;line-height:1.05;text-transform:uppercase}
+.mt .r{font-size:15px;font-weight:600;color:#4a4136;margin-top:3px;line-height:1.35}.mt .r b{font-weight:800;color:#1b1712}
+.mt .r .pos{color:#1E7046}.mt .r .neg{color:#C22E25}
+.mt .go{font-family:var(--display);font-weight:900;font-size:15px;letter-spacing:.06em;text-transform:uppercase;color:#D8342A;margin-top:6px;display:inline-block}
+.mtchg{display:block;margin:8px 2px 0;font-size:13.5px;color:var(--muted);background:none;border:0;padding:0;cursor:pointer;text-decoration:underline}
+#find-sec.has .sechead h2{font-size:22px!important}
+#fab{transition:transform .25s ease,opacity .25s ease}#fab.hid{transform:translateY(140%);opacity:0;pointer-events:none}
+@media (max-width:640px){
+  #topgames th:nth-child(5),#topgames td:nth-child(5),#topgames th:nth-child(6),#topgames td:nth-child(6),#topgames th:nth-child(8),#topgames td:nth-child(8){display:none}
+  #confs th:nth-child(3),#confs td:nth-child(3),#confs th:nth-child(7),#confs td:nth-child(7),#confs th:nth-child(8),#confs td:nth-child(8){display:none}
+  #topgames th:nth-child(4),#topgames td:nth-child(4){display:none}
+  #topgames td,#topgames th{white-space:normal!important}
+  #topgames td:nth-child(3){min-width:0;font-size:14px}
+  #poll th,#poll td{padding-left:5px!important;padding-right:5px!important}
+  #poll .vd,#poll td:last-child span{font-size:11px!important;padding:2px 6px!important;letter-spacing:.02em!important;white-space:nowrap}
+  .key span{font-size:13px}
+  .fgrid{grid-template-columns:repeat(3,1fr)}
+  #fab{font-size:14px!important;padding:7px 13px!important;right:12px!important}
+  #fab svg{width:15px!important;height:15px!important}
+  .wrap{padding-bottom:70px}
+}
 </style>
 
 <div id="htip" role="tooltip" hidden></div>
@@ -600,15 +644,90 @@ th{font-size:15px!important}
   <section class="sec page" data-page="rankings" id="start-sec" aria-label="Start here">
     <details class="start" id="startd" open>
       <summary><span class="lbl">Start here</span><span class="sumq">What is the DAWG Index?</span></summary>
-      <p><b>The DAWG Index grades every Power 4 game on whether a team showed up:</b> beat the spread, finished drives, kept pulling away with a lead, cashed in after defensive stops and answered when the other team scored. Garbage time doesn't count, and road, night, packed-stadium and ranked-opponent games count more.</p>
-      <p class="sm"><a href="dawg-index-games.csv" download style="color:var(--accent)">Download every graded game</a> to check the work. It describes how teams played. It doesn't predict who wins or covers. For how a team is likely to play, see Tendencies. Tap any game to see how it graded.</p>
+      <p><b>We grade every Power 4 game on one question: did the team show up?</b> Beat the spread, finish drives, pull away with a lead, cash in after stops, answer back. Big games count more. Garbage time doesn't count.</p>
+      <div class="key" role="note"><span class="kt">How to read a grade</span><span><b>0</b> played like Vegas expected</span><span><b class="pos">+5</b> a top-16% game</span><span><b class="pos">+10</b> top 4%</span><span>Season <b class="pos">+3</b> or better = DAWG · <b class="neg">−3</b> or worse = SOFT</span></div>
+      <p class="sm"><a href="#method" data-p="method" class="golink">How it works</a> · <a href="dawg-index-games.csv" download class="golink">Download every graded game</a> · It describes how teams played. It doesn't predict games.</p>
       <button type="button" class="gotit" id="gotit">Got it</button>
     </details>
+  </section>
+  <section class="sec page" data-page="rankings" id="find-sec" aria-labelledby="find-h">
+    <div id="myteam" hidden></div>
+    <div class="sechead"><h2 id="find-h">Find your team</h2></div>
+    <input id="findq" class="findq" type="search" placeholder="Search all 68 Power 4 teams" autocomplete="off" aria-label="Search teams">
+    <div class="fconfs" id="fconfs" role="group" aria-label="Conferences"></div>
+    <div class="fgrid" id="fgrid"></div>
   </section>
 
   <section class="sec page" data-page="rankings" id="week-sec" aria-labelledby="week-h">
     <div class="sechead"><h2 id="week-h">Highlights</h2><span class="note" id="week-note"></span></div>
     <div class="wk" id="wk"></div>
+    <p class="keyline">Grades: <b>0</b> = played like Vegas expected · <b class="pos">+5</b> = top-16% game · <b class="pos">+10</b> = top 4%</p>
+  </section>
+  <section class="sec page" data-page="rankings" id="poll-sec" aria-labelledby="poll-h">
+    <div class="sechead"><h2 id="poll-h">Poll Check</h2><span class="note" id="poll-note"></span></div>
+    <p class="note">AP rank next to DAWG rank: where each team ranks at living up to expectations, out of every Power 4 team.</p>
+    <p class="note sm"><b class="pos">Earned it</b> ranked and a top-12 DAWG team · <b class="neg">Fraud Watch</b> ranked, but bottom half or winning on luck · <b style="color:var(--accent)">Sleeper</b> unranked, but a top-15 DAWG team</p>
+    <div class="tablewrap">
+      <table id="poll">
+        <thead><tr><th class="l" data-tip="paprank"><span class="hide-sm">AP Rank</span><span class="show-sm">AP</span></th><th class="l">Team</th><th data-tip="wl">W–L</th><th data-tip="pdrank"><span class="hide-sm">DAWG Rank</span><span class="show-sm">DAWG</span></th><th class="hide-sm" data-tip="dawg">Season Grade</th><th class="hide-sm" data-tip="luck">Luck</th><th class="l">Verdict</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </section>
+  <section class="sec page" data-page="rankings" id="board-sec" aria-labelledby="board-h">
+    <div class="sechead"><h2 id="board-h">Leaderboard</h2><span class="note"><span class="hide-sm">Hover a header for its meaning · tap to sort</span><span class="show-sm">Tap a header to sort · tap a team for its page</span></span></div>
+    <p class="keyline">Season grade = average game grade. <b class="pos">+3</b> or better = DAWG · <b class="neg">−3</b> or worse = SOFT · 0 = played like Vegas expected</p>
+    <div class="tablewrap">
+      <table id="board">
+        <thead><tr>
+          <th class="l rank">#</th><th class="l">Team</th><th class="l hide-sm" id="confcol">Conf</th><th data-tip="wl">W–L</th>
+          <th data-k="dawg" data-tip="dawg"><button>DAWG</button></th><th data-k="big" data-tip="big"><button>Big<span class="hide-sm"> Games</span></button></th><th data-k="other" data-tip="routine"><button>Routine</button></th><th class="c-drop" data-k="drop" data-tip="drop"><button>Big-Stage Drop</button></th><th id="lastcol" data-k="consN" data-tip="pcons" hidden><button>Consistent</button></th>
+        </tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </section>
+  <section class="sec page" data-page="rankings" id="due-sec" aria-labelledby="due-h">
+    <div class="sechead"><h2 id="due-h">Due for a Correction</h2><span class="note" id="due-note"></span></div>
+    <p class="note">Records running ahead of, or behind, how teams actually played, judged play by play. <button type="button" class="ib" data-more="due-more" aria-expanded="false" aria-label="More about this list" title="More">i</button></p>
+    <div class="modenote" id="due-more" hidden><p>Built from success rate, yards per play, explosive plays, expected turnovers and field goals. Since 2019, teams whose record ran a full win ahead of their play after five games won 54% the rest of the way after winning 89% early; teams running behind climbed back toward how they played. Tap a team for its page.</p></div>
+    <div class="duewrap">
+      <div><h3>Running hot</h3><p class="note sm">Record better than the play</p><div class="tablewrap"><table class="due" id="due-hot"><tbody></tbody></table></div></div>
+      <div><h3>Running cold</h3><p class="note sm">Record worse than the play</p><div class="tablewrap"><table class="due" id="due-cold"><tbody></tbody></table></div></div>
+    </div>
+  </section>
+  <section class="sec page" data-page="rankings" id="top-sec" aria-labelledby="top-h">
+    <div class="sechead"><h2 id="top-h">Top 10 Games</h2><span class="note" id="top-note">Single-game grade</span></div>
+    <p class="note">The best single games of the season. Tap one to see how it graded. <button type="button" class="ib" data-more="top-more" aria-expanded="false" aria-label="More about this table" title="More">i</button></p>
+    <div class="modenote" id="top-more" hidden><p><b>Hindsight</b> re-grades each game based on how good the opponent turned out to be, using every other game they've played this year. The number in parentheses is how much the grade moved. It's shaky this early in the season.</p></div>
+    <div class="tablewrap">
+      <table id="topgames">
+        <thead><tr><th class="l rank">#</th><th class="l">Team</th><th class="l" data-tip="tgame">Game</th><th data-tip="wl">Score</th><th data-tip="line">Spread</th><th data-tip="thline">Hindsight Spread</th><th data-tip="tgrade">Game Grade</th><th data-tip="thgrade">Hindsight Grade</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </section>
+  <section class="sec page" data-page="rankings" id="cc-sec" aria-labelledby="cc-h">
+    <div class="sechead"><h2 id="cc-h">Conferences</h2><span class="note">Is the conference actually better, or just louder?</span></div>
+    <p class="note"><b>Results</b>: Power 4 teams playing Power 4 teams from other conferences (nonconference games, bowls, the playoff). <b>Expectations</b>: how each conference's teams have played against what was expected. A conference can win head to head and still sit near zero on expectations, because Vegas already expects it to win. <button type="button" class="ib" data-more="cc-more" aria-expanded="false" aria-label="More about these tables" title="More">i</button></p>
+    <div class="tablewrap">
+      <table id="cc">
+        <thead><tr><th class="l">Conference</th><th>Since 2019</th><th>Avg margin</th><th class="hide-sm">Vs Vegas</th><th class="hide-sm" data-tip="ccyrs">Winning years</th><th id="cc-now">This year</th><th class="hide-sm">Margin</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <h3 style="margin-top:6px">Results: head to head, 2019 to now</h3>
+    <div class="tablewrap"><table id="cch"><thead></thead><tbody></tbody></table></div>
+    <div class="modenote" id="cc-more" hidden><p>"Since 2019" leaves out 2020 and the current season; head to head includes this season. Winning years = seasons the conference outscored the other Power 4 conferences in these games. This year's numbers come from a dozen or so games per conference, so they swing a lot; the multi-year numbers are the ones to argue with. Read across a row: the row conference's record against the column conference.</p><p>Vs Vegas: near zero means the conference is about as good as people already think.</p></div>
+    <h3 id="conf-h" style="margin-top:14px">Against expectations, this season</h3>
+    <p class="note sm">Average season grade of each conference's teams · tap a conference to filter the chart below</p>
+    <div class="tablewrap">
+      <table id="confs">
+        <thead><tr><th class="l rank">#</th><th class="l">Conference</th><th>Teams</th><th data-tip="dawg">DAWG</th><th data-tip="big">Big Games</th><th data-tip="routine">Routine</th><th data-tip="drop">Big-Stage Drop</th><th class="l" data-tip="cquad">Dawgs · Soft</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+
   </section>
 
   <section class="sec page" data-page="rankings" id="chart-sec" aria-labelledby="chart-h">
@@ -632,73 +751,12 @@ th{font-size:15px!important}
     <div class="offchart" id="offchart" hidden></div>
   </section>
 
-  <section class="sec page" data-page="rankings" id="board-sec" aria-labelledby="board-h">
-    <div class="sechead"><h2 id="board-h">Leaderboard</h2><span class="note"><span class="hide-sm">Hover a header for its meaning · tap to sort</span><span class="show-sm">Tap a header to sort · tap a team for its page</span></span></div>
-    <div class="tablewrap">
-      <table id="board">
-        <thead><tr>
-          <th class="l rank">#</th><th class="l">Team</th><th class="l hide-sm" id="confcol">Conf</th><th data-tip="wl">W–L</th>
-          <th data-k="dawg" data-tip="dawg"><button>DAWG</button></th><th data-k="big" data-tip="big"><button>Big<span class="hide-sm"> Games</span></button></th><th data-k="other" data-tip="routine"><button>Routine</button></th><th class="c-drop" data-k="drop" data-tip="drop"><button>Big-Stage Drop</button></th><th id="lastcol" data-k="consN" data-tip="pcons" hidden><button>Consistent</button></th>
-        </tr></thead>
-        <tbody></tbody>
-      </table>
-    </div>
-  </section>
 
-  <section class="sec page" data-page="rankings" id="poll-sec" aria-labelledby="poll-h">
-    <div class="sechead"><h2 id="poll-h">Poll Check</h2><span class="note" id="poll-note"></span></div>
-    <p class="note">Where the AP poll ranks each team, next to where it ranks by how it's actually played (DAWG rank, out of every Power 4 team). <b class="pos">Earned it</b>: ranked and a top-12 DAWG team. <b class="neg">Fraud Watch</b>: ranked, but grading in the bottom half, or winning on luck. <b style="color:var(--accent)">Sleeper</b>: unranked, but a top-15 DAWG team. Tap a team for its page.</p>
-    <div class="tablewrap">
-      <table id="poll">
-        <thead><tr><th class="l" data-tip="paprank"><span class="hide-sm">AP Rank</span><span class="show-sm">AP</span></th><th class="l">Team</th><th data-tip="wl">W–L</th><th data-tip="pdrank"><span class="hide-sm">DAWG Rank</span><span class="show-sm">DAWG</span></th><th class="hide-sm" data-tip="dawg">Season Grade</th><th class="hide-sm" data-tip="luck">Luck</th><th class="l">Verdict</th></tr></thead>
-        <tbody></tbody>
-      </table>
-    </div>
-  </section>
 
-  <section class="sec page" data-page="rankings" id="due-sec" aria-labelledby="due-h">
-    <div class="sechead"><h2 id="due-h">Due for a Correction</h2><span class="note" id="due-note"></span></div>
-    <p class="note">Records that are running ahead of, or behind, how a team has actually played (play-by-play: success rate, yards per play, explosive plays, expected turnovers and field goals). Since 2019, teams whose record ran a full win ahead of their play after five games won 54% the rest of the way after winning 89% early; teams running behind climbed back toward how they played. Tap a team for its page.</p>
-    <div class="duewrap">
-      <div><h3>Running hot</h3><p class="note sm">Record better than the play</p><div class="tablewrap"><table class="due" id="due-hot"><tbody></tbody></table></div></div>
-      <div><h3>Running cold</h3><p class="note sm">Record worse than the play</p><div class="tablewrap"><table class="due" id="due-cold"><tbody></tbody></table></div></div>
-    </div>
-  </section>
 
-  <section class="sec page" data-page="rankings" id="conf-sec" aria-labelledby="conf-h">
-    <div class="sechead"><h2 id="conf-h">Conference Rankings</h2><span class="note">Average across each conference's teams · tap to filter</span></div>
-    <div class="tablewrap">
-      <table id="confs">
-        <thead><tr><th class="l rank">#</th><th class="l">Conference</th><th>Teams</th><th data-tip="dawg">DAWG</th><th data-tip="big">Big Games</th><th data-tip="routine">Routine</th><th data-tip="drop">Big-Stage Drop</th><th class="l" data-tip="cquad">Dawgs · Soft</th></tr></thead>
-        <tbody></tbody>
-      </table>
-    </div>
-  </section>
 
-  <section class="sec page" data-page="rankings" id="cc-sec" aria-labelledby="cc-h">
-    <div class="sechead"><h2 id="cc-h">Conference Check</h2><span class="note">Is the conference actually better, or just the label?</span></div>
-    <p class="note">The only games that can settle it: Power 4 teams playing Power 4 teams from other conferences (nonconference games, bowls and the playoff), with each team in the conference it was in that season. <b>Record and margin</b> say who's better. <b>Vs Vegas</b> says whether the reputation is right: near zero means the conference is about as good as people already think.</p>
-    <div class="tablewrap">
-      <table id="cc">
-        <thead><tr><th class="l">Conference</th><th>Since 2019</th><th>Avg margin</th><th class="hide-sm">Vs Vegas</th><th class="hide-sm" data-tip="ccyrs">Winning years</th><th id="cc-now">This year</th><th class="hide-sm">Margin</th></tr></thead>
-        <tbody></tbody>
-      </table>
-    </div>
-    <h3 style="margin-top:6px">Head to head, 2019 to now</h3>
-    <div class="tablewrap"><table id="cch"><thead></thead><tbody></tbody></table></div>
-    <p class="note" style="font-size:13.5px">"Since 2019" leaves out 2020 and the current season; head to head includes this season. Winning years = seasons the conference outscored the other Power 4 conferences in these games. This year's numbers come from a dozen or so games per conference, so they swing a lot; the multi-year numbers are the ones to argue with. Read across a row: the row conference's record against the column conference.</p>
-  </section>
 
-  <section class="sec page" data-page="rankings" id="top-sec" aria-labelledby="top-h">
-    <div class="sechead"><h2 id="top-h">Top 10 Games</h2><span class="note" id="top-note">Single-game grade · hover a header for its formula</span></div>
-    <p class="note">The best single games of the season. Tap one to see how it graded. <b>Hindsight</b> re-grades each game based on how good the opponent turned out to be, using every other game they've played this year. The number in parentheses is how much the grade moved. It's shaky this early in the season.</p>
-    <div class="tablewrap">
-      <table id="topgames">
-        <thead><tr><th class="l rank">#</th><th class="l">Team</th><th class="l" data-tip="tgame">Game</th><th data-tip="wl">Score</th><th data-tip="line">Spread</th><th data-tip="thline">Hindsight Spread</th><th data-tip="tgrade">Game Grade</th><th data-tip="thgrade">Hindsight Grade</th></tr></thead>
-        <tbody></tbody>
-      </table>
-    </div>
-  </section>
+
 
   <section class="sec page" data-page="tend" id="tend-sec" aria-labelledby="tend-h">
     <div class="sechead"><h2 id="tend-h">Team Tendencies</h2><span class="note">Season projection · through Week 5 · hover a header for its formula · tap to sort</span></div>
@@ -958,7 +1016,7 @@ var TRK = {"season":2026,"baseBlown":0.19864940911648846,"baseCash":0.5229621125
     var Q = [
       {x:x0, y:sy(hi), w:sx(XH)-x0, h:y0-sy(hi), fill:"var(--q-dawg)", t:"DAWGS", s:"Beat expectations everywhere", c:"var(--qc-dawg)", ax:"end", tx:sx(XH)-(MOB?8:14), ty:sy(hi)+(MOB?18:24), f:function(t){ return t.other >= 0 && t.big >= 0; }},
       {x:sx(XL), y:sy(hi), w:x0-sx(XL), h:y0-sy(hi), fill:"var(--q-rise)", t:"GETS UP FOR GAMEDAY", s:"Flat in routine games, shows up when it's loud", c:"var(--qc-rise)", ax:"start", tx:sx(XL)+(MOB?8:14), ty:sy(hi)+(MOB?18:24), f:function(t){ return t.other < 0 && t.big >= 0; }},
-      {x:x0, y:y0, w:sx(XH)-x0, h:sy(lo)-y0, fill:"var(--q-front)", t:"TO BE DESIRED", s:"Handles routine games, shrinks in big ones", c:"var(--qc-front)", ax:"end", tx:sx(XH)-(MOB?8:14), ty:sy(lo)-(MOB?20:30), f:function(t){ return t.other >= 0 && t.big < 0; }},
+      {x:x0, y:y0, w:sx(XH)-x0, h:sy(lo)-y0, fill:"var(--q-front)", t:"FADES IN BIG GAMES", s:"Handles routine games, shrinks in big ones", c:"var(--qc-front)", ax:"end", tx:sx(XH)-(MOB?8:14), ty:sy(lo)-(MOB?20:30), f:function(t){ return t.other >= 0 && t.big < 0; }},
       {x:sx(XL), y:y0, w:x0-sx(XL), h:sy(lo)-y0, fill:"var(--q-soft)", t:"SOFT", s:"Below expectations everywhere", c:"var(--qc-soft)", ax:"start", tx:sx(XL)+(MOB?8:14), ty:sy(lo)-(MOB?20:30), f:function(t){ return t.other < 0 && t.big < 0; }}
     ];
     Q.forEach(function(q){ el("rect", {x:q.x, y:q.y, width:q.w, height:q.h, fill:q.fill}, svg); });
@@ -1372,7 +1430,7 @@ var TRK = {"season":2026,"baseBlown":0.19864940911648846,"baseCash":0.5229621125
       routine: ["Routine", "DAWG grade in every game that wasn't a big game."],
       ccyrs: ["Winning years", "Seasons (2019 on, no 2020 or the current season) in which the conference outscored the other Power 4 conferences in nonconference and postseason games."],
       drop: ["Big-stage drop", "How much better or worse a team plays when the game gets big. Negative means it shrinks; positive means it rises.", "Big games − Routine"],
-      pdrank: ["DAWG rank", "Where the team ranks among all Power 4 teams by how it has actually played this season (season DAWG grade)."],
+      pdrank: ["DAWG rank", "Where the team ranks among all Power 4 teams at living up to expectations this season (season DAWG grade)."],
       paprank: ["AP rank", "This week's AP Top 25. NR means not ranked."],
       cquad: ["Dawgs · Soft", "How many of the conference's teams sit in the chart's Dawgs box (above expectations in both big and routine games) and Soft box (below in both). Teams without a big game yet aren't on the chart."],
       luck: ["Luck", "Wins above what the team's play earned. Each game gets a win chance from the play-by-play: how often plays succeeded, explosive plays, turnovers the team forced or gave away, penalties and field-goal tries. Who recovers a fumble, tipped interceptions, missed kicks and return touchdowns count as luck. Also shows the record in one-score games.", "wins − expected wins"],
@@ -1715,7 +1773,7 @@ var TRK = {"season":2026,"baseBlown":0.19864940911648846,"baseCash":0.5229621125
   function drawTop(){
     var y = String(state.season), latest = String(seasons[seasons.length-1]);
     $("top-h").textContent = "Top 10 Games of " + y;
-    $("top-note").textContent = "Single-game grade · " + (y === latest ? (DATA.asOfLabel || "this season").replace("Through", "through") : "full season") + " · hover a header for its formula";
+    $("top-note").textContent = "Single-game grade · " + (y === latest ? (DATA.asOfLabel || "this season").replace("Through", "through") : "full season");
     document.querySelector("#topgames tbody").innerHTML = TOPS[y] || '<tr><td class="l" colspan="8"><span class="dim">No graded games for this season.</span></td></tr>';
   }
   // No scroll boxes: long tables show 25 rows plus a Show-all button, and the page does the scrolling.
@@ -1835,9 +1893,57 @@ var TRK = {"season":2026,"baseBlown":0.19864940911648846,"baseCash":0.5229621125
     menu.addEventListener("click", function(e){ var b = e.target.closest("button[data-i]"); if (!b) return; var x = SHARES[+b.getAttribute("data-i")]; close(); x.btn.scrollIntoView({block:"center", behavior:"smooth"}); exportImage(x.o, x.btn); });
     document.addEventListener("click", function(e){ if (!menu.hidden && !e.target.closest("#fabmenu")) close(); });
     document.addEventListener("keydown", function(e){ if (e.key === "Escape" && !menu.hidden){ close(); fab.focus(); } });
+    fab.classList.add("hid"); var shown = false;
+    function onScroll(){ var up = window.scrollY > 600; fab.classList.toggle("hid", !up); if (up && !shown){ shown = true; maybeTip(); } }
+    window.addEventListener("scroll", onScroll, {passive:true}); onScroll();
+    function maybeTip(){
     var seen = false; try { seen = localStorage.getItem("dawg-share-tip") === "1"; } catch(e){}
     if (!seen){ var tip = document.createElement("div"); tip.id = "fabtip"; tip.textContent = "Like something? Share it as an image"; document.body.appendChild(tip);
       setTimeout(function(){ tip.classList.add("on"); }, 2500); setTimeout(function(){ tip.classList.remove("on"); setTimeout(function(){ tip.remove(); }, 400); try { localStorage.setItem("dawg-share-tip", "1"); } catch(e){} }, 9500); }
+    }
+  })();
+
+  // "i" buttons that open a short explainer (data-more = id of the hidden note)
+  document.addEventListener("click", function(e){ var b = e.target.closest("[data-more]"); if (!b) return; var t = $(b.getAttribute("data-more")); if (!t) return; t.hidden = !t.hidden; b.setAttribute("aria-expanded", String(!t.hidden)); });
+  // in-text links to other pages (e.g. "How it works")
+  document.addEventListener("click", function(e){ var a = e.target.closest("a[data-p]"); if (!a || a.closest(".topnav")) return; e.preventDefault(); showPage(a.getAttribute("data-p")); window.scrollTo(0, 0); });
+  // Find your team + remembered team
+  (function(){
+    var Y = LATEST, ids = Object.keys(DATA.ts[Y] || {}).filter(function(id){ return META[id]; });
+    var CONFS = [["SEC","SEC"],["Big Ten","Big Ten"],["Big 12","Big 12"],["ACC","ACC"],["Independent","Notre Dame"]], cur = null;
+    var graded = seasonTeams(Y).filter(function(t){ return t.dawg !== null && t.dawg !== undefined; }).sort(function(a,b){ return b.dawg - a.dawg; });
+    var RK = {}; graded.forEach(function(t, i){ RK[t.id] = i + 1; });
+    function lg(id){ return '<img src="logos/' + id + '-dark.png" alt="" loading="lazy" onerror="this.onerror=null;this.src=\'logos/' + id + '.png\'">'; }
+    function tile(id){ return '<a href="/' + slugOf(id) + '/" data-mine="' + id + '">' + lg(id) + '<span>' + esc(META[id].name) + '</span></a>'; }
+    function render(){
+      var q = ($("findq").value || "").trim().toLowerCase(), list;
+      if (q) list = ids.filter(function(id){ var m = META[id]; return (m.name + " " + m.full + " " + m.abbr).toLowerCase().indexOf(q) >= 0; });
+      else if (cur) list = ids.filter(function(id){ return META[id].conf === cur; });
+      else { $("fgrid").innerHTML = ""; return; }
+      list.sort(function(a,b){ return META[a].name.localeCompare(META[b].name); });
+      $("fgrid").innerHTML = list.length ? list.map(tile).join("") : '<p class="none">No Power 4 team matches that.</p>';
+    }
+    $("fconfs").innerHTML = CONFS.map(function(c){ return '<button type="button" data-c="' + c[0] + '" aria-pressed="false">' + c[1] + '</button>'; }).join("");
+    $("fconfs").addEventListener("click", function(e){ var b = e.target.closest("button[data-c]"); if (!b) return; var c = b.getAttribute("data-c"); cur = cur === c ? null : c; $("findq").value = "";
+      $("fconfs").querySelectorAll("button").forEach(function(x){ x.setAttribute("aria-pressed", String(x.getAttribute("data-c") === cur)); }); render(); });
+    $("findq").addEventListener("input", function(){ if ($("findq").value) { cur = null; $("fconfs").querySelectorAll("button").forEach(function(x){ x.setAttribute("aria-pressed", "false"); }); } render(); });
+    $("fgrid").addEventListener("click", function(e){ var a = e.target.closest("a[data-mine]"); if (a) try { localStorage.setItem("dawg-myteam", a.getAttribute("data-mine")); } catch(x){} });
+    function ord(n){ var s = ["th","st","nd","rd"], v = n % 100; return n + (s[(v - 20) % 10] || s[v] || s[0]); }
+    function myCard(){
+      var id = null; try { id = localStorage.getItem("dawg-myteam"); } catch(e){}
+      if (!id || !META[id]){ $("myteam").hidden = true; $("find-sec").classList.remove("has"); $("find-h").textContent = "Find your team"; return; }
+      var s = DATA.ts[Y][id], m = META[id], line = "", last = "";
+      if (s && s.dawg !== null && s.dawg !== undefined){
+        var tag = s.dawg >= 3 ? " · <b class=\"pos\">DAWG</b>" : s.dawg <= -3 ? " · <b class=\"neg\">SOFT</b>" : "";
+        line = "<b>" + ord(RK[id]) + " of " + graded.length + "</b> at living up to expectations · season <b class=\"" + (s.dawg > 0 ? "pos" : s.dawg < 0 ? "neg" : "") + "\">" + signed(s.dawg) + "</b>" + tag + " · " + s.w + "–" + s.l;
+        var g = (s.games || []).slice(-1)[0];
+        if (g) last = "<br>Last game: " + (g.pf > g.pa ? "W" : "L") + " " + g.pf + "–" + g.pa + " " + (g.site === "away" ? "at " : "vs ") + esc(g.oppName) + (g.dawg !== null && g.dawg !== undefined ? " · <b class=\"" + (g.dawg > 0 ? "pos" : "neg") + "\">" + signed(g.dawg) + "</b>" : "");
+      } else line = "No graded games yet this season.";
+      $("myteam").innerHTML = '<a class="mt" href="/' + slugOf(id) + '/">' + lg(id) + '<div><div class="k">Your team</div><div class="n">' + esc(m.name) + '</div><div class="r">' + line + last + '</div><span class="go">See why →</span></div></a><button type="button" class="mtchg" id="mtchg">Not your team? Change it</button>';
+      $("myteam").hidden = false; $("find-sec").classList.add("has"); $("find-h").textContent = "Find another team";
+      $("mtchg").addEventListener("click", function(){ try { localStorage.removeItem("dawg-myteam"); } catch(e){} myCard(); $("findq").focus(); });
+    }
+    myCard();
   })();
   function drawCC(){
     if (!CC || !CC.rows){ $("cc-sec").hidden = true; return; }
@@ -1889,7 +1995,7 @@ var TRK = {"season":2026,"baseBlown":0.19864940911648846,"baseCash":0.5229621125
     function gtile(lbl, g, cls){ return '<div tabindex="0" data-gid="' + g.id + '" data-t="' + g.t + '" data-y="' + g.y + '"><span class="lbl">' + lbl + '</span><span class="big ' + cls + '">' + signed(g.grade) + '</span><span class="t">' + esc(g.team) + '</span><span class="s">' + (g.site === "away" ? "at " : "vs ") + (g.rk ? "No. " + g.rk + " " : "") + esc(g.opp) + " · " + (g.pf > g.pa ? "W " : "L ") + g.pf + "–" + g.pa + " · #" + g.srank + " of the season</span></div>"; }
     var h = gtile("Best game", W.best, "pos") + gtile("Worst game", W.worst, "neg");
     if (W.collapse){ var c = W.collapse; h += '<div tabindex="0" data-id="' + c.tid + '"><span class="lbl">Biggest collapse</span><span class="big neg">' + c.at[0] + "–" + c.at[1] + '</span><span class="t">' + esc(c.team) + '</span><span class="s">led ' + (c.site === "away" ? "at " : "vs ") + esc(c.opp) + ", lost " + c.pf + "–" + c.pa + "</span></div>"; }
-    if (W.gap){ var p = W.gap; h += '<div tabindex="0" data-id="' + p.id + '"><span class="lbl">Biggest poll disparity</span><span class="pc"><span><b>#' + p.ap + '</b>AP Poll</span><span><b class="neg">#' + p.drank + '</b>DAWG Index</span></span><span class="t">' + esc(p.name) + '</span><span class="s">' + ord(p.ap) + " in the AP poll, " + ord(p.drank) + " of " + W.n + " in how it's actually played</span></div>"; }
+    if (W.gap){ var p = W.gap; h += '<div tabindex="0" data-id="' + p.id + '"><span class="lbl">Biggest poll disparity</span><span class="pc"><span><b>#' + p.ap + '</b>AP Poll</span><span><b class="neg">#' + p.drank + '</b>DAWG Index</span></span><span class="t">' + esc(p.name) + '</span><span class="s">' + ord(p.ap) + " in the AP poll, " + ord(p.drank) + " of " + W.n + " at living up to expectations</span></div>"; }
     el.innerHTML = h;
   }
   function drawPoll(){
