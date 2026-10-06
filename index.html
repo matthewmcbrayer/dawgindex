@@ -392,7 +392,7 @@ tr.big td:first-child{box-shadow:inset 4px 0 0 var(--red)}
   #board td.dg{font-size:20px!important}
   #board td.num{font-size:16px}
   #board td .dim{display:none}
-  #board th{top:58px!important}
+  #board th{top:var(--navh,58px)!important}
   #board th{font-size:12.5px!important;letter-spacing:.03em!important}
   .moreb{justify-self:center;align-self:center;margin-top:4px}
 }
@@ -484,7 +484,7 @@ select{-webkit-appearance:none;appearance:none;padding:7px 42px 7px 16px!importa
 /* long tables that fit: let the page scroll them, with the header pinned under the nav */
 @media (min-width:641px){
   .tablewrap:has(#board),.tablewrap:has(#tend),.tablewrap:has(#blown),.tablewrap:has(#cashtab),.tablewrap:has(#biggest),.tablewrap:has(#poll),.tablewrap:has(#topgames),#coaches-sec .tablewrap{overflow:visible!important}
-  .tablewrap:has(#board) th,.tablewrap:has(#tend) th,.tablewrap:has(#blown) th,.tablewrap:has(#cashtab) th,.tablewrap:has(#biggest) th,.tablewrap:has(#poll) th,.tablewrap:has(#topgames) th,#coaches-sec .tablewrap th{position:sticky!important;top:64px!important}
+  .tablewrap:has(#board) th,.tablewrap:has(#tend) th,.tablewrap:has(#blown) th,.tablewrap:has(#cashtab) th,.tablewrap:has(#biggest) th,.tablewrap:has(#poll) th,.tablewrap:has(#topgames) th,#coaches-sec .tablewrap th{position:sticky!important;top:var(--navh,64px)!important}
 }
 .tablewrap.wide:is(#z,*){overflow-x:auto!important;overflow-y:hidden!important}.tablewrap.wide:is(#z,*) th{position:static!important}
 .tablewrap table:not(.all) > tbody > tr:nth-child(n+26){display:none}
@@ -497,7 +497,7 @@ select{-webkit-appearance:none;appearance:none;padding:7px 42px 7px 16px!importa
   #cc th,#cc td,#cch th,#cch td{padding-left:6px!important;padding-right:6px!important}#cch td .dim{font-size:11px!important}#cch td.num{font-size:15px}
   .tbwrap{grid-template-columns:minmax(0,1fr)!important}
   .tablewrap:has(#board){overflow:visible!important}
-  .tablewrap:has(#board) th{position:sticky!important;top:58px!important}
+  .tablewrap:has(#board) th{position:sticky!important;top:var(--navh,58px)!important}
 }
 /* ===== Legibility pass ===== */
 html:root:not(#x){--muted:#d3c8b2;--faint:#a3977f;--qc-dawg:#4FC488;--qc-soft:#FF6B5E;--qc-rise:#78A6F5;--qc-front:#E3C27A;--quiet:#4a4238}
@@ -1843,7 +1843,10 @@ var TRK = {"season":2026,"baseBlown":0.19864940911648846,"baseCash":0.5229621125
   function roundHeads(){ document.querySelectorAll(".tablewrap thead tr").forEach(function(tr){ var last = null;
     Array.prototype.forEach.call(tr.children, function(th){ th.classList.remove("lastvis"); if (!th.hidden && getComputedStyle(th).display !== "none") last = th; });
     if (last) last.classList.add("lastvis"); }); }
-  function fitTables(){ roundHeads(); document.querySelectorAll(".tablewrap").forEach(function(w){ var tb = w.querySelector("table"); if (!tb || !w.offsetParent) return; w.classList.remove("wide"); if (tb.offsetWidth > w.clientWidth + 2) w.classList.add("wide"); }); }
+  // floating table headers sit flush under the sticky nav (no gap where rows show through)
+  function navH(){ var n = document.querySelector(".topnav"); if (!n) return; var r = n.getBoundingClientRect(); document.documentElement.style.setProperty("--navh", Math.round(Math.max(0, parseFloat(getComputedStyle(n).top) || 0) + r.height - 1) + "px"); }
+  window.addEventListener("load", navH);
+  function fitTables(){ navH(); roundHeads(); document.querySelectorAll(".tablewrap").forEach(function(w){ var tb = w.querySelector("table"); if (!tb || !w.offsetParent) return; w.classList.remove("wide"); if (tb.offsetWidth > w.clientWidth + 2) w.classList.add("wide"); }); }
   window.addEventListener("resize", function(){ clearTimeout(fitTables.t); fitTables.t = setTimeout(fitTables, 120); });
   function capTables(){
     document.querySelectorAll(".tablewrap > table").forEach(function(tb){
