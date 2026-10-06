@@ -469,6 +469,7 @@ select{-webkit-appearance:none;appearance:none;padding:7px 42px 7px 16px!importa
 .due td{padding:10px 14px!important}.due td.num{font-size:24px!important;font-weight:900!important;line-height:1}.due td.num .dim{font-size:12px!important;font-weight:600!important;text-transform:uppercase}
 @media (max-width:640px){.wk>div:last-child:nth-child(odd){grid-column:1/-1}}
 /* share buttons */
+.olg{width:20px;height:20px;object-fit:contain;vertical-align:-5px;margin-right:7px}
 .xbtn{font-family:var(--display);font-weight:800;text-transform:uppercase;letter-spacing:.05em;font-size:14px;line-height:1;color:var(--ink);background:transparent;border:2px solid var(--ink);border-radius:999px;padding:6px 12px 6px 30px;cursor:pointer;position:relative;white-space:nowrap}
 .xbtn::before{content:"";position:absolute;left:11px;top:50%;width:12px;height:12px;margin-top:-7px;background:no-repeat center/contain url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M6 8V1.5M3 4l3-3 3 3M1.5 7v3.5h9V7' fill='none' stroke='%23F4EAD2' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")}
 .xbtn:hover{background:var(--chipbg)}.xbtn:disabled{opacity:.6;cursor:wait}
@@ -2697,7 +2698,7 @@ var TREND = {"season":2026,"weeks":[1,2,3,4,5],"teams":{"158":[[3.4,16,1],[3.8,1
       var mg = g.pf - g.pa, site = {home:"Home", away:"Road", neutral:"Neutral"}[g.site];
       var envNote = (g.full !== null && g.site !== "home" ? Math.round(g.full*100) + "% full" : g.site === "home" ? "home" : "") + (g.night ? " · night" : "");
       return '<tr class="gc ' + (g.big ? "big" : "") + '" tabindex="0" data-gid="' + g.id + '" data-t="' + state.sel + '" data-y="' + state.season + '">' +
-        '<td class="l">' + (g.site === "away" ? "at " : g.site === "neutral" ? "vs " : "") + esc(g.oppName) + (g.oppRank ? ' <span class="dim">#' + g.oppRank + '</span>' : '') + (g.big ? '<span class="tag">Big Game</span>' : '') + (g.stype === 3 ? '<span class="tag">Bowl/CFP</span>' : '') + '</td>' +
+        '<td class="l">' + olg(g.oid) + (g.site === "away" ? "at " : g.site === "neutral" ? "vs " : "") + esc(g.oppName) + (g.oppRank ? ' <span class="dim">#' + g.oppRank + '</span>' : '') + (g.big ? '<span class="tag">Big Game</span>' : '') + (g.stype === 3 ? '<span class="tag">Bowl/CFP</span>' : '') + '</td>' +
         '<td class="num ' + cls(mg) + '">' + (mg > 0 ? "W " : mg < 0 ? "L " : "T ") + g.pf + "–" + g.pa + '</td>' +
         '<td class="num gg ' + cls(g.dawg) + '" title="' + esc(g.set ? "Setting: " + g.set + " (×" + g.mult + ")" : "No setting adjustment") + '">' + signed(g.dawg) + ' ' + verdict(g.dawg, 5) + '</td>' +
         '<td class="l hide-sm">' + fmtDate(g.date) + ' · ' + site + '</td>' +
@@ -3028,9 +3029,10 @@ var TREND = {"season":2026,"weeks":[1,2,3,4,5],"teams":{"158":[[3.4,16,1],[3.8,1
 
 
   // ---------- quarterbacks (separate QB model; data loads when the tab opens) ----------
-  var QBV = "2cd8dcba", QBD = null, QBWAIT = null, qst = {mode: "season", k: "rating", dir: -1, open: null, q: "", gy: {}};
+  var QBV = "440ff20c", QBD = null, QBWAIT = null, qst = {mode: "season", k: "rating", dir: -1, open: null, q: "", gy: {}};
   function loadQB(){ if (QBD) return Promise.resolve(QBD); if (QBWAIT) return QBWAIT; QBWAIT = fetch("/data/qb.json?v=" + QBV).then(function(r){ if (!r.ok) throw new Error("qb"); return r.json(); }).then(function(d){ QBD = d; return d; }).catch(function(e){ QBWAIT = null; throw e; }); return QBWAIT; }
   function qcls(x){ return x === null || x === undefined ? "dim" : x >= 1 ? "pos" : x <= -1 ? "neg" : ""; }
+  function olg(id){ return id ? '<img class="olg" src="logos/' + id + '-dark.png" alt="" loading="lazy" onerror="if(this.dataset.f){this.remove()}else{this.dataset.f=1;this.src=\'logos/' + id + '.png\'}">' : ''; }
   function qlogo(id){ return '<img src="logos/' + id + '-dark.png" alt="" loading="lazy" onerror="this.onerror=null;this.src=\'logos/' + id + '.png\'">'; }
   function qschools(ids){ return ids.map(function(t){ return META[t] ? qlogo(t) + esc(META[t].name) : ""; }).join(' <span class="dim">→</span> '); }
   function qbRows(){
@@ -3054,7 +3056,7 @@ var TREND = {"season":2026,"weeks":[1,2,3,4,5],"teams":{"158":[[3.4,16,1],[3.8,1
     var bars = '<div class="bars">' + S.map(function(s){ var h = Math.max(3, Math.abs(s.rating) * sc); return '<div class="bc"><div class="ba" style="height:' + AH.toFixed(0) + 'px"><em style="top:' + zero.toFixed(0) + 'px"></em><i class="' + (s.rating < 0 ? 'n' : 'p') + '" style="height:' + h.toFixed(0) + 'px;' + (s.rating < 0 ? 'top:' + zero.toFixed(0) + 'px' : 'top:' + (zero - h).toFixed(0) + 'px') + '"></i><b class="' + qcls(s.rating) + '" style="top:' + (s.rating < 0 ? zero + h + 4 : zero - h - 20).toFixed(0) + 'px">' + signed(s.rating) + '</b></div><span>' + s.y + '</span></div>'; }).join("") + '</div>';
     var rows = S.map(function(s){ return '<tr><td class="l">' + s.y + '</td><td class="l">' + s.teams.map(function(t){ return META[t] ? esc(META[t].abbr || META[t].name) : ""; }).join("/") + '</td><td>' + s.games + '</td><td class="' + qcls(s.rating) + '"><b>' + signed(s.rating) + '</b></td><td class="hide-xs">' + signed(s.raw) + '</td><td class="' + qcls(s.big) + '">' + signed(s.big) + '</td><td class="hide-xs ' + qcls(s.clutch) + '">' + signed(s.clutch) + '</td><td class="hide-xs">' + s.to + '%</td></tr>'; }).join("");
     var gy = qst.gy[o.qb] || S[S.length - 1].y, gs = S.filter(function(s){ return s.y === gy; })[0] || S[S.length - 1];
-    var log = gs.log.map(function(g){ return '<tr><td class="l">' + fmtDate(g.d) + '</td><td class="l">' + (g.s === "away" ? "at " : "vs ") + esc(g.o) + (g.big ? ' <span class="dim">· big</span>' : '') + '</td><td>' + (g.pf > g.pa ? "W " : g.pf < g.pa ? "L " : "T ") + g.pf + "–" + g.pa + '</td><td class="hide-xs">' + g.n + '</td><td class="' + qcls(g.v) + '"><b>' + signed(g.v) + '</b></td></tr>'; }).join("");
+    var log = gs.log.map(function(g){ return '<tr><td class="l">' + fmtDate(g.d) + '</td><td class="l">' + olg(g.oi) + (g.s === "away" ? "at " : "vs ") + esc(g.o) + (g.big ? ' <span class="dim">· big</span>' : '') + '</td><td>' + (g.pf > g.pa ? "W " : g.pf < g.pa ? "L " : "T ") + g.pf + "–" + g.pa + '</td><td class="hide-xs">' + g.n + '</td><td class="' + qcls(g.v) + '"><b>' + signed(g.v) + '</b></td></tr>'; }).join("");
     return '<div class="qbd" data-qbd="' + esc(o.qb) + '"><div class="qh"><h3>' + esc(o.qb) + '</h3><button type="button" class="xbtn" data-qshare="1" title="Save this as an image">Share</button></div><div class="sub">' + qschools(o.teams) + '</div><div class="sub2">Career rating <b class="' + qcls(o.career.rating) + '">' + signed(o.career.rating) + '</b> over ' + o.career.games + ' Power 4 games since 2019</div>' + bars +
       '<table><thead><tr><th class="l">Year</th><th class="l">School</th><th data-tip="qgames">G</th><th data-tip="qrate">Rating</th><th class="hide-xs" data-tip="qraw">Raw</th><th data-tip="qbig">Big games</th><th class="hide-xs" data-tip="qclutch">Clutch</th><th class="hide-xs" data-tip="qto">TO %</th></tr></thead><tbody>' + rows + '</tbody></table>' +
       '<div class="gl"><div class="gsel" role="group" aria-label="Game log season">' + S.map(function(s){ return '<button type="button" data-gy="' + s.y + '" aria-pressed="' + (s.y === gs.y) + '">' + s.y + '</button>'; }).join("") + '</div>' +
@@ -3579,7 +3581,7 @@ var TREND = {"season":2026,"weeks":[1,2,3,4,5],"teams":{"158":[[3.4,16,1],[3.8,1
   function tcOrd(n){ var v = n % 100, q = ["th","st","nd","rd"]; return n + (q[(v - 20) % 10] || q[v] || q[0]); }
   function tcSg(x){ if (x === null || x === undefined) return "—"; var s = Math.abs(x).toFixed(1); return (x > 0.04 ? "+" : x < -0.04 ? "−" : "") + s; }
   function tcC(x){ return x === null || x === undefined ? "z" : x >= 0.5 ? "p" : x <= -0.5 ? "n" : "z"; }
-  function tcImg(id, abbr){ return META[id] ? '<img src="logos/' + id + '-dark.png" onerror="this.onerror=null;this.src=\'logos/' + id + '.png\'">' : '<span class="ph">' + esc(String(abbr || "").slice(0, 4)) + '</span>'; }
+  function tcImg(id, abbr){ return id ? '<img src="logos/' + id + '-dark.png" onerror="this.onerror=null;this.src=\'logos/' + id + '.png\'">' : '<span class="ph">' + esc(String(abbr || "").slice(0, 4)) + '</span>'; }
   function teamCardHTML(id, y, qbd){
     y = String(y); var T = DATA.ts[y] || {}, raw = T[id]; if (!raw) return null;
     var c = centers(y), s = Object.assign({}, raw), t = META[id], latest = y === LATEST;
