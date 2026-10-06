@@ -2401,7 +2401,11 @@ var PREVIEW = {
     el("line", {x1:sx(XL), x2:sx(XH), y1:y0, y2:y0, stroke:"var(--faint)", "stroke-width":1.5}, svg);
     Q.forEach(function(q){
       var n = plotted.filter(q.f).length;
-      txt(svg, q.tx, q.ty, q.t, {"text-anchor":q.ax, "font-family":"var(--display)", "font-size":MOB ? 14 : 22, "font-weight":800, fill:q.c, "letter-spacing":".04em"});
+      var qw = q.t.split(" "), ql = [q.t];
+      if (MOB && q.t.length > 12){ var cut = 0, best = 99; for (var wi = 1; wi < qw.length; wi++){ var d = Math.abs(qw.slice(0, wi).join(" ").length - qw.slice(wi).join(" ").length); if (d < best){ best = d; cut = wi; } } if (cut) ql = [qw.slice(0, cut).join(" "), qw.slice(cut).join(" ")]; else { var hy = q.t.split("-"); if (hy.length > 1) ql = [hy[0] + "-", hy.slice(1).join("-")]; } }
+      var qtop = q.ty < y0, qy0 = qtop ? q.ty : q.ty - (ql.length - 1) * 15;
+      ql.forEach(function(line, li){ txt(svg, q.tx, qy0 + li * 15, line, {"text-anchor":q.ax, "font-family":"var(--display)", "font-size":MOB ? 14 : 22, "font-weight":800, fill:q.c, "letter-spacing":".04em"}); });
+      if (qtop) q.ty += (ql.length - 1) * 15;
       txt(svg, q.tx, q.ty + (MOB ? 12 : 18), (MOB ? "" : q.s + " · ") + n + " team" + (n === 1 ? "" : "s"), {"text-anchor":q.ax, "font-size":MOB ? 10.5 : 14, fill:"var(--muted)"});
     });
     txt(svg, (sx(XL)+sx(XH))/2, H - (MOB?8:12), MOB ? "Routine games: worse ← → better" : "Routine games: worse ← → better than expected", {"text-anchor":"middle", "font-size":FS});
