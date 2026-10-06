@@ -1459,7 +1459,7 @@ var TRK = {"season":2026,"baseBlown":0.19864940911648846,"baseCash":0.5229621125
     document.querySelectorAll(".topnav a").forEach(function(a){ var on = a.getAttribute("data-p") === pg; a.classList.toggle("on", on); if (on) a.setAttribute("aria-current","page"); else a.removeAttribute("aria-current"); });
     $("seasonbox").hidden = !(pg === "team" || (pg === "rankings" && state.mode !== "proven"));
     try { var web = /^https?:/.test(location.protocol);
-      history.replaceState(null, "", web ? (pg === "team" && state.sel ? "/" + slugOf(state.sel) + "#team" : "/#" + pg) : "#" + pg); } catch(e){}
+      history.replaceState(null, "", web ? (pg === "team" && state.sel ? "/?team=" + slugOf(state.sel) + "#team" : "/#" + pg) : "#" + pg); } catch(e){}
     try { localStorage.setItem("dawg-page", pg); } catch(e){}
     if (!keepScroll) window.scrollTo(0, 0);
     setTimeout(function(){ if (typeof fitTables === "function") fitTables(); }, 0);
