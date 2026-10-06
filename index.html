@@ -588,6 +588,7 @@ th{font-size:15px!important}
 .sechead > h2{order:1;flex:1 1 0;min-width:0}
 .sechead > .xbtn{order:2;margin-left:auto;align-self:center;flex:none}
 .sechead > :not(h2):not(.xbtn){order:3;flex:1 1 100%}
+.ib[aria-expanded="true"]{color:#131210!important;background:var(--ink)!important}
 .sechead > .modebar{display:flex;justify-content:flex-start!important;margin-left:0!important}
 </style>
 
@@ -680,7 +681,7 @@ th{font-size:15px!important}
     </div>
     <p class="note">Right = better than expected in routine games · Up = better in big games <button type="button" class="ib" id="chart-why" aria-expanded="false" aria-label="More about this chart" title="More about this chart">i</button></p>
     <div class="modenote" id="chart-why-t" hidden>
-      <p>Zero is an average team. Bigger dots have played more big games. Teams are spread out early in the season, and by December a dozen games pulls most of them toward the middle.</p>
+      <p>Zero means a team played exactly as expected. Early in the season teams are spread out; as games pile up they drift toward the middle. The scale stretches to fit wherever teams actually are, so the chart zooms in as the season goes on and the gaps stay easy to see. Check the numbers on the edges.</p>
       <p id="modenote" hidden>Coach Career follows the current head coach, not the school. It blends every season he's been a head coach since 2019, including previous jobs (Jon Sumrall's Troy and Tulane years count for Florida). Recent seasons count more (each year back is worth 80%), and short careers are pulled toward zero. Zero is a typical current Power 4 coach, since most of them were hired after beating expectations somewhere else. Dawg and Soft start at ±0.8 in this view instead of ±3.</p>
     </div>
     <div class="chartbox">
@@ -1046,7 +1047,7 @@ var TRK = {"season":2026,"baseBlown":0.19864940911648846,"baseCash":0.5229621125
     txt(svg, (sx(XL)+sx(XH))/2, H - (MOB?8:12), MOB ? "Routine games: worse ← → better" : "Routine games: worse ← → better than expected", {"text-anchor":"middle", "font-size":FS});
     var my = (sy(lo)+sy(hi))/2, ax = MOB ? 9 : 16; txt(svg, ax, my, MOB ? "Big games: worse ← → better" : ({big:"Big games", bigR:"Big road games", bigH:"Big home games"})[state.bigKey] + ": worse ← → better than expected", {"text-anchor":"middle", "font-size":FS, transform:"rotate(-90 " + ax + " " + my + ")"});
     function hiOf(t){ return (state.picked && t.id === state.sel) ? 1 : 0; }
-    var dots = plotted.map(function(t){ return {t:t, x:sx(clampX(t.other)), y:sy(clamp(t.big)), r:(MOB ? 3 : 4) + Math.min(t.nBig, 8) * (MOB ? 0.35 : 0.5)}; });
+    var dots = plotted.map(function(t){ return {t:t, x:sx(clampX(t.other)), y:sy(clamp(t.big)), r:(MOB ? 5 : 6.5)}; });
     var boxes = [];
     function hits(b){
       if (b.x1 < M.l || b.x2 > W - M.r || b.y1 < M.t || b.y2 > H - M.b) return true;
