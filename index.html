@@ -14,6 +14,7 @@
 <meta name="twitter:description" content="Which college football teams show up when it matters, and which ones let teams hang around. Every Power 4 game since 2019, graded.">
 <meta name="twitter:image" content="https://dawgindex.com/og.png">
 <link rel="icon" type="image/png" sizes="32x32" href="/icon-32.png"><link rel="icon" type="image/png" sizes="64x64" href="/icon-64.png"><link rel="apple-touch-icon" href="/icon-180.png"><meta name="theme-color" content="#131210">
+<script>window.goatcounter={path:function(p){try{var t=new URLSearchParams(location.search).get("team");return t?"/"+t:p}catch(e){return p}}}</script>
 <title>DAWG Index</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bowlby+One&family=Big+Shoulders+Display:wght@500;600;700;800;900&family=Barlow:wght@400;500;600;700&display=swap">
@@ -1602,7 +1603,7 @@ var TRK = {"season":2026,"baseBlown":0.19864940911648846,"baseCash":0.5229621125
     (document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve()).then(function(){
       cardImage(function(blob){
         btn.disabled = false; if (!blob){ msg.textContent = "Couldn't make the image."; return; }
-        var name = "dawg-" + slugOf(gcShare.t) + "-" + gcShare.g.date + ".png";
+        var name = "dawg-" + slugOf(gcShare.t) + "-" + gcShare.g.date + ".png"; gcEv("share-ticket-" + slugOf(gcShare.t));
         var file = null; try { file = new File([blob], name, {type:"image/png"}); } catch(e){}
         if (file && navigator.canShare && navigator.canShare({files:[file]})){
           navigator.share({files:[file], text:"dawgindex.com/" + slugOf(gcShare.t)}).then(function(){ msg.textContent = ""; }).catch(function(){ msg.textContent = ""; });
@@ -1712,7 +1713,9 @@ var TRK = {"season":2026,"baseBlown":0.19864940911648846,"baseCash":0.5229621125
   }
 
   // ---------- share any section as a formatted image ----------
+  function gcEv(p){ try { if (window.goatcounter && window.goatcounter.count) window.goatcounter.count({path:p, title:p, event:true}); } catch(e){} }
   function shareBlob(blob, name, text, msgEl){
+    gcEv("share-" + String(name).replace(/^dawg-/, "").replace(/\.png$/, ""));
     var file = null; try { file = new File([blob], name, {type:"image/png"}); } catch(e){}
     if (file && navigator.canShare && navigator.canShare({files:[file]})){
       navigator.share({files:[file], text:text}).then(function(){ if (msgEl) msgEl.textContent = ""; }).catch(function(){ if (msgEl) msgEl.textContent = ""; });
@@ -1901,4 +1904,4 @@ try{localStorage.setItem("dawg-intro-seen","1");}catch(e){}
 b.addEventListener("click",function(){d.removeAttribute("open");});})();
 </script>
 
-<script data-goatcounter="https://dawgindex.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+<script data-goatcounter="https://dawgindex.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
