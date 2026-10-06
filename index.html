@@ -750,6 +750,8 @@ th{font-size:15px!important}
 .sc-tag{font-family:var(--display);font-weight:900;font-size:19px;letter-spacing:.04em}.sc-tag.pos{color:var(--good)}.sc-tag.neg{color:var(--bad)}
 #cmpt td.l .cl{display:block;color:var(--ink);font-weight:700;font-size:15px}#cmpt td.l .cs{display:block;font-size:12.5px;color:var(--muted);line-height:1.3;margin-top:2px}
 .xbodyin #cmpt td.l .cl{font-size:19px}.xbodyin #cmpt td.l .cs{font-size:15px}
+.pvk.cmpable{cursor:pointer;transition:transform .12s ease,box-shadow .12s ease}.pvk.cmpable:hover,.pvk.cmpable:focus-visible{transform:translate(-2px,-2px);box-shadow:7px 7px 0 #0c0b0a;outline:none}
+.pvc{margin-top:10px;font-family:var(--display);font-weight:900;font-size:14px;letter-spacing:.06em;text-transform:uppercase;color:#D8342A}
 </style>
 
 <div id="htip" role="tooltip" hidden></div>
@@ -2994,9 +2996,11 @@ var PREVIEW = {
   })();
   function pvTicket(g, feat){
     var side = window.__pvside;
-      return '<div class="pvk' + (feat ? ' feat' : '') + '"><div class="pvm"><div class="pvh">' + (g.tier ? '<span class="pvsec">' + esc(g.tier) + ' stage</span>' : '') + '<span class="pvwhy">' + esc(g.why.join(". ")) + (g.why.length ? "." : "") + '</span></div>' +
+      var cmp = META[g.away.id] && META[g.home.id];
+      return '<div class="pvk' + (feat ? ' feat' : '') + (cmp ? ' cmpable" role="button" tabindex="0" data-cmp="' + g.away.id + ',' + g.home.id + '" aria-label="Compare ' + esc(g.away.name) + ' and ' + esc(g.home.name) : '') + '"><div class="pvm"><div class="pvh">' + (g.tier ? '<span class="pvsec">' + esc(g.tier) + ' stage</span>' : '') + '<span class="pvwhy">' + esc(g.why.join(". ")) + (g.why.length ? "." : "") + '</span></div>' +
         side(g.away) + '<div class="pvvs">' + (g.neutral ? "vs" : "at") + '</div>' + side(g.home) +
         (g.watch ? '<div class="pvw"><span>Watch</span>' + esc(g.watch) + '</div>' : '') +
+        (cmp ? '<div class="pvc">Tap to compare side by side →</div>' : '') +
         '</div><div class="pvstub"><b>' + esc(g.when.day) + '</b><i>' + esc(g.when.date) + '</i><b>' + esc(g.when.time.replace(" CT", "")) + '</b><i>CT' + (g.when.net ? ' · ' + esc(g.when.net) : '') + '</i></div></div>';
   }
   // ---------- Compare two teams ----------
@@ -3046,7 +3050,8 @@ var PREVIEW = {
     if (!META[b]) b = Object.keys(META).filter(function(x){ return x !== a; })[0];
     $("cmpa").value = a; $("cmpb").value = b; setTimeout(drawCompare, 0);
     $("cmpa").addEventListener("change", drawCompare); $("cmpb").addEventListener("change", drawCompare);
-    document.addEventListener("click", function(e){ var x = e.target.closest("[data-cmp]"); if (!x) return; e.preventDefault(); var p = x.getAttribute("data-cmp").split(","); openCompare(p[0], p[1]); showPage("week"); setTimeout(function(){ $("cmp-sec").scrollIntoView({block:"start"}); }, 50); });
+    document.addEventListener("keydown", function(e){ if (e.key === "Enter" && e.target.matches && e.target.matches(".pvk[data-cmp]")) e.target.click(); });
+    document.addEventListener("click", function(e){ if (e.target.closest("a.pvn")) return; var x = e.target.closest("[data-cmp]"); if (!x) return; e.preventDefault(); var p = x.getAttribute("data-cmp").split(","); openCompare(p[0], p[1]); showPage("week"); setTimeout(function(){ $("cmp-sec").scrollIntoView({block:"start"}); }, 50); });
   })();
   function drawTend(){
     var L = TEND.teams.filter(function(r){ return !tstate.conf || r.conf === tstate.conf; });
