@@ -748,6 +748,8 @@ th{font-size:15px!important}
 .sc-key{margin:10px 0 0;font-size:14px;line-height:1.45;color:var(--muted);background:rgba(244,234,210,.05);border-radius:10px;padding:10px 12px}.sc-key b{color:var(--ink)}.sc-key b.pos{color:var(--good)}.sc-key b.neg{color:var(--bad)}
 @media (max-width:640px){.sc-big{padding:8px 12px 10px}.sc-big b{font-size:46px}.sc-big .sc-lbl{font-size:11.5px}.sc-rank b{font-size:34px}.sc-rank span{font-size:13.5px}.sc-big .vstk{right:-12px;bottom:-12px;top:auto;font-size:12px!important}}
 .sc-tag{font-family:var(--display);font-weight:900;font-size:19px;letter-spacing:.04em}.sc-tag.pos{color:var(--good)}.sc-tag.neg{color:var(--bad)}
+#cmpt td.l .cl{display:block;color:var(--ink);font-weight:700;font-size:15px}#cmpt td.l .cs{display:block;font-size:12.5px;color:var(--muted);line-height:1.3;margin-top:2px}
+.xbodyin #cmpt td.l .cl{font-size:19px}.xbodyin #cmpt td.l .cs{font-size:15px}
 </style>
 
 <div id="htip" role="tooltip" hidden></div>
@@ -783,7 +785,7 @@ th{font-size:15px!important}
     <div class="sechead"><h2 id="cmp-h">Compare Two Teams</h2><span class="note">Side by side this season. No predictions, just how each has played.</span></div>
     <div class="cmpsel"><select id="cmpa" aria-label="First team"></select><span>vs</span><select id="cmpb" aria-label="Second team"></select></div>
     <div class="tablewrap"><table id="cmpt"><thead></thead><tbody></tbody></table></div>
-    <p class="note sm">Green marks the better number where there is one. Ranks are out of every Power 4 team.</p>
+    <p class="note sm">Green marks the better side. Everything here describes how each team has played this season; none of it predicts the game.</p>
   </section>
   <section class="sec page" data-page="none" id="matchup" aria-labelledby="mu-h">
     <div class="sechead"><h2 id="mu-h">Matchup Builder</h2><span class="note">Vegas line, adjusted for how each team handles this kind of environment</span></div>
@@ -853,7 +855,7 @@ th{font-size:15px!important}
         <select id="confsel" aria-label="Conference"><option value="">All Conferences</option><option>SEC</option><option>Big Ten</option><option>Big 12</option><option>ACC</option><option value="Independent">Notre Dame</option></select>
       </div>
     </div>
-    <p class="note">Right = better than expected in routine games · Up = better in big games <button type="button" class="ib" id="chart-why" aria-expanded="false" aria-label="More about this chart" title="More about this chart">i</button></p>
+    <p class="note">This season so far. Right = better than expected in routine games · Up = better in big games <button type="button" class="ib" id="chart-why" aria-expanded="false" aria-label="More about this chart" title="More about this chart">i</button></p>
     <div class="modenote" id="chart-why-t" hidden>
       <p>Zero means a team played exactly as expected. Early in the season teams are spread out; as games pile up they drift toward the middle. The scale stretches to fit wherever teams actually are, so the chart zooms in as the season goes on and the gaps stay easy to see. Check the numbers on the edges.</p>
       <p id="modenote" hidden>Coach Career follows the current head coach, not the school. It blends every season he's been a head coach since 2019, including previous jobs (Jon Sumrall's Troy and Tulane years count for Florida). Recent seasons count more (each year back is worth 80%), and short careers are pulled toward zero. Zero is a typical current Power 4 coach, since most of them were hired after beating expectations somewhere else. Dawg and Soft start at ±0.8 in this view instead of ±3.</p>
@@ -2381,10 +2383,10 @@ var PREVIEW = {
     while (svg.firstChild) svg.removeChild(svg.firstChild);
     var x0 = sx(0), y0 = sy(0);
     var Q = [
-      {x:x0, y:sy(hi), w:sx(XH)-x0, h:y0-sy(hi), fill:"var(--q-dawg)", t:"DAWGS", s:"Beat expectations everywhere", c:"var(--qc-dawg)", ax:"end", tx:sx(XH)-(MOB?8:14), ty:sy(hi)+(MOB?18:24), f:function(t){ return t.other >= 0 && t.big >= 0; }},
-      {x:sx(XL), y:sy(hi), w:x0-sx(XL), h:y0-sy(hi), fill:"var(--q-rise)", t:"GETS UP FOR GAMEDAY", s:"Flat in routine games, shows up when it's loud", c:"var(--qc-rise)", ax:"start", tx:sx(XL)+(MOB?8:14), ty:sy(hi)+(MOB?18:24), f:function(t){ return t.other < 0 && t.big >= 0; }},
-      {x:x0, y:y0, w:sx(XH)-x0, h:sy(lo)-y0, fill:"var(--q-front)", t:"FADES IN BIG GAMES", s:"Handles routine games, shrinks in big ones", c:"var(--qc-front)", ax:"end", tx:sx(XH)-(MOB?8:14), ty:sy(lo)-(MOB?20:30), f:function(t){ return t.other >= 0 && t.big < 0; }},
-      {x:sx(XL), y:y0, w:x0-sx(XL), h:sy(lo)-y0, fill:"var(--q-soft)", t:"SOFT", s:"Below expectations everywhere", c:"var(--qc-soft)", ax:"start", tx:sx(XL)+(MOB?8:14), ty:sy(lo)-(MOB?20:30), f:function(t){ return t.other < 0 && t.big < 0; }}
+      {x:x0, y:sy(hi), w:sx(XH)-x0, h:y0-sy(hi), fill:"var(--q-dawg)", t:"DAWGS", s:"Above expectations in every game", c:"var(--qc-dawg)", ax:"end", tx:sx(XH)-(MOB?8:14), ty:sy(hi)+(MOB?18:24), f:function(t){ return t.other >= 0 && t.big >= 0; }},
+      {x:sx(XL), y:sy(hi), w:x0-sx(XL), h:y0-sy(hi), fill:"var(--q-rise)", t:"PLAYS TO THE COMPETITION", s:"Up for big games, flat in routine ones", c:"var(--qc-rise)", ax:"start", tx:sx(XL)+(MOB?8:14), ty:sy(hi)+(MOB?18:24), f:function(t){ return t.other < 0 && t.big >= 0; }},
+      {x:x0, y:y0, w:sx(XH)-x0, h:sy(lo)-y0, fill:"var(--q-front)", t:"FLAT-TRACK BULLIES", s:"Beat who they should, not good teams", c:"var(--qc-front)", ax:"end", tx:sx(XH)-(MOB?8:14), ty:sy(lo)-(MOB?20:30), f:function(t){ return t.other >= 0 && t.big < 0; }},
+      {x:sx(XL), y:y0, w:x0-sx(XL), h:sy(lo)-y0, fill:"var(--q-soft)", t:"SOFT", s:"Below expectations in every game", c:"var(--qc-soft)", ax:"start", tx:sx(XL)+(MOB?8:14), ty:sy(lo)-(MOB?20:30), f:function(t){ return t.other < 0 && t.big < 0; }}
     ];
     Q.forEach(function(q){ el("rect", {x:q.x, y:q.y, width:q.w, height:q.h, fill:q.fill}, svg); });
     for (var xv = XL; xv <= XH + 1e-9; xv += XS){
@@ -2988,7 +2990,7 @@ var PREVIEW = {
   })();
   function pvTicket(g, feat){
     var side = window.__pvside;
-      return '<div class="pvk' + (feat ? ' feat' : '') + '"><div class="pvm"><div class="pvh">' + (g.tier ? '<span class="pvsec">Section: ' + esc(g.tier) + '</span>' : '') + '<span class="pvwhy">' + esc(g.why.join(". ")) + (g.why.length ? "." : "") + '</span></div>' +
+      return '<div class="pvk' + (feat ? ' feat' : '') + '"><div class="pvm"><div class="pvh">' + (g.tier ? '<span class="pvsec">' + esc(g.tier) + ' stage</span>' : '') + '<span class="pvwhy">' + esc(g.why.join(". ")) + (g.why.length ? "." : "") + '</span></div>' +
         side(g.away) + '<div class="pvvs">' + (g.neutral ? "vs" : "at") + '</div>' + side(g.home) +
         (g.watch ? '<div class="pvw"><span>Watch</span>' + esc(g.watch) + '</div>' : '') +
         '</div><div class="pvstub"><b>' + esc(g.when.day) + '</b><i>' + esc(g.when.date) + '</i><b>' + esc(g.when.time.replace(" CT", "")) + '</b><i>CT' + (g.when.net ? ' · ' + esc(g.when.net) : '') + '</i></div></div>';
@@ -3006,29 +3008,26 @@ var PREVIEW = {
     function TK(id){ var r = null; TRK.teams.forEach(function(x){ if (x.id === id) r = x; }); return r; }
     function rkT(k, id, asc){ var arr = TEND.teams.slice().sort(function(p,q){ return asc ? p[k] - q[k] : q[k] - p[k]; }); for (var i = 0; i < arr.length; i++) if (arr[i].id === id) return i + 1; return null; }
     var rows = [
-      ["AP poll", function(id){ return AP[id] ? "No. " + AP[id] : "Unranked"; }, function(id){ return AP[id] || 99; }, "lo"],
-      ["Record", function(id){ var x = S(id); return x.w + "–" + x.l; }, null, null],
-      ["Living up to expectations", function(id){ return RK[id] ? ordn(RK[id]) + " of " + G.length + " Power 4" : "–"; }, function(id){ return RK[id] || 99; }, "lo"],
-      ["Season grade", function(id){ return signed(S(id).dawg); }, function(id){ return S(id).dawg; }, "hi"],
-      ["Big games", function(id){ var x = S(id); return x.nBig ? signed(x.big) + ' <span class="dim">(' + x.nBig + ')</span>' : '<span class="dim">none yet</span>'; }, function(id){ return S(id).nBig ? S(id).big : null; }, "hi"],
-      ["Routine games", function(id){ return signed(S(id).other); }, function(id){ return S(id).other; }, "hi"],
-      ["Big vs. routine", function(id){ var d = S(id).drop; return d === null || d === undefined ? "–" : (d >= 3 ? "Rises" : d <= -3 ? "Shrinks" : "About the same") + ' <span class="dim">' + signed(d) + '</span>'; }, null, null],
-      ["Record vs. its play", function(id){ var l = S(id).luck; return l === null || l === undefined ? "–" : Math.abs(l) < 0.5 ? "About right" : (l > 0 ? "Ahead by " : "Behind by ") + Math.abs(l).toFixed(1) + " wins"; }, null, null],
-      ["Against the spread", function(id){ var x = S(id); return x.atsW + "–" + x.atsL; }, function(id){ var x = S(id); return x.atsW - x.atsL; }, "hi"],
-      ["Penalties per game", function(id){ var t = TN(id); return t ? t.pen.toFixed(1) + ' <span class="dim">(' + ordn(rkT("pen", id, true)) + ' fewest)</span>' : "–"; }, function(id){ var t = TN(id); return t ? t.pen : null; }, "lo"],
-      ["Foot on the gas", function(id){ var t = TN(id); return t ? signed(t.leadEpa - TAVG.leadEpa, 2) : "–"; }, function(id){ var t = TN(id); return t ? t.leadEpa : null; }, "hi"],
-      ["Goes for it on 4th", function(id){ var t = TN(id); return t ? Math.round(t.go4 * 100) + "%" : "–"; }, null, null],
-      ["Pass-first", function(id){ var t = TN(id); return t ? Math.round(t.neuPass * 100) + "%" : "–"; }, null, null],
-      ["Blown leads this year", function(id){ var k = TK(id); return k ? k.lost + " of " + k.led : "–"; }, function(id){ var k = TK(id); return k && k.led ? k.lost / k.led : null; }, "lo"],
-      ["Blown leads since 2019", function(id){ var k = TK(id); return k && k.ledAll ? Math.round(k.lostAll / k.ledAll * 100) + "%" : "–"; }, function(id){ var k = TK(id); return k && k.ledAll ? k.lostAll / k.ledAll : null; }, "lo"],
-      ["Cash-in after stops", function(id){ var k = TK(id); return k && k.cashN ? Math.round(k.cashScores / k.cashN * 100) + "%" : "–"; }, function(id){ var k = TK(id); return k && k.cashN ? k.cashScores / k.cashN : null; }, "hi"]
+      ["AP poll", "", function(id){ return AP[id] ? "No. " + AP[id] : "Unranked"; }, function(id){ return AP[id] || 99; }, "lo"],
+      ["Record", "", function(id){ var x = S(id); return x.w + "–" + x.l; }, null, null],
+      ["DAWG score", "How it played vs. what Vegas expected. 0 = as expected, +3 or better = DAWG", function(id){ return signed(S(id).dawg); }, function(id){ return S(id).dawg; }, "hi"],
+      ["DAWG rank", "Out of 68 Power 4 teams", function(id){ return RK[id] ? ordn(RK[id]) : "–"; }, function(id){ return RK[id] || 99; }, "lo"],
+      ["In big games", "Ranked opponents, rivals, primetime, road crowds", function(id){ var x = S(id); return x.nBig ? signed(x.big) + ' <span class="dim">(' + x.nBig + ' game' + (x.nBig === 1 ? '' : 's') + ')</span>' : '<span class="dim">none yet</span>'; }, function(id){ return S(id).nBig ? S(id).big : null; }, "hi"],
+      ["In routine games", "Everything else", function(id){ return signed(S(id).other); }, function(id){ return S(id).other; }, "hi"],
+      ["Record vs. how it played", "Wins it got vs. wins its play earned", function(id){ var l = S(id).luck; return l === null || l === undefined ? "–" : Math.abs(l) < 0.5 ? "About right" : (l > 0 ? "Lucky: " : "Unlucky: ") + (l > 0 ? "+" : "−") + Math.abs(l).toFixed(1) + " wins"; }, null, null],
+      ["Against the spread", "Times it beat the Vegas line", function(id){ var x = S(id); return x.atsW + "–" + x.atsL; }, function(id){ var x = S(id); return x.atsW - x.atsL; }, "hi"],
+      ["Keeps the foot on the gas", "Keeps attacking once it's up 9+ (rank)", function(id){ var r = TN(id) ? rkT("leadEpa", id, false) : null; return r ? ordn(r) : "–"; }, function(id){ return TN(id) ? rkT("leadEpa", id, false) : null; }, "lo"],
+      ["Blown leads", "Lost after leading by 7+", function(id){ var k = TK(id); return k ? k.lost + " of " + k.led + (k.ledAll ? ' <span class="dim">· ' + Math.round(k.lostAll / k.ledAll * 100) + '% since 2019</span>' : '') : "–"; }, function(id){ var k = TK(id); return k && k.ledAll ? k.lostAll / k.ledAll : null; }, "lo"],
+      ["Scores after a stop", "Next drive after its defense gets a stop", function(id){ var k = TK(id); return k && k.cashN ? Math.round(k.cashScores / k.cashN * 100) + "%" : "–"; }, function(id){ var k = TK(id); return k && k.cashN ? k.cashScores / k.cashN : null; }, "hi"],
+      ["Penalties", "Per game. Fewer is better", function(id){ var t = TN(id); return t ? t.pen.toFixed(1) + ' <span class="dim">(' + ordn(rkT("pen", id, true)) + ' fewest)</span>' : "–"; }, function(id){ var t = TN(id); return t ? t.pen : null; }, "lo"],
+      ["Goes for it on 4th and short", "Between the 30s, instead of kicking", function(id){ var t = TN(id); return t ? Math.round(t.go4 * 100) + "%" : "–"; }, null, null]
     ];
     function lg(id){ return '<img src="logos/' + id + '-dark.png" alt="" onerror="this.onerror=null;this.src=\'logos/' + id + '.png\'">'; }
     $("cmpt").tHead.innerHTML = '<tr><th class="l"></th><th class="cmph">' + lg(a) + '<span>' + esc(META[a].name) + '</span></th><th class="cmph">' + lg(b) + '<span>' + esc(META[b].name) + '</span></th></tr>';
     $("cmpt").tBodies[0].innerHTML = rows.map(function(r){
-      var va = r[2] ? r[2](a) : null, vb = r[2] ? r[2](b) : null, wa = "", wb = "";
-      if (r[3] && va !== null && vb !== null && va !== undefined && vb !== undefined && va !== vb){ var aBetter = r[3] === "hi" ? va > vb : va < vb; wa = aBetter ? "win" : ""; wb = aBetter ? "" : "win"; }
-      return '<tr><td class="l">' + r[0] + '</td><td class="cv ' + wa + '">' + r[1](a) + '</td><td class="cv ' + wb + '">' + r[1](b) + '</td></tr>';
+      var va = r[3] ? r[3](a) : null, vb = r[3] ? r[3](b) : null, wa = "", wb = "";
+      if (r[4] && va !== null && vb !== null && va !== undefined && vb !== undefined && va !== vb){ var aBetter = r[4] === "hi" ? va > vb : va < vb; wa = aBetter ? "win" : ""; wb = aBetter ? "" : "win"; }
+      return '<tr><td class="l"><b class="cl">' + r[0] + '</b>' + (r[1] ? '<span class="cs">' + r[1] + '</span>' : '') + '</td><td class="cv ' + wa + '">' + r[2](a) + '</td><td class="cv ' + wb + '">' + r[2](b) + '</td></tr>';
     }).join("");
     setTimeout(fitTables, 0);
   }
@@ -3184,7 +3183,7 @@ var PREVIEW = {
         var name = "dawg-" + slugOf(gcShare.t) + "-" + gcShare.g.date + ".png"; gcEv("share-ticket-" + slugOf(gcShare.t));
         var file = null; try { file = new File([blob], name, {type:"image/png"}); } catch(e){}
         if (file && navigator.canShare && navigator.canShare({files:[file]})){
-          navigator.share({files:[file], text:"dawgindex.com/" + slugOf(gcShare.t)}).then(function(){ msg.textContent = ""; }).catch(function(){ msg.textContent = ""; });
+          navigator.share({files:[file]}).then(function(){ msg.textContent = ""; }).catch(function(){ msg.textContent = ""; });
         } else {
           var a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = name; document.body.appendChild(a); a.click(); a.remove();
           setTimeout(function(){ URL.revokeObjectURL(a.href); }, 4000); msg.textContent = "Saved. Post it anywhere.";
@@ -3304,7 +3303,7 @@ var PREVIEW = {
     gcEv("share-" + String(name).replace(/^dawg-/, "").replace(/\.png$/, ""));
     var file = null; try { file = new File([blob], name, {type:"image/png"}); } catch(e){}
     if (file && navigator.canShare && navigator.canShare({files:[file]})){
-      navigator.share({files:[file], text:text}).then(function(){ if (msgEl) msgEl.textContent = ""; }).catch(function(){ if (msgEl) msgEl.textContent = ""; });
+      navigator.share({files:[file]}).then(function(){ if (msgEl) msgEl.textContent = ""; }).catch(function(){ if (msgEl) msgEl.textContent = ""; });
     } else {
       var a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = name; document.body.appendChild(a); a.click(); a.remove();
       setTimeout(function(){ URL.revokeObjectURL(a.href); }, 4000); if (msgEl) msgEl.textContent = "Saved";
@@ -3345,7 +3344,7 @@ var PREVIEW = {
   var XCSS = '.xbody{margin:0;background:#131210;width:1080px}.xf{width:1080px;padding:60px 60px 46px;background:#131210;display:flex;flex-direction:column;gap:26px;position:relative}' +
     '.xf::after{content:"";position:absolute;inset:0;pointer-events:none;opacity:.5;mix-blend-mode:soft-light;background-image:url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%27300%27 height=%27300%27%3E%3Cfilter id=%27n%27%3E%3CfeTurbulence type=%27fractalNoise%27 baseFrequency=%27.8%27 numOctaves=%273%27/%3E%3CfeColorMatrix values=%270 0 0 0 1  0 0 0 0 .95  0 0 0 0 .85  0 0 0 .5 0%27/%3E%3C/filter%3E%3Crect width=%27300%27 height=%27300%27 filter=%27url(%23n)%27/%3E%3C/svg%3E")}' +
     '.xh{display:flex;justify-content:space-between;align-items:center;padding-bottom:30px;position:relative}.xh::after{content:"";position:absolute;left:0;right:0;bottom:0;height:16px;background:linear-gradient(#2F64C0 0 30%,#131210 0 42%,#E5463A 0 70%,#131210 0 82%,#F08A2C 0);border-top:2.5px solid #F4EAD2;border-bottom:2.5px solid #F4EAD2}' +
-    '.xh h1{font-size:64px!important;-webkit-text-stroke:2.5px #0c0b0a!important;text-shadow:4px 4px 0 #E5463A!important}.xk{font-family:var(--display);font-weight:800;text-transform:uppercase;letter-spacing:.08em;font-size:18px;line-height:1.3;text-align:right;border:2.5px solid #F4EAD2;border-radius:10px;padding:8px 14px;color:#F4EAD2}' +
+    '.xh h1 span{box-shadow:none!important;filter:drop-shadow(4px 4px 0 #F4EAD2)}.xh h1{font-size:64px!important;-webkit-text-stroke:2.5px #0c0b0a!important;text-shadow:4px 4px 0 #E5463A!important}.xk{font-family:var(--display);font-weight:800;text-transform:uppercase;letter-spacing:.08em;font-size:18px;line-height:1.3;text-align:right;border:2.5px solid #F4EAD2;border-radius:10px;padding:8px 14px;color:#F4EAD2}' +
     '.xtitle h2{font-size:44px!important;line-height:1.05}.xtitle p{margin:8px 0 0;color:var(--muted);font-size:20px}' +
     '.xbodyin{display:flex;flex-direction:column;gap:18px}.xbodyin .tablewrap{box-shadow:none!important;overflow:visible!important}.xbodyin th{position:static!important}.xbodyin th *,.xbodyin th{text-decoration:none!important}' +
     '.xbodyin td,.xbodyin th{font-size:17px}.xbodyin td.num{font-size:20px}.xbodyin #log td.gg,.xbodyin td.gg{font-size:26px!important}' +
@@ -3366,7 +3365,7 @@ var PREVIEW = {
   (function(){
     var sh = function(id){ return $(id) ? $(id).closest(".sechead") : null; };
     addShare(sh("week-h"), {title:function(){ return $("week-h").textContent; }, nodes:function(){ return [$("wk")]; }, file:"highlights"});
-    addShare(sh("chart-h"), {title:function(){ return $("chart-h").textContent; }, sub:function(){ return "Right = better than expected in routine games · Up = better in big games"; }, nodes:function(){ return [document.querySelector("#chart-sec .chartbox")]; }, file:"big-vs-routine"});
+    addShare(sh("chart-h"), {title:function(){ return $("chart-h").textContent; }, sub:function(){ return "This season so far. Right = better than expected in routine games · Up = better in big games"; }, nodes:function(){ return [document.querySelector("#chart-sec .chartbox")]; }, file:"big-vs-routine"});
     addShare(sh("board-h"), {title:function(){ return $("board-h").textContent; }, sub:function(){ return "Season DAWG: how each team played vs expectations, adjusted for the stage"; }, nodes:function(){ return [wrapOf("board")]; }, file:"leaderboard"});
     addShare(sh("poll-h"), {title:function(){ return "Poll Check"; }, sub:function(){ return $("poll-note").textContent; }, nodes:function(){ return [wrapOf("poll")]; }, file:"poll-check"});
     addShare(sh("conf-h"), {title:function(){ return "Conference Rankings"; }, nodes:function(){ return [document.querySelector("#conf-sec .tablewrap")]; }, file:"conferences"});
