@@ -488,7 +488,7 @@ select{-webkit-appearance:none;appearance:none;padding:7px 42px 7px 16px!importa
 }
 .tablewrap.wide:is(#z,*){overflow-x:auto!important;overflow-y:hidden!important}.tablewrap.wide:is(#z,*) th{position:static!important}
 .tablewrap table:not(.all) > tbody > tr:nth-child(n+26){display:none}
-.tablewrap thead th:first-child{border-top-left-radius:14px}.tablewrap thead th:last-child{border-top-right-radius:14px}
+.tablewrap thead th:first-child{border-top-left-radius:14px}.tablewrap thead th:last-child,.tablewrap thead th.lastvis{border-top-right-radius:14px}
 .moreb{display:block;margin:2px auto 0!important}
 #log th,#log td{padding-left:7px!important;padding-right:7px!important}#log td.l{white-space:normal}
 .tbt td.l{white-space:normal!important}.tbt td.l:nth-child(2){white-space:nowrap!important}
@@ -1839,7 +1839,11 @@ var TRK = {"season":2026,"baseBlown":0.19864940911648846,"baseCash":0.5229621125
     document.querySelector("#topgames tbody").innerHTML = TOPS[y] || '<tr><td class="l" colspan="8"><span class="dim">No graded games for this season.</span></td></tr>';
   }
   // No scroll boxes: long tables show 25 rows plus a Show-all button, and the page does the scrolling.
-  function fitTables(){ document.querySelectorAll(".tablewrap").forEach(function(w){ var tb = w.querySelector("table"); if (!tb || !w.offsetParent) return; w.classList.remove("wide"); if (tb.offsetWidth > w.clientWidth + 2) w.classList.add("wide"); }); }
+  // round the top-right corner on the last column that's actually showing (hidden columns sit at the end on phones)
+  function roundHeads(){ document.querySelectorAll(".tablewrap thead tr").forEach(function(tr){ var last = null;
+    Array.prototype.forEach.call(tr.children, function(th){ th.classList.remove("lastvis"); if (!th.hidden && getComputedStyle(th).display !== "none") last = th; });
+    if (last) last.classList.add("lastvis"); }); }
+  function fitTables(){ roundHeads(); document.querySelectorAll(".tablewrap").forEach(function(w){ var tb = w.querySelector("table"); if (!tb || !w.offsetParent) return; w.classList.remove("wide"); if (tb.offsetWidth > w.clientWidth + 2) w.classList.add("wide"); }); }
   window.addEventListener("resize", function(){ clearTimeout(fitTables.t); fitTables.t = setTimeout(fitTables, 120); });
   function capTables(){
     document.querySelectorAll(".tablewrap > table").forEach(function(tb){
