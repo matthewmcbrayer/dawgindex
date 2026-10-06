@@ -620,8 +620,16 @@ th{font-size:15px!important}
   #biggest td,#biggest th{white-space:normal!important}
   #biggest td:nth-child(2){font-size:14px}
   #biggest th,#biggest td{padding-left:6px!important;padding-right:6px!important}
-  .topnav a{font-size:12.5px!important;padding:4px 7px!important;letter-spacing:.01em!important}
+  .topnav a{font-size:12.5px!important;padding:4px 5.5px!important;letter-spacing:0!important}
+  .topnav{gap:3px!important}
   #find-sec .sechead h2{font-size:23px!important}
+}
+@media (max-width:420px){
+  .topnav a{font-size:11.6px!important;padding:4px 4.5px!important}
+}
+@media (max-width:375px){
+  .topnav a{font-size:10.6px!important;padding:3px 4px!important}
+  .topnav{gap:2px!important}
 }
 
 #what-sec.gone{display:none!important}
@@ -718,6 +726,17 @@ th{font-size:15px!important}
 .sc-l i{font-style:normal;width:24px;height:24px;border-radius:50%;display:grid;place-items:center;font-size:12px;font-weight:900;background:var(--line);color:var(--ink);margin-top:1px}
 .sc-l li.up i,.sc-l li.good i{background:#1E7046;color:#fff}.sc-l li.dn i{background:#C22E25;color:#fff}.sc-l li.warn i{background:#E2711D;color:#131210}
 .hv .pp{display:inline-flex;align-items:flex-start;gap:.3em}.hv .pp>span{display:inline-flex;flex-direction:column;align-items:center}.hv .pp small{font-family:var(--display);font-weight:800;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-top:2px;line-height:1;white-space:nowrap}.hv .pp i{font-style:normal;font-size:.7em;line-height:1.45}
+#week-pv{overflow-x:clip}
+.qbtools{display:flex;align-items:center;gap:12px;margin:0 0 12px;flex-wrap:wrap}.qbtools input{font:inherit;font-size:16px;background:transparent;color:var(--ink);border:2px solid var(--line);border-radius:999px;padding:7px 14px;min-width:240px}
+#qbt td.l b{font-weight:700}#qbt .qs{display:flex;align-items:center;gap:6px;margin-top:2px;font-size:13px;color:var(--muted)}#qbt .qs img{width:18px;height:18px;object-fit:contain}
+#qbt tr.qrow{cursor:pointer}#qbt tr.qrow.open td{border-bottom:0}#qbt td.qrt{font-family:var(--display);font-weight:900;font-size:20px}
+.qbx td{padding:0!important}.qbd{margin:4px 8px 16px;border:2px solid var(--line);border-radius:14px;padding:14px 16px;text-align:left;white-space:normal}
+.qbd h3{font-family:var(--display);font-weight:900;font-size:22px;text-transform:uppercase;margin:0}.qbd .sub{color:var(--muted);font-size:14px;margin:2px 0 10px}.qbd .sub img{width:18px;height:18px;object-fit:contain;vertical-align:-4px;margin-right:4px}
+.qbd table{width:100%;font-size:14px}.qbd th{font-size:12px!important}.qbd td,.qbd th{padding:5px 6px!important;text-align:right}.qbd td.l,.qbd th.l{text-align:left}
+.qbd .bars{display:flex;gap:10px;height:120px;margin:10px 0 26px;position:relative}.qbd .bars::before{content:'';position:absolute;left:0;right:0;top:50%;border-top:1.5px solid var(--line)}.qbd .bars>div{flex:1;max-width:70px;height:100%;position:relative}.qbd .bars i{position:absolute;left:0;right:0;display:block}.qbd .bars i.p{bottom:50%;background:var(--good);border-radius:6px 6px 0 0}.qbd .bars i.n{top:50%;background:var(--bad);border-radius:0 0 6px 6px}.qbd .bars b{position:absolute;left:0;right:0;text-align:center;font-family:var(--display);font-weight:900;font-size:14px;line-height:1}.qbd .bars span{position:absolute;bottom:-22px;left:0;right:0;text-align:center;font-family:var(--display);font-weight:800;font-size:12px;color:var(--muted)}
+.qbd .gl{margin-top:12px}.qbd .gsel{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0}.qbd .gsel button{font-family:var(--display);font-weight:800;font-size:13px;background:transparent;color:var(--ink);border:2px solid var(--line);border-radius:999px;padding:3px 10px;cursor:pointer}.qbd .gsel button[aria-pressed="true"]{background:var(--ink);color:#131210;border-color:var(--ink)}
+.qbd p.dim{font-size:13px;margin-top:8px}
+@media (max-width:640px){.qbtools{gap:6px}.qbtools input{min-width:0;width:100%}#qbt th,#qbt td{padding-left:6px!important;padding-right:6px!important}#qbt .qs{font-size:12.5px}#qbt td.qrt{font-size:18px}.qbd{margin:4px 0 14px;padding:12px}.qbd .hide-xs{display:none}}
 .sc-tr{margin-top:16px;border-top:1.5px solid var(--line);padding-top:12px}.sc-tr>*{max-width:520px}.sc-trh{display:flex;justify-content:space-between;align-items:baseline;gap:8px}.sc-trh span{font-family:var(--display);font-weight:800;font-size:12.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}.sc-trh b{font-family:var(--display);font-weight:900;font-size:16px}.sc-trh b.pos{color:var(--good)}.sc-trh b.neg{color:var(--bad)}.sc-tr svg{display:block;width:100%;max-width:520px;height:auto;margin-top:4px;overflow:visible}.tr-mid{stroke:var(--line);stroke-dasharray:3 4}.tr-ln{fill:none;stroke:var(--ink);stroke-width:2}.tr-pt{fill:var(--ink)}.tr-now{fill:var(--accent,#D8342A)}.tr-rk{font-family:var(--display);font-weight:900;font-size:12px;text-anchor:middle;fill:var(--ink)}.tr-wk{font-family:var(--display);font-weight:800;font-size:10.5px;text-anchor:middle;fill:var(--muted);letter-spacing:.05em}.sc-tr p{font-size:13px;margin-top:2px}td.rank i.mv{font-style:normal;font-family:var(--display);font-weight:800;font-size:11px;margin-left:5px;display:inline-flex;align-items:center;gap:2px;vertical-align:middle}td.rank i.mv svg{width:7px;height:6px}#board td.rank{white-space:nowrap!important}td.rank i.mv.up{color:var(--good)}td.rank i.mv.dn{color:var(--bad)}
 .sc-t{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:16px;border-top:1.5px solid var(--line);padding-top:14px}
 .sc-t div{display:flex;flex-direction:column}.sc-t span{font-family:var(--display);font-weight:800;font-size:12.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
@@ -776,6 +795,7 @@ th{font-size:15px!important}
     <a href="#team" data-p="team">Teams</a>
     <a href="#week" data-p="week">This Week</a>
     <a href="#coaches" data-p="coaches">Coaches</a>
+    <a href="#qbs" data-p="qbs">QBs</a>
     <a href="#method" data-p="method">How It Works</a>
   </nav>
 
@@ -1003,6 +1023,26 @@ th{font-size:15px!important}
         <tbody></tbody>
       </table>
     </div>
+  </section>
+
+  <section class="sec page" data-page="qbs" id="qbs-sec" aria-labelledby="qb-h">
+    <div class="sechead"><h2 id="qb-h">Quarterbacks</h2><span class="note">Points per game each QB adds compared with an average Power 4 QB</span></div>
+    <p class="note">Every pass, sack, run and turnover counts, adjusted for the defense he faced. Unlike team scores, this one sticks from year to year, even after a transfer. <button type="button" class="ib" data-more="qb-more" aria-expanded="false" aria-label="How the QB rating works" title="More">i</button></p>
+    <div class="modenote" id="qb-more" hidden>
+      <p><b>What counts.</b> Each of his plays is valued by how much it changed the expected score: a 3rd-down conversion adds, a sack or a pick in his own end costs a lot. Each play is then compared with what that defense gave up to every QB that season, so 7 yards against Georgia counts for more than 7 against a bad defense. Blowouts (24+ points) and FCS games are left out.</p>
+      <p><b>The rating.</b> Shown as points per game against an average Power 4 QB, on a typical 30 plays. Early in a season, a few games can swing wildly, so the rating leans on his last season (or on average if he's new) until more games come in. "This season, raw" is the number with no leaning.</p>
+      <p><b>Does it hold up?</b> Yes, more than anything else on this site. A QB's number carries over to his next season at about 0.4 (0 = not at all, 1 = perfectly), and about 0.5 after a transfer. Team scores carry over at about 0.07. <b>Big games and clutch</b> (3rd/4th down, or 4th quarter within 8) are shown for what happened, but they don't carry over: no QB has proven to be a big-game or clutch player year after year.</p>
+      <p><b>What it can't separate.</b> His line, receivers and play-calling are part of every play. When a team swaps QBs, its new QB's number still carries over about 0.3 from the old one, so some of this is the program around him.</p>
+    </div>
+    <div class="csorts" id="qbmode" role="group" aria-label="Which QBs"><button type="button" data-qm="season" aria-pressed="true">This season</button><button type="button" data-qm="career" aria-pressed="false">Career since 2019</button></div>
+    <div class="qbtools"><input id="qbq" type="search" placeholder="Search a QB or school" aria-label="Search quarterbacks"><span class="note" id="qbcount"></span></div>
+    <div class="tablewrap">
+      <table id="qbt">
+        <thead><tr><th class="l rank">#</th><th class="l">QB</th><th data-qk="rating"><button>Rating</button></th><th data-qk="games"><button><span class="hide-sm">Games</span><span class="show-sm">G</span></button></th><th data-qk="raw"><button>Raw</button></th><th data-qk="big" class="hide-sm"><button>Big Games</button></th><th data-qk="to" class="hide-sm"><button>TO %</button></th></tr></thead>
+        <tbody><tr><td class="l" colspan="7"><span class="dim">Loading quarterbacks…</span></td></tr></tbody>
+      </table>
+    </div>
+    <p class="note" style="margin-top:10px">Rating leans on last season until enough games come in; Raw is this season alone. Tap a QB for his year-by-year line, big games and game log. This season needs 3+ starts; career needs 10+.</p>
   </section>
 
 
@@ -2957,7 +2997,7 @@ var TREND = {"season":2026,"weeks":[1,2,3,4,5],"teams":{"158":[[3.4,16,1],[3.8,1
   $("mode-proven").addEventListener("click", function(){ setMode("proven"); });
 
   // ---------- pages ----------
-  var PAGES = ["rankings","team","week","coaches","method"], PALIAS = {tend:"team", trackers:"team", real:"method", matchup:"week"};
+  var PAGES = ["rankings","team","week","coaches","qbs","method"], PALIAS = {tend:"team", trackers:"team", real:"method", matchup:"week"};
   function showPage(pg, keepScroll){
     if (PALIAS[pg]) pg = PALIAS[pg];
     if (PAGES.indexOf(pg) < 0) pg = "rankings";
@@ -2968,10 +3008,68 @@ var TREND = {"season":2026,"weeks":[1,2,3,4,5],"teams":{"158":[[3.4,16,1],[3.8,1
       history.replaceState(null, "", web ? (pg === "team" && state.sel ? "/?team=" + slugOf(state.sel) + "#team" : "/#" + pg) : "#" + pg); } catch(e){}
     try { localStorage.setItem("dawg-page", pg); } catch(e){}
     if (!keepScroll) window.scrollTo(0, 0);
+    if (pg === "qbs") drawQB();
     setTimeout(function(){ if (typeof fitTables === "function") fitTables(); }, 0);
   }
   document.querySelectorAll(".topnav a").forEach(function(a){ a.addEventListener("click", function(e){ e.preventDefault(); showPage(a.getAttribute("data-p")); }); });
 
+
+  // ---------- quarterbacks (separate QB model; data loads when the tab opens) ----------
+  var QBV = "7e870eac", QBD = null, QBWAIT = null, qst = {mode: "season", k: "rating", dir: -1, open: null, q: "", gy: {}};
+  function loadQB(){ if (QBD) return Promise.resolve(QBD); if (QBWAIT) return QBWAIT; QBWAIT = fetch("/data/qb.json?v=" + QBV).then(function(r){ if (!r.ok) throw new Error("qb"); return r.json(); }).then(function(d){ QBD = d; return d; }).catch(function(e){ QBWAIT = null; throw e; }); return QBWAIT; }
+  function qcls(x){ return x === null || x === undefined ? "dim" : x >= 1 ? "pos" : x <= -1 ? "neg" : ""; }
+  function qlogo(id){ return '<img src="logos/' + id + '-dark.png" alt="" loading="lazy" onerror="this.onerror=null;this.src=\'logos/' + id + '.png\'">'; }
+  function qschools(ids){ return ids.map(function(t){ return META[t] ? qlogo(t) + esc(META[t].name) : ""; }).join(' <span class="dim">→</span> '); }
+  function qbRows(){
+    var Y = QBD.season, out = [];
+    QBD.qbs.forEach(function(o){
+      var s = qst.mode === "career" ? o.career : o.seasons.filter(function(x){ return x.y === Y; })[0];
+      if (!s || s.games < (qst.mode === "career" ? 10 : 3)) return;
+      var teams = qst.mode === "career" ? o.teams : s.teams;
+      out.push({o: o, s: s, teams: teams, rating: s.rating, games: s.games, raw: s.raw, big: s.big, to: s.to});
+    });
+    var q = qst.q.trim().toLowerCase();
+    if (q) out = out.filter(function(r){ return r.o.qb.toLowerCase().indexOf(q) >= 0 || r.teams.some(function(t){ return META[t] && META[t].name.toLowerCase().indexOf(q) >= 0; }); });
+    var k = qst.k, dir = qst.dir;
+    out.sort(function(a, b){ var av = a[k], bv = b[k]; if (av === null || av === undefined) return 1; if (bv === null || bv === undefined) return -1; return (av - bv) * dir; });
+    return out;
+  }
+  function qbDetail(o){
+    var S = o.seasons, mx = Math.max.apply(null, S.map(function(s){ return Math.abs(s.rating); }).concat([3]));
+    var bars = '<div class="bars">' + S.map(function(s){ var h = Math.max(3, Math.abs(s.rating) / mx * 50); return '<div title="' + s.y + '"><i class="' + (s.rating < 0 ? 'n' : 'p') + '" style="height:' + h + '%"></i><b class="' + qcls(s.rating) + '" style="' + (s.rating < 0 ? 'top:calc(50% + ' + h + '% + 2px)' : 'bottom:calc(50% + ' + h + '% + 2px)') + '">' + signed(s.rating) + '</b><span>' + s.y + '</span></div>'; }).join("") + '</div>';
+    var rows = S.map(function(s){ return '<tr><td class="l">' + s.y + '</td><td class="l">' + s.teams.map(function(t){ return META[t] ? esc(META[t].abbr || META[t].name) : ""; }).join("/") + '</td><td>' + s.games + '</td><td class="' + qcls(s.rating) + '"><b>' + signed(s.rating) + '</b></td><td class="hide-xs">' + signed(s.raw) + '</td><td class="' + qcls(s.big) + '">' + signed(s.big) + '</td><td class="hide-xs ' + qcls(s.clutch) + '">' + signed(s.clutch) + '</td><td class="hide-xs">' + s.to + '%</td></tr>'; }).join("");
+    var gy = qst.gy[o.qb] || S[S.length - 1].y, gs = S.filter(function(s){ return s.y === gy; })[0] || S[S.length - 1];
+    var log = gs.log.map(function(g){ return '<tr><td class="l">' + fmtDate(g.d) + '</td><td class="l">' + (g.s === "away" ? "at " : "vs ") + esc(g.o) + (g.big ? ' <span class="dim">· big</span>' : '') + '</td><td>' + (g.pf > g.pa ? "W " : g.pf < g.pa ? "L " : "T ") + g.pf + "–" + g.pa + '</td><td class="hide-xs">' + g.n + '</td><td class="' + qcls(g.v) + '"><b>' + signed(g.v) + '</b></td></tr>'; }).join("");
+    return '<div class="qbd"><h3>' + esc(o.qb) + '</h3><div class="sub">' + qschools(o.teams) + ' · career rating <b class="' + qcls(o.career.rating) + '">' + signed(o.career.rating) + '</b> over ' + o.career.games + ' games</div>' + bars +
+      '<table><thead><tr><th class="l">Year</th><th class="l">School</th><th>G</th><th>Rating</th><th class="hide-xs">Raw</th><th>Big games</th><th class="hide-xs">Clutch</th><th class="hide-xs">TO %</th></tr></thead><tbody>' + rows + '</tbody></table>' +
+      '<div class="gl"><div class="gsel" role="group" aria-label="Game log season">' + S.map(function(s){ return '<button type="button" data-gy="' + s.y + '" aria-pressed="' + (s.y === gs.y) + '">' + s.y + '</button>'; }).join("") + '</div>' +
+      '<table><thead><tr><th class="l">Date</th><th class="l">Game</th><th>Result</th><th class="hide-xs">Plays</th><th>Pts added</th></tr></thead><tbody>' + log + '</tbody></table></div>' +
+      '<p class="dim">Pts added = points he added in that game vs. an average QB on the same plays. Big games and clutch don\'t carry over from year to year; read them as what happened.</p></div>';
+  }
+  function drawQB(){
+    if (!QBD){ loadQB().then(drawQB).catch(function(){ $("qbt").tBodies[0].innerHTML = '<tr><td class="l" colspan="7"><span class="dim">Couldn\'t load quarterbacks. Refresh to try again.</span></td></tr>'; }); return; }
+    document.querySelectorAll("#qbmode button").forEach(function(b){ b.setAttribute("aria-pressed", String(b.getAttribute("data-qm") === qst.mode)); });
+    document.querySelectorAll("#qbt th[data-qk]").forEach(function(th){ th.classList.toggle("on", th.getAttribute("data-qk") === qst.k); });
+    var L = qbRows();
+    $("qbcount").textContent = L.length + " QBs";
+    $("qbt").tBodies[0].innerHTML = L.length ? L.map(function(r, i){
+      var open = qst.open === r.o.qb;
+      return '<tr class="qrow' + (open ? ' open' : '') + '" data-qb="' + esc(r.o.qb) + '" tabindex="0" aria-expanded="' + open + '"><td class="l rank">' + (i + 1) + '</td><td class="l"><b>' + esc(r.o.qb) + '</b><div class="qs">' + qschools(r.teams) + '</div></td>' +
+        '<td class="num qrt ' + qcls(r.rating) + '">' + signed(r.rating) + '</td><td class="num">' + r.games + '</td><td class="num hide-sm ' + qcls(r.raw) + '">' + signed(r.raw) + '</td><td class="num ' + qcls(r.big) + '">' + signed(r.big) + '</td><td class="num hide-sm">' + r.to + '%</td></tr>' +
+        (open ? '<tr class="qbx"><td colspan="7">' + qbDetail(r.o) + '</td></tr>' : '');
+    }).join("") : '<tr><td class="l" colspan="7"><span class="dim">No QBs match.</span></td></tr>';
+    try { fitTables(); } catch(e){}
+  }
+  document.querySelectorAll("#qbmode button").forEach(function(b){ b.addEventListener("click", function(){ qst.mode = b.getAttribute("data-qm"); qst.open = null; drawQB(); }); });
+  $("qbq").addEventListener("input", function(){ qst.q = this.value; drawQB(); });
+  document.querySelector("#qbt thead").addEventListener("click", function(e){ var th = e.target.closest("th[data-qk]"); if (!th) return; var k = th.getAttribute("data-qk"); if (qst.k === k) qst.dir *= -1; else { qst.k = k; qst.dir = -1; } drawQB(); });
+  $("qbt").tBodies[0].addEventListener("click", function(e){
+    var gb = e.target.closest("button[data-gy]"); if (gb){ var row = e.target.closest("tr.qbx").previousElementSibling; qst.gy[row.getAttribute("data-qb")] = +gb.getAttribute("data-gy"); drawQB(); return; }
+    if (e.target.closest(".qbd")) return;
+    var tr = e.target.closest("tr.qrow"); if (!tr) return; var q = tr.getAttribute("data-qb"); qst.open = qst.open === q ? null : q; drawQB();
+    try { gcEv("qb-open"); } catch(_){}
+  });
+  $("qbt").tBodies[0].addEventListener("keydown", function(e){ if (e.key !== "Enter") return; var tr = e.target.closest("tr.qrow"); if (tr) tr.click(); });
   function select(id, scroll){
     state.sel = id; state.picked = true; try { localStorage.setItem("dawg-sel", id); } catch(e){}
     drawChart(); drawBoard(); drawTeam(); drawCoaches();
