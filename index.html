@@ -717,6 +717,7 @@ th{font-size:15px!important}
 .sc-l li{display:grid;grid-template-columns:26px 1fr;gap:10px;font-size:15.5px;line-height:1.4;color:var(--muted)}.sc-l li b{color:var(--ink)}
 .sc-l i{font-style:normal;width:24px;height:24px;border-radius:50%;display:grid;place-items:center;font-size:12px;font-weight:900;background:var(--line);color:var(--ink);margin-top:1px}
 .sc-l li.up i,.sc-l li.good i{background:#1E7046;color:#fff}.sc-l li.dn i{background:#C22E25;color:#fff}.sc-l li.warn i{background:#E2711D;color:#131210}
+.sc-tr{margin-top:16px;border-top:1.5px solid var(--line);padding-top:12px}.sc-tr>*{max-width:520px}.sc-trh{display:flex;justify-content:space-between;align-items:baseline;gap:8px}.sc-trh span{font-family:var(--display);font-weight:800;font-size:12.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}.sc-trh b{font-family:var(--display);font-weight:900;font-size:16px}.sc-trh b.pos{color:var(--good)}.sc-trh b.neg{color:var(--bad)}.sc-tr svg{display:block;width:100%;max-width:520px;height:auto;margin-top:4px;overflow:visible}.tr-mid{stroke:var(--line);stroke-dasharray:3 4}.tr-ln{fill:none;stroke:var(--ink);stroke-width:2}.tr-pt{fill:var(--ink)}.tr-now{fill:var(--accent,#D8342A)}.tr-rk{font-family:var(--display);font-weight:900;font-size:12px;text-anchor:middle;fill:var(--ink)}.tr-wk{font-family:var(--display);font-weight:800;font-size:10.5px;text-anchor:middle;fill:var(--muted);letter-spacing:.05em}.sc-tr p{font-size:13px;margin-top:2px}td.rank i.mv{font-style:normal;font-family:var(--display);font-weight:800;font-size:11px;margin-left:5px;vertical-align:1px}td.rank i.mv.up{color:var(--good)}td.rank i.mv.dn{color:var(--bad)}
 .sc-t{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:16px;border-top:1.5px solid var(--line);padding-top:14px}
 .sc-t div{display:flex;flex-direction:column}.sc-t span{font-family:var(--display);font-weight:800;font-size:12.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
 .sc-t b{font-family:var(--display);font-weight:900;font-size:28px;line-height:1.1;color:var(--ink)}.sc-t b.pos{color:var(--good)}.sc-t b.neg{color:var(--bad)}
@@ -2267,6 +2268,7 @@ var PREVIEW = {
   }
  ]
 };
+var TREND = {"season":2026,"weeks":[1,2,3,4,5],"teams":{"158":[[3.4,16,1],[3.8,10,2],[1.0,28,3],[2.1,12,4],[2.7,9,5]],"59":[[-5.5,62,1],[-4.2,59,2],[-2.6,55,3],[-3.3,60,4],[-3.3,58,4]],"2294":[[1.4,30,1],[-2.6,55,2],[-0.5,42,3],[0.8,24,4],[0.8,27,5]],"120":[[-0.2,40,1],[1.7,21,2],[1.5,23,3],[-1.3,49,4],[-2.4,54,5]],"2579":[[1.4,32,1],[-1.6,46,2],[-2.5,53,3],[-4.4,64,4],[-4.4,66,5]],"38":[[0.5,37,1],[0.0,40,2],[-3.6,60,3],[-3.8,62,4],[-5.0,67,5]],"2483":[[-5.5,60,1],[-5.7,63,2],[-4.0,63,3],[-1.2,48,4],[-1.2,46,4]],"356":[[4.6,10,1],[0.7,33,2],[-0.3,39,3],[-1.0,45,4],[-1.6,49,5]],"96":[[4.2,14,1],[-1.2,44,2],[2.6,13,3],[2.1,14,4],[2.5,11,5]],"135":[[1.6,28,1],[-2.3,51,2],[-1.3,47,3],[0.0,33,4],[0.2,36,5]],"26":[[11.2,1,1],[5.4,4,2],[4.2,4,3],[6.2,2,4],[6.2,3,4]],"127":[[0.7,36,1],[2.1,18,2],[2.7,11,3],[1.1,21,4],[-0.4,39,5]],"2567":[[-1.9,48,1],[1.9,20,2],[-0.1,36,3],[-2.4,53,4],[-2.1,52,5]],"277":[[-3.5,56,1],[-0.4,41,2],[2.1,16,3],[0.5,30,4],[1.4,21,5]],"61":[[-1.0,43,1],[1.7,22,2],[2.7,12,3],[4.4,6,4],[3.9,5,5]],"9":[[2.2,24,1],[-4.4,60,2],[-2.9,58,3],[-2.8,56,3],[-3.7,61,4]],"2390":[[5.8,6,1],[4.4,7,2],[2.3,15,3],[2.1,13,4],[3.1,7,5]],"239":[[-2.8,52,1],[-0.6,42,2],[-0.6,44,3],[-0.6,41,4],[2.3,12,5]],"333":[[4.4,13,1],[6.3,2,2],[4.7,3,3],[6.2,3,4],[6.9,2,5]],"248":[[-1.1,44,1],[0.9,32,2],[0.9,29,3],[1.4,18,4],[1.0,24,5]],"2509":[[2.1,25,1],[0.4,35,2],[0.7,30,3],[-0.7,43,4],[0.4,33,5]],"66":[[2.6,21,1],[1.2,29,2],[1.9,20,3],[0.7,28,4],[0.8,29,5]],"164":[[-13.7,68,1],[-8.0,66,2],[-4.7,65,3],[-3.1,58,4],[-2.8,57,5]],"2628":[[-3.9,58,1],[-3.5,58,2],[-2.0,50,3],[-3.6,61,4],[-4.1,62,5]],"251":[[6.8,5,1],[5.1,5,2],[2.8,10,3],[0.8,25,4],[0.8,28,4]],"228":[[-5.5,59,1],[-5.9,65,2],[-2.9,57,3],[-1.4,50,4],[-2.6,55,5]],"183":[[4.5,11,1],[-1.9,50,2],[-2.7,56,3],[-2.6,54,3],[-2.3,53,4]],"2":[[-3.2,55,1],[-1.0,43,2],[0.3,32,3],[-0.3,38,4],[-1.4,48,5]],"150":[[-3.2,54,1],[0.6,34,2],[2.0,17,3],[1.7,16,4],[1.7,19,4]],"197":[[-13.5,67,1],[-2.6,54,2],[-3.1,59,3],[-0.3,37,4],[-0.3,37,4]],"238":[[-2.8,51,1],[-3.4,57,2],[-1.9,49,3],[-2.3,52,4],[-2.0,51,5]],"2641":[[-7.8,63,1],[-5.8,64,2],[-3.8,62,3],[-3.2,59,4],[-1.8,50,5]],"2305":[[-1.6,47,1],[-2.5,53,2],[-4.6,64,3],[-4.6,65,3],[-2.6,56,4]],"201":[[2.7,19,1],[-2.5,52,2],[-3.7,61,3],[-6.2,68,4],[-6.2,68,4]],"52":[[1.4,33,2],[1.0,30,2],[0.5,31,3],[-0.1,34,4],[1.4,22,5]],"25":[[-5.5,61,1],[-1.8,48,2],[-2.5,52,3],[-2.8,55,4],[-3.4,59,5]],"84":[[3.0,18,1],[1.6,23,2],[-0.2,37,3],[-0.9,44,4],[0.3,35,5]],"87":[[4.5,12,1],[4.0,9,2],[1.4,25,3],[2.8,11,4],[1.8,18,5]],"77":[[2.7,20,1],[2.3,16,1],[7.1,1,2],[8.2,1,3],[8.1,1,4]],"30":[[2.2,23,2],[2.2,17,3],[1.4,24,4],[1.1,22,5],[0.5,30,6]],"194":[[-2.8,50,1],[-1.7,47,2],[-1.5,48,3],[-0.4,39,4],[0.4,32,5]],"213":[[4.8,9,1],[3.1,14,2],[2.0,18,3],[0.6,29,4],[-0.6,42,5]],"259":[[2.5,22,1],[3.7,11,2],[3.7,7,3],[1.2,20,4],[-0.5,41,5]],"97":[[1.2,35,1],[0.3,36,2],[1.6,22,3],[0.3,31,4],[-0.3,38,5]],"2306":[[0.2,39,1],[1.2,28,2],[0.1,35,3],[-1.2,47,4],[-1.2,45,4]],"145":[[1.3,34,1],[-0.0,39,2],[1.3,26,3],[-0.7,42,4],[-0.7,44,4]],"245":[[0.3,38,1],[3.6,13,2],[0.2,33,3],[-1.8,51,4],[-0.5,40,5]],"2116":[[3.3,17,1],[0.2,37,2],[1.1,27,3],[1.7,17,4],[0.8,26,5]],"275":[[-2.8,53,1],[-2.9,56,2],[-0.5,43,3],[0.8,26,4],[1.9,16,5]],"264":[[-3.8,57,1],[-8.0,67,2],[-5.7,66,3],[-5.1,67,4],[-4.1,63,5]],"24":[[-1.3,45,2],[-1.6,45,2],[-2.3,51,3],[-0.4,40,4],[-1.3,47,5]],"8":[[-10.9,65,1],[-9.7,68,2],[-7.5,68,3],[-4.3,63,4],[-4.3,65,5]],"152":[[-2.6,49,1],[0.9,31,2],[-0.4,40,3],[-0.2,36,4],[0.4,31,5]],"252":[[1.7,27,1],[1.3,27,2],[2.9,9,3],[3.0,10,3],[2.2,14,4]],"221":[[7.7,4,1],[1.3,26,2],[1.9,19,3],[1.2,19,4],[1.6,20,5]],"2633":[[-1.3,46,1],[2.0,19,2],[1.6,21,3],[1.0,23,4],[1.0,25,5]],"103":[[-10.1,64,1],[-4.8,62,2],[-7.0,67,3],[-5.0,66,4],[-4.3,64,5]],"99":[[7.8,3,1],[0.2,38,2],[-0.2,38,3],[1.9,15,4],[1.1,23,5]],"254":[[1.4,31,1],[4.7,6,2],[3.7,6,3],[3.1,9,4],[3.1,8,4]],"258":[[4.1,15,1],[1.5,24,2],[-0.6,45,3],[0.7,27,4],[-0.6,43,5]],"153":[[1.9,26,1],[2.3,15,2],[0.1,34,3],[0.2,32,3],[1.8,17,4]],"130":[[-12.2,66,1],[-4.6,61,2],[-2.6,54,3],[-3.0,57,4],[-3.6,60,5]],"2132":[[9.7,2,1],[5.9,3,2],[4.0,5,3],[3.9,7,4],[2.1,15,5]],"12":[[-1.0,42,1],[-1.9,49,2],[-0.9,46,3],[-1.1,46,4],[0.3,34,5]],"57":[[4.9,8,1],[4.0,8,2],[3.2,8,3],[4.9,5,4],[2.5,10,5]],"142":[[-0.9,41,1],[1.3,25,2],[-0.5,41,3],[-0.2,35,4],[2.2,13,5]],"154":[[1.5,29,1],[3.6,12,2],[2.5,14,3],[3.3,8,4],[4.2,4,5]],"344":[[4.9,7,1],[7.6,1,2],[6.9,2,3],[5.5,4,4],[3.2,6,5]]}};
 (function(){
   var META = {}; DATA.meta.forEach(function(t){ META[t.id] = t; });
   var $ = function(id){ return document.getElementById(id); };
@@ -2510,7 +2512,7 @@ var PREVIEW = {
     document.querySelectorAll("#board th[data-k]").forEach(function(th){ th.classList.toggle("on", th.getAttribute("data-k") === k); });
     $("board").tBodies[0].innerHTML = list.map(function(t, i){
       return '<tr class="trow' + (state.picked && t.id === state.sel ? ' sel' : '') + '" data-id="' + t.id + '" tabindex="0">' +
-        '<td class="l rank">' + (i+1) + '</td><td class="l"><b>' + esc(t.name) + '</b>' + (state.mode === "proven" ? ' <span class="dim">' + esc(t.coach) + ' · ' + t.seasons + ' yr' + (t.seasons === 1 ? '' : 's') + (t.schools && t.schools.length > 1 ? ' · ' + esc(t.schools.join(", ")) : '') + '</span>' : '') + '</td>' +
+        '<td class="l rank">' + (i+1) + (function(){ if (state.mode === "proven") return ""; var mv = trendMove(t.id); return mv ? '<i class="mv ' + (mv > 0 ? 'up' : 'dn') + '">' + (mv > 0 ? '▲' : '▼') + Math.abs(mv) + '</i>' : ''; })() + '</td><td class="l"><b>' + esc(t.name) + '</b>' + (state.mode === "proven" ? ' <span class="dim">' + esc(t.coach) + ' · ' + t.seasons + ' yr' + (t.seasons === 1 ? '' : 's') + (t.schools && t.schools.length > 1 ? ' · ' + esc(t.schools.join(", ")) : '') + '</span>' : '') + '</td>' +
         (state.conf ? '' : '<td class="l conf hide-sm">' + esc(t.conf === "Independent" ? "Ind." : t.conf) + '</td>') +
         '<td class="num">' + t.w + '–' + t.l + '</td>' +
         '<td class="num dg ' + cls(t.dawg) + '">' + signed(t.dawg) + ' ' + verdict(t.dawg, state.mode === "proven" ? 0.8 : 3) + '</td>' +
@@ -2546,6 +2548,36 @@ var PREVIEW = {
   var allIds = Object.keys(META).sort(function(a,b){ return META[a].name < META[b].name ? -1 : 1; });
   $("teampick").innerHTML = allIds.map(function(id){ return '<option value="' + id + '">' + esc(META[id].name) + '</option>'; }).join("");
   $("teampick").addEventListener("change", function(){ select(this.value, false); });
+
+  // week-by-week rank this season (TREND, rebuilt each Sunday from game grades)
+  function trendMove(id){
+    if (!TREND || String(state.season) !== String(TREND.season)) return null;
+    var L = (TREND.teams[id] || []).filter(function(p){ return p[1]; });
+    if (L.length < 2) return null;
+    return L[L.length-2][1] - L[L.length-1][1];
+  }
+  function trendBlock(id){
+    if (!TREND || String(state.season) !== String(TREND.season)) return "";
+    var raw = TREND.teams[id] || [], N = 0, pts = [];
+    raw.forEach(function(p, i){ if (p[1]) pts.push({w: TREND.weeks[i], s: p[0], r: p[1]}); });
+    Object.keys(TREND.teams).forEach(function(k){ var L = TREND.teams[k]; if (L.length && L[L.length-1][1]) N++; });
+    if (pts.length < 2) return "";
+    var W = 320, H = 96, pl = 16, pr = 16, pt = 18, pb = 22, n = pts.length;
+    function X(i){ return pl + (W - pl - pr) * (n === 1 ? .5 : i / (n - 1)); }
+    function Y(r){ return pt + (H - pt - pb) * (r - 1) / Math.max(1, N - 1); }
+    var mid = Y((N + 1) / 2);
+    var path = pts.map(function(p, i){ return (i ? "L" : "M") + X(i).toFixed(1) + " " + Y(p.r).toFixed(1); }).join(" ");
+    var mv = pts[n-2].r - pts[n-1].r;
+    var head = mv > 0 ? "Up " + mv + " spot" + (mv === 1 ? "" : "s") + " this week" : mv < 0 ? "Down " + (-mv) + " spot" + (mv === -1 ? "" : "s") + " this week" : "Same spot as last week";
+    var svg = '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="Rank by week: ' + pts.map(function(p){ return "Week " + p.w + " " + p.r; }).join(", ") + '">' +
+      '<line x1="' + pl + '" x2="' + (W - pr) + '" y1="' + mid.toFixed(1) + '" y2="' + mid.toFixed(1) + '" class="tr-mid"/>' +
+      '<path d="' + path + '" class="tr-ln"/>' +
+      pts.map(function(p, i){ return '<circle cx="' + X(i).toFixed(1) + '" cy="' + Y(p.r).toFixed(1) + '" r="' + (i === n-1 ? 5 : 3.5) + '" class="' + (i === n-1 ? 'tr-now' : 'tr-pt') + '"/>' +
+        '<text x="' + X(i).toFixed(1) + '" y="' + (Y(p.r) - 8).toFixed(1) + '" class="tr-rk">' + p.r + '</text>' +
+        '<text x="' + X(i).toFixed(1) + '" y="' + (H - 4) + '" class="tr-wk">Wk ' + p.w + '</text>'; }).join("") + '</svg>';
+    return '<div class="sc-tr"><div class="sc-trh"><span>Rank by week</span><b class="' + (mv > 0 ? "pos" : mv < 0 ? "neg" : "") + '">' + head + '</b></div>' + svg +
+      '<p class="dim">Rank among ' + N + ' Power 4 teams after each week. Early weeks swing a lot; it steadies as games pile up.</p></div>';
+  }
   // plain-English summary of a team's season, with a few numbers behind it
   function scoutReport(m, s, rk, N){
     function ordn(x){ var v = x % 100, q = ["th","st","nd","rd"]; return x + (q[(v - 20) % 10] || q[v] || q[0]); }
@@ -2568,7 +2600,7 @@ var PREVIEW = {
       '<p class="sc-v">' + (verdict[0] ? '<b class="sc-tag ' + verdict[1] + '">' + verdict[0] + '.</b> ' : '') + verdict[2] + ' <span class="dim">' + s.w + '–' + s.l + ' record</span></p>' +
       '<p class="sc-key" id="sc-key" hidden>The DAWG score is the average of a team\'s game grades this season. <b>0</b> = played exactly like Vegas expected. <b class="pos">+3</b> or better = DAWG. <b class="neg">−3</b> or worse = SOFT. Each game is measured against every Power 4 performance since 2019.</p>' +
       '<ul class="sc-l">' + lines.map(function(l){ return '<li class="' + l[0] + '"><i>' + IC[l[0]] + '</i><span>' + l[1] + '</span></li>'; }).join("") + '</ul>' +
-      '<div class="sc-t"><div><span>Big games</span><b class="' + cls(s.big) + '">' + (s.nBig ? signed(s.big) : "–") + '</b><em>' + (s.nBig || 0) + ' game' + (s.nBig === 1 ? '' : 's') + '</em></div><div><span>Routine games</span><b class="' + cls(s.other) + '">' + signed(s.other) + '</b><em>' + (s.n - (s.nBig || 0)) + ' game' + (s.n - (s.nBig || 0) === 1 ? '' : 's') + '</em></div><div><span>Luck</span><b>' + signed(s.luck) + '</b><em>wins vs. its play</em></div></div></div>';
+      '<div class="sc-t"><div><span>Big games</span><b class="' + cls(s.big) + '">' + (s.nBig ? signed(s.big) : "–") + '</b><em>' + (s.nBig || 0) + ' game' + (s.nBig === 1 ? '' : 's') + '</em></div><div><span>Routine games</span><b class="' + cls(s.other) + '">' + signed(s.other) + '</b><em>' + (s.n - (s.nBig || 0)) + ' game' + (s.n - (s.nBig || 0) === 1 ? '' : 's') + '</em></div><div><span>Luck</span><b>' + signed(s.luck) + '</b><em>wins vs. its play</em></div></div>' + trendBlock(m.id) + '</div>';
   }
   function drawTeam(){
     var m = META[state.sel], s = SEASONIDX[state.season] && SEASONIDX[state.season][state.sel];
