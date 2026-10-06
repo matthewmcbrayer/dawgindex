@@ -670,6 +670,43 @@ th{font-size:15px!important}
 .pvstub b{font-weight:900;font-size:21px;line-height:1.05}.pvstub i{font-style:normal;font-weight:800;font-size:13px;color:#6b5f4c;letter-spacing:.06em;margin-bottom:6px}
 .pvk.feat .pvn{font-size:28px}.pvk.feat .pvt img{width:56px;height:56px}.pvk.feat .pvvs{margin-left:68px}.pvk.feat .pvstub{width:120px}.pvk.feat .pvstub b{font-size:26px}
 @media (max-width:640px){.pvgrid{grid-template-columns:1fr}.pvk.feat .pvn{font-size:23px}.pvk.feat .pvt img{width:46px;height:46px}.pvk.feat .pvvs{margin-left:58px}.pvk.feat .pvstub{width:96px}.pvk.feat .pvstub b{font-size:21px}.hbs{grid-template-columns:1fr 1fr}.hbs.two{grid-template-columns:1fr}.hb .hv{font-size:28px}}
+
+/* content pass */
+.uph{margin:18px 0 8px!important}.uph .dim{font-size:.7em;letter-spacing:.06em}
+.pvgrid.one{grid-template-columns:1fr;margin-top:0}
+.upbye{margin:14px 0 0;color:var(--muted)}.upbye b{font-family:var(--display);font-weight:900;text-transform:uppercase;letter-spacing:.06em;color:var(--ink);margin-right:8px}
+.csub{display:none}
+.csorts{display:flex;flex-wrap:wrap;gap:8px;margin:4px 0 14px}
+.csorts button{font-family:var(--display);font-weight:800;text-transform:uppercase;letter-spacing:.03em;font-size:14px;color:var(--ink);background:transparent;border:2px solid var(--line);border-radius:999px;padding:5px 12px;cursor:pointer}
+.csorts button[aria-pressed="true"]{background:var(--ink);color:#131210;border-color:var(--ink)}
+.lognote{display:none}
+@media (max-width:640px){
+  #coaches th:nth-child(2),#coaches td:nth-child(2),#coaches th:nth-child(3),#coaches td:nth-child(3),#coaches th:nth-child(4),#coaches td:nth-child(4),#coaches th:nth-child(5),#coaches td:nth-child(5),#coaches th:nth-child(9),#coaches td:nth-child(9),#coaches th:nth-child(10),#coaches td:nth-child(10){display:none}
+  .csub{display:block;font-size:13px;color:var(--muted);font-weight:500;margin-top:2px}
+  #coaches td,#coaches th{white-space:normal!important;padding-left:6px!important;padding-right:6px!important}
+  #log th:nth-child(n+6),#log td:nth-child(n+6){display:none}
+  .lognote{display:block;font-size:13.5px;color:var(--muted);margin:8px 0 0}
+  #tendtest th:nth-child(3),#tendtest td:nth-child(3),#tendtest th:nth-child(4),#tendtest td:nth-child(4),#tendtest th:nth-child(5),#tendtest td:nth-child(5){display:none}
+  #tendtest td,#tendtest th{white-space:normal!important}
+  .csorts button{font-size:13px;padding:4px 10px}
+}
+
+.five{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;margin:14px 0 6px}
+.five>div{background:#EFE3C6;color:#1b1712;border-radius:16px;padding:14px 16px;box-shadow:4px 4px 0 #0c0b0a;position:relative}
+.five b{font-family:var(--chunk);font-size:15px;color:#EFE3C6;background:#1b1712;border-radius:50%;width:26px;height:26px;display:grid;place-items:center}
+.five h4{font-family:var(--display);font-weight:900;font-size:20px;text-transform:uppercase;letter-spacing:.03em;margin:8px 0 4px}
+.five p{font-size:14.5px;line-height:1.35;margin:0;color:#3d352b}
+.five-then{margin:12px 0 18px!important}
+.mx{border-top:2px solid var(--line);padding:2px 0}
+.mx:last-of-type{border-bottom:2px solid var(--line)}
+.mx summary{cursor:pointer;list-style:none;font-family:var(--display);font-weight:900;font-size:19px;text-transform:uppercase;letter-spacing:.03em;padding:12px 28px 12px 0;position:relative;color:var(--ink)}
+.mx summary::-webkit-details-marker{display:none}
+.mx summary::after{content:"+";position:absolute;right:4px;top:8px;font-size:24px;color:var(--orange)}
+.mx[open] summary::after{content:"−"}
+.mx>div{padding:0 0 14px}.mx>div p{margin:0 0 8px;color:var(--muted);font-size:15.5px;line-height:1.5}
+.method{display:block!important}
+.chg{margin:8px 0 0;padding:0 0 0 18px}.chg li{color:var(--muted);margin:0 0 8px;line-height:1.45}.chg b{color:var(--ink);font-family:var(--display);font-weight:900;margin-right:6px}
+@media (max-width:640px){.five{grid-template-columns:1fr 1fr}.five>div:last-child{grid-column:1/-1}.mx summary{font-size:17px}}
 </style>
 
 <div id="htip" role="tooltip" hidden></div>
@@ -800,7 +837,7 @@ th{font-size:15px!important}
       <table id="board">
         <thead><tr>
           <th class="l rank">#</th><th class="l">Team</th><th class="l hide-sm" id="confcol">Conf</th><th data-tip="wl">W–L</th>
-          <th data-k="dawg" data-tip="dawg"><button>DAWG</button></th><th data-k="big" data-tip="big"><button>Big<span class="hide-sm"> Games</span></button></th><th data-k="other" data-tip="routine"><button>Routine</button></th><th class="c-drop" data-k="drop" data-tip="drop"><button>Big-Stage Drop</button></th><th id="lastcol" data-k="consN" data-tip="pcons" hidden><button>Consistent</button></th>
+          <th data-k="dawg" data-tip="dawg"><button>DAWG</button></th><th data-k="big" data-tip="big"><button>Big<span class="hide-sm"> Games</span></button></th><th data-k="other" data-tip="routine"><button>Routine</button></th><th class="c-drop" data-k="drop" data-tip="drop"><button>Big vs. Routine</button></th><th id="lastcol" data-k="consN" data-tip="pcons" hidden><button>Consistent</button></th>
         </tr></thead>
         <tbody></tbody>
       </table>
@@ -846,7 +883,7 @@ th{font-size:15px!important}
     <p class="note sm">Average season grade of each conference's teams · tap a conference to filter the chart below</p>
     <div class="tablewrap">
       <table id="confs">
-        <thead><tr><th class="l rank">#</th><th class="l">Conference</th><th>Teams</th><th data-tip="dawg">DAWG</th><th data-tip="big">Big Games</th><th data-tip="routine">Routine</th><th data-tip="drop">Big-Stage Drop</th><th class="l" data-tip="cquad">Dawgs · Soft</th></tr></thead>
+        <thead><tr><th class="l rank">#</th><th class="l">Conference</th><th>Teams</th><th data-tip="dawg">DAWG</th><th data-tip="big">Big Games</th><th data-tip="routine">Routine</th><th data-tip="drop">Big vs. Routine</th><th class="l" data-tip="cquad">Dawgs · Soft</th></tr></thead>
         <tbody></tbody>
       </table>
     </div>
@@ -872,6 +909,7 @@ th{font-size:15px!important}
       <div class="kv"><label class="lbl" for="teampick">Switch Team</label><select id="teampick"></select></div>
     </div>
     <div class="teamhead" id="teamstats"></div>
+    <div id="upnext"></div>
     <div class="chartbox">
       <svg id="trend" class="chart" viewBox="0 0 900 300" role="img" aria-label="Season-by-season DAWG trend"></svg>
     </div>
@@ -889,6 +927,7 @@ th{font-size:15px!important}
         <tbody></tbody>
       </table>
     </div>
+    <p class="lognote">Tap a game for the full breakdown: spread, finishing, knife twist, cash-in, answers.</p>
     <div id="teamhab"></div>
     <div class="bigwins"><h3>Biggest Wins Since 2019</h3><p class="note">Wins in big games, ranked by how big the game was. The grade shows how well they actually played.</p><div class="tablewrap"><table class="tbt" id="bigw"><thead><tr><th class="l">Game</th><th class="l hide-sm">Date</th><th data-tip="wl">Score</th><th data-tip="env">Stage</th><th data-tip="tgrade"><span class="hide-sm">Game </span>Grade</th></tr></thead><tbody id="tb-big"></tbody></table></div></div>
     <div class="tbwrap">
@@ -898,8 +937,10 @@ th{font-size:15px!important}
   </section>
 
   <section class="sec page" data-page="coaches" id="coaches-sec" aria-labelledby="coach-h">
-    <div class="sechead"><h2 id="coach-h">Coach Résumés</h2><span class="note">Every head-coaching stop since 2019, including Group of Five jobs · coaches with three or more full seasons · 2020 left out</span></div>
-    <p class="note">How each coach's teams have done against expectations, season by season. Career and At School only count full seasons (8+ games). It's a track record, not a prediction: we checked, and a coach's past numbers say nothing about how his next season will go. It also measures expectations, not wins. A coach whose teams win a lot but keep falling short of the spread, like Lincoln Riley's early Oklahoma teams, grades lower than his record.</p>
+    <div class="sechead"><h2 id="coach-h">Coaches</h2><span class="note">How each coach's teams have done against expectations since 2019</span></div>
+    <p class="note">A track record, not a prediction. It measures expectations, not wins. <button type="button" class="ib" data-more="coach-more" aria-expanded="false" aria-label="More about this table" title="More">i</button></p>
+    <div class="modenote" id="coach-more" hidden><p>    How each coach's teams have done against expectations, season by season. Career and At School only count full seasons (8+ games). It's a track record, not a prediction: we checked, and a coach's past numbers say nothing about how his next season will go. It also measures expectations, not wins. A coach whose teams win a lot but keep falling short of the spread, like Lincoln Riley's early Oklahoma teams, grades lower than his record. Every head-coaching stop since 2019 counts, including Group of Five jobs. Coaches with three or more full seasons; 2020 left out.</p></div>
+    <div class="csorts" id="csorts" role="group" aria-label="Sort coaches"><button type="button" data-cs="avg" data-cd="-1" aria-pressed="true">Best track record</button><button type="button" data-cs="avg" data-cd="1" aria-pressed="false">Falling short most</button><button type="button" data-cs="cur" data-cd="-1" aria-pressed="false">Best this season</button><button type="button" data-cs="cur" data-cd="1" aria-pressed="false">Worst this season</button></div>
     <div class="tablewrap">
       <table id="coaches">
         <thead><tr>
@@ -947,19 +988,28 @@ th{font-size:15px!important}
   </section>
   <section class="sec page" data-page="method" id="method-sec">
     <h2>How the Grade Works</h2>
+    <p class="note">Every Power 4 game since 2019, graded for both teams on five things. Tap any heading below for the full rule.</p>
+    <div class="five">
+      <div><b>1</b><h4>Beat the spread</h4><p>Final margin against Vegas's closing line. Did they beat expectations?</p></div>
+      <div><b>2</b><h4>Finishing</h4><p>Did the scoreboard match the yardage, or did drives die?</p></div>
+      <div><b>3</b><h4>Knife twist</h4><p>Once up 9+, did the lead keep growing?</p></div>
+      <div><b>4</b><h4>Cash-in</h4><p>Points on the drive right after a defensive stop.</p></div>
+      <div><b>5</b><h4>Answers</h4><p>When the other team makes it a one-score game, do they score right back?</p></div>
+    </div>
+    <p class="note five-then"><b>Then:</b> garbage time is thrown out, tougher settings raise the grade, and every team's season grade is the average of its games.</p>
     <div class="method">
-      <div><h3>Big Games</h3><p>Each game gets a stage score, the same for both teams except where noted: ranked opponent +15 (top 10 +25), ranked vs. ranked +10, rivalry +20 (traditional rivalries only, like the Iron Bowl, Red River or The Game), national TV (ABC, CBS, NBC, FOX, ESPN) +10, primetime on national TV +10 more, bowl, playoff or title game +30, neutral-site showcase +20, non-conference Power 4 matchup +10, packed stadium (90%+ of its biggest crowd, night crowds count 1.25×) +10, and an opponent that won 10+ games the season before +10. 25 or more is a big game, so it takes at least two of those. Against a team outside the Power 4, it only counts if that team is ranked or it's a bowl, playoff or title game: a night game on TV against an unranked Group of 5 or FCS team isn't a test, no matter how loud it gets (rule added Oct. 4, 2026). Contenders in big conferences play more of them, and that's intended.</p></div>
+      <details class="mx"><summary>Big Games</summary><div><p>Each game gets a stage score, the same for both teams except where noted: ranked opponent +15 (top 10 +25), ranked vs. ranked +10, rivalry +20 (traditional rivalries only, like the Iron Bowl, Red River or The Game), national TV (ABC, CBS, NBC, FOX, ESPN) +10, primetime on national TV +10 more, bowl, playoff or title game +30, neutral-site showcase +20, non-conference Power 4 matchup +10, packed stadium (90%+ of its biggest crowd, night crowds count 1.25×) +10, and an opponent that won 10+ games the season before +10. 25 or more is a big game, so it takes at least two of those. Against a team outside the Power 4, it only counts if that team is ranked or it's a bowl, playoff or title game: a night game on TV against an unranked Group of 5 or FCS team isn't a test, no matter how loud it gets. Contenders in big conferences play more of them, and that's intended.</p></div></details>
 
-      <div><h3>Garbage time is out</h3><p>Only competitive plays count. A play is garbage time when the lead before it is more than 38 in the 2nd quarter, 28 in the 3rd or 22 in the 4th. If the lead shrinks back under the line, plays count again, so a collapse still shows up.</p></div>
-      <div><h3>vs spread</h3><p>Did they beat the expectation set before kickoff? Home field is already priced in.</p><span class="formula">margin (no garbage time) + closing line</span></div>
-      <div><h3>Finishing</h3><p>Did the scoreboard match the yardage? Out-gaining a team and losing is a finishing gap.</p><span class="formula">margin − the margin those yards usually produce</span></div>
-      <div><h3>Knife twist</h3><p>Once up 9 or more, does the lead grow? Net points from that moment until garbage time, compared with what's normal for that matchup.</p></div>
-      <div><h3>Cash-in</h3><p>Points on the very next drive after the defense gets a stop or a takeaway, compared with what's normal for a team favored by that much. The national average is about 45% of those drives scoring.</p></div>
-      <div><h3>Answers</h3><p>When the opponent scores to make it a one-score game, how often does the next drive score?</p></div>
-      <div><h3>The game grade</h3><p>Each part is scored by how rare it is compared with every Power 4 game since 2019, so there's no ceiling: a 30-point cover counts for more than a 14-point one. Answers rests on a handful of drives, so it counts half as much as the other four. A game needs at least three of the five parts. The average is scaled so about two-thirds of games land between −5 and +5.</p><span class="formula">average of the five parts × setting</span></div>
-      <div><h3>Setting</h3><p>Bigger stages magnify the grade, good or bad: road +10%, night +5%, full road stadium (90%+, night crowds count 1.25×) +10%, ranked opponent +10% (top 10 +20%), postseason +10%. A good grade against a Group of 5 team shrinks 15%, against an FCS team 40%; a bad grade against them is never softened.</p></div>
-      <div><h3>Season DAWG and big-stage drop</h3><p>A season's DAWG is the average of its game grades, with 0 as an average Power 4 team. +3 or better is Dawg, −3 or worse is Soft. Big-game and routine averages leave out the setting boost, so a team doesn't look like it rose just because the stage was bigger. With only a game or two, those averages are nudged toward the team's overall number so one game can't put a team at the edge of the chart.</p><span class="formula">big-stage drop = big-game grade − routine grade</span></div>
-      <div><h3>Luck</h3><p>Wins minus the wins a team's play earned. Each game's win chance comes from the play-by-play with garbage time removed: how often plays succeeded, explosive plays, penalties, turnovers forced and given away, and field-goal tries judged by distance. The parts that are mostly chance (who falls on a fumble, interception swings, missed kicks, return touchdowns) are left out, so they show up as luck. +2 means two more wins than the play earned. Lucky teams tend to come back to earth.</p></div>
+      <details class="mx"><summary>Garbage time is out</summary><div><p>Only competitive plays count. A play is garbage time when the lead before it is more than 38 in the 2nd quarter, 28 in the 3rd or 22 in the 4th. If the lead shrinks back under the line, plays count again, so a collapse still shows up.</p></div></details>
+      <details class="mx"><summary>vs spread</summary><div><p>Did they beat the expectation set before kickoff? Home field is already priced in.</p><span class="formula">margin (no garbage time) + closing line</span></div></details>
+      <details class="mx"><summary>Finishing</summary><div><p>Did the scoreboard match the yardage? Out-gaining a team and losing is a finishing gap.</p><span class="formula">margin − the margin those yards usually produce</span></div></details>
+      <details class="mx"><summary>Knife twist</summary><div><p>Once up 9 or more, does the lead grow? Net points from that moment until garbage time, compared with what's normal for that matchup.</p></div></details>
+      <details class="mx"><summary>Cash-in</summary><div><p>Points on the very next drive after the defense gets a stop or a takeaway, compared with what's normal for a team favored by that much. The national average is about 45% of those drives scoring.</p></div></details>
+      <details class="mx"><summary>Answers</summary><div><p>When the opponent scores to make it a one-score game, how often does the next drive score?</p></div></details>
+      <details class="mx"><summary>The game grade</summary><div><p>Each part is scored by how rare it is compared with every Power 4 game since 2019, so there's no ceiling: a 30-point cover counts for more than a 14-point one. Answers rests on a handful of drives, so it counts half as much as the other four. A game needs at least three of the five parts. The scale: 0 is a game played exactly like Vegas expected; +5 is better than 84% of every Power 4 performance since 2019 (about 5,900 of them), and +10 is better than 96%.</p><span class="formula">average of the five parts × setting</span></div></details>
+      <details class="mx"><summary>Setting</summary><div><p>Bigger stages magnify the grade, good or bad: road +10%, night +5%, full road stadium (90%+, night crowds count 1.25×) +10%, ranked opponent +10% (top 10 +20%), postseason +10%. A good grade against a Group of 5 team shrinks 15%, against an FCS team 40%; a bad grade against them is never softened.</p></div></details>
+      <details class="mx"><summary>Season DAWG and big games vs. routine</summary><div><p>A season's DAWG is the average of its game grades, with 0 as an average Power 4 team. +3 or better is Dawg, −3 or worse is Soft. Big-game and routine averages leave out the setting boost, so a team doesn't look like it rose just because the stage was bigger. With only a game or two, those averages are nudged toward the team's overall number so one game can't put a team at the edge of the chart.</p><span class="formula">big games vs. routine = big-game grade − routine grade</span></div></details>
+      <details class="mx"><summary>Luck</summary><div><p>Wins minus the wins a team's play earned. Each game's win chance comes from the play-by-play with garbage time removed: how often plays succeeded, explosive plays, penalties, turnovers forced and given away, and field-goal tries judged by distance. The parts that are mostly chance (who falls on a fumble, interception swings, missed kicks, return touchdowns) are left out, so they show up as luck. +2 means two more wins than the play earned. Lucky teams tend to come back to earth.</p></div></details>
     </div>
     <p class="note">Data: ESPN box scores, drive logs and closing lines (ESPN BET and DraftKings) for every game involving a current Power 4 team or Notre Dame since 2019, including bowls and playoffs. Coaches from Wikipedia's list of current FBS coaches. Attendance is missing for some games; those use a 75% default.</p>
     <p class="note"><b>Check the work:</b> <a href="dawg-index-games.csv" download style="color:var(--accent)">download every graded game</a> (CSV, one row per team per game, with each part of the grade). It's updated every Sunday with the site.</p>
@@ -977,6 +1027,20 @@ th{font-size:15px!important}
     <p class="note">Carryover is how closely a habit one year matches the next: 0 is not at all, 1 is perfectly. For reference, how good a team is carries over at about 0.5. "Predicts" is whether the habit told us anything about next season's results.</p>
     <div class="tablewrap"><table id="tendtest"><thead><tr><th class="l">Trait</th><th>Carryover 2021–24</th><th>Checked on 2025</th><th>Same coach</th><th class="l">Predicts next season</th><th class="l">Verdict</th></tr></thead><tbody></tbody></table></div>
     </section>
+  <section class="sec page" data-page="method" id="faq-sec" aria-labelledby="faq-h">
+    <h2 id="faq-h">Questions You'll Ask</h2>
+    <details class="mx"><summary>Why isn't my unbeaten team ranked higher?</summary><div><p>The rank isn't about wins. It's how a team has played compared with what was expected of it. A 5–0 team that was supposed to win big and keeps winning close can rank below a 3–1 team that keeps beating expectations. Records still matter for the playoff. This measures something different: who's showing up.</p></div></details>
+    <details class="mx"><summary>Is this a betting tool?</summary><div><p>No. The grade describes games after they happen. We tested it: a team's season grade barely carries into the next season, and picking teams by their grades went about 50/50 against the spread, the same as a coin flip. The details are in "Does It Hold Up?" above.</p></div></details>
+    <details class="mx"><summary>Why does a win sometimes grade negative?</summary><div><p>Because the grade compares against expectations. A team favored by 20 that wins by 10 didn't do what it was supposed to, and the grade says so. Same the other way: a 7-point loss as a 20-point underdog can grade well.</p></div></details>
+    <details class="mx"><summary>Does the formula change during the season?</summary><div><p>No. It's locked for the season, except for fixes to definitions, which are listed below with dates so nothing changes quietly.</p></div></details>
+  </section>
+  <section class="sec page" data-page="method" id="changes-sec" aria-labelledby="chg-h">
+    <h2 id="chg-h">Changes</h2>
+    <ul class="chg">
+      <li><b>Oct. 4, 2026</b> A game against a team outside the Power 4 only counts as a big game if that team is ranked or it's a bowl, playoff or title game. A night game on TV against an unranked Group of 5 or FCS team isn't a test.</li>
+      <li><b>Oct. 2026</b> The rivalry list was trimmed to traditional rivalries only (like the Iron Bowl, Red River and The Game).</li>
+    </ul>
+  </section>
 <!--TIP-->  <footer class="sitefoot">
     <div><b>Free, no ads, updated every Sunday.</b> If the DAWG Index made you smarter or settled an argument, you can chip in for the data and the hours.</div>
     <a class="tipbtn" href="https://buymeacoffee.com/dawgindex" target="_blank" rel="noopener">☕ Buy me a coffee</a>
@@ -1363,6 +1427,781 @@ var PREVIEW = {
     "tier": "mid"
    }
   }
+ ],
+ "all": [
+  {
+   "tier": "",
+   "why": [
+    "Primetime on ESPN"
+   ],
+   "watch": "Louisville is 2\u20133 but has played like a 4\u20131 team.",
+   "neutral": false,
+   "when": {
+    "day": "Fri",
+    "date": "Oct 9",
+    "time": "6 PM CT",
+    "net": "ESPN"
+   },
+   "away": {
+    "id": "52",
+    "name": "Florida State",
+    "ap": null,
+    "rank": 22,
+    "tier": "up"
+   },
+   "home": {
+    "id": "97",
+    "name": "Louisville",
+    "ap": null,
+    "rank": 37,
+    "tier": "mid"
+   }
+  },
+  {
+   "tier": "",
+   "why": [
+    "No. 20 Iowa on the road"
+   ],
+   "watch": "Iowa is 4\u20131 but has played like a 3\u20132 team.",
+   "neutral": false,
+   "when": {
+    "day": "Fri",
+    "date": "Oct 9",
+    "time": "8 PM CT",
+    "net": ""
+   },
+   "away": {
+    "id": "2294",
+    "name": "Iowa",
+    "ap": 20,
+    "rank": 27,
+    "tier": "mid"
+   },
+   "home": {
+    "id": "264",
+    "name": "Washington",
+    "ap": null,
+    "rank": 63,
+    "tier": "dn"
+   }
+  },
+  {
+   "tier": "Huge",
+   "why": [
+    "No. 8 BYU",
+    "Primetime on ESPN"
+   ],
+   "watch": "BYU is 4\u20130 but has played like a 3\u20131 team.",
+   "neutral": false,
+   "when": {
+    "day": "Fri",
+    "date": "Oct 9",
+    "time": "9:15 PM CT",
+    "net": "ESPN"
+   },
+   "away": {
+    "id": "66",
+    "name": "Iowa State",
+    "ap": null,
+    "rank": 28,
+    "tier": "mid"
+   },
+   "home": {
+    "id": "252",
+    "name": "BYU",
+    "ap": 8,
+    "rank": 13,
+    "tier": "up"
+   }
+  },
+  {
+   "tier": "Huge",
+   "why": [
+    "No. 7 Indiana on the road"
+   ],
+   "watch": "Indiana is ranked No. 7 but 35th of 68 at living up to expectations.",
+   "neutral": false,
+   "when": {
+    "day": "Sat",
+    "date": "Oct 10",
+    "time": "11 AM CT",
+    "net": "Fox"
+   },
+   "away": {
+    "id": "84",
+    "name": "Indiana",
+    "ap": 7,
+    "rank": 35,
+    "tier": "mid"
+   },
+   "home": {
+    "id": "158",
+    "name": "Nebraska",
+    "ap": null,
+    "rank": 9,
+    "tier": "up"
+   }
+  },
+  {
+   "tier": "Big",
+   "why": [
+    "No. 14 Missouri"
+   ],
+   "watch": "Missouri has lived up to expectations better so far: 14th of 68 vs. 40th.",
+   "neutral": false,
+   "when": {
+    "day": "Sat",
+    "date": "Oct 10",
+    "time": "11 AM CT",
+    "net": "ABC"
+   },
+   "away": {
+    "id": "245",
+    "name": "Texas A&M",
+    "ap": null,
+    "rank": 40,
+    "tier": "mid"
+   },
+   "home": {
+    "id": "142",
+    "name": "Missouri",
+    "ap": 14,
+    "rank": 14,
+    "tier": "up"
+   }
+  },
+  {
+   "tier": "",
+   "why": [
+    "No. 18 Oklahoma State"
+   ],
+   "watch": "UCF has lived up to expectations better so far: 26th of 68 vs. 38th.",
+   "neutral": false,
+   "when": {
+    "day": "Sat",
+    "date": "Oct 10",
+    "time": "11 AM CT",
+    "net": "ESPN2"
+   },
+   "away": {
+    "id": "2116",
+    "name": "UCF",
+    "ap": null,
+    "rank": 26,
+    "tier": "mid"
+   },
+   "home": {
+    "id": "197",
+    "name": "Oklahoma State",
+    "ap": 18,
+    "rank": 38,
+    "tier": "mid"
+   }
+  },
+  {
+   "tier": "Big",
+   "why": [
+    "No. 25 Pittsburgh"
+   ],
+   "watch": "North Carolina has lived up to expectations better so far: 18th of 68 vs. 20th.",
+   "neutral": false,
+   "when": {
+    "day": "Sat",
+    "date": "Oct 10",
+    "time": "11 AM CT",
+    "net": "ESPN"
+   },
+   "away": {
+    "id": "153",
+    "name": "North Carolina",
+    "ap": null,
+    "rank": 18,
+    "tier": "up"
+   },
+   "home": {
+    "id": "221",
+    "name": "Pittsburgh",
+    "ap": 25,
+    "rank": 20,
+    "tier": "up"
+   }
+  },
+  {
+   "tier": "",
+   "why": [],
+   "watch": "West Virginia has lived up to expectations better so far: 21st of 68 vs. 32nd.",
+   "neutral": false,
+   "when": {
+    "day": "Sat",
+    "date": "Oct 10",
+    "time": "11 AM CT",
+    "net": "TNT"
+   },
+   "away": {
+    "id": "12",
+    "name": "Arizona",
+    "ap": null,
+    "rank": 32,
+    "tier": "mid"
+   },
+   "home": {
+    "id": "277",
+    "name": "West Virginia",
+    "ap": null,
+    "rank": 21,
+    "tier": "up"
+   }
+  },
+  {
+   "tier": "",
+   "why": [],
+   "watch": "Wake Forest isn't ranked, but is 4th of 68 at living up to expectations.",
+   "neutral": false,
+   "when": {
+    "day": "Sat",
+    "date": "Oct 10",
+    "time": "11 AM CT",
+    "net": "CW"
+   },
+   "away": {
+    "id": "154",
+    "name": "Wake Forest",
+    "ap": null,
+    "rank": 4,
+    "tier": "up"
+   },
+   "home": {
+    "id": "152",
+    "name": "NC State",
+    "ap": null,
+    "rank": 34,
+    "tier": "mid"
+   }
+  },
+  {
+   "tier": "",
+   "why": [],
+   "watch": "Northwestern isn't ranked, but is 1st of 68 at living up to expectations.",
+   "neutral": false,
+   "when": {
+    "day": "Sat",
+    "date": "Oct 10",
+    "time": "11:30 AM CT",
+    "net": "BTN"
+   },
+   "away": {
+    "id": "2050",
+    "name": "Ball State",
+    "ap": null,
+    "rank": null,
+    "tier": ""
+   },
+   "home": {
+    "id": "77",
+    "name": "Northwestern",
+    "ap": null,
+    "rank": 1,
+    "tier": "up"
+   }
+  },
+  {
+   "tier": "",
+   "why": [
+    "No. 16 Florida"
+   ],
+   "watch": "Florida has lived up to expectations better so far: 11th of 68 vs. 66th.",
+   "neutral": false,
+   "when": {
+    "day": "Sat",
+    "date": "Oct 10",
+    "time": "11:45 AM CT",
+    "net": "SEC Network"
+   },
+   "away": {
+    "id": "2579",
+    "name": "South Carolina",
+    "ap": null,
+    "rank": 66,
+    "tier": "dn"
+   },
+   "home": {
+    "id": "57",
+    "name": "Florida",
+    "ap": 16,
+    "rank": 11,
+    "tier": "up"
+   }
+  },
+  {
+   "tier": "Massive",
+   "why": [
+    "Rivalry game",
+    "Neutral site in Dallas"
+   ],
+   "watch": "Texas is 4\u20130 but has played like a 3\u20131 team.",
+   "neutral": true,
+   "when": {
+    "day": "Sat",
+    "date": "Oct 10",
+    "time": "2:30 PM CT",
+    "net": "ABC"
+   },
+   "away": {
+    "id": "251",
+    "name": "Texas",
+    "ap": 1,
+    "rank": 29,
+    "tier": "mid"
+   },
+   "home": {
+    "id": "201",
+    "name": "Oklahoma",
+    "ap": null,
+    "rank": 68,
+    "tier": "dn"
+   }
+  },
+  {
+   "tier": "Huge",
+   "why": [
+    "No. 3 Notre Dame",
+    "Non-conference"
+   ],
+   "watch": "Notre Dame has lived up to expectations better so far: 17th of 68 vs. 47th.",
+   "neutral": false,
+   "when": {
+    "day": "Sat",
+    "date": "Oct 10",
+    "time": "2:30 PM CT",
+    "net": "NBC"
+   },
+   "away": {
+    "id": "24",
+    "name": "Stanford",
+    "ap": null,
+    "rank": 47,
+    "tier": "dn"
+   },
+   "home": {
+    "id": "87",
+    "name": "Notre Dame",
+    "ap": 3,
+    "rank": 17,
+    "tier": "up"
+   }
+  },
+  {
+   "tier": "Huge",
+   "why": [
+    "No. 9 Ole Miss on the road"
+   ],
+   "watch": "Ole Miss is ranked No. 9 but 44th of 68 at living up to expectations.",
+   "neutral": false,
+   "when": {
+    "day": "Sat",
+    "date": "Oct 10",
+    "time": "2:30 PM CT",
+    "net": "ESPN"
+   },
+   "away": {
+    "id": "145",
+    "name": "Ole Miss",
+    "ap": 9,
+    "rank": 44,
+    "tier": "mid"
+   },
+   "home": {
+    "id": "238",
+    "name": "Vanderbilt",
+    "ap": null,
+    "rank": 51,
+    "tier": "dn"
+   }
+  },
+  {
+   "tier": "Huge",
+   "why": [
+    "Both teams ranked"
+   ],
+   "watch": "UCLA has lived up to expectations better so far: 3rd of 68 vs. 46th.",
+   "neutral": false,
+   "when": {
+    "day": "Sat",
+    "date": "Oct 10",
+    "time": "2:30 PM CT",
+    "net": "CBS"
+   },
+   "away": {
+    "id": "26",
+    "name": "UCLA",
+    "ap": 21,
+    "rank": 3,
+    "tier": "up"
+   },
+   "home": {
+    "id": "2483",
+    "name": "Oregon",
+    "ap": 13,
+    "rank": 46,
+    "tier": "dn"
+   }
+  },
+  {
+   "tier": "Big",
+   "why": [
+    "No. 22 Houston on the road"
+   ],
+   "watch": "Houston has lived up to expectations better so far: 24th of 68 vs. 45th.",
+   "neutral": false,
+   "when": {
+    "day": "Sat",
+    "date": "Oct 10",
+    "time": "2:30 PM CT",
+    "net": "Fox"
+   },
+   "away": {
+    "id": "248",
+    "name": "Houston",
+    "ap": 22,
+    "rank": 24,
+    "tier": "mid"
+   },
+   "home": {
+    "id": "2306",
+    "name": "Kansas State",
+    "ap": null,
+    "rank": 45,
+    "tier": "mid"
+   }
+  },
+  {
+   "tier": "",
+   "why": [],
+   "watch": "Georgia Tech is 1\u20133 but has played like a 2\u20132 team.",
+   "neutral": false,
+   "when": {
+    "day": "Sat",
+    "date": "Oct 10",
+    "time": "2:30 PM CT",
+    "net": "ESPN2"
+   },
+   "away": {
+    "id": "150",
+    "name": "Duke",
+    "ap": null,
+    "rank": 19,
+    "tier": "up"
+   },
+   "home": {
+    "id": "59",
+    "name": "Georgia Tech",
+    "ap": null,
+    "rank": 58,
+    "tier": "dn"
+   }
+  },
+  {
+   "tier": "",
+   "why": [],
+   "watch": "Virginia Tech has lived up to expectations better so far: 41st of 68 vs. 59th.",
+   "neutral": false,
+   "when": {
+    "day": "Sat",
+    "date": "Oct 10",
+    "time": "2:30 PM CT",
+    "net": "ACC Network"
+   },
+   "away": {
+    "id": "259",
+    "name": "Virginia Tech",
+    "ap": null,
+    "rank": 41,
+    "tier": "mid"
+   },
+   "home": {
+    "id": "25",
+    "name": "California",
+    "ap": null,
+    "rank": 59,
+    "tier": "dn"
+   }
+  },
+  {
+   "tier": "",
+   "why": [],
+   "watch": "Illinois is 2\u20133 but has played like a 3\u20132 team.",
+   "neutral": false,
+   "when": {
+    "day": "Sat",
+    "date": "Oct 10",
+    "time": "2:30 PM CT",
+    "net": "FS1"
+   },
+   "away": {
+    "id": "356",
+    "name": "Illinois",
+    "ap": null,
+    "rank": 49,
+    "tier": "dn"
+   },
+   "home": {
+    "id": "127",
+    "name": "Michigan State",
+    "ap": null,
+    "rank": 39,
+    "tier": "mid"
+   }
+  },
+  {
+   "tier": "Big",
+   "why": [
+    "No. 5 Ohio State"
+   ],
+   "watch": "Ohio State is 4\u20131 but has played like a 5\u20130 team.",
+   "neutral": false,
+   "when": {
+    "day": "Sat",
+    "date": "Oct 10",
+    "time": "3:15 PM CT",
+    "net": "BTN"
+   },
+   "away": {
+    "id": "120",
+    "name": "Maryland",
+    "ap": null,
+    "rank": 54,
+    "tier": "dn"
+   },
+   "home": {
+    "id": "194",
+    "name": "Ohio State",
+    "ap": 5,
+    "rank": 33,
+    "tier": "mid"
+   }
+  },
+  {
+   "tier": "",
+   "why": [
+    "No. 15 Tennessee on the road"
+   ],
+   "watch": "Tennessee has lived up to expectations better so far: 25th of 68 vs. 65th.",
+   "neutral": false,
+   "when": {
+    "day": "Sat",
+    "date": "Oct 10",
+    "time": "3:15 PM CT",
+    "net": "SEC Network"
+   },
+   "away": {
+    "id": "2633",
+    "name": "Tennessee",
+    "ap": 15,
+    "rank": 25,
+    "tier": "mid"
+   },
+   "home": {
+    "id": "8",
+    "name": "Arkansas",
+    "ap": null,
+    "rank": 65,
+    "tier": "dn"
+   }
+  },
+  {
+   "tier": "Huge",
+   "why": [
+    "No. 10 LSU on the road",
+    "Primetime on ESPN"
+   ],
+   "watch": "Kentucky isn't ranked, but is 10th of 68 at living up to expectations.",
+   "neutral": false,
+   "when": {
+    "day": "Sat",
+    "date": "Oct 10",
+    "time": "6 PM CT",
+    "net": "ESPN"
+   },
+   "away": {
+    "id": "99",
+    "name": "LSU",
+    "ap": 10,
+    "rank": 23,
+    "tier": "mid"
+   },
+   "home": {
+    "id": "96",
+    "name": "Kentucky",
+    "ap": null,
+    "rank": 10,
+    "tier": "up"
+   }
+  },
+  {
+   "tier": "Massive",
+   "why": [
+    "Two top-10 teams",
+    "Primetime on ABC"
+   ],
+   "watch": "Alabama has lived up to expectations better so far: 2nd of 68 vs. 5th.",
+   "neutral": false,
+   "when": {
+    "day": "Sat",
+    "date": "Oct 10",
+    "time": "6:30 PM CT",
+    "net": "ABC"
+   },
+   "away": {
+    "id": "61",
+    "name": "Georgia",
+    "ap": 2,
+    "rank": 5,
+    "tier": "up"
+   },
+   "home": {
+    "id": "333",
+    "name": "Alabama",
+    "ap": 6,
+    "rank": 2,
+    "tier": "up"
+   }
+  },
+  {
+   "tier": "Big",
+   "why": [
+    "No. 19 USC on the road",
+    "Primetime on NBC"
+   ],
+   "watch": "USC is 5\u20131 but has played like a 4\u20132 team.",
+   "neutral": false,
+   "when": {
+    "day": "Sat",
+    "date": "Oct 10",
+    "time": "6:30 PM CT",
+    "net": "NBC"
+   },
+   "away": {
+    "id": "30",
+    "name": "USC",
+    "ap": 19,
+    "rank": 30,
+    "tier": "mid"
+   },
+   "home": {
+    "id": "213",
+    "name": "Penn State",
+    "ap": null,
+    "rank": 42,
+    "tier": "mid"
+   }
+  },
+  {
+   "tier": "",
+   "why": [],
+   "watch": "Virginia has lived up to expectations better so far: 43rd of 68 vs. 53rd.",
+   "neutral": false,
+   "when": {
+    "day": "Sat",
+    "date": "Oct 10",
+    "time": "6:30 PM CT",
+    "net": "ACC Network"
+   },
+   "away": {
+    "id": "183",
+    "name": "Syracuse",
+    "ap": null,
+    "rank": 53,
+    "tier": "dn"
+   },
+   "home": {
+    "id": "258",
+    "name": "Virginia",
+    "ap": null,
+    "rank": 43,
+    "tier": "mid"
+   }
+  },
+  {
+   "tier": "",
+   "why": [],
+   "watch": "Purdue has lived up to expectations better so far: 31st of 68 vs. 36th.",
+   "neutral": false,
+   "when": {
+    "day": "Sat",
+    "date": "Oct 10",
+    "time": "7 PM CT",
+    "net": "BTN"
+   },
+   "away": {
+    "id": "135",
+    "name": "Minnesota",
+    "ap": null,
+    "rank": 36,
+    "tier": "mid"
+   },
+   "home": {
+    "id": "2509",
+    "name": "Purdue",
+    "ap": null,
+    "rank": 31,
+    "tier": "mid"
+   }
+  },
+  {
+   "tier": "",
+   "why": [],
+   "watch": "",
+   "neutral": false,
+   "when": {
+    "day": "Sat",
+    "date": "Oct 10",
+    "time": "8:30 PM CT",
+    "net": "FS1"
+   },
+   "away": {
+    "id": "62",
+    "name": "Hawai'i",
+    "ap": null,
+    "rank": null,
+    "tier": ""
+   },
+   "home": {
+    "id": "9",
+    "name": "Arizona State",
+    "ap": null,
+    "rank": 61,
+    "tier": "dn"
+   }
+  },
+  {
+   "tier": "Huge",
+   "why": [
+    "No. 12 Utah",
+    "Primetime on ESPN"
+   ],
+   "watch": "Kansas is 2\u20132 but has played like a 3\u20131 team.",
+   "neutral": false,
+   "when": {
+    "day": "Sat",
+    "date": "Oct 10",
+    "time": "9:15 PM CT",
+    "net": "ESPN"
+   },
+   "away": {
+    "id": "2305",
+    "name": "Kansas",
+    "ap": null,
+    "rank": 56,
+    "tier": "dn"
+   },
+   "home": {
+    "id": "254",
+    "name": "Utah",
+    "ap": 12,
+    "rank": 8,
+    "tier": "up"
+   }
+  }
  ]
 };
 (function(){
@@ -1674,7 +2513,7 @@ var PREVIEW = {
       ["DAWG " + state.season, signed(s.dawg), "#" + rk + " of " + T.length, s.dawg],
       ["Big Games", signed(s.big), s.nBig + " game" + (s.nBig === 1 ? "" : "s"), s.big],
       ["Routine", signed(s.other), (s.n - s.nBig) + " game" + (s.n - s.nBig === 1 ? "" : "s"), s.other],
-      ["Big-stage drop", signed(s.drop), s.drop === null ? "Needs both kinds" : s.drop <= -3 ? "Shrinks" : s.drop >= 3 ? "Rises" : "No clear split", s.drop],
+      ["Big games vs. routine", signed(s.drop), s.drop === null ? "Needs both kinds of games" : s.drop <= -3 ? "Shrinks in big games" : s.drop >= 3 ? "Rises in big games" : "About the same", s.drop],
       ["Luck", signed(s.luck), (s.luck === null || s.luck === undefined ? "" : Math.abs(s.luck) < 0.5 ? "Record matches its play" : "Record is about " + Math.abs(s.luck).toFixed(1).replace(/\.0$/, "") + " win" + (Math.abs(s.luck).toFixed(1) === "1.0" ? " " : "s ") + (s.luck > 0 ? "better" : "worse") + " than its play") + " · " + s.cW + "–" + s.cL + " in one-score games", null],
       ["Record · ATS", s.w + "–" + s.l + " · " + s.atsW + "–" + s.atsL, "Straight up · vs spread", null]
     ];
@@ -1706,7 +2545,8 @@ var PREVIEW = {
     drawTrend();
   }
   function drawTrend(){
-    var tv = $("trend"), m = META[state.sel], TW = 900, TH = 300, L = 52, R = 20, Tp = 20, B = 40;
+    var tv = $("trend"), m = META[state.sel], TW = 900, TH = 300, L = 52, R = 20, Tp = 20, B = 40, MOBT = window.matchMedia("(max-width:640px)").matches;
+    if (MOBT){ TW = 400; TH = 280; L = 30; R = 8; Tp = 26; B = 34; } tv.setAttribute("viewBox", "0 0 " + TW + " " + TH);
     var tvals = []; seasons.forEach(function(yr){ var s = SEASONIDX[yr] && SEASONIDX[yr][m.id]; if (s){ if (s.dawg !== null) tvals.push(s.dawg); if (s.big !== null) tvals.push(s.big); } });
     var tr = niceRange(tvals, 3), hi2 = tr[0], lo2 = -hi2, st2 = tr[1];
     while (tv.firstChild) tv.removeChild(tv.firstChild);
@@ -1717,11 +2557,11 @@ var PREVIEW = {
     seasons.forEach(function(yr, i){ if (yr >= m.since) el("rect", {x: L + i*colW, y: Tp, width: colW, height: TH - Tp - B, fill:"var(--era)"}, tv); });
     for (var v = lo2; v <= hi2 + 1e-9; v += st2){
       el("line", {x1:L, x2:TW-R, y1:y(v), y2:y(v), stroke: v === 0 ? "var(--line)" : "var(--grid)", "stroke-width": v === 0 ? 1.5 : 1}, tv);
-      txt(tv, L - 8, y(v) + 4, signed(v,0), {"text-anchor":"end"});
+      txt(tv, L - 6, y(v) + 4, signed(v,0), {"text-anchor":"end", "font-size": MOBT ? 13 : 12});
     }
     seasons.forEach(function(yr, i){
       var cur = String(yr) === state.season;
-      txt(tv, x(i), TH - 14, String(yr) + (yr == 2020 ? "*" : ""), {"text-anchor":"middle", "font-weight": cur ? 600 : 400, fill: cur ? "var(--ink)" : "var(--muted)"});
+      txt(tv, x(i), TH - 12, (MOBT ? "'" + String(yr).slice(2) : String(yr)) + (yr == 2020 ? "*" : ""), {"text-anchor":"middle", "font-weight": cur ? 600 : 400, fill: cur ? "var(--ink)" : "var(--muted)", "font-size": MOBT ? 14 : 12});
       if (cur) el("rect", {x: L + i*colW + 2, y: Tp, width: colW - 4, height: TH - Tp - B, fill:"none", stroke:"var(--faint)", "stroke-dasharray":"3 3"}, tv);
     });
     function series(key, color, width){
@@ -1735,8 +2575,8 @@ var PREVIEW = {
     }
     series("big", "var(--accent)", 2);
     var main = series("dawg", "var(--ink)", 2.5);
-    main.forEach(function(p){ if (p) txt(tv, p[0], p[1] - 10, signed(p[2]), {"text-anchor":"middle", "font-size":12, fill:"var(--ink)", "font-weight":600, "paint-order":"stroke", stroke:"var(--surface)", "stroke-width":3}); });
-    txt(tv, L, 14, "Season DAWG · * 2020 played in empty or limited stadiums", {"font-size":12});
+    main.forEach(function(p){ if (p) txt(tv, p[0], p[1] - 10, signed(p[2]), {"text-anchor":"middle", "font-size": MOBT ? 14 : 12, fill:"var(--ink)", "font-weight":600, "paint-order":"stroke", stroke:"var(--surface)", "stroke-width":3}); });
+    txt(tv, L, 14, MOBT ? "Season DAWG by year · *2020 empty stadiums" : "Season DAWG · * 2020 played in empty or limited stadiums", {"font-size": MOBT ? 13 : 12});
   }
 
   // ---------- coaches table ----------
@@ -1752,11 +2592,13 @@ var PREVIEW = {
       spark += '<polyline points="' + pts.map(function(p){ return p.join(","); }).join(" ") + '" fill="none" stroke="var(--ink)" stroke-width="1.5"/>';
       var lp = pts[pts.length-1]; if (lp) spark += '<circle cx="' + lp[0] + '" cy="' + lp[1] + '" r="3" fill="' + ((r.ys.length && r.ys[r.ys.length-1][1] >= (r.avg || 0)) ? "var(--good)" : "var(--bad)") + '"/>';
       spark += '</svg>';
-      return '<tr class="trow' + (state.picked && r.id === state.sel ? ' sel' : '') + '" data-id="' + r.id + '" tabindex="0"><td class="l"><b>' + esc(r.coach) + '</b></td><td class="l">' + esc(r.name) + (r.schools && r.schools.length > 1 ? ' <span class="dim">via ' + esc(r.schools.filter(function(a){ return a !== r.abbr; }).join(", ")) + '</span>' : '') + '</td><td class="num">' + r.since + '</td><td class="num">' + r.n + '</td><td class="num">' + r.w + '–' + r.l + '</td>' +
+      return '<tr class="trow' + (state.picked && r.id === state.sel ? ' sel' : '') + '" data-id="' + r.id + '" tabindex="0"><td class="l"><b>' + esc(r.coach) + '</b><span class="csub">' + esc(r.name) + (r.cur !== null ? ' · ' + r.curW + '–' + r.curL : '') + '</span></td><td class="l">' + esc(r.name) + (r.schools && r.schools.length > 1 ? ' <span class="dim">via ' + esc(r.schools.filter(function(a){ return a !== r.abbr; }).join(", ")) + '</span>' : '') + '</td><td class="num">' + r.since + '</td><td class="num">' + r.n + '</td><td class="num">' + r.w + '–' + r.l + '</td>' +
         '<td class="num ' + cls(r.avg) + '">' + signed(r.avg) + '</td><td class="num ' + cls(r.school) + '">' + (r.school === null ? '<span class="dim">first year</span>' : signed(r.school) + ' <span class="dim">(' + r.nSchool + ')</span>') + '</td>' +
         '<td class="num ' + cls(r.cur) + '">' + (r.cur === null ? "–" : signed(r.cur) + ' <span class="dim">' + r.curW + '–' + r.curL + '</span>') + '</td><td class="num ' + cls(r.drop) + '">' + signed(r.drop) + '</td><td class="l">' + spark + '</td></tr>';
     }).join("");
   }
+  $("csorts").addEventListener("click", function(e){ var b = e.target.closest("button[data-cs]"); if (!b) return; state.csort = b.getAttribute("data-cs"); state.cdir = +b.getAttribute("data-cd");
+    $("csorts").querySelectorAll("button").forEach(function(x){ x.setAttribute("aria-pressed", String(x === b)); }); drawCoaches(); });
   document.querySelector("#coaches thead").addEventListener("click", function(e){ var th = e.target.closest("th[data-k]"); if (!th) return; var k = th.getAttribute("data-k"); if (state.csort === k) state.cdir *= -1; else { state.csort = k; state.cdir = -1; } drawCoaches(); });
   $("coaches").tBodies[0].addEventListener("click", function(e){ var tr = e.target.closest("tr[data-id]"); if (tr) select(tr.getAttribute("data-id"), true); });
 
@@ -1910,7 +2752,7 @@ var PREVIEW = {
       big: ["Big games", "Game grade (before the setting adjustment) in games with a stage score of 25 or more: ranked opponents, rivalries, national and primetime TV, bowls and title games, neutral-site showcases, packed stadiums, marquee opponents. Pulled slightly toward the season average when a team has played only a few.", "average core grade in big games"],
       routine: ["Routine", "DAWG grade in every game that wasn't a big game."],
       ccyrs: ["Winning years", "Seasons (2019 on, no 2020 or the current season) in which the conference outscored the other Power 4 conferences in nonconference and postseason games."],
-      drop: ["Big-stage drop", "How much better or worse a team plays when the game gets big. Negative means it shrinks; positive means it rises.", "Big games − Routine"],
+      drop: ["Big games vs. routine", "How much better or worse a team plays when the game gets big. Negative means it shrinks; positive means it rises.", "Big games − Routine"],
       pdrank: ["DAWG rank", "Where the team ranks among all Power 4 teams at living up to expectations this season (season DAWG grade)."],
       paprank: ["AP rank", "This week's AP Top 25. NR means not ranked."],
       cquad: ["Dawgs · Soft", "How many of the conference's teams sit in the chart's Dawgs box (above expectations in both big and routine games) and Soft box (below in both). Teams without a big game yet aren't on the chart."],
@@ -2055,20 +2897,30 @@ var PREVIEW = {
     }
     $("teamhab").innerHTML = h;
   }
-  var _drawTeam0 = drawTeam; drawTeam = function(){ _drawTeam0(); try { drawHabits(); } catch(e){} };
+  function drawUpNext(){
+    var id = state.sel, el = $("upnext"); if (!el) return;
+    if (!PREVIEW || !PREVIEW.all || String(state.season) !== String(PREVIEW.season)){ el.innerHTML = ""; return; }
+    var g = null; PREVIEW.all.forEach(function(x){ if (!g && (x.away.id === id || x.home.id === id)) g = x; });
+    if (!g){ el.innerHTML = '<p class="upbye"><b>Up next</b> Bye in Week ' + PREVIEW.week + '.</p>'; return; }
+    el.innerHTML = '<h3 class="uph">Up next <span class="dim">Week ' + PREVIEW.week + '</span></h3><div class="pvgrid one">' + pvTicket(g, false) + '</div>';
+  }
+  var _drawTeam0 = drawTeam; drawTeam = function(){ _drawTeam0(); try { drawHabits(); } catch(e){} try { drawUpNext(); } catch(e){} };
   // ---------- This Week: the week's biggest games as tickets ----------
   (function(){
+    function ordn(x){ var v = x % 100, q = ["th","st","nd","rd"]; return x + (q[(v - 20) % 10] || q[v] || q[0]); }
+    var ordn = function(x){ var v = x % 100, q = ["th","st","nd","rd"]; return x + (q[(v - 20) % 10] || q[v] || q[0]); };
+    window.__pvside = function(t){ return '<div class="pvt"><img src="logos/' + t.id + '.png" alt="" loading="lazy" onerror="this.style.visibility=\'hidden\'"><div><a class="pvn" href="/' + (META[t.id] ? slugOf(t.id) + '/' : '#') + '">' + esc(t.name) + '</a><div class="pvs"><b>' + (t.ap ? "AP No. " + t.ap : "Unranked") + '</b> · ' + (t.rank ? '<b class="' + t.tier + '">' + ordn(t.rank) + ' of ' + PREVIEW.nt + '</b> at living up to expectations' : 'not graded') + '</div></div></div>'; }
     if (!PREVIEW || !PREVIEW.games || !PREVIEW.games.length){ $("pvgrid").innerHTML = '<p class="note">The next slate shows up here once the schedule is set.</p>'; return; }
     $("pv-note").textContent = "Week " + PREVIEW.week + " · " + PREVIEW.season;
-    function ordn(x){ var v = x % 100, q = ["th","st","nd","rd"]; return x + (q[(v - 20) % 10] || q[v] || q[0]); }
-    function side(t){ return '<div class="pvt"><img src="logos/' + t.id + '.png" alt="" loading="lazy" onerror="this.style.visibility=\'hidden\'"><div><a class="pvn" href="/' + (META[t.id] ? slugOf(t.id) + '/' : '#') + '">' + esc(t.name) + '</a><div class="pvs"><b>' + (t.ap ? "AP No. " + t.ap : "Unranked") + '</b> · ' + (t.rank ? '<b class="' + t.tier + '">' + ordn(t.rank) + ' of ' + PREVIEW.nt + '</b> at living up to expectations' : 'not graded') + '</div></div></div>'; }
-    $("pvgrid").innerHTML = PREVIEW.games.slice(0, 10).map(function(g, i){
-      return '<div class="pvk' + (i === 0 ? ' feat' : '') + '"><div class="pvm"><div class="pvh"><span class="pvsec">Section: ' + esc(g.tier) + '</span><span class="pvwhy">' + esc(g.why.join(". ")) + (g.why.length ? "." : "") + '</span></div>' +
+    $("pvgrid").innerHTML = PREVIEW.games.slice(0, 10).map(function(g, i){ return pvTicket(g, i === 0); }).join("");
+  })();
+  function pvTicket(g, feat){
+    var side = window.__pvside;
+      return '<div class="pvk' + (feat ? ' feat' : '') + '"><div class="pvm"><div class="pvh">' + (g.tier ? '<span class="pvsec">Section: ' + esc(g.tier) + '</span>' : '') + '<span class="pvwhy">' + esc(g.why.join(". ")) + (g.why.length ? "." : "") + '</span></div>' +
         side(g.away) + '<div class="pvvs">' + (g.neutral ? "vs" : "at") + '</div>' + side(g.home) +
         (g.watch ? '<div class="pvw"><span>Watch</span>' + esc(g.watch) + '</div>' : '') +
-        '</div><div class="pvstub"><b>' + esc(g.when.day) + '</b><i>' + esc(g.when.date) + '</i><b>' + esc(g.when.time.replace(" CT", "")) + '</b><i>CT · ' + esc(g.when.net) + '</i></div></div>';
-    }).join("");
-  })();
+        '</div><div class="pvstub"><b>' + esc(g.when.day) + '</b><i>' + esc(g.when.date) + '</i><b>' + esc(g.when.time.replace(" CT", "")) + '</b><i>CT' + (g.when.net ? ' · ' + esc(g.when.net) : '') + '</i></div></div>';
+  }
   function drawTend(){
     var L = TEND.teams.filter(function(r){ return !tstate.conf || r.conf === tstate.conf; });
     L.sort(function(a,b){ return tstate.dir * (a[tstate.k] - b[tstate.k]); });
