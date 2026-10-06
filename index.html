@@ -731,6 +731,15 @@ th{font-size:15px!important}
 #cmpt td.cv.win{color:var(--good)}#cmpt td.cv .dim{font-family:var(--body);font-weight:500;font-size:12.5px}
 .cmplink{display:inline-block;margin-top:10px;color:var(--orange);font-family:var(--display);font-weight:900;font-size:16px;letter-spacing:.04em;text-transform:uppercase;text-decoration:none}
 @media (max-width:640px){.sc-h{font-size:17px}.sc-t b{font-size:24px}#cmpt td,#cmpt th{padding-left:6px!important;padding-right:6px!important}#cmpt td.cv{font-size:15px}}
+
+.sc-top{display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+.sc-big{display:flex;flex-direction:column;align-items:flex-start;background:#131210;border:2.5px solid var(--edge,#F4EAD2);border-radius:16px;padding:10px 16px 12px;box-shadow:4px 4px 0 var(--red,#E5463A);position:relative}
+.sc-big .sc-lbl{font-family:var(--display);font-weight:900;font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.sc-big b{font-family:var(--display);font-weight:900;font-size:58px;line-height:1;color:var(--ink)}.sc-big b.pos{color:var(--good)}.sc-big b.neg{color:var(--bad)}
+.sc-big .vstk{position:absolute;right:-12px;top:-12px;transform:rotate(6deg);font-size:14px!important}
+.sc-rank{display:flex;flex-direction:column;flex:1 1 150px}.sc-rank b{font-family:var(--display);font-weight:900;font-size:40px;line-height:1;color:var(--ink)}
+.sc-rank span{font-size:15px;color:var(--muted);line-height:1.3;margin-top:4px}
+.sc-v{margin:14px 0 0;font-size:16px;font-weight:700;color:var(--ink);line-height:1.4}.sc-v .dim{display:block;font-weight:500;font-size:13.5px;margin-top:3px}
 </style>
 
 <div id="htip" role="tooltip" hidden></div>
@@ -1128,7 +1137,7 @@ var PREVIEW = {
     "Two top-10 teams",
     "Primetime on ABC"
    ],
-   "watch": "Alabama has lived up to expectations better so far: 2nd of 68 vs. 5th.",
+   "watch": "Alabama has lived up to expectations better so far: 2nd of 68 Power 4 teams vs. 5th.",
    "neutral": false,
    "when": {
     "day": "Sat",
@@ -1190,7 +1199,7 @@ var PREVIEW = {
     "No. 3 Notre Dame",
     "Non-conference"
    ],
-   "watch": "Notre Dame has lived up to expectations better so far: 17th of 68 vs. 47th.",
+   "watch": "Notre Dame has lived up to expectations better so far: 17th of 68 Power 4 teams vs. 47th.",
    "neutral": false,
    "when": {
     "day": "Sat",
@@ -1220,7 +1229,7 @@ var PREVIEW = {
    "why": [
     "No. 7 Indiana on the road"
    ],
-   "watch": "Indiana is ranked No. 7 but 35th of 68 at living up to expectations.",
+   "watch": "Indiana is ranked No. 7 but 35th of 68 Power 4 teams at living up to expectations.",
    "neutral": false,
    "when": {
     "day": "Sat",
@@ -1250,7 +1259,7 @@ var PREVIEW = {
    "why": [
     "No. 9 Ole Miss on the road"
    ],
-   "watch": "Ole Miss is ranked No. 9 but 44th of 68 at living up to expectations.",
+   "watch": "Ole Miss is ranked No. 9 but 44th of 68 Power 4 teams at living up to expectations.",
    "neutral": false,
    "when": {
     "day": "Sat",
@@ -1280,7 +1289,7 @@ var PREVIEW = {
    "why": [
     "Both teams ranked"
    ],
-   "watch": "UCLA has lived up to expectations better so far: 3rd of 68 vs. 46th.",
+   "watch": "UCLA has lived up to expectations better so far: 3rd of 68 Power 4 teams vs. 46th.",
    "neutral": false,
    "when": {
     "day": "Sat",
@@ -1311,7 +1320,7 @@ var PREVIEW = {
     "No. 10 LSU on the road",
     "Primetime on ESPN"
    ],
-   "watch": "Kentucky isn't ranked, but is 10th of 68 at living up to expectations.",
+   "watch": "Kentucky isn't ranked, but is 10th of 68 Power 4 teams at living up to expectations.",
    "neutral": false,
    "when": {
     "day": "Sat",
@@ -1372,7 +1381,7 @@ var PREVIEW = {
    "why": [
     "No. 22 Houston on the road"
    ],
-   "watch": "Houston has lived up to expectations better so far: 24th of 68 vs. 45th.",
+   "watch": "Houston has lived up to expectations better so far: 24th of 68 Power 4 teams vs. 45th.",
    "neutral": false,
    "when": {
     "day": "Sat",
@@ -1549,7 +1558,7 @@ var PREVIEW = {
    "why": [
     "No. 7 Indiana on the road"
    ],
-   "watch": "Indiana is ranked No. 7 but 35th of 68 at living up to expectations.",
+   "watch": "Indiana is ranked No. 7 but 35th of 68 Power 4 teams at living up to expectations.",
    "neutral": false,
    "when": {
     "day": "Sat",
@@ -1577,7 +1586,7 @@ var PREVIEW = {
    "why": [
     "No. 14 Missouri"
    ],
-   "watch": "Missouri has lived up to expectations better so far: 14th of 68 vs. 40th.",
+   "watch": "Missouri has lived up to expectations better so far: 14th of 68 Power 4 teams vs. 40th.",
    "neutral": false,
    "when": {
     "day": "Sat",
@@ -1605,7 +1614,7 @@ var PREVIEW = {
    "why": [
     "No. 18 Oklahoma State"
    ],
-   "watch": "UCF has lived up to expectations better so far: 26th of 68 vs. 38th.",
+   "watch": "UCF has lived up to expectations better so far: 26th of 68 Power 4 teams vs. 38th.",
    "neutral": false,
    "when": {
     "day": "Sat",
@@ -1633,7 +1642,7 @@ var PREVIEW = {
    "why": [
     "No. 25 Pittsburgh"
    ],
-   "watch": "North Carolina has lived up to expectations better so far: 18th of 68 vs. 20th.",
+   "watch": "North Carolina has lived up to expectations better so far: 18th of 68 Power 4 teams vs. 20th.",
    "neutral": false,
    "when": {
     "day": "Sat",
@@ -1659,7 +1668,7 @@ var PREVIEW = {
   {
    "tier": "",
    "why": [],
-   "watch": "West Virginia has lived up to expectations better so far: 21st of 68 vs. 32nd.",
+   "watch": "West Virginia has lived up to expectations better so far: 21st of 68 Power 4 teams vs. 32nd.",
    "neutral": false,
    "when": {
     "day": "Sat",
@@ -1685,7 +1694,7 @@ var PREVIEW = {
   {
    "tier": "",
    "why": [],
-   "watch": "Wake Forest isn't ranked, but is 4th of 68 at living up to expectations.",
+   "watch": "Wake Forest isn't ranked, but is 4th of 68 Power 4 teams at living up to expectations.",
    "neutral": false,
    "when": {
     "day": "Sat",
@@ -1711,7 +1720,7 @@ var PREVIEW = {
   {
    "tier": "",
    "why": [],
-   "watch": "Northwestern isn't ranked, but is 1st of 68 at living up to expectations.",
+   "watch": "Northwestern isn't ranked, but is 1st of 68 Power 4 teams at living up to expectations.",
    "neutral": false,
    "when": {
     "day": "Sat",
@@ -1739,7 +1748,7 @@ var PREVIEW = {
    "why": [
     "No. 16 Florida"
    ],
-   "watch": "Florida has lived up to expectations better so far: 11th of 68 vs. 66th.",
+   "watch": "Florida has lived up to expectations better so far: 11th of 68 Power 4 teams vs. 66th.",
    "neutral": false,
    "when": {
     "day": "Sat",
@@ -1797,7 +1806,7 @@ var PREVIEW = {
     "No. 3 Notre Dame",
     "Non-conference"
    ],
-   "watch": "Notre Dame has lived up to expectations better so far: 17th of 68 vs. 47th.",
+   "watch": "Notre Dame has lived up to expectations better so far: 17th of 68 Power 4 teams vs. 47th.",
    "neutral": false,
    "when": {
     "day": "Sat",
@@ -1825,7 +1834,7 @@ var PREVIEW = {
    "why": [
     "No. 9 Ole Miss on the road"
    ],
-   "watch": "Ole Miss is ranked No. 9 but 44th of 68 at living up to expectations.",
+   "watch": "Ole Miss is ranked No. 9 but 44th of 68 Power 4 teams at living up to expectations.",
    "neutral": false,
    "when": {
     "day": "Sat",
@@ -1853,7 +1862,7 @@ var PREVIEW = {
    "why": [
     "Both teams ranked"
    ],
-   "watch": "UCLA has lived up to expectations better so far: 3rd of 68 vs. 46th.",
+   "watch": "UCLA has lived up to expectations better so far: 3rd of 68 Power 4 teams vs. 46th.",
    "neutral": false,
    "when": {
     "day": "Sat",
@@ -1881,7 +1890,7 @@ var PREVIEW = {
    "why": [
     "No. 22 Houston on the road"
    ],
-   "watch": "Houston has lived up to expectations better so far: 24th of 68 vs. 45th.",
+   "watch": "Houston has lived up to expectations better so far: 24th of 68 Power 4 teams vs. 45th.",
    "neutral": false,
    "when": {
     "day": "Sat",
@@ -1933,7 +1942,7 @@ var PREVIEW = {
   {
    "tier": "",
    "why": [],
-   "watch": "Virginia Tech has lived up to expectations better so far: 41st of 68 vs. 59th.",
+   "watch": "Virginia Tech has lived up to expectations better so far: 41st of 68 Power 4 teams vs. 59th.",
    "neutral": false,
    "when": {
     "day": "Sat",
@@ -2015,7 +2024,7 @@ var PREVIEW = {
    "why": [
     "No. 15 Tennessee on the road"
    ],
-   "watch": "Tennessee has lived up to expectations better so far: 25th of 68 vs. 65th.",
+   "watch": "Tennessee has lived up to expectations better so far: 25th of 68 Power 4 teams vs. 65th.",
    "neutral": false,
    "when": {
     "day": "Sat",
@@ -2044,7 +2053,7 @@ var PREVIEW = {
     "No. 10 LSU on the road",
     "Primetime on ESPN"
    ],
-   "watch": "Kentucky isn't ranked, but is 10th of 68 at living up to expectations.",
+   "watch": "Kentucky isn't ranked, but is 10th of 68 Power 4 teams at living up to expectations.",
    "neutral": false,
    "when": {
     "day": "Sat",
@@ -2073,7 +2082,7 @@ var PREVIEW = {
     "Two top-10 teams",
     "Primetime on ABC"
    ],
-   "watch": "Alabama has lived up to expectations better so far: 2nd of 68 vs. 5th.",
+   "watch": "Alabama has lived up to expectations better so far: 2nd of 68 Power 4 teams vs. 5th.",
    "neutral": false,
    "when": {
     "day": "Sat",
@@ -2128,7 +2137,7 @@ var PREVIEW = {
   {
    "tier": "",
    "why": [],
-   "watch": "Virginia has lived up to expectations better so far: 43rd of 68 vs. 53rd.",
+   "watch": "Virginia has lived up to expectations better so far: 43rd of 68 Power 4 teams vs. 53rd.",
    "neutral": false,
    "when": {
     "day": "Sat",
@@ -2154,7 +2163,7 @@ var PREVIEW = {
   {
    "tier": "",
    "why": [],
-   "watch": "Purdue has lived up to expectations better so far: 31st of 68 vs. 36th.",
+   "watch": "Purdue has lived up to expectations better so far: 31st of 68 Power 4 teams vs. 36th.",
    "neutral": false,
    "when": {
     "day": "Sat",
@@ -2512,7 +2521,6 @@ var PREVIEW = {
   // plain-English summary of a team's season, with a few numbers behind it
   function scoutReport(m, s, rk, N){
     function ordn(x){ var v = x % 100, q = ["th","st","nd","rd"]; return x + (q[(v - 20) % 10] || q[v] || q[0]); }
-    var tag = s.dawg >= 3 ? ' <span class="vstk vg">DAWG</span>' : s.dawg <= -3 ? ' <span class="vstk vs">SOFT</span>' : "";
     var lines = [];
     if (s.drop === null || s.drop === undefined){ if (!s.nBig) lines.push(["dot", "No big games yet this season."]); }
     else if (s.drop >= 3) lines.push(["up", "<b>Rises in big games.</b> " + signed(s.big) + " in big games vs. " + signed(s.other) + " in routine ones."]);
@@ -2525,9 +2533,12 @@ var PREVIEW = {
     var ats = s.atsW - s.atsL;
     if (s.atsW + s.atsL) lines.push([ats >= 2 ? "up" : ats <= -2 ? "dn" : "eq", "<b>" + s.atsW + "–" + s.atsL + " against the spread.</b>" + (ats >= 2 ? " Beating Vegas more often than not." : ats <= -2 ? " Falling short of Vegas more often than not." : "")]);
     var IC = {up:"▲", dn:"▼", eq:"=", warn:"!", good:"+", dot:"·"};
-    return '<div class="scout"><p class="sc-h"><b>' + esc(m.name) + ' is ' + ordn(rk) + ' of ' + N + '</b> at living up to expectations' + tag + '<span class="sc-rec">' + s.w + '–' + s.l + ' · season grade <b class="' + cls(s.dawg) + '">' + signed(s.dawg) + '</b></span></p>' +
+    var verdict = s.dawg >= 3 ? ["DAWG", "vg", "Showing up: well above expectations."] : s.dawg <= -3 ? ["SOFT", "vs", "Not showing up: well below expectations."] : s.dawg > 0 ? ["", "", "A little better than expected."] : s.dawg < 0 ? ["", "", "A little worse than expected."] : ["", "", "Right at expectations."];
+    return '<div class="scout"><div class="sc-top"><div class="sc-big"><span class="sc-lbl">' + state.season + ' DAWG score</span><b class="' + cls(s.dawg) + '">' + signed(s.dawg) + '</b>' + (verdict[0] ? '<span class="vstk ' + verdict[1] + '">' + verdict[0] + '</span>' : '') + '</div>' +
+      '<div class="sc-rank"><b>' + ordn(rk) + '</b><span>of ' + N + ' Power 4 teams at living up to expectations</span></div></div>' +
+      '<p class="sc-v">' + verdict[2] + ' <span class="dim">' + s.w + '–' + s.l + ' record · 0 = played like Vegas expected · +3 or better = DAWG · −3 or worse = SOFT</span></p>' +
       '<ul class="sc-l">' + lines.map(function(l){ return '<li class="' + l[0] + '"><i>' + IC[l[0]] + '</i><span>' + l[1] + '</span></li>'; }).join("") + '</ul>' +
-      '<div class="sc-t"><div><span>Season</span><b class="' + cls(s.dawg) + '">' + signed(s.dawg) + '</b><em>#' + rk + ' of ' + N + '</em></div><div><span>Big vs. routine</span><b class="' + cls(s.drop) + '">' + signed(s.drop) + '</b><em>' + (s.nBig || 0) + ' big · ' + (s.n - (s.nBig || 0)) + ' routine</em></div><div><span>Luck</span><b>' + signed(s.luck) + '</b><em>wins vs. play</em></div></div></div>';
+      '<div class="sc-t"><div><span>Big games</span><b class="' + cls(s.big) + '">' + (s.nBig ? signed(s.big) : "–") + '</b><em>' + (s.nBig || 0) + ' game' + (s.nBig === 1 ? '' : 's') + '</em></div><div><span>Routine games</span><b class="' + cls(s.other) + '">' + signed(s.other) + '</b><em>' + (s.n - (s.nBig || 0)) + ' game' + (s.n - (s.nBig || 0) === 1 ? '' : 's') + '</em></div><div><span>Luck</span><b>' + signed(s.luck) + '</b><em>wins vs. its play</em></div></div></div>';
   }
   function drawTeam(){
     var m = META[state.sel], s = SEASONIDX[state.season] && SEASONIDX[state.season][state.sel];
@@ -2560,7 +2571,7 @@ var PREVIEW = {
     var T = seasonTeams(state.season).sort(function(a,b){ return (b.dawg === null ? -99 : b.dawg) - (a.dawg === null ? -99 : a.dawg); });
     var rk = T.findIndex(function(t){ return t.id === m.id; }) + 1;
     var items = [
-      ["DAWG " + state.season, signed(s.dawg), "#" + rk + " of " + T.length, s.dawg],
+      ["DAWG " + state.season, signed(s.dawg), "#" + rk + " of " + T.length + " Power 4", s.dawg],
       ["Big Games", signed(s.big), s.nBig + " game" + (s.nBig === 1 ? "" : "s"), s.big],
       ["Routine", signed(s.other), (s.n - s.nBig) + " game" + (s.n - s.nBig === 1 ? "" : "s"), s.other],
       ["Big games vs. routine", signed(s.drop), s.drop === null ? "Needs both kinds of games" : s.drop <= -3 ? "Shrinks in big games" : s.drop >= 3 ? "Rises in big games" : "About the same", s.drop],
@@ -2931,11 +2942,11 @@ var PREVIEW = {
       var rp = rk("pen", true), rg = rk("leadEpa", false), r4 = rk("go4", false), rs = rk("leadPassAdj", true), rpp = rk("neuPass", false);
       var tone = function(r){ return r <= n / 3 ? "pos" : r > n * 2 / 3 ? "neg" : ""; };
       h += '<h3 class="hbh">Habits <span class="dim">' + LATEST + ' projection</span></h3><p class="note sm">Things a team does that tend to stick from year to year. Early in the season they lean on last year.</p><div class="hbs">' +
-        card("Penalties per game", T.pen.toFixed(1), tone(rp), ordn(rp) + " fewest of " + n, "The stickiest habit we track. Fewer is better.") +
-        card("Foot on the gas", signed(T.leadEpa - TAVG.leadEpa, 2), tone(rg), ordn(rg) + " of " + n, "How well it keeps playing once it's up 9+ in the second half. Above zero keeps attacking.") +
-        card("Goes for it", Math.round(T.go4 * 100) + "%", "", ordn(r4) + " most aggressive of " + n, "How often it goes for it on 4th and 1–3 between the 30s.") +
-        card("Sits on a lead", signed(T.leadPassAdj * 100, 0) + " pts", "", ordn(rs) + " most run-heavy of " + n, "How much its pass rate drops with a lead. Bigger drop = runs the clock.") +
-        card("Pass-first", Math.round(T.neuPass * 100) + "%", "", ordn(rpp) + " most pass-heavy of " + n, "Early-down pass rate in close games. Style, not grit.") + '</div>';
+        card("Penalties per game", T.pen.toFixed(1), tone(rp), ordn(rp) + " fewest of " + n + " Power 4 teams", "The stickiest habit we track. Fewer is better.") +
+        card("Foot on the gas", signed(T.leadEpa - TAVG.leadEpa, 2), tone(rg), ordn(rg) + " of " + n + " Power 4 teams", "How well it keeps playing once it's up 9+ in the second half. Above zero keeps attacking.") +
+        card("Goes for it", Math.round(T.go4 * 100) + "%", "", ordn(r4) + " most aggressive of " + n + " Power 4 teams", "How often it goes for it on 4th and 1–3 between the 30s.") +
+        card("Sits on a lead", signed(T.leadPassAdj * 100, 0) + " pts", "", ordn(rs) + " most run-heavy of " + n + " Power 4 teams", "How much its pass rate drops with a lead. Bigger drop = runs the clock.") +
+        card("Pass-first", Math.round(T.neuPass * 100) + "%", "", ordn(rpp) + " most pass-heavy of " + n + " Power 4 teams", "Early-down pass rate in close games. Style, not grit.") + '</div>';
     }
     if (K){
       var blownAll = K.ledAll ? K.lostAll / K.ledAll : null, cash = K.cashN ? K.cashScores / K.cashN : null;
@@ -2960,7 +2971,7 @@ var PREVIEW = {
   (function(){
     function ordn(x){ var v = x % 100, q = ["th","st","nd","rd"]; return x + (q[(v - 20) % 10] || q[v] || q[0]); }
     var ordn = function(x){ var v = x % 100, q = ["th","st","nd","rd"]; return x + (q[(v - 20) % 10] || q[v] || q[0]); };
-    window.__pvside = function(t){ return '<div class="pvt"><img src="logos/' + t.id + '.png" alt="" loading="lazy" onerror="this.style.visibility=\'hidden\'"><div><a class="pvn" href="/' + (META[t.id] ? slugOf(t.id) + '/' : '#') + '">' + esc(t.name) + '</a><div class="pvs"><b>' + (t.ap ? "AP No. " + t.ap : "Unranked") + '</b> · ' + (t.rank ? '<b class="' + t.tier + '">' + ordn(t.rank) + ' of ' + PREVIEW.nt + '</b> at living up to expectations' : 'not graded') + '</div></div></div>'; }
+    window.__pvside = function(t){ return '<div class="pvt"><img src="logos/' + t.id + '.png" alt="" loading="lazy" onerror="this.style.visibility=\'hidden\'"><div><a class="pvn" href="/' + (META[t.id] ? slugOf(t.id) + '/' : '#') + '">' + esc(t.name) + '</a><div class="pvs"><b>' + (t.ap ? "AP No. " + t.ap : "Unranked") + '</b> · ' + (t.rank ? '<b class="' + t.tier + '">' + ordn(t.rank) + ' of ' + PREVIEW.nt + ' Power 4 teams</b> at living up to expectations' : 'not graded') + '</div></div></div>'; }
     if (!PREVIEW || !PREVIEW.games || !PREVIEW.games.length){ $("pvgrid").innerHTML = '<p class="note">The next slate shows up here once the schedule is set.</p>'; return; }
     $("pv-note").textContent = "Week " + PREVIEW.week + " · " + PREVIEW.season;
     $("pvgrid").innerHTML = PREVIEW.games.slice(0, 10).map(function(g, i){ return pvTicket(g, i === 0); }).join("");
@@ -2987,7 +2998,7 @@ var PREVIEW = {
     var rows = [
       ["AP poll", function(id){ return AP[id] ? "No. " + AP[id] : "Unranked"; }, function(id){ return AP[id] || 99; }, "lo"],
       ["Record", function(id){ var x = S(id); return x.w + "–" + x.l; }, null, null],
-      ["Living up to expectations", function(id){ return RK[id] ? ordn(RK[id]) + " of " + G.length : "–"; }, function(id){ return RK[id] || 99; }, "lo"],
+      ["Living up to expectations", function(id){ return RK[id] ? ordn(RK[id]) + " of " + G.length + " Power 4" : "–"; }, function(id){ return RK[id] || 99; }, "lo"],
       ["Season grade", function(id){ return signed(S(id).dawg); }, function(id){ return S(id).dawg; }, "hi"],
       ["Big games", function(id){ var x = S(id); return x.nBig ? signed(x.big) + ' <span class="dim">(' + x.nBig + ')</span>' : '<span class="dim">none yet</span>'; }, function(id){ return S(id).nBig ? S(id).big : null; }, "hi"],
       ["Routine games", function(id){ return signed(S(id).other); }, function(id){ return S(id).other; }, "hi"],
@@ -3426,7 +3437,7 @@ var PREVIEW = {
       var s = DATA.ts[Y][id], m = META[id], line = "", last = "";
       if (s && s.dawg !== null && s.dawg !== undefined){
         var tag = s.dawg >= 3 ? " · <b class=\"pos\">DAWG</b>" : s.dawg <= -3 ? " · <b class=\"neg\">SOFT</b>" : "";
-        line = "<b>" + ord(RK[id]) + " of " + graded.length + "</b> at living up to expectations · season <b class=\"" + (s.dawg > 0 ? "pos" : s.dawg < 0 ? "neg" : "") + "\">" + signed(s.dawg) + "</b>" + tag + " · " + s.w + "–" + s.l;
+        line = "<b>" + ord(RK[id]) + " of " + graded.length + " Power 4 teams</b> at living up to expectations · season <b class=\"" + (s.dawg > 0 ? "pos" : s.dawg < 0 ? "neg" : "") + "\">" + signed(s.dawg) + "</b>" + tag + " · " + s.w + "–" + s.l;
         var g = (s.games || []).slice(-1)[0];
         if (g) last = "<br>Last game: " + (g.pf > g.pa ? "W" : "L") + " " + g.pf + "–" + g.pa + " " + (g.site === "away" ? "at " : "vs ") + esc(g.oppName) + (g.dawg !== null && g.dawg !== undefined ? " · <b class=\"" + (g.dawg > 0 ? "pos" : "neg") + "\">" + signed(g.dawg) + "</b>" : "");
       } else line = "No graded games yet this season.";
@@ -3482,7 +3493,7 @@ var PREVIEW = {
     function set(open){ $("what-sec").classList.toggle("gone", !open); $("pitch").hidden = open; }
     set(!seen);
     var g = WEEK && WEEK.gap, ordn = function(n){ var v = n % 100, x = ["th","st","nd","rd"]; return n + (x[(v - 20) % 10] || x[v] || x[0]); };
-    if (g && META[g.id]){ $("what-ex").innerHTML = "<b>Example</b>" + esc(META[g.id].name) + " is No. " + g.ap + " in the AP poll, but " + ordn(g.drank) + " of 68 at living up to expectations."; $("what-ex").hidden = false; }
+    if (g && META[g.id]){ $("what-ex").innerHTML = "<b>Example</b>" + esc(META[g.id].name) + " is No. " + g.ap + " in the AP poll, but " + ordn(g.drank) + " of 68 Power 4 teams at living up to expectations."; $("what-ex").hidden = false; }
     $("what-x").addEventListener("click", function(){ set(false); try { localStorage.setItem("dawg-what-seen", "1"); } catch(e){} });
     $("what-open").addEventListener("click", function(){ set(true); $("what-sec").scrollIntoView({block:"start", behavior:"smooth"}); });
     // a reader who scrolls well past it has read it; don't make them dismiss it next time
@@ -3498,7 +3509,7 @@ var PREVIEW = {
     function gtile(lbl, g, cls){ return '<div tabindex="0" data-gid="' + g.id + '" data-t="' + g.t + '" data-y="' + g.y + '"><span class="lbl">' + lbl + '</span><span class="big ' + cls + '">' + signed(g.grade) + '</span><span class="t">' + esc(g.team) + '</span><span class="s">' + (g.site === "away" ? "at " : "vs ") + (g.rk ? "No. " + g.rk + " " : "") + esc(g.opp) + " · " + (g.pf > g.pa ? "W " : "L ") + g.pf + "–" + g.pa + " · #" + g.srank + " of the season</span></div>"; }
     var h = gtile("Best game", W.best, "pos") + gtile("Worst game", W.worst, "neg");
     if (W.collapse){ var c = W.collapse; h += '<div tabindex="0" data-id="' + c.tid + '"><span class="lbl">Biggest collapse</span><span class="big neg">' + c.at[0] + "–" + c.at[1] + '</span><span class="t">' + esc(c.team) + '</span><span class="s">led ' + (c.site === "away" ? "at " : "vs ") + esc(c.opp) + ", lost " + c.pf + "–" + c.pa + "</span></div>"; }
-    if (W.gap){ var p = W.gap; h += '<div tabindex="0" data-id="' + p.id + '"><span class="lbl">Biggest poll disparity</span><span class="pc"><span><b>#' + p.ap + '</b>AP Poll</span><span><b class="neg">#' + p.drank + '</b>DAWG Index</span></span><span class="t">' + esc(p.name) + '</span><span class="s">' + ord(p.ap) + " in the AP poll, " + ord(p.drank) + " of " + W.n + " at living up to expectations</span></div>"; }
+    if (W.gap){ var p = W.gap; h += '<div tabindex="0" data-id="' + p.id + '"><span class="lbl">Biggest poll disparity</span><span class="pc"><span><b>#' + p.ap + '</b>AP Poll</span><span><b class="neg">#' + p.drank + '</b>DAWG Index</span></span><span class="t">' + esc(p.name) + '</span><span class="s">' + ord(p.ap) + " in the AP poll, " + ord(p.drank) + " of " + W.n + " Power 4 teams at living up to expectations</span></div>"; }
     el.innerHTML = h;
   }
   function drawPoll(){
