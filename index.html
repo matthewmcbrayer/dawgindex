@@ -707,6 +707,30 @@ th{font-size:15px!important}
 .method{display:block!important}
 .chg{margin:8px 0 0;padding:0 0 0 18px}.chg li{color:var(--muted);margin:0 0 8px;line-height:1.45}.chg b{color:var(--ink);font-family:var(--display);font-weight:900;margin-right:6px}
 @media (max-width:640px){.five{grid-template-columns:1fr 1fr}.five>div:last-child{grid-column:1/-1}.mx summary{font-size:17px}}
+
+/* scouting report */
+.scout{width:100%;background:#1d1b18;border:2px solid var(--line);border-radius:18px;padding:16px 18px}
+.sc-h{font-size:19px;line-height:1.35;margin:0;color:var(--ink)}.sc-h b{font-weight:800}
+.sc-h .vstk{font-size:13px!important;vertical-align:3px;margin-left:6px}
+.sc-rec{display:block;font-size:15px;color:var(--muted);margin-top:4px}.sc-rec b{font-family:var(--display);font-weight:900;font-size:17px}
+.sc-l{list-style:none;margin:14px 0 0;padding:0;display:grid;gap:10px}
+.sc-l li{display:grid;grid-template-columns:26px 1fr;gap:10px;font-size:15.5px;line-height:1.4;color:var(--muted)}.sc-l li b{color:var(--ink)}
+.sc-l i{font-style:normal;width:24px;height:24px;border-radius:50%;display:grid;place-items:center;font-size:12px;font-weight:900;background:var(--line);color:var(--ink);margin-top:1px}
+.sc-l li.up i,.sc-l li.good i{background:#1E7046;color:#fff}.sc-l li.dn i{background:#C22E25;color:#fff}.sc-l li.warn i{background:#E2711D;color:#131210}
+.sc-t{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:16px;border-top:1.5px solid var(--line);padding-top:14px}
+.sc-t div{display:flex;flex-direction:column}.sc-t span{font-family:var(--display);font-weight:800;font-size:12.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.sc-t b{font-family:var(--display);font-weight:900;font-size:28px;line-height:1.1;color:var(--ink)}.sc-t b.pos{color:var(--good)}.sc-t b.neg{color:var(--bad)}
+.sc-t em{font-style:normal;font-size:12.5px;color:var(--muted)}
+#teamstats{display:block!important}
+/* compare */
+.cmpsel{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:6px 0 14px}.cmpsel span{font-family:var(--display);font-weight:900;text-transform:uppercase;color:var(--muted)}
+.cmpsel select{min-width:0;flex:1 1 140px}
+#cmpt th.cmph{text-align:center}#cmpt th.cmph img{width:36px;height:36px;object-fit:contain;display:block;margin:0 auto 4px}#cmpt th.cmph span{font-size:14px;color:var(--ink)}
+#cmpt td{font-size:15px}#cmpt td.l{color:var(--muted);white-space:normal}
+#cmpt td.cv{text-align:center;font-family:var(--display);font-weight:800;font-size:17px;color:var(--ink);white-space:normal}
+#cmpt td.cv.win{color:var(--good)}#cmpt td.cv .dim{font-family:var(--body);font-weight:500;font-size:12.5px}
+.cmplink{display:inline-block;margin-top:10px;color:var(--orange);font-family:var(--display);font-weight:900;font-size:16px;letter-spacing:.04em;text-transform:uppercase;text-decoration:none}
+@media (max-width:640px){.sc-h{font-size:17px}.sc-t b{font-size:24px}#cmpt td,#cmpt th{padding-left:6px!important;padding-right:6px!important}#cmpt td.cv{font-size:15px}}
 </style>
 
 <div id="htip" role="tooltip" hidden></div>
@@ -738,7 +762,13 @@ th{font-size:15px!important}
     <div class="pvgrid" id="pvgrid"></div>
     <p class="note" style="margin-top:14px">Every game is graded Sunday. Then come back to see who showed up.</p>
   </section>
-  <section class="sec page" data-page="week" id="matchup" aria-labelledby="mu-h">
+  <section class="sec page" data-page="week" id="cmp-sec" aria-labelledby="cmp-h">
+    <div class="sechead"><h2 id="cmp-h">Compare Two Teams</h2><span class="note">Side by side this season. No predictions, just how each has played.</span></div>
+    <div class="cmpsel"><select id="cmpa" aria-label="First team"></select><span>vs</span><select id="cmpb" aria-label="Second team"></select></div>
+    <div class="tablewrap"><table id="cmpt"><thead></thead><tbody></tbody></table></div>
+    <p class="note sm">Green marks the better number where there is one. Ranks are out of every Power 4 team.</p>
+  </section>
+  <section class="sec page" data-page="none" id="matchup" aria-labelledby="mu-h">
     <div class="sechead"><h2 id="mu-h">Matchup Builder</h2><span class="note">Vegas line, adjusted for how each team handles this kind of environment</span></div>
     <div class="mu">
       <div>
@@ -2479,6 +2509,26 @@ var PREVIEW = {
   var allIds = Object.keys(META).sort(function(a,b){ return META[a].name < META[b].name ? -1 : 1; });
   $("teampick").innerHTML = allIds.map(function(id){ return '<option value="' + id + '">' + esc(META[id].name) + '</option>'; }).join("");
   $("teampick").addEventListener("change", function(){ select(this.value, false); });
+  // plain-English summary of a team's season, with a few numbers behind it
+  function scoutReport(m, s, rk, N){
+    function ordn(x){ var v = x % 100, q = ["th","st","nd","rd"]; return x + (q[(v - 20) % 10] || q[v] || q[0]); }
+    var tag = s.dawg >= 3 ? ' <span class="vstk vg">DAWG</span>' : s.dawg <= -3 ? ' <span class="vstk vs">SOFT</span>' : "";
+    var lines = [];
+    if (s.drop === null || s.drop === undefined){ if (!s.nBig) lines.push(["dot", "No big games yet this season."]); }
+    else if (s.drop >= 3) lines.push(["up", "<b>Rises in big games.</b> " + signed(s.big) + " in big games vs. " + signed(s.other) + " in routine ones."]);
+    else if (s.drop <= -3) lines.push(["dn", "<b>Shrinks in big games.</b> " + signed(s.big) + " in big games vs. " + signed(s.other) + " in routine ones."]);
+    else lines.push(["eq", "<b>About the same in big games</b> as routine ones (" + signed(s.big) + " vs. " + signed(s.other) + ")."]);
+    if (s.luck !== null && s.luck !== undefined && Math.abs(s.luck) >= 0.5){
+      var gp = s.w + s.l, xw = Math.max(0, Math.min(gp, Math.round(s.w - s.luck))); if (xw === s.w) xw = s.luck > 0 ? Math.max(0, s.w - 1) : Math.min(gp, s.w + 1);
+      lines.push([s.luck > 0 ? "warn" : "good", "<b>Record is " + (s.luck > 0 ? "ahead of" : "behind") + " its play.</b> " + s.w + "–" + s.l + ", but has played like a " + xw + "–" + (gp - xw) + " team" + ((s.cW + s.cL) ? " (" + s.cW + "–" + s.cL + " in one-score games)." : ".")]);
+    }
+    var ats = s.atsW - s.atsL;
+    if (s.atsW + s.atsL) lines.push([ats >= 2 ? "up" : ats <= -2 ? "dn" : "eq", "<b>" + s.atsW + "–" + s.atsL + " against the spread.</b>" + (ats >= 2 ? " Beating Vegas more often than not." : ats <= -2 ? " Falling short of Vegas more often than not." : "")]);
+    var IC = {up:"▲", dn:"▼", eq:"=", warn:"!", good:"+", dot:"·"};
+    return '<div class="scout"><p class="sc-h"><b>' + esc(m.name) + ' is ' + ordn(rk) + ' of ' + N + '</b> at living up to expectations' + tag + '<span class="sc-rec">' + s.w + '–' + s.l + ' · season grade <b class="' + cls(s.dawg) + '">' + signed(s.dawg) + '</b></span></p>' +
+      '<ul class="sc-l">' + lines.map(function(l){ return '<li class="' + l[0] + '"><i>' + IC[l[0]] + '</i><span>' + l[1] + '</span></li>'; }).join("") + '</ul>' +
+      '<div class="sc-t"><div><span>Season</span><b class="' + cls(s.dawg) + '">' + signed(s.dawg) + '</b><em>#' + rk + ' of ' + N + '</em></div><div><span>Big vs. routine</span><b class="' + cls(s.drop) + '">' + signed(s.drop) + '</b><em>' + (s.nBig || 0) + ' big · ' + (s.n - (s.nBig || 0)) + ' routine</em></div><div><span>Luck</span><b>' + signed(s.luck) + '</b><em>wins vs. play</em></div></div></div>';
+  }
   function drawTeam(){
     var m = META[state.sel], s = SEASONIDX[state.season] && SEASONIDX[state.season][state.sel];
     $("teampick").value = m.id; $("team-h").innerHTML = esc(m.full) + (s && s.dawg !== null && s.dawg >= 3 ? ' <span class="vstk vg" title="Season DAWG +3 or better">DAWG</span>' : s && s.dawg !== null && s.dawg <= -3 ? ' <span class="vstk vs" title="Season DAWG −3 or worse">SOFT</span>' : "");
@@ -2517,7 +2567,7 @@ var PREVIEW = {
       ["Luck", signed(s.luck), (s.luck === null || s.luck === undefined ? "" : Math.abs(s.luck) < 0.5 ? "Record matches its play" : "Record is about " + Math.abs(s.luck).toFixed(1).replace(/\.0$/, "") + " win" + (Math.abs(s.luck).toFixed(1) === "1.0" ? " " : "s ") + (s.luck > 0 ? "better" : "worse") + " than its play") + " · " + s.cW + "–" + s.cL + " in one-score games", null],
       ["Record · ATS", s.w + "–" + s.l + " · " + s.atsW + "–" + s.atsL, "Straight up · vs spread", null]
     ];
-    $("teamstats").innerHTML = items.map(function(r){ return '<div class="kv"><span class="lbl">' + r[0] + '</span><span class="v ' + (r[3] === null ? "" : cls(r[3])) + '">' + r[1] + '</span><span class="n">' + r[2] + '</span></div>'; }).join("");
+    $("teamstats").innerHTML = scoutReport(m, s, rk, T.length);
     $("log-h").textContent = state.season + " game log";
     if (!s.games){
       var wantY = state.season, wantT = state.sel;
@@ -2902,7 +2952,8 @@ var PREVIEW = {
     if (!PREVIEW || !PREVIEW.all || String(state.season) !== String(PREVIEW.season)){ el.innerHTML = ""; return; }
     var g = null; PREVIEW.all.forEach(function(x){ if (!g && (x.away.id === id || x.home.id === id)) g = x; });
     if (!g){ el.innerHTML = '<p class="upbye"><b>Up next</b> Bye in Week ' + PREVIEW.week + '.</p>'; return; }
-    el.innerHTML = '<h3 class="uph">Up next <span class="dim">Week ' + PREVIEW.week + '</span></h3><div class="pvgrid one">' + pvTicket(g, false) + '</div>';
+    var opp = g.away.id === id ? g.home.id : g.away.id;
+    el.innerHTML = '<h3 class="uph">Up next <span class="dim">Week ' + PREVIEW.week + '</span></h3><div class="pvgrid one">' + pvTicket(g, false) + '</div>' + (META[opp] ? '<a class="cmplink" href="#week" data-cmp="' + id + ',' + opp + '">Compare ' + esc(META[id].name) + ' and ' + esc(META[opp].name) + ' side by side →</a>' : '');
   }
   var _drawTeam0 = drawTeam; drawTeam = function(){ _drawTeam0(); try { drawHabits(); } catch(e){} try { drawUpNext(); } catch(e){} };
   // ---------- This Week: the week's biggest games as tickets ----------
@@ -2921,6 +2972,58 @@ var PREVIEW = {
         (g.watch ? '<div class="pvw"><span>Watch</span>' + esc(g.watch) + '</div>' : '') +
         '</div><div class="pvstub"><b>' + esc(g.when.day) + '</b><i>' + esc(g.when.date) + '</i><b>' + esc(g.when.time.replace(" CT", "")) + '</b><i>CT' + (g.when.net ? ' · ' + esc(g.when.net) : '') + '</i></div></div>';
   }
+  // ---------- Compare two teams ----------
+  function cmpOpts(){ var ids = Object.keys(DATA.ts[LATEST] || {}).filter(function(id){ return META[id]; }).sort(function(a,b){ return META[a].name.localeCompare(META[b].name); });
+    var o = ids.map(function(id){ return '<option value="' + id + '">' + esc(META[id].name) + '</option>'; }).join(""); $("cmpa").innerHTML = o; $("cmpb").innerHTML = o; }
+  function drawCompare(){
+    var a = $("cmpa").value, b = $("cmpb").value; if (!a || !b) return;
+    function ordn(x){ var v = x % 100, q = ["th","st","nd","rd"]; return x + (q[(v - 20) % 10] || q[v] || q[0]); }
+    var G = seasonTeams(LATEST).filter(function(t){ return t.dawg !== null && t.dawg !== undefined; }).sort(function(x,y){ return y.dawg - x.dawg; }), RK = {}; G.forEach(function(t, i){ RK[t.id] = i + 1; });
+    var AP = {}; ((WEEK && WEEK.poll) || []).forEach(function(p){ if (p.ap) AP[p.id] = p.ap; });
+    function S(id){ return (SEASONIDX[LATEST] || {})[id] || {}; }
+    function TN(id){ var r = null; TEND.teams.forEach(function(x){ if (x.id === id) r = x; }); return r; }
+    function TK(id){ var r = null; TRK.teams.forEach(function(x){ if (x.id === id) r = x; }); return r; }
+    function rkT(k, id, asc){ var arr = TEND.teams.slice().sort(function(p,q){ return asc ? p[k] - q[k] : q[k] - p[k]; }); for (var i = 0; i < arr.length; i++) if (arr[i].id === id) return i + 1; return null; }
+    var rows = [
+      ["AP poll", function(id){ return AP[id] ? "No. " + AP[id] : "Unranked"; }, function(id){ return AP[id] || 99; }, "lo"],
+      ["Record", function(id){ var x = S(id); return x.w + "–" + x.l; }, null, null],
+      ["Living up to expectations", function(id){ return RK[id] ? ordn(RK[id]) + " of " + G.length : "–"; }, function(id){ return RK[id] || 99; }, "lo"],
+      ["Season grade", function(id){ return signed(S(id).dawg); }, function(id){ return S(id).dawg; }, "hi"],
+      ["Big games", function(id){ var x = S(id); return x.nBig ? signed(x.big) + ' <span class="dim">(' + x.nBig + ')</span>' : '<span class="dim">none yet</span>'; }, function(id){ return S(id).nBig ? S(id).big : null; }, "hi"],
+      ["Routine games", function(id){ return signed(S(id).other); }, function(id){ return S(id).other; }, "hi"],
+      ["Big vs. routine", function(id){ var d = S(id).drop; return d === null || d === undefined ? "–" : (d >= 3 ? "Rises" : d <= -3 ? "Shrinks" : "About the same") + ' <span class="dim">' + signed(d) + '</span>'; }, null, null],
+      ["Record vs. its play", function(id){ var l = S(id).luck; return l === null || l === undefined ? "–" : Math.abs(l) < 0.5 ? "About right" : (l > 0 ? "Ahead by " : "Behind by ") + Math.abs(l).toFixed(1) + " wins"; }, null, null],
+      ["Against the spread", function(id){ var x = S(id); return x.atsW + "–" + x.atsL; }, function(id){ var x = S(id); return x.atsW - x.atsL; }, "hi"],
+      ["Penalties per game", function(id){ var t = TN(id); return t ? t.pen.toFixed(1) + ' <span class="dim">(' + ordn(rkT("pen", id, true)) + ' fewest)</span>' : "–"; }, function(id){ var t = TN(id); return t ? t.pen : null; }, "lo"],
+      ["Foot on the gas", function(id){ var t = TN(id); return t ? signed(t.leadEpa - TAVG.leadEpa, 2) : "–"; }, function(id){ var t = TN(id); return t ? t.leadEpa : null; }, "hi"],
+      ["Goes for it on 4th", function(id){ var t = TN(id); return t ? Math.round(t.go4 * 100) + "%" : "–"; }, null, null],
+      ["Pass-first", function(id){ var t = TN(id); return t ? Math.round(t.neuPass * 100) + "%" : "–"; }, null, null],
+      ["Blown leads this year", function(id){ var k = TK(id); return k ? k.lost + " of " + k.led : "–"; }, function(id){ var k = TK(id); return k && k.led ? k.lost / k.led : null; }, "lo"],
+      ["Blown leads since 2019", function(id){ var k = TK(id); return k && k.ledAll ? Math.round(k.lostAll / k.ledAll * 100) + "%" : "–"; }, function(id){ var k = TK(id); return k && k.ledAll ? k.lostAll / k.ledAll : null; }, "lo"],
+      ["Cash-in after stops", function(id){ var k = TK(id); return k && k.cashN ? Math.round(k.cashScores / k.cashN * 100) + "%" : "–"; }, function(id){ var k = TK(id); return k && k.cashN ? k.cashScores / k.cashN : null; }, "hi"]
+    ];
+    function lg(id){ return '<img src="logos/' + id + '-dark.png" alt="" onerror="this.onerror=null;this.src=\'logos/' + id + '.png\'">'; }
+    $("cmpt").tHead.innerHTML = '<tr><th class="l"></th><th class="cmph">' + lg(a) + '<span>' + esc(META[a].name) + '</span></th><th class="cmph">' + lg(b) + '<span>' + esc(META[b].name) + '</span></th></tr>';
+    $("cmpt").tBodies[0].innerHTML = rows.map(function(r){
+      var va = r[2] ? r[2](a) : null, vb = r[2] ? r[2](b) : null, wa = "", wb = "";
+      if (r[3] && va !== null && vb !== null && va !== undefined && vb !== undefined && va !== vb){ var aBetter = r[3] === "hi" ? va > vb : va < vb; wa = aBetter ? "win" : ""; wb = aBetter ? "" : "win"; }
+      return '<tr><td class="l">' + r[0] + '</td><td class="cv ' + wa + '">' + r[1](a) + '</td><td class="cv ' + wb + '">' + r[1](b) + '</td></tr>';
+    }).join("");
+    setTimeout(fitTables, 0);
+  }
+  function openCompare(a, b){ $("cmpa").value = a; $("cmpb").value = b; drawCompare(); }
+  (function(){
+    cmpOpts();
+    var mine = null; try { mine = localStorage.getItem("dawg-myteam"); } catch(e){}
+    var a = null, b = null;
+    if (mine && META[mine] && PREVIEW && PREVIEW.all){ PREVIEW.all.forEach(function(g){ if (!b && (g.away.id === mine || g.home.id === mine)){ a = mine; b = g.away.id === mine ? g.home.id : g.away.id; } }); }
+    if (!a && PREVIEW && PREVIEW.games && PREVIEW.games[0]){ a = PREVIEW.games[0].away.id; b = PREVIEW.games[0].home.id; }
+    if (!a){ var ids = Object.keys(META); a = ids[0]; b = ids[1]; }
+    if (!META[b]) b = Object.keys(META).filter(function(x){ return x !== a; })[0];
+    $("cmpa").value = a; $("cmpb").value = b; setTimeout(drawCompare, 0);
+    $("cmpa").addEventListener("change", drawCompare); $("cmpb").addEventListener("change", drawCompare);
+    document.addEventListener("click", function(e){ var x = e.target.closest("[data-cmp]"); if (!x) return; e.preventDefault(); var p = x.getAttribute("data-cmp").split(","); openCompare(p[0], p[1]); showPage("week"); setTimeout(function(){ $("cmp-sec").scrollIntoView({block:"start"}); }, 50); });
+  })();
   function drawTend(){
     var L = TEND.teams.filter(function(r){ return !tstate.conf || r.conf === tstate.conf; });
     L.sort(function(a,b){ return tstate.dir * (a[tstate.k] - b[tstate.k]); });
@@ -3254,6 +3357,7 @@ var PREVIEW = {
     ["Blown Leads", "Biggest Blown Leads", "Cash-In After Stops"].forEach(function(n){ var h = h3s(n); if (h) addShare(h, {title:function(){ return n; }, nodes:function(){ return [h.closest(".xrow").nextElementSibling]; }, file:n.toLowerCase().replace(/[^a-z]+/g, "-")}, true); });
     addShare(document.querySelector("#team .teamhead > div"), {title:function(){ return teamName() + " · " + state.season; }, sub:function(){ return $("coachline").textContent; }, nodes:function(){ return [$("teamstats"), document.querySelector("#team .chartbox"), document.querySelector("#team .legend")]; }, slug:function(){ return slugOf(state.sel); }, file:"team"});
     var bw = h3s("Biggest Wins Since 2019");
+    addShare(sh("cmp-h"), {title:function(){ return META[$("cmpa").value].name + " vs. " + META[$("cmpb").value].name; }, sub:function(){ return "Side by side, " + LATEST + " season"; }, nodes:function(){ return [wrapOf("cmpt")]; }, file:"compare"});
     addShare(sh("bb-h"), {title:function(){ return "Biggest blown leads of " + TRK.season; }, sub:function(){ return "The biggest leads that still turned into losses"; }, nodes:function(){ return [wrapOf("biggest")]; }, file:"blown-leads"});
     if (bw) addShare(bw, {title:function(){ return teamName() + ": biggest wins since 2019"; }, sub:function(){ return "Wins in big games, ranked by how big the game was"; }, nodes:function(){ return [bw.closest(".xrow").parentNode.querySelector(".tablewrap")]; }, slug:function(){ return slugOf(state.sel); }, file:"biggest-wins"}, true);
     var bh = h3s("Best Performances Since 2019"), wh = h3s("Worst Performances Since 2019");
