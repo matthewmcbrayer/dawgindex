@@ -590,6 +590,35 @@ th{font-size:15px!important}
 .sechead > :not(h2):not(.xbtn){order:3;flex:1 1 100%}
 .ib[aria-expanded="true"]{color:#131210!important;background:var(--ink)!important}
 .sechead > .modebar{display:flex;justify-content:flex-start!important;margin-left:0!important}
+
+/* first screen: less competing for attention */
+.pitch{font-size:16px;color:var(--muted);margin:8px 0 0;max-width:560px;line-height:1.4}
+.pitch a{color:var(--orange);font-weight:700;text-decoration:none;white-space:nowrap}
+#find-sec{background:#1d1b18;border:2.5px solid var(--line);border-radius:20px;padding:18px 18px 16px}
+#find-sec .sechead h2{font-size:26px!important;line-height:1.05}
+#find-sec .findq{margin:6px 0 10px;max-width:none}
+.fconfs{flex-wrap:nowrap!important;overflow-x:auto;scrollbar-width:none;margin:0 -4px;padding:0 4px 2px}
+.fconfs::-webkit-scrollbar{display:none}
+.fconfs button{flex:none;font-size:14px!important;padding:5px 12px!important}
+.fgrid:not(:empty){margin-top:12px}
+#find-sec.has{background:none;border:0;padding:0}
+@media (max-width:640px){
+  header{gap:10px!important;padding-bottom:20px!important}
+  h1{font-size:44px!important;-webkit-text-stroke:2px var(--dark)!important;text-shadow:3px 3px 0 var(--red)!important}
+  h1 span{font-size:.42em!important}
+  .sub{font-size:16px!important;margin-top:6px!important}
+  .pitch{font-size:15px}
+  .hdr-r{flex-direction:row!important;align-items:center!important;gap:10px!important;flex-wrap:wrap}
+  #seasonbox{flex-direction:row!important;align-items:center!important;gap:6px!important}
+  #seasonbox .lbl{display:none}
+  #seasonbox{width:auto!important;flex:none}
+  #asof{flex:1 1 auto;min-width:0}
+  #season{font-size:15px!important;padding:4px 30px 4px 12px!important;min-height:0!important;height:auto!important}
+  .asof{font-size:13px!important}
+  .tiplink{display:none!important}
+  .topnav a{font-size:14px!important;padding:4px 12px!important}
+  #find-sec .sechead h2{font-size:23px!important}
+}
 </style>
 
 <div id="htip" role="tooltip" hidden></div>
@@ -599,6 +628,7 @@ th{font-size:15px!important}
     <div>
       <h1>DAWG <span>Index</span></h1>
       <p class="sub">Who gets up for big games, and who shrinks.</p>
+      <p class="pitch">Every Power 4 game, graded on one question: did the team show up? <a href="#method" data-p="method">How it works →</a></p>
     </div>
     <div class="hdr-r">
       <div id="seasonbox" class="hdr-r"><label class="lbl" for="season">Season</label>
@@ -649,18 +679,9 @@ th{font-size:15px!important}
   </section>
 
 
-  <section class="sec page" data-page="rankings" id="start-sec" aria-label="Start here">
-    <details class="start" id="startd" open>
-      <summary><span class="lbl">Start here</span><span class="sumq">What is the DAWG Index?</span></summary>
-      <p><b>We grade every Power 4 game on one question: did the team show up?</b> Beat the spread, finish drives, pull away with a lead, cash in after stops, answer back. Big games count more. Garbage time doesn't count.</p>
-      <div class="key" role="note"><span class="kt">How to read a grade</span><span><b>0</b> played like Vegas expected</span><span><b class="pos">+5</b> a top-16% game</span><span><b class="pos">+10</b> top 4%</span><span>Season <b class="pos">+3</b> or better = DAWG · <b class="neg">−3</b> or worse = SOFT</span></div>
-      <p class="sm"><a href="#method" data-p="method" class="golink">How it works</a> · <a href="dawg-index-games.csv" download class="golink">Download every graded game</a> · It describes how teams played. It doesn't predict games.</p>
-      <button type="button" class="gotit" id="gotit">Got it</button>
-    </details>
-  </section>
   <section class="sec page" data-page="rankings" id="find-sec" aria-labelledby="find-h">
     <div id="myteam" hidden></div>
-    <div class="sechead"><h2 id="find-h">Find your team</h2></div>
+    <div class="sechead"><h2 id="find-h">Where does your team rank?</h2></div>
     <input id="findq" class="findq" type="search" placeholder="Search all 68 Power 4 teams" autocomplete="off" aria-label="Search teams">
     <div class="fconfs" id="fconfs" role="group" aria-label="Conferences"></div>
     <div class="fgrid" id="fgrid"></div>
@@ -1940,7 +1961,7 @@ var TRK = {"season":2026,"baseBlown":0.19864940911648846,"baseCash":0.5229621125
     function ord(n){ var s = ["th","st","nd","rd"], v = n % 100; return n + (s[(v - 20) % 10] || s[v] || s[0]); }
     function myCard(){
       var id = null; try { id = localStorage.getItem("dawg-myteam"); } catch(e){}
-      if (!id || !META[id]){ $("myteam").hidden = true; $("find-sec").classList.remove("has"); $("find-h").textContent = "Find your team"; return; }
+      if (!id || !META[id]){ $("myteam").hidden = true; $("find-sec").classList.remove("has"); $("find-h").textContent = "Where does your team rank?"; return; }
       var s = DATA.ts[Y][id], m = META[id], line = "", last = "";
       if (s && s.dawg !== null && s.dawg !== undefined){
         var tag = s.dawg >= 3 ? " · <b class=\"pos\">DAWG</b>" : s.dawg <= -3 ? " · <b class=\"neg\">SOFT</b>" : "";
