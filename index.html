@@ -582,6 +582,13 @@ th{font-size:15px!important}
   #fab::before{left:13px!important;width:15px!important;height:15px!important;margin-top:-8px!important}
   .wrap{padding-bottom:70px}
 }
+
+/* section header: title and Share on one line, everything else below */
+.sechead{flex-wrap:wrap!important;align-items:center!important}
+.sechead > h2{order:1;flex:1 1 0;min-width:0}
+.sechead > .xbtn{order:2;margin-left:auto;align-self:center;flex:none}
+.sechead > :not(h2):not(.xbtn){order:3;flex:1 1 100%}
+.sechead > .modebar{display:flex;justify-content:flex-start!important;margin-left:0!important}
 </style>
 
 <div id="htip" role="tooltip" hidden></div>
@@ -663,6 +670,27 @@ th{font-size:15px!important}
     <div class="wk" id="wk"></div>
     <p class="keyline">Grades: <b>0</b> = played like Vegas expected · <b class="pos">+5</b> = top-16% game · <b class="pos">+10</b> = top 4%</p>
   </section>
+  <section class="sec page" data-page="rankings" id="chart-sec" aria-labelledby="chart-h">
+    <div class="sechead">
+      <h2 id="chart-h">Big Games vs. Routine Games</h2>
+      <div class="modebar">
+        <div class="seg" role="group" aria-label="Time frame" hidden><button type="button" id="mode-season" aria-pressed="true">This Season</button><button type="button" id="mode-proven" aria-pressed="false">Coach Career</button></div>
+        <select id="confsel" aria-label="Conference"><option value="">All Conferences</option><option>SEC</option><option>Big Ten</option><option>Big 12</option><option>ACC</option><option value="Independent">Notre Dame</option></select>
+      </div>
+    </div>
+    <p class="note">Right = better than expected in routine games · Up = better in big games <button type="button" class="ib" id="chart-why" aria-expanded="false" aria-label="More about this chart" title="More about this chart">i</button></p>
+    <div class="modenote" id="chart-why-t" hidden>
+      <p>Zero is an average team. Bigger dots have played more big games. Teams are spread out early in the season, and by December a dozen games pulls most of them toward the middle.</p>
+      <p id="modenote" hidden>Coach Career follows the current head coach, not the school. It blends every season he's been a head coach since 2019, including previous jobs (Jon Sumrall's Troy and Tulane years count for Florida). Recent seasons count more (each year back is worth 80%), and short careers are pulled toward zero. Zero is a typical current Power 4 coach, since most of them were hired after beating expectations somewhere else. Dawg and Soft start at ±0.8 in this view instead of ±3.</p>
+    </div>
+    <div class="chartbox">
+      <svg id="chart" class="chart" viewBox="0 0 900 720" role="img" aria-labelledby="chart-h"></svg>
+      <div class="tip" id="tip" hidden></div>
+    </div>
+    <p class="scrollhint" id="chart-hint">Swipe the chart sideways to see every team →</p>
+    <div class="offchart" id="offchart" hidden></div>
+  </section>
+
   <section class="sec page" data-page="rankings" id="poll-sec" aria-labelledby="poll-h">
     <div class="sechead"><h2 id="poll-h">Poll Check</h2><span class="note" id="poll-note"></span></div>
     <p class="note">AP rank next to DAWG rank: where each team ranks at living up to expectations, out of every Power 4 team.</p>
@@ -730,26 +758,6 @@ th{font-size:15px!important}
 
   </section>
 
-  <section class="sec page" data-page="rankings" id="chart-sec" aria-labelledby="chart-h">
-    <div class="sechead">
-      <h2 id="chart-h">Big Games vs. Routine Games</h2>
-      <div class="modebar">
-        <div class="seg" role="group" aria-label="Time frame" hidden><button type="button" id="mode-season" aria-pressed="true">This Season</button><button type="button" id="mode-proven" aria-pressed="false">Coach Career</button></div>
-        <select id="confsel" aria-label="Conference"><option value="">All Conferences</option><option>SEC</option><option>Big Ten</option><option>Big 12</option><option>ACC</option><option value="Independent">Notre Dame</option></select>
-      </div>
-    </div>
-    <p class="note">Right = better than expected in routine games · Up = better in big games <button type="button" class="ib" id="chart-why" aria-expanded="false" aria-label="More about this chart" title="More about this chart">i</button></p>
-    <div class="modenote" id="chart-why-t" hidden>
-      <p>Zero is an average team. Bigger dots have played more big games. Teams are spread out early in the season, and by December a dozen games pulls most of them toward the middle.</p>
-      <p id="modenote" hidden>Coach Career follows the current head coach, not the school. It blends every season he's been a head coach since 2019, including previous jobs (Jon Sumrall's Troy and Tulane years count for Florida). Recent seasons count more (each year back is worth 80%), and short careers are pulled toward zero. Zero is a typical current Power 4 coach, since most of them were hired after beating expectations somewhere else. Dawg and Soft start at ±0.8 in this view instead of ±3.</p>
-    </div>
-    <div class="chartbox">
-      <svg id="chart" class="chart" viewBox="0 0 900 720" role="img" aria-labelledby="chart-h"></svg>
-      <div class="tip" id="tip" hidden></div>
-    </div>
-    <p class="scrollhint" id="chart-hint">Swipe the chart sideways to see every team →</p>
-    <div class="offchart" id="offchart" hidden></div>
-  </section>
 
 
 
