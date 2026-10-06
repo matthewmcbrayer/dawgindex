@@ -747,6 +747,7 @@ th{font-size:15px!important}
 .sc-big .ib{width:16px!important;height:16px!important;font-size:10px!important;vertical-align:1px;margin-left:4px}
 .sc-key{margin:10px 0 0;font-size:14px;line-height:1.45;color:var(--muted);background:rgba(244,234,210,.05);border-radius:10px;padding:10px 12px}.sc-key b{color:var(--ink)}.sc-key b.pos{color:var(--good)}.sc-key b.neg{color:var(--bad)}
 @media (max-width:640px){.sc-big{padding:8px 12px 10px}.sc-big b{font-size:46px}.sc-big .sc-lbl{font-size:11.5px}.sc-rank b{font-size:34px}.sc-rank span{font-size:13.5px}.sc-big .vstk{right:-12px;bottom:-12px;top:auto;font-size:12px!important}}
+.sc-v .vstk{font-size:13px!important;vertical-align:2px;margin-right:4px;transform:rotate(-3deg);display:inline-block}
 </style>
 
 <div id="htip" role="tooltip" hidden></div>
@@ -2540,11 +2541,11 @@ var PREVIEW = {
     var ats = s.atsW - s.atsL;
     if (s.atsW + s.atsL) lines.push([ats >= 2 ? "up" : ats <= -2 ? "dn" : "eq", "<b>" + s.atsW + "–" + s.atsL + " against the spread.</b>" + (ats >= 2 ? " Beating Vegas more often than not." : ats <= -2 ? " Falling short of Vegas more often than not." : "")]);
     var IC = {up:"▲", dn:"▼", eq:"=", warn:"!", good:"+", dot:"·"};
-    var verdict = s.dawg >= 3 ? ["DAWG", "vg", "Showing up: well above expectations."] : s.dawg <= -3 ? ["SOFT", "vs", "Not showing up: well below expectations."] : s.dawg >= 1 ? ["", "", "A little better than expected."] : s.dawg <= -1 ? ["", "", "A little worse than expected."] : ["", "", "Right around expectations."];
+    var verdict = s.dawg >= 3 ? ["DAWG", "vg", "Showing up. A score of +3 or better makes a team a DAWG: well above expectations."] : s.dawg <= -3 ? ["SOFT", "vs", "Not showing up. A score of −3 or worse makes a team SOFT: well below expectations."] : s.dawg >= 1 ? ["", "", "A little better than expected."] : s.dawg <= -1 ? ["", "", "A little worse than expected."] : ["", "", "Right around expectations."];
     var sc = Math.abs(s.dawg) < 1 ? "" : cls(s.dawg);
-    return '<div class="scout"><div class="sc-top"><div class="sc-big"><span class="sc-lbl">' + state.season + ' DAWG score <button type="button" class="ib" data-more="sc-key" aria-expanded="false" aria-label="How to read the score" title="How to read the score">i</button></span><b class="' + sc + '">' + signed(s.dawg) + '</b>' + (verdict[0] ? '<span class="vstk ' + verdict[1] + '">' + verdict[0] + '</span>' : '') + '</div>' +
+    return '<div class="scout"><div class="sc-top"><div class="sc-big"><span class="sc-lbl">' + state.season + ' DAWG score <button type="button" class="ib" data-more="sc-key" aria-expanded="false" aria-label="How to read the score" title="How to read the score">i</button></span><b class="' + sc + '">' + signed(s.dawg) + '</b>' + '</div>' +
       '<div class="sc-rank"><b>' + ordn(rk) + '</b><span>of ' + N + ' Power 4 teams at living up to expectations</span></div></div>' +
-      '<p class="sc-v">' + verdict[2] + ' <span class="dim">' + s.w + '–' + s.l + ' record</span></p>' +
+      '<p class="sc-v">' + (verdict[0] ? '<span class="vstk ' + verdict[1] + '">' + verdict[0] + '</span> ' : '') + verdict[2] + ' <span class="dim">' + s.w + '–' + s.l + ' record</span></p>' +
       '<p class="sc-key" id="sc-key" hidden>The DAWG score is the average of a team\'s game grades this season. <b>0</b> = played exactly like Vegas expected. <b class="pos">+3</b> or better = DAWG. <b class="neg">−3</b> or worse = SOFT. Each game is measured against every Power 4 performance since 2019.</p>' +
       '<ul class="sc-l">' + lines.map(function(l){ return '<li class="' + l[0] + '"><i>' + IC[l[0]] + '</i><span>' + l[1] + '</span></li>'; }).join("") + '</ul>' +
       '<div class="sc-t"><div><span>Big games</span><b class="' + cls(s.big) + '">' + (s.nBig ? signed(s.big) : "–") + '</b><em>' + (s.nBig || 0) + ' game' + (s.nBig === 1 ? '' : 's') + '</em></div><div><span>Routine games</span><b class="' + cls(s.other) + '">' + signed(s.other) + '</b><em>' + (s.n - (s.nBig || 0)) + ' game' + (s.n - (s.nBig || 0) === 1 ? '' : 's') + '</em></div><div><span>Luck</span><b>' + signed(s.luck) + '</b><em>wins vs. its play</em></div></div></div>';
