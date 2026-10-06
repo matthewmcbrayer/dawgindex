@@ -1030,7 +1030,7 @@ th{font-size:15px!important}
     <p class="note">Every pass, sack, run and turnover counts, adjusted for the defense he faced. Unlike team scores, this one sticks from year to year, even after a transfer. <button type="button" class="ib" data-more="qb-more" aria-expanded="false" aria-label="How the QB rating works" title="More">i</button></p>
     <div class="modenote" id="qb-more" hidden>
       <p><b>What counts.</b> Each of his plays is valued by how much it changed the expected score: a 3rd-down conversion adds, a sack or a pick in his own end costs a lot. Each play is then compared with what that defense gave up to every QB that season, so 7 yards against Georgia counts for more than 7 against a bad defense. Blowouts (24+ points) and FCS games are left out.</p>
-      <p><b>The rating.</b> Shown as points per game against an average Power 4 QB, on a typical 30 plays. Early in a season, a few games can swing wildly, so the rating leans on his last season (or on average if he's new) until more games come in. "This season, raw" is the number with no leaning.</p>
+      <p><b>The rating.</b> Shown as points per game against an average Power 4 QB, on a typical 30 plays. A few games can swing wildly, so a QB with only a handful of games is pulled toward average until more games come in. "Raw" is the same number with no pulling.</p>
       <p><b>Does it hold up?</b> Yes, more than anything else on this site. A QB's number carries over to his next season at about 0.4 (0 = not at all, 1 = perfectly), and about 0.5 after a transfer. Team scores carry over at about 0.07. <b>Big games and clutch</b> (3rd/4th down, or 4th quarter within 8) are shown for what happened, but they don't carry over: no QB has proven to be a big-game or clutch player year after year.</p>
       <p><b>What it can't separate.</b> His line, receivers and play-calling are part of every play. When a team swaps QBs, its new QB's number still carries over about 0.3 from the old one, so some of this is the program around him.</p>
     </div>
@@ -1042,7 +1042,7 @@ th{font-size:15px!important}
         <tbody><tr><td class="l" colspan="7"><span class="dim">Loading quarterbacks…</span></td></tr></tbody>
       </table>
     </div>
-    <p class="note" style="margin-top:10px">Rating leans on last season until enough games come in; Raw is this season alone. Tap a QB for his year-by-year line, big games and game log. This season needs 3+ starts; career needs 10+.</p>
+    <p class="note" style="margin-top:10px">Rating pulls small samples toward average; Raw is the number with no pulling. Tap a QB for his year-by-year line, big games and game log. This season needs 3+ starts; career needs 10+.</p>
   </section>
 
 
@@ -2939,9 +2939,9 @@ var TREND = {"season":2026,"weeks":[1,2,3,4,5],"teams":{"158":[[3.4,16,1],[3.8,1
       proutine: ["Routine over time", "Same blend, using each season's routine-game grade."],
       pdrop: ["Big-stage drop over time", "Same blend of each season's big-stage drop. Under the same coach, a team that shrank or rose two years running kept that direction 61% of the time."],
       pcons: ["Consistent", "How many of this coach's seasons, at any school, pointed the same way as the overall drop. 5/5 means every season shrank (or every season rose)."],
-      qrate: ["Rating", "Points per game he adds compared with an average Power 4 QB, on a typical 30 plays. Every pass, sack, run and turnover counts, adjusted for the defense he faced. Early in a season it leans on his last season (or on average if he's new) until more games come in.", "his plays valued by expected points, vs. what that defense usually allows"],
+      qrate: ["Rating", "Points per game he adds compared with an average Power 4 QB, on a typical 30 plays. Every pass, sack, run and turnover counts, adjusted for the defense he faced. With only a few games, it's pulled toward average until more games come in.", "his plays valued by expected points, vs. what that defense usually allows"],
       qgames: ["Games", "Games he started and played at least 10 snaps in. FCS games are left out."],
-      qraw: ["Raw", "Same scale as Rating, but only this season (or his whole career), with no leaning on last year. Noisier early in the season."],
+      qraw: ["Raw", "Same scale as Rating, with no pulling toward average. Noisier with only a few games."],
       qbig: ["Big games", "Same scale, only in big games (same big-stage rules as the rest of the site). Shows what happened. It doesn't carry over from year to year."],
       qclutch: ["Clutch", "Same scale, only on 3rd and 4th down or in the 4th quarter within 8 points. Shows what happened. It doesn't carry over from year to year."],
       qto: ["Turnover %", "Share of his plays that ended in an interception or a lost fumble. About 2% is typical. It swings a lot from year to year."],
@@ -3024,7 +3024,7 @@ var TREND = {"season":2026,"weeks":[1,2,3,4,5],"teams":{"158":[[3.4,16,1],[3.8,1
 
 
   // ---------- quarterbacks (separate QB model; data loads when the tab opens) ----------
-  var QBV = "7e870eac", QBD = null, QBWAIT = null, qst = {mode: "season", k: "rating", dir: -1, open: null, q: "", gy: {}};
+  var QBV = "04fca0ba", QBD = null, QBWAIT = null, qst = {mode: "season", k: "rating", dir: -1, open: null, q: "", gy: {}};
   function loadQB(){ if (QBD) return Promise.resolve(QBD); if (QBWAIT) return QBWAIT; QBWAIT = fetch("/data/qb.json?v=" + QBV).then(function(r){ if (!r.ok) throw new Error("qb"); return r.json(); }).then(function(d){ QBD = d; return d; }).catch(function(e){ QBWAIT = null; throw e; }); return QBWAIT; }
   function qcls(x){ return x === null || x === undefined ? "dim" : x >= 1 ? "pos" : x <= -1 ? "neg" : ""; }
   function qlogo(id){ return '<img src="logos/' + id + '-dark.png" alt="" loading="lazy" onerror="this.onerror=null;this.src=\'logos/' + id + '.png\'">'; }
@@ -3549,7 +3549,7 @@ var TREND = {"season":2026,"weeks":[1,2,3,4,5],"teams":{"158":[[3.4,16,1],[3.8,1
       var keep = qst.q; qst.q = ""; var k0 = qst.k, d0 = qst.dir; qst.k = "rating"; qst.dir = -1; var L = qbRows(); qst.q = keep; qst.k = k0; qst.dir = d0;
       function tb(h, list, start){ return '<div class="xcw"><h3>' + h + '</h3><div class="tablewrap"><table><thead><tr><th class="l">QB</th><th>Pts/game vs. avg QB</th><th>Games</th></tr></thead><tbody>' + list.map(function(r, i){
         return '<tr><td class="l"><b>' + (start ? (i + 1) + '. ' : '') + esc(r.o.qb) + '</b><span class="xcs">' + r.teams.map(function(t){ return META[t] ? esc(META[t].name) : ""; }).join(" → ") + '</span></td><td class="num ' + qcls(r.rating) + '">' + signed(r.rating) + '</td><td class="num">' + r.games + '</td></tr>'; }).join("") + '</tbody></table></div></div>'; }
-      var d = document.createElement("div"); d.className = "xcoach"; d.innerHTML = tb("Playing the best", L.slice(0, 10), true) + tb("Struggling the most", L.slice(-10).reverse(), false); return [d]; }, file:"qb-rankings"});
+      var d = document.createElement("div"); d.className = "xcoach"; d.innerHTML = tb("Playing the best", L.slice(0, 10), true) + tb("Struggling the most", L.slice(-10), false); return [d]; }, file:"qb-rankings"});
     ["Blown Leads", "Biggest Blown Leads", "Cash-In After Stops"].forEach(function(n){ var h = h3s(n); if (h) addShare(h, {title:function(){ return n; }, nodes:function(){ return [h.closest(".xrow").nextElementSibling]; }, file:n.toLowerCase().replace(/[^a-z]+/g, "-")}, true); });
     addShare(document.querySelector("#team .teamhead > div"), {title:function(){ return teamName() + " · " + state.season; }, sub:function(){ return $("coachline").textContent; }, nodes:function(){ return [$("teamstats"), document.querySelector("#team .chartbox"), document.querySelector("#team .legend")]; }, slug:function(){ return slugOf(state.sel); }, file:"team"});
     var bw = h3s("Biggest Wins Since 2019");
