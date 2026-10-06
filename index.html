@@ -1781,7 +1781,7 @@ var TRK = {"season":2026,"baseBlown":0.19864940911648846,"baseCash":0.5229621125
   window.addEventListener("resize", function(){ clearTimeout(fitTables.t); fitTables.t = setTimeout(fitTables, 120); });
   function capTables(){
     document.querySelectorAll(".tablewrap > table").forEach(function(tb){
-      if (tb.id === "topgames" || tb.id === "log" || !tb.tBodies[0] || tb._capped) return; tb._capped = true;
+      if (tb.id === "topgames" || tb.id === "log" || tb.id === "poll" || !tb.tBodies[0] || tb._capped) return; tb._capped = true;
       var wrap = tb.parentNode, btn = document.createElement("button"); btn.type = "button"; btn.className = "gotit moreb"; btn.hidden = true; wrap.after(btn);
       function update(){ setTimeout(fitTables, 0); var n = tb.tBodies[0].rows.length; btn.hidden = n <= 25; btn.textContent = tb.classList.contains("all") ? "Show top 25" : "Show all " + n; }
       btn.addEventListener("click", function(){ var open = tb.classList.toggle("all"); update(); if (!open) wrap.scrollIntoView({block:"start"}); });
@@ -2003,7 +2003,10 @@ var TRK = {"season":2026,"baseBlown":0.19864940911648846,"baseCash":0.5229621125
     $("poll-sec").hidden = state.season !== String(W.best ? W.best.y : state.season);
     $("poll-note").textContent = W.pollName + " vs. DAWG rank · " + W.label;
     var V = {fraud:'<span class="verdict v-soft">Fraud Watch</span>', legit:'<span class="verdict v-dawg">Earned it</span>', sleeper:'<span class="verdict v-sleep">Sleeper</span>', "":'<span class="dim">–</span>'};
-    $("poll").tBodies[0].innerHTML = W.poll.map(function(p){ var m = META[p.id];
+    // every ranked Power 4 team, plus the single best unranked team (no "show more")
+    var nr = W.poll.filter(function(p){ return !p.ap; }).sort(function(a,b){ return a.drank - b.drank; })[0];
+    var rows = W.poll.filter(function(p){ return p.ap; }).concat(nr ? [nr] : []);
+    $("poll").tBodies[0].innerHTML = rows.map(function(p){ var m = META[p.id];
       return '<tr class="trow" data-id="' + p.id + '" tabindex="0"><td class="l num">' + (p.ap ? "#" + p.ap : '<span class="dim">NR</span>') + '</td><td class="l"><b>' + esc(m.name) + '</b></td><td class="num">' + p.w + "–" + p.l + '</td><td class="num">#' + p.drank + '</td><td class="num hide-sm ' + cls(p.dawg) + '">' + signed(p.dawg) + '</td><td class="num hide-sm">' + (p.luck === null || p.luck === undefined ? "–" : signed(p.luck)) + '</td><td class="l">' + V[p.flag] + '</td></tr>'; }).join("");
   }
   $("poll").tBodies[0].addEventListener("click", function(e){ var tr = e.target.closest("tr[data-id]"); if (tr) select(tr.getAttribute("data-id"), true); });
