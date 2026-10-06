@@ -616,7 +616,11 @@ th{font-size:15px!important}
   #season{font-size:15px!important;padding:4px 30px 4px 12px!important;min-height:0!important;height:auto!important}
   .asof{font-size:13px!important}
   .tiplink{display:none!important}
-  .topnav a{font-size:14px!important;padding:4px 12px!important}
+  .topnav{gap:5px!important}
+  #biggest td,#biggest th{white-space:normal!important}
+  #biggest td:nth-child(2){font-size:14px}
+  #biggest th,#biggest td{padding-left:6px!important;padding-right:6px!important}
+  .topnav a{font-size:12.5px!important;padding:4px 7px!important;letter-spacing:.01em!important}
   #find-sec .sechead h2{font-size:23px!important}
 }
 
@@ -637,6 +641,35 @@ th{font-size:15px!important}
 .wopen{all:unset;cursor:pointer;color:var(--orange);font-weight:700;white-space:nowrap}
 .whow{display:inline-block;font-family:var(--display);font-weight:900;font-size:17px;letter-spacing:.05em;text-transform:uppercase;color:#D8342A;text-decoration:none}
 @media (max-width:640px){.what{padding:18px 18px 16px}.what .wh{font-size:22px!important;margin:10px 0 12px!important}.w3 li{font-size:15px}.wex{font-size:15px}}
+
+/* team habits */
+.hbh{margin-top:26px!important}.hbh .dim{font-size:.7em;letter-spacing:.06em}
+.hbs{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;margin-top:10px}.hbs.two{grid-template-columns:repeat(auto-fill,minmax(260px,1fr))}
+.hb{background:#1d1b18;border:2px solid var(--line);border-radius:16px;padding:14px 16px;display:flex;flex-direction:column}
+.hb .hl{font-family:var(--display);font-weight:900;font-size:14px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.hb .hv{font-family:var(--display);font-weight:900;font-size:34px;line-height:1.05;color:var(--ink);margin-top:4px}
+.hb .hr{font-size:14px;font-weight:600;color:var(--ink);margin-top:2px}
+.hb p{font-size:14px;color:var(--muted);margin:8px 0 0;line-height:1.35}
+/* This Week tickets */
+.pvgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:18px;margin-top:14px}
+.pvk{display:flex;background:#EFE3C6;color:#1b1712;border-radius:18px;box-shadow:5px 5px 0 #0c0b0a;position:relative}
+.pvk.feat{grid-column:1/-1}
+.pvm{flex:1;min-width:0;padding:15px 18px 13px}
+.pvh{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center;margin-bottom:10px}
+.pvsec{font-family:var(--display);font-weight:900;font-size:14px;letter-spacing:.1em;text-transform:uppercase;color:#EFE3C6;background:#D8342A;border-radius:999px;padding:2px 10px 3px}
+.pvwhy{font-family:var(--display);font-weight:800;font-size:16px;letter-spacing:.02em;text-transform:uppercase}
+.pvt{display:flex;align-items:center;gap:12px}.pvt img{width:40px;height:40px;object-fit:contain;flex:none}
+.pvn{font-family:var(--chunk);font-size:21px;line-height:1.05;text-transform:uppercase;color:#1b1712;text-decoration:none}
+.pvs{font-size:14px;color:#4a4136;margin-top:2px;line-height:1.3}.pvs b{color:#1b1712;font-weight:800}
+.pvs .up{color:#1E7046}.pvs .dn{color:#C22E25}.pvs .mid{color:#8a5a12}
+.pvvs{font-family:var(--display);font-weight:800;font-size:14px;letter-spacing:.1em;text-transform:uppercase;color:#9a8c74;margin:4px 0 4px 52px}
+.pvw{margin-top:10px;border-top:2px solid #1b1712;padding-top:8px;font-size:15px;font-weight:600;line-height:1.3}
+.pvw span{font-family:var(--display);font-weight:900;font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:#EFE3C6;background:#1F4E9C;border-radius:6px;padding:1px 7px 2px;margin-right:8px}
+.pvstub{width:92px;flex:none;border-left:3px dashed #1b1712;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:8px 4px;font-family:var(--display);text-transform:uppercase;position:relative}
+.pvstub::before,.pvstub::after{content:'';position:absolute;left:-14px;width:25px;height:25px;border-radius:50%;background:var(--bg)}.pvstub::before{top:-13px}.pvstub::after{bottom:-13px}
+.pvstub b{font-weight:900;font-size:21px;line-height:1.05}.pvstub i{font-style:normal;font-weight:800;font-size:13px;color:#6b5f4c;letter-spacing:.06em;margin-bottom:6px}
+.pvk.feat .pvn{font-size:28px}.pvk.feat .pvt img{width:56px;height:56px}.pvk.feat .pvvs{margin-left:68px}.pvk.feat .pvstub{width:120px}.pvk.feat .pvstub b{font-size:26px}
+@media (max-width:640px){.pvgrid{grid-template-columns:1fr}.pvk.feat .pvn{font-size:23px}.pvk.feat .pvt img{width:46px;height:46px}.pvk.feat .pvvs{margin-left:58px}.pvk.feat .pvstub{width:96px}.pvk.feat .pvstub b{font-size:21px}.hbs{grid-template-columns:1fr 1fr}.hbs.two{grid-template-columns:1fr}.hb .hv{font-size:28px}}
 </style>
 
 <div id="htip" role="tooltip" hidden></div>
@@ -656,15 +689,19 @@ th{font-size:15px!important}
   </header>
   <nav class="topnav" aria-label="Pages">
     <a href="#rankings" data-p="rankings">Rankings</a>
-    <a href="#team" data-p="team">Team File</a>
-    <a href="#tend" data-p="tend">Tendencies</a>
-    <a href="#trackers" data-p="trackers">Trackers</a>
-    <a href="#coaches" data-p="coaches">Coach Résumés</a>
-    <a href="#real" data-p="real">Is It Real?</a>
+    <a href="#team" data-p="team">Teams</a>
+    <a href="#week" data-p="week">This Week</a>
+    <a href="#coaches" data-p="coaches">Coaches</a>
     <a href="#method" data-p="method">How It Works</a>
   </nav>
 
-  <section class="sec page" data-page="matchup" id="matchup" aria-labelledby="mu-h">
+  <section class="sec page" data-page="week" id="week-pv" aria-labelledby="pv-h">
+    <div class="sechead"><h2 id="pv-h">This Week</h2><span class="note" id="pv-note"></span></div>
+    <p class="note">The week's biggest stages, ranked. Each team's rank is where it stands at living up to expectations this season, out of every Power 4 team. <b class="pos">Green</b> top third · <b style="color:#E0B04A">gold</b> middle · <b class="neg">red</b> bottom third.</p>
+    <div class="pvgrid" id="pvgrid"></div>
+    <p class="note" style="margin-top:14px">Every game is graded Sunday. Then come back to see who showed up.</p>
+  </section>
+  <section class="sec page" data-page="week" id="matchup" aria-labelledby="mu-h">
     <div class="sechead"><h2 id="mu-h">Matchup Builder</h2><span class="note">Vegas line, adjusted for how each team handles this kind of environment</span></div>
     <div class="mu">
       <div>
@@ -778,6 +815,10 @@ th{font-size:15px!important}
       <div><h3>Running cold</h3><p class="note sm">Record worse than the play</p><div class="tablewrap"><table class="due" id="due-cold"><tbody></tbody></table></div></div>
     </div>
   </section>
+  <section class="sec page" data-page="rankings" id="bigblown-sec" aria-labelledby="bb-h">
+    <div class="sechead"><h2 id="bb-h">Biggest Blown Leads</h2><span class="note">This season · the biggest leads that still turned into losses</span></div>
+        <div class="tablewrap"><table id="biggest"><thead><tr><th class="l">Team</th><th class="l">Game</th><th data-tip="tlead">Led by</th><th>Final</th></tr></thead><tbody></tbody></table></div>
+  </section>
   <section class="sec page" data-page="rankings" id="top-sec" aria-labelledby="top-h">
     <div class="sechead"><h2 id="top-h">Top 10 Games</h2><span class="note" id="top-note">Single-game grade</span></div>
     <p class="note">The best single games of the season. Tougher settings (road, night, a packed stadium, a ranked opponent) raise the grade. Tap a game to see how it graded. <button type="button" class="ib" data-more="top-more" aria-expanded="false" aria-label="More about this table" title="More">i</button></p>
@@ -820,44 +861,7 @@ th{font-size:15px!important}
 
 
 
-  <section class="sec page" data-page="tend" id="tend-sec" aria-labelledby="tend-h">
-    <div class="sechead"><h2 id="tend-h">Team Tendencies</h2><span class="note">Season projection · through Week 5 · hover a header for its formula · tap to sort</span></div>
-    <p class="note">The game grade tells you how a team played. These are habits that tend to stick from one year to the next, so they say more about how a team will play. Early in the season each number leans on last year (less so with a new coach) and moves as this season's games come in.</p>
-    <div class="modebar" style="justify-content:flex-start"><select id="tendconf" aria-label="Conference"><option value="">All Conferences</option><option>SEC</option><option>Big Ten</option><option>Big 12</option><option>ACC</option><option value="Independent">Notre Dame</option></select></div>
-    <div class="tablewrap">
-      <table id="tend">
-        <thead><tr><th class="l rank">#</th><th class="l">Team</th><th class="l hide-sm">Conf</th>
-          <th data-tk="pen" data-tip="tpen"><button>Penalties / Game</button></th>
-          <th data-tk="leadEpa" data-tip="tlead"><button>Foot on the Gas</button></th>
-          <th data-tk="go4" data-tip="tgo4"><button>Goes for It</button></th>
-          <th data-tk="leadPassAdj" data-tip="tsit"><button>Sits on a Lead</button></th>
-          <th data-tk="neuPass" data-tip="tpass"><button>Pass-First</button></th></tr></thead>
-        <tbody></tbody>
-      </table>
-    </div>
-    <h3>What made the cut, and what didn't</h3>
-    <p class="note">Carryover is how closely a habit one year matches the next: 0 is not at all, 1 is perfectly. For reference, how good a team is carries over at about 0.5. "Predicts" is whether the habit told us anything about next season's results.</p>
-    <div class="tablewrap"><table id="tendtest"><thead><tr><th class="l">Trait</th><th>Carryover 2021–24</th><th>Checked on 2025</th><th>Same coach</th><th class="l">Predicts next season</th><th class="l">Verdict</th></tr></thead><tbody></tbody></table></div>
-  </section>
 
-  <section class="sec page" data-page="trackers" id="trk-sec" aria-labelledby="trk-h">
-    <div class="sechead"><h2 id="trk-h">Trackers</h2><span class="note">2026 season · through Week 5 · hover a header for its formula · tap to sort</span></div>
-    <p class="note">Who lets games get away after building a lead, and who makes it count when the defense gets a stop.</p>
-    <div class="trk">
-      <div>
-        <h3>Blown Leads</h3>
-        <p class="note" id="blown-note"></p>
-        <div class="tablewrap"><table id="blown"><thead><tr><th class="l">Team</th><th data-bk2="lost" data-tip="tblown"><button>Lost after leading 7+</button></th><th data-bk2="lostAll" data-tip="tblownall"><button>Since 2019</button></th></tr></thead><tbody></tbody></table></div>
-        <h3>Biggest Blown Leads</h3>
-        <div class="tablewrap"><table id="biggest"><thead><tr><th class="l">Team</th><th class="l">Game</th><th data-tip="tlead">Led by</th><th>Final</th></tr></thead><tbody></tbody></table></div>
-      </div>
-      <div>
-        <h3>Cash-In After Stops</h3>
-        <p class="note" id="cash-note"></p>
-        <div class="tablewrap"><table id="cashtab"><thead><tr><th class="l">Team</th><th data-ck="rate" data-tip="tcash"><button>Scored</button></th><th data-ck="ppc" data-tip="tppc"><button>Pts / Chance</button></th><th data-ck="prev" data-tip="tcashprev"><button>Last Season</button></th></tr></thead><tbody></tbody></table></div>
-      </div>
-    </div>
-  </section>
 
   <section class="sec page" data-page="team" id="team" aria-labelledby="team-h">
     <div class="teamhead">
@@ -885,6 +889,7 @@ th{font-size:15px!important}
         <tbody></tbody>
       </table>
     </div>
+    <div id="teamhab"></div>
     <div class="bigwins"><h3>Biggest Wins Since 2019</h3><p class="note">Wins in big games, ranked by how big the game was. The grade shows how well they actually played.</p><div class="tablewrap"><table class="tbt" id="bigw"><thead><tr><th class="l">Game</th><th class="l hide-sm">Date</th><th data-tip="wl">Score</th><th data-tip="env">Stage</th><th data-tip="tgrade"><span class="hide-sm">Game </span>Grade</th></tr></thead><tbody id="tb-big"></tbody></table></div></div>
     <div class="tbwrap">
       <div><h3>Best Performances Since 2019</h3><div class="tablewrap"><table class="tbt"><thead><tr><th class="l">Game</th><th class="l hide-sm">Date</th><th data-tip="wl">Score</th><th data-tip="tgrade"><span class="hide-sm">Game </span>Grade</th></tr></thead><tbody id="tb-top"></tbody></table></div></div>
@@ -906,13 +911,40 @@ th{font-size:15px!important}
     </div>
   </section>
 
-  <section class="sec page" data-page="real" id="real-sec" aria-labelledby="real-h">
-    <h2 id="real-h">Is DAWG Real?</h2>
-    <p class="note">If grit is a trait, a team's grade should carry over: good this year, good next year. If it's mostly luck, it should reset. Each number below runs from 0 (no carryover at all) to 1 (perfect). For reference, how good a team is carries over at about 0.5.</p>
-    <div class="real" id="real"></div>
-    <div class="verdictbox" id="verdict"></div>
-  </section>
 
+  <section class="sec page" data-page="none" id="tend-sec" aria-labelledby="tend-h">
+    <div class="sechead"><h2 id="tend-h">Team Tendencies</h2><span class="note">Season projection · through Week 5 · hover a header for its formula · tap to sort</span></div>
+    <p class="note">The game grade tells you how a team played. These are habits that tend to stick from one year to the next, so they say more about how a team will play. Early in the season each number leans on last year (less so with a new coach) and moves as this season's games come in.</p>
+    <div class="modebar" style="justify-content:flex-start"><select id="tendconf" aria-label="Conference"><option value="">All Conferences</option><option>SEC</option><option>Big Ten</option><option>Big 12</option><option>ACC</option><option value="Independent">Notre Dame</option></select></div>
+    <div class="tablewrap">
+      <table id="tend">
+        <thead><tr><th class="l rank">#</th><th class="l">Team</th><th class="l hide-sm">Conf</th>
+          <th data-tk="pen" data-tip="tpen"><button>Penalties / Game</button></th>
+          <th data-tk="leadEpa" data-tip="tlead"><button>Foot on the Gas</button></th>
+          <th data-tk="go4" data-tip="tgo4"><button>Goes for It</button></th>
+          <th data-tk="leadPassAdj" data-tip="tsit"><button>Sits on a Lead</button></th>
+          <th data-tk="neuPass" data-tip="tpass"><button>Pass-First</button></th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+</section>
+  <section class="sec page" data-page="none" id="trk-sec" aria-labelledby="trk-h">
+    <div class="sechead"><h2 id="trk-h">Trackers</h2><span class="note">2026 season · through Week 5 · hover a header for its formula · tap to sort</span></div>
+    <p class="note">Who lets games get away after building a lead, and who makes it count when the defense gets a stop.</p>
+    <div class="trk">
+      <div>
+        <h3>Blown Leads</h3>
+        <p class="note" id="blown-note"></p>
+        <div class="tablewrap"><table id="blown"><thead><tr><th class="l">Team</th><th data-bk2="lost" data-tip="tblown"><button>Lost after leading 7+</button></th><th data-bk2="lostAll" data-tip="tblownall"><button>Since 2019</button></th></tr></thead><tbody></tbody></table></div>
+
+      </div>
+      <div>
+        <h3>Cash-In After Stops</h3>
+        <p class="note" id="cash-note"></p>
+        <div class="tablewrap"><table id="cashtab"><thead><tr><th class="l">Team</th><th data-ck="rate" data-tip="tcash"><button>Scored</button></th><th data-ck="ppc" data-tip="tppc"><button>Pts / Chance</button></th><th data-ck="prev" data-tip="tcashprev"><button>Last Season</button></th></tr></thead><tbody></tbody></table></div>
+      </div>
+    </div>
+  </section>
   <section class="sec page" data-page="method" id="method-sec">
     <h2>How the Grade Works</h2>
     <div class="method">
@@ -932,6 +964,19 @@ th{font-size:15px!important}
     <p class="note">Data: ESPN box scores, drive logs and closing lines (ESPN BET and DraftKings) for every game involving a current Power 4 team or Notre Dame since 2019, including bowls and playoffs. Coaches from Wikipedia's list of current FBS coaches. Attendance is missing for some games; those use a 75% default.</p>
     <p class="note"><b>Check the work:</b> <a href="dawg-index-games.csv" download style="color:var(--accent)">download every graded game</a> (CSV, one row per team per game, with each part of the grade). It's updated every Sunday with the site.</p>
   </section>
+  <section class="sec page" data-page="method" id="real-sec" aria-labelledby="real-h">
+    <h2 id="real-h">Does It Hold Up?</h2>
+    <p class="note">If grit is a trait, a team's grade should carry over: good this year, good next year. If it's mostly luck, it should reset. Each number below runs from 0 (no carryover at all) to 1 (perfect). For reference, how good a team is carries over at about 0.5.</p>
+    <div class="real" id="real"></div>
+    <div class="verdictbox" id="verdict"></div>
+  </section>
+  <section class="sec page" data-page="method" id="habits-sec" aria-labelledby="hab-h">
+    <h2 id="hab-h">Which Habits Stick</h2>
+    <p class="note">Each team page shows five habits. These are the ones that carry over from one season to the next; the grade itself mostly doesn't.</p>
+    <h3>What made the cut, and what didn't</h3>
+    <p class="note">Carryover is how closely a habit one year matches the next: 0 is not at all, 1 is perfectly. For reference, how good a team is carries over at about 0.5. "Predicts" is whether the habit told us anything about next season's results.</p>
+    <div class="tablewrap"><table id="tendtest"><thead><tr><th class="l">Trait</th><th>Carryover 2021–24</th><th>Checked on 2025</th><th>Same coach</th><th class="l">Predicts next season</th><th class="l">Verdict</th></tr></thead><tbody></tbody></table></div>
+    </section>
 <!--TIP-->  <footer class="sitefoot">
     <div><b>Free, no ads, updated every Sunday.</b> If the DAWG Index made you smarter or settled an argument, you can chip in for the data and the hours.</div>
     <a class="tipbtn" href="https://buymeacoffee.com/dawgindex" target="_blank" rel="noopener">☕ Buy me a coffee</a>
@@ -946,6 +991,380 @@ var TEND = {"teams":[{"id":"77","abbr":"NU","name":"Northwestern","conf":"Big Te
 var TOPS = {"2019": "<tr class='gc' tabindex='0' data-gid='401112098' data-t='2305' data-y='2019'><td class='l rank'>1</td><td class='l'><b>Kansas</b></td><td class='l'>at Boston College <span class='dim'>\u00b7 Wk 3</span><div class='conf tset'>Road + night + full house = grade +25%</div></td><td class='num'>W 48\u201324</td><td class='num'>+20.5</td><td class='num'>+15.1</td><td class='num tg pos'>+17.4</td><td class='num'>+16.7 <span class='dim'>(\u22120.7)</span></td></tr><tr class='gc' tabindex='0' data-gid='401112509' data-t='183' data-y='2019'><td class='l rank'>2</td><td class='l'><b>Syracuse</b></td><td class='l'>at Duke <span class='dim'>\u00b7 Wk 12</span><div class='conf tset'>Road = grade +10%</div></td><td class='num'>W 49\u20136</td><td class='num'>+9.0</td><td class='num'>+11.4</td><td class='num tg pos'>+16.4</td><td class='num'>+16.7 <span class='dim'>(+0.3)</span></td></tr><tr class='gc' tabindex='0' data-gid='401112228' data-t='194' data-y='2019'><td class='l rank'>3</td><td class='l'><b>Ohio State</b></td><td class='l'>at No. 13 Michigan <span class='dim'>\u00b7 Wk 14</span><div class='conf tset'>Road + full house + ranked opponent = grade +30%</div></td><td class='num'>W 56\u201327</td><td class='num'>\u22129.0</td><td class='num'>\u221211.2</td><td class='num tg pos'>+16.0</td><td class='num'>+15.7 <span class='dim'>(\u22120.3)</span></td></tr><tr class='gc' tabindex='0' data-gid='401112204' data-t='213' data-y='2019'><td class='l rank'>4</td><td class='l'><b>Penn State</b></td><td class='l'>at Maryland <span class='dim'>\u00b7 Wk 5</span><div class='conf tset'>Road + night + full house = grade +25%</div></td><td class='num'>W 59\u20130</td><td class='num'>\u22126.5</td><td class='num'>\u221214.2</td><td class='num tg pos'>+15.6</td><td class='num'>+14.4 <span class='dim'>(\u22121.2)</span> <span class=\"tag\" style=\"display:block;margin:2px 0 0\">Opp. overrated</span></td></tr><tr class='gc' tabindex='0' data-gid='401112237' data-t='275' data-y='2019'><td class='l rank'>5</td><td class='l'><b>Wisconsin</b></td><td class='l'>at No. 8 Minnesota <span class='dim'>\u00b7 Wk 14</span><div class='conf tset'>Road + full house + top-10 opponent = grade +40%</div></td><td class='num'>W 38\u201317</td><td class='num'>\u22123.0</td><td class='num'>\u22120.2</td><td class='num tg pos'>+14.5</td><td class='num'>+14.9 <span class='dim'>(+0.4)</span></td></tr><tr class='gc' tabindex='0' data-gid='401135285' data-t='251' data-y='2019'><td class='l rank'>6</td><td class='l'><b>Texas</b></td><td class='l'>vs No. 11 Utah <span class='dim'>\u00b7 Bowl/CFP</span><div class='conf tset'>Night + ranked opponent + postseason = grade +25%</div></td><td class='num'>W 38\u201310</td><td class='num'>+7.0</td><td class='num'>+7.8</td><td class='num tg pos'>+14.3</td><td class='num'>+14.4 <span class='dim'>(+0.1)</span></td></tr><tr class='gc' tabindex='0' data-gid='401136253' data-t='2294' data-y='2019'><td class='l rank'>7</td><td class='l'><b>Iowa</b></td><td class='l'>vs No. 22 USC <span class='dim'>\u00b7 Bowl/CFP</span><div class='conf tset'>Night + ranked opponent + postseason = grade +25%</div></td><td class='num'>W 49\u201324</td><td class='num'>+1.5</td><td class='num'>\u22121.1</td><td class='num tg pos'>+13.9</td><td class='num'>+13.6 <span class='dim'>(\u22120.3)</span></td></tr><tr class='gc' tabindex='0' data-gid='401112102' data-t='2305' data-y='2019'><td class='l rank'>8</td><td class='l'><b>Kansas</b></td><td class='l'>at No. 15 Texas <span class='dim'>\u00b7 Wk 8</span><div class='conf tset'>Road + night + full house + ranked opponent = grade +35%</div></td><td class='num'>L 48\u201350</td><td class='num'>+21.0</td><td class='num'>+20.4</td><td class='num tg pos'>+13.5</td><td class='num'>+13.3 <span class='dim'>(\u22120.2)</span></td></tr><tr class='gc' tabindex='0' data-gid='401112465' data-t='150' data-y='2019'><td class='l rank'>9</td><td class='l'><b>Duke</b></td><td class='l'>at Virginia Tech <span class='dim'>\u00b7 Wk 5</span><div class='conf tset'>Road + night + full house = grade +25%</div></td><td class='num'>W 45\u201310</td><td class='num'>+2.5</td><td class='num'>+11.4</td><td class='num tg pos'>+13.0</td><td class='num'>+14.2 <span class='dim'>(+1.2)</span> <span class=\"tag\" style=\"display:block;margin:2px 0 0\">Opp. underrated</span></td></tr><tr class='gc' tabindex='0' data-gid='401112476' data-t='259' data-y='2019'><td class='l rank'>10</td><td class='l'><b>Virginia Tech</b></td><td class='l'>at Miami <span class='dim'>\u00b7 Wk 6</span><div class='conf tset'>Road = grade +10%</div></td><td class='num'>W 42\u201335</td><td class='num'>+14.0</td><td class='num'>+1.3</td><td class='num tg pos'>+12.6</td><td class='num'>+11.2 <span class='dim'>(\u22121.4)</span> <span class=\"tag\" style=\"display:block;margin:2px 0 0\">Opp. overrated</span></td></tr>", "2020": "<tr class='gc' tabindex='0' data-gid='401249429' data-t='9' data-y='2020'><td class='l rank'>1</td><td class='l'><b>Arizona State</b></td><td class='l'>at Arizona <span class='dim'>\u00b7 Wk 15</span><div class='conf tset'>Road = grade +10%</div></td><td class='num'>W 70\u20137</td><td class='num'>\u22129.0</td><td class='num'>\u22126.1</td><td class='num tg pos'>+16.7</td><td class='num'>+17.1 <span class='dim'>(+0.4)</span></td></tr><tr class='gc' tabindex='0' data-gid='401247312' data-t='120' data-y='2020'><td class='l rank'>2</td><td class='l'><b>Maryland</b></td><td class='l'>at Penn State <span class='dim'>\u00b7 Wk 10</span><div class='conf tset'>Road = grade +10%</div></td><td class='num'>W 35\u201319</td><td class='num'>+27.5</td><td class='num'>+12.0</td><td class='num tg pos'>+15.1</td><td class='num'>+13.3 <span class='dim'>(\u22121.8)</span> <span class=\"tag\" style=\"display:block;margin:2px 0 0\">Opp. overrated</span></td></tr><tr class='gc' tabindex='0' data-gid='401237111' data-t='96' data-y='2020'><td class='l rank'>3</td><td class='l'><b>Kentucky</b></td><td class='l'>at No. 18 Tennessee <span class='dim'>\u00b7 Wk 7</span><div class='conf tset'>Road + ranked opponent = grade +20%</div></td><td class='num'>W 34\u20137</td><td class='num'>+6.5</td><td class='num'>+1.1</td><td class='num tg pos'>+14.2</td><td class='num'>+13.4 <span class='dim'>(\u22120.8)</span></td></tr><tr class='gc' tabindex='0' data-gid='401256194' data-t='201' data-y='2020'><td class='l rank'>4</td><td class='l'><b>Oklahoma</b></td><td class='l'>vs No. 7 Florida <span class='dim'>\u00b7 Bowl/CFP</span><div class='conf tset'>Night + top-10 opponent + postseason = grade +35%</div></td><td class='num'>W 55\u201320</td><td class='num'>+3.0</td><td class='num'>\u22122.3</td><td class='num tg pos'>+13.6</td><td class='num'>+12.8 <span class='dim'>(\u22120.8)</span></td></tr><tr class='gc' tabindex='0' data-gid='401236036' data-t='251' data-y='2020'><td class='l rank'>5</td><td class='l'><b>Texas</b></td><td class='l'>at Kansas State <span class='dim'>\u00b7 Wk 14</span><div class='conf tset'>Road = grade +10%</div></td><td class='num'>W 69\u201331</td><td class='num'>\u22127.5</td><td class='num'>\u22125.8</td><td class='num tg pos'>+13.6</td><td class='num'>+13.8 <span class='dim'>(+0.2)</span></td></tr><tr class='gc' tabindex='0' data-gid='401240173' data-t='194' data-y='2020'><td class='l rank'>6</td><td class='l'><b>Ohio State</b></td><td class='l'>vs Clemson <span class='dim'>\u00b7 Bowl/CFP</span><div class='conf tset'>Night + postseason = grade +15%</div></td><td class='num'>W 49\u201328</td><td class='num'>+7.5</td><td class='num'>+8.0</td><td class='num tg pos'>+13.4</td><td class='num'>+13.5 <span class='dim'>(+0.1)</span></td></tr><tr class='gc' tabindex='0' data-gid='401235996' data-t='2306' data-y='2020'><td class='l rank'>7</td><td class='l'><b>Kansas State</b></td><td class='l'>at No. 3 Oklahoma <span class='dim'>\u00b7 Wk 4</span><div class='conf tset'>Road + top-10 opponent = grade +30%</div></td><td class='num'>W 38\u201335</td><td class='num'>+27.5</td><td class='num'>+22.3</td><td class='num tg pos'>+13.2</td><td class='num'>+12.3 <span class='dim'>(\u22120.9)</span></td></tr><tr class='gc' tabindex='0' data-gid='401212488' data-t='2132' data-y='2020'><td class='l rank'>8</td><td class='l'><b>Cincinnati</b></td><td class='l'>at No. 16 SMU <span class='dim'>\u00b7 Wk 8</span><div class='conf tset'>Road + night + ranked opponent = grade +25%</div></td><td class='num'>W 42\u201313</td><td class='num'>+1.0</td><td class='num'>\u22123.4</td><td class='num tg pos'>+12.5</td><td class='num'>+11.9 <span class='dim'>(\u22120.6)</span></td></tr><tr class='gc' tabindex='0' data-gid='401266694' data-t='52' data-y='2020'><td class='l rank'>9</td><td class='l'><b>Florida State</b></td><td class='l'>vs Duke <span class='dim'>\u00b7 Wk 15</span><div class='conf tset'>Normal setting, no adjustment</div></td><td class='num'>W 56\u201335</td><td class='num'>\u22123.0</td><td class='num'>\u22121.5</td><td class='num tg pos'>+12.1</td><td class='num'>+12.2 <span class='dim'>(+0.1)</span></td></tr><tr class='gc' tabindex='0' data-gid='401247313' data-t='2294' data-y='2020'><td class='l rank'>10</td><td class='l'><b>Iowa</b></td><td class='l'>vs Michigan State <span class='dim'>\u00b7 Wk 10</span><div class='conf tset'>Normal setting, no adjustment</div></td><td class='num'>W 49\u20137</td><td class='num'>\u22125.5</td><td class='num'>\u221216.2</td><td class='num tg pos'>+12.0</td><td class='num'>+10.7 <span class='dim'>(\u22121.3)</span> <span class=\"tag\" style=\"display:block;margin:2px 0 0\">Opp. overrated</span></td></tr>", "2021": "<tr class='gc' tabindex='0' data-gid='401309843' data-t='24' data-y='2021'><td class='l rank'>1</td><td class='l'><b>Stanford</b></td><td class='l'>at No. 14 USC <span class='dim'>\u00b7 Wk 2</span><div class='conf tset'>Road + night + full house + ranked opponent = grade +35%</div></td><td class='num'>W 42\u201328</td><td class='num'>+17.5</td><td class='num'>+6.6</td><td class='num tg pos'>+17.9</td><td class='num'>+16.3 <span class='dim'>(\u22121.6)</span> <span class=\"tag\" style=\"display:block;margin:2px 0 0\">Opp. overrated</span></td></tr><tr class='gc' tabindex='0' data-gid='401282641' data-t='59' data-y='2021'><td class='l rank'>2</td><td class='l'><b>Georgia Tech</b></td><td class='l'>vs No. 21 North Carolina <span class='dim'>\u00b7 Wk 4</span><div class='conf tset'>Night + ranked opponent = grade +15%</div></td><td class='num'>W 45\u201322</td><td class='num'>+14.5</td><td class='num'>+9.7</td><td class='num tg pos'>+15.9</td><td class='num'>+15.3 <span class='dim'>(\u22120.6)</span></td></tr><tr class='gc' tabindex='0' data-gid='401282125' data-t='2579' data-y='2021'><td class='l rank'>3</td><td class='l'><b>South Carolina</b></td><td class='l'>vs Florida <span class='dim'>\u00b7 Wk 10</span><div class='conf tset'>Night = grade +5%</div></td><td class='num'>W 40\u201317</td><td class='num'>+20.5</td><td class='num'>+7.0</td><td class='num tg pos'>+15.8</td><td class='num'>+14.3 <span class='dim'>(\u22121.5)</span> <span class=\"tag\" style=\"display:block;margin:2px 0 0\">Opp. overrated</span></td></tr><tr class='gc' tabindex='0' data-gid='401287941' data-t='2305' data-y='2021'><td class='l rank'>4</td><td class='l'><b>Kansas</b></td><td class='l'>at Texas <span class='dim'>\u00b7 Wk 11</span><div class='conf tset'>Road + night + full house = grade +25%</div></td><td class='num'>W 57\u201356</td><td class='num'>+31.0</td><td class='num'>+18.8</td><td class='num tg pos'>+15.0</td><td class='num'>+12.9 <span class='dim'>(\u22122.1)</span> <span class=\"tag\" style=\"display:block;margin:2px 0 0\">Opp. overrated</span></td></tr><tr class='gc' tabindex='0' data-gid='401282149' data-t='96' data-y='2021'><td class='l rank'>5</td><td class='l'><b>Kentucky</b></td><td class='l'>at Louisville <span class='dim'>\u00b7 Wk 13</span><div class='conf tset'>Road + night + full house = grade +25%</div></td><td class='num'>W 52\u201321</td><td class='num'>+3.0</td><td class='num'>+0.6</td><td class='num tg pos'>+15.0</td><td class='num'>+14.7 <span class='dim'>(\u22120.3)</span></td></tr><tr class='gc' tabindex='0' data-gid='401309904' data-t='26' data-y='2021'><td class='l rank'>6</td><td class='l'><b>UCLA</b></td><td class='l'>at USC <span class='dim'>\u00b7 Wk 12</span><div class='conf tset'>Road + full house = grade +20%</div></td><td class='num'>W 62\u201333</td><td class='num'>\u22123.5</td><td class='num'>\u22125.4</td><td class='num tg pos'>+14.8</td><td class='num'>+14.5 <span class='dim'>(\u22120.3)</span></td></tr><tr class='gc' tabindex='0' data-gid='401282102' data-t='2633' data-y='2021'><td class='l rank'>7</td><td class='l'><b>Tennessee</b></td><td class='l'>vs South Carolina <span class='dim'>\u00b7 Wk 6</span><div class='conf tset'>Normal setting, no adjustment</div></td><td class='num'>W 45\u201320</td><td class='num'>\u221210.5</td><td class='num'>\u22128.3</td><td class='num tg pos'>+14.1</td><td class='num'>+14.3 <span class='dim'>(+0.2)</span></td></tr><tr class='gc' tabindex='0' data-gid='401301012' data-t='248' data-y='2021'><td class='l rank'>8</td><td class='l'><b>Houston</b></td><td class='l'>at Tulsa <span class='dim'>\u00b7 Wk 5</span><div class='conf tset'>Road + night + group of 5 opponent (no adjustment)</div></td><td class='num'>W 45\u201310</td><td class='num'>+3.5</td><td class='num'>\u22123.2</td><td class='num tg pos'>+14.1</td><td class='num'>+13.3 <span class='dim'>(\u22120.8)</span></td></tr><tr class='gc' tabindex='0' data-gid='401282759' data-t='2294' data-y='2021'><td class='l rank'>9</td><td class='l'><b>Iowa</b></td><td class='l'>at Maryland <span class='dim'>\u00b7 Wk 5</span><div class='conf tset'>Road + night + full house = grade +25%</div></td><td class='num'>W 51\u201314</td><td class='num'>\u22123.0</td><td class='num'>+0.5</td><td class='num tg pos'>+13.9</td><td class='num'>+14.3 <span class='dim'>(+0.4)</span></td></tr><tr class='gc' tabindex='0' data-gid='401282093' data-t='2633' data-y='2021'><td class='l rank'>10</td><td class='l'><b>Tennessee</b></td><td class='l'>at Missouri <span class='dim'>\u00b7 Wk 5</span><div class='conf tset'>Road = grade +10%</div></td><td class='num'>W 62\u201324</td><td class='num'>+2.5</td><td class='num'>\u22125.9</td><td class='num tg pos'>+13.5</td><td class='num'>+12.5 <span class='dim'>(\u22121.0)</span> <span class=\"tag\" style=\"display:block;margin:2px 0 0\">Opp. overrated</span></td></tr>", "2022": "<tr class='gc' tabindex='0' data-gid='401403953' data-t='2579' data-y='2022'><td class='l rank'>1</td><td class='l'><b>South Carolina</b></td><td class='l'>vs No. 5 Tennessee <span class='dim'>\u00b7 Wk 12</span><div class='conf tset'>Night + top-10 opponent = grade +25%</div></td><td class='num'>W 63\u201338</td><td class='num'>+22.5</td><td class='num'>+12.8</td><td class='num tg pos'>+19.6</td><td class='num'>+18.3 <span class='dim'>(\u22121.3)</span> <span class=\"tag\" style=\"display:block;margin:2px 0 0\">Opp. overrated</span></td></tr><tr class='gc' tabindex='0' data-gid='401404109' data-t='2306' data-y='2022'><td class='l rank'>2</td><td class='l'><b>Kansas State</b></td><td class='l'>at Baylor <span class='dim'>\u00b7 Wk 11</span><div class='conf tset'>Road + night + full house = grade +25%</div></td><td class='num'>W 31\u20133</td><td class='num'>+2.5</td><td class='num'>\u22121.9</td><td class='num tg pos'>+16.4</td><td class='num'>+15.8 <span class='dim'>(\u22120.6)</span></td></tr><tr class='gc' tabindex='0' data-gid='401411148' data-t='97' data-y='2022'><td class='l rank'>3</td><td class='l'><b>Louisville</b></td><td class='l'>vs No. 10 Wake Forest <span class='dim'>\u00b7 Wk 9</span><div class='conf tset'>Top-10 opponent = grade +20%</div></td><td class='num'>W 48\u201321</td><td class='num'>+3.0</td><td class='num'>+0.8</td><td class='num tg pos'>+15.7</td><td class='num'>+15.5 <span class='dim'>(\u22120.2)</span></td></tr><tr class='gc' tabindex='0' data-gid='401405153' data-t='130' data-y='2022'><td class='l rank'>4</td><td class='l'><b>Michigan</b></td><td class='l'>at No. 2 Ohio State <span class='dim'>\u00b7 Wk 13</span><div class='conf tset'>Road + full house + top-10 opponent = grade +40%</div></td><td class='num'>W 45\u201323</td><td class='num'>+9.0</td><td class='num'>+6.3</td><td class='num tg pos'>+15.6</td><td class='num'>+15.2 <span class='dim'>(\u22120.4)</span></td></tr><tr class='gc' tabindex='0' data-gid='401437035' data-t='254' data-y='2022'><td class='l rank'>5</td><td class='l'><b>Utah</b></td><td class='l'>vs No. 4 USC <span class='dim'>\u00b7 Wk 14</span><div class='conf tset'>Night + top-10 opponent = grade +25%</div></td><td class='num'>W 47\u201324</td><td class='num'>+2.5</td><td class='num'>\u22122.4</td><td class='num tg pos'>+14.4</td><td class='num'>+13.7 <span class='dim'>(\u22120.7)</span></td></tr><tr class='gc' tabindex='0' data-gid='401404102' data-t='2306' data-y='2022'><td class='l rank'>6</td><td class='l'><b>Kansas State</b></td><td class='l'>vs No. 9 Oklahoma State <span class='dim'>\u00b7 Wk 9</span><div class='conf tset'>Top-10 opponent = grade +20%</div></td><td class='num'>W 48\u20130</td><td class='num'>\u22122.5</td><td class='num'>\u22127.3</td><td class='num tg pos'>+12.9</td><td class='num'>+12.2 <span class='dim'>(\u22120.7)</span></td></tr><tr class='gc' tabindex='0' data-gid='401403989' data-t='2483' data-y='2022'><td class='l rank'>7</td><td class='l'><b>Oregon</b></td><td class='l'>vs No. 12 BYU <span class='dim'>\u00b7 Wk 3</span><div class='conf tset'>Ranked opponent = grade +10%</div></td><td class='num'>W 41\u201320</td><td class='num'>\u22123.5</td><td class='num'>\u221210.0</td><td class='num tg pos'>+12.8</td><td class='num'>+12.1 <span class='dim'>(\u22120.7)</span></td></tr><tr class='gc' tabindex='0' data-gid='401403963' data-t='245' data-y='2022'><td class='l rank'>8</td><td class='l'><b>Texas A&amp;M</b></td><td class='l'>vs No. 5 LSU <span class='dim'>\u00b7 Wk 13</span><div class='conf tset'>Night + top-10 opponent = grade +25%</div></td><td class='num'>W 38\u201323</td><td class='num'>+10.0</td><td class='num'>+7.8</td><td class='num tg pos'>+12.7</td><td class='num'>+12.4 <span class='dim'>(\u22120.3)</span></td></tr><tr class='gc' tabindex='0' data-gid='401403923' data-t='99' data-y='2022'><td class='l rank'>9</td><td class='l'><b>LSU</b></td><td class='l'>vs No. 7 Ole Miss <span class='dim'>\u00b7 Wk 8</span><div class='conf tset'>Top-10 opponent = grade +20%</div></td><td class='num'>W 45\u201320</td><td class='num'>0.0</td><td class='num'>\u22124.0</td><td class='num tg pos'>+12.7</td><td class='num'>+12.2 <span class='dim'>(\u22120.5)</span></td></tr><tr class='gc' tabindex='0' data-gid='401403882' data-t='213' data-y='2022'><td class='l rank'>10</td><td class='l'><b>Penn State</b></td><td class='l'>at Auburn <span class='dim'>\u00b7 Wk 3</span><div class='conf tset'>Road + full house = grade +20%</div></td><td class='num'>W 41\u201312</td><td class='num'>\u22122.5</td><td class='num'>\u22125.4</td><td class='num tg pos'>+12.6</td><td class='num'>+12.2 <span class='dim'>(\u22120.4)</span></td></tr>", "2023": "<tr class='gc' tabindex='0' data-gid='401520182' data-t='52' data-y='2023'><td class='l rank'>1</td><td class='l'><b>Florida State</b></td><td class='l'>vs No. 5 LSU <span class='dim'>\u00b7 Wk 1</span><div class='conf tset'>Night + top-10 opponent = grade +25%</div></td><td class='num'>W 45\u201324</td><td class='num'>+2.5</td><td class='num'>+1.3</td><td class='num tg pos'>+15.0</td><td class='num'>+14.8 <span class='dim'>(\u22120.2)</span></td></tr><tr class='gc' tabindex='0' data-gid='401525886' data-t='66' data-y='2023'><td class='l rank'>2</td><td class='l'><b>Iowa State</b></td><td class='l'>at BYU <span class='dim'>\u00b7 Wk 11</span><div class='conf tset'>Road + night + full house = grade +25%</div></td><td class='num'>W 45\u201313</td><td class='num'>\u22127.5</td><td class='num'>\u22122.5</td><td class='num tg pos'>+13.2</td><td class='num'>+13.9 <span class='dim'>(+0.7)</span></td></tr><tr class='gc' tabindex='0' data-gid='401525468' data-t='150' data-y='2023'><td class='l rank'>3</td><td class='l'><b>Duke</b></td><td class='l'>vs No. 9 Clemson <span class='dim'>\u00b7 Wk 1</span><div class='conf tset'>Night + top-10 opponent = grade +25%</div></td><td class='num'>W 28\u20137</td><td class='num'>+12.5</td><td class='num'>+1.3</td><td class='num tg pos'>+13.0</td><td class='num'>+11.5 <span class='dim'>(\u22121.5)</span> <span class=\"tag\" style=\"display:block;margin:2px 0 0\">Opp. overrated</span></td></tr><tr class='gc' tabindex='0' data-gid='401525542' data-t='59' data-y='2023'><td class='l rank'>4</td><td class='l'><b>Georgia Tech</b></td><td class='l'>at Virginia <span class='dim'>\u00b7 Wk 10</span><div class='conf tset'>Road = grade +10%</div></td><td class='num'>W 45\u201317</td><td class='num'>0.0</td><td class='num'>\u22123.7</td><td class='num tg pos'>+13.0</td><td class='num'>+12.6 <span class='dim'>(\u22120.4)</span></td></tr><tr class='gc' tabindex='0' data-gid='401525564' data-t='259' data-y='2023'><td class='l rank'>5</td><td class='l'><b>Virginia Tech</b></td><td class='l'>at Virginia <span class='dim'>\u00b7 Wk 13</span><div class='conf tset'>Road = grade +10%</div></td><td class='num'>W 55\u201317</td><td class='num'>\u22121.0</td><td class='num'>\u22123.9</td><td class='num tg pos'>+12.9</td><td class='num'>+12.6 <span class='dim'>(\u22120.3)</span></td></tr><tr class='gc' tabindex='0' data-gid='401525892' data-t='2116' data-y='2023'><td class='l rank'>6</td><td class='l'><b>UCF</b></td><td class='l'>vs No. 15 Oklahoma State <span class='dim'>\u00b7 Wk 11</span><div class='conf tset'>Ranked opponent = grade +10%</div></td><td class='num'>W 45\u20133</td><td class='num'>+2.0</td><td class='num'>+0.6</td><td class='num tg pos'>+12.9</td><td class='num'>+12.7 <span class='dim'>(\u22120.2)</span></td></tr><tr class='gc' tabindex='0' data-gid='401520380' data-t='2' data-y='2023'><td class='l rank'>7</td><td class='l'><b>Auburn</b></td><td class='l'>at Arkansas <span class='dim'>\u00b7 Wk 11</span><div class='conf tset'>Road + full house = grade +20%</div></td><td class='num'>W 48\u201310</td><td class='num'>+2.5</td><td class='num'>+4.1</td><td class='num tg pos'>+12.8</td><td class='num'>+13.0 <span class='dim'>(+0.2)</span></td></tr><tr class='gc' tabindex='0' data-gid='401524031' data-t='87' data-y='2023'><td class='l rank'>8</td><td class='l'><b>Notre Dame</b></td><td class='l'>vs No. 10 USC <span class='dim'>\u00b7 Wk 7</span><div class='conf tset'>Night + top-10 opponent = grade +25%</div></td><td class='num'>W 48\u201320</td><td class='num'>\u22123.0</td><td class='num'>\u22129.1</td><td class='num tg pos'>+12.6</td><td class='num'>+11.8 <span class='dim'>(\u22120.8)</span></td></tr><tr class='gc' tabindex='0' data-gid='401524058' data-t='12' data-y='2023'><td class='l rank'>9</td><td class='l'><b>Arizona</b></td><td class='l'>vs No. 22 Utah <span class='dim'>\u00b7 Wk 12</span><div class='conf tset'>Ranked opponent = grade +10%</div></td><td class='num'>W 42\u201318</td><td class='num'>\u22122.5</td><td class='num'>\u22127.5</td><td class='num tg pos'>+12.1</td><td class='num'>+11.5 <span class='dim'>(\u22120.6)</span></td></tr><tr class='gc' tabindex='0' data-gid='401525506' data-t='97' data-y='2023'><td class='l rank'>10</td><td class='l'><b>Louisville</b></td><td class='l'>vs Boston College <span class='dim'>\u00b7 Wk 4</span><div class='conf tset'>Normal setting, no adjustment</div></td><td class='num'>W 56\u201328</td><td class='num'>\u221214.0</td><td class='num'>\u221211.0</td><td class='num tg pos'>+12.0</td><td class='num'>+12.3 <span class='dim'>(+0.3)</span></td></tr>", "2024": "<tr class='gc' tabindex='0' data-gid='401636872' data-t='252' data-y='2024'><td class='l rank'>1</td><td class='l'><b>BYU</b></td><td class='l'>vs No. 13 Kansas State <span class='dim'>\u00b7 Wk 4</span><div class='conf tset'>Night + ranked opponent = grade +15%</div></td><td class='num'>W 38\u20139</td><td class='num'>+7.5</td><td class='num'>\u22122.9</td><td class='num tg pos'>+17.0</td><td class='num'>+15.7 <span class='dim'>(\u22121.3)</span> <span class=\"tag\" style=\"display:block;margin:2px 0 0\">Opp. overrated</span></td></tr><tr class='gc' tabindex='0' data-gid='401636885' data-t='38' data-y='2024'><td class='l rank'>2</td><td class='l'><b>Colorado</b></td><td class='l'>at UCF <span class='dim'>\u00b7 Wk 5</span><div class='conf tset'>Road + full house = grade +20%</div></td><td class='num'>W 48\u201321</td><td class='num'>+12.5</td><td class='num'>\u22120.5</td><td class='num tg pos'>+16.6</td><td class='num'>+14.9 <span class='dim'>(\u22121.7)</span> <span class=\"tag\" style=\"display:block;margin:2px 0 0\">Opp. overrated</span></td></tr><tr class='gc' tabindex='0' data-gid='401628513' data-t='77' data-y='2024'><td class='l rank'>3</td><td class='l'><b>Northwestern</b></td><td class='l'>at Maryland <span class='dim'>\u00b7 Wk 7</span><div class='conf tset'>Road + night + full house = grade +25%</div></td><td class='num'>W 37\u201310</td><td class='num'>+10.5</td><td class='num'>+8.2</td><td class='num tg pos'>+16.0</td><td class='num'>+15.7 <span class='dim'>(\u22120.3)</span></td></tr><tr class='gc' tabindex='0' data-gid='401636904' data-t='2306' data-y='2024'><td class='l rank'>4</td><td class='l'><b>Kansas State</b></td><td class='l'>at West Virginia <span class='dim'>\u00b7 Wk 8</span><div class='conf tset'>Road + night + full house = grade +25%</div></td><td class='num'>W 45\u201318</td><td class='num'>\u22122.5</td><td class='num'>\u22122.5</td><td class='num tg pos'>+14.3</td><td class='num'>+14.3 <span class='dim'>(0.0)</span></td></tr><tr class='gc' tabindex='0' data-gid='401636902' data-t='239' data-y='2024'><td class='l rank'>5</td><td class='l'><b>Baylor</b></td><td class='l'>at Texas Tech <span class='dim'>\u00b7 Wk 8</span><div class='conf tset'>Road + full house = grade +20%</div></td><td class='num'>W 59\u201335</td><td class='num'>+4.5</td><td class='num'>+1.6</td><td class='num tg pos'>+14.1</td><td class='num'>+13.7 <span class='dim'>(\u22120.4)</span></td></tr><tr class='gc' tabindex='0' data-gid='401673465' data-t='9' data-y='2024'><td class='l rank'>6</td><td class='l'><b>Arizona State</b></td><td class='l'>vs No. 16 Iowa State <span class='dim'>\u00b7 Wk 15</span><div class='conf tset'>Ranked opponent = grade +10%</div></td><td class='num'>W 45\u201319</td><td class='num'>+1.5</td><td class='num'>+1.4</td><td class='num tg pos'>+14.0</td><td class='num'>+14.0 <span class='dim'>(0.0)</span></td></tr><tr class='gc' tabindex='0' data-gid='401628978' data-t='87' data-y='2024'><td class='l rank'>7</td><td class='l'><b>Notre Dame</b></td><td class='l'>at Purdue <span class='dim'>\u00b7 Wk 3</span><div class='conf tset'>Road + full house = grade +20%</div></td><td class='num'>W 66\u20137</td><td class='num'>\u22127.5</td><td class='num'>\u221222.6</td><td class='num tg pos'>+13.1</td><td class='num'>+11.0 <span class='dim'>(\u22122.1)</span> <span class=\"tag\" style=\"display:block;margin:2px 0 0\">Opp. overrated</span></td></tr><tr class='gc' tabindex='0' data-gid='401628413' data-t='333' data-y='2024'><td class='l rank'>8</td><td class='l'><b>Alabama</b></td><td class='l'>at No. 15 LSU <span class='dim'>\u00b7 Wk 11</span><div class='conf tset'>Road + night + full house + ranked opponent = grade +35%</div></td><td class='num'>W 42\u201313</td><td class='num'>\u22122.5</td><td class='num'>+1.7</td><td class='num tg pos'>+13.0</td><td class='num'>+13.6 <span class='dim'>(+0.6)</span></td></tr><tr class='gc' tabindex='0' data-gid='401628512' data-t='2294' data-y='2024'><td class='l rank'>9</td><td class='l'><b>Iowa</b></td><td class='l'>vs Washington <span class='dim'>\u00b7 Wk 7</span><div class='conf tset'>Normal setting, no adjustment</div></td><td class='num'>W 40\u201316</td><td class='num'>\u22122.5</td><td class='num'>\u22127.4</td><td class='num tg pos'>+12.7</td><td class='num'>+12.2 <span class='dim'>(\u22120.5)</span></td></tr><tr class='gc' tabindex='0' data-gid='401628406' data-t='145' data-y='2024'><td class='l rank'>10</td><td class='l'><b>Ole Miss</b></td><td class='l'>at Arkansas <span class='dim'>\u00b7 Wk 10</span><div class='conf tset'>Road + full house = grade +20%</div></td><td class='num'>W 63\u201331</td><td class='num'>\u22127.5</td><td class='num'>\u22125.2</td><td class='num tg pos'>+12.5</td><td class='num'>+12.8 <span class='dim'>(+0.3)</span></td></tr>", "2025": "<tr class='gc' tabindex='0' data-gid='401769074' data-t='84' data-y='2025'><td class='l rank'>1</td><td class='l'><b>Indiana</b></td><td class='l'>vs No. 5 Oregon <span class='dim'>\u00b7 Bowl/CFP</span><div class='conf tset'>Night + top-10 opponent + postseason = grade +35%</div></td><td class='num'>W 56\u201322</td><td class='num'>\u22123.0</td><td class='num'>\u22120.8</td><td class='num tg pos'>+16.2</td><td class='num'>+16.5 <span class='dim'>(+0.3)</span></td></tr><tr class='gc' tabindex='0' data-gid='401752863' data-t='26' data-y='2025'><td class='l rank'>2</td><td class='l'><b>UCLA</b></td><td class='l'>at Michigan State <span class='dim'>\u00b7 Wk 7</span><div class='conf tset'>Road + full house = grade +20%</div></td><td class='num'>W 38\u201313</td><td class='num'>+6.5</td><td class='num'>+10.1</td><td class='num tg pos'>+15.8</td><td class='num'>+16.3 <span class='dim'>(+0.5)</span></td></tr><tr class='gc' tabindex='0' data-gid='401756949' data-t='254' data-y='2025'><td class='l rank'>3</td><td class='l'><b>Utah</b></td><td class='l'>at Baylor <span class='dim'>\u00b7 Wk 12</span><div class='conf tset'>Road + night + full house = grade +25%</div></td><td class='num'>W 55\u201328</td><td class='num'>\u22129.5</td><td class='num'>\u221211.2</td><td class='num tg pos'>+13.0</td><td class='num'>+12.8 <span class='dim'>(\u22120.2)</span></td></tr><tr class='gc' tabindex='0' data-gid='401756937' data-t='12' data-y='2025'><td class='l rank'>4</td><td class='l'><b>Arizona</b></td><td class='l'>at Colorado <span class='dim'>\u00b7 Wk 10</span><div class='conf tset'>Road = grade +10%</div></td><td class='num'>W 52\u201317</td><td class='num'>\u22123.5</td><td class='num'>\u22127.5</td><td class='num tg pos'>+12.8</td><td class='num'>+12.3 <span class='dim'>(\u22120.5)</span></td></tr><tr class='gc' tabindex='0' data-gid='401752869' data-t='2294' data-y='2025'><td class='l rank'>5</td><td class='l'><b>Iowa</b></td><td class='l'>at Wisconsin <span class='dim'>\u00b7 Wk 7</span><div class='conf tset'>Road + night + full house = grade +25%</div></td><td class='num'>W 37\u20130</td><td class='num'>\u22124.5</td><td class='num'>\u22128.7</td><td class='num tg pos'>+12.7</td><td class='num'>+12.1 <span class='dim'>(\u22120.6)</span></td></tr><tr class='gc' tabindex='0' data-gid='401752910' data-t='264' data-y='2025'><td class='l rank'>6</td><td class='l'><b>Washington</b></td><td class='l'>at UCLA <span class='dim'>\u00b7 Wk 13</span><div class='conf tset'>Road + night = grade +15%</div></td><td class='num'>W 48\u201314</td><td class='num'>\u221210.5</td><td class='num'>\u22129.8</td><td class='num tg pos'>+12.0</td><td class='num'>+12.1 <span class='dim'>(+0.1)</span></td></tr><tr class='gc' tabindex='0' data-gid='401752747' data-t='2633' data-y='2025'><td class='l rank'>7</td><td class='l'><b>Tennessee</b></td><td class='l'>at Kentucky <span class='dim'>\u00b7 Wk 9</span><div class='conf tset'>Road + night + full house = grade +25%</div></td><td class='num'>W 56\u201334</td><td class='num'>\u22127.5</td><td class='num'>\u22125.3</td><td class='num tg pos'>+11.8</td><td class='num'>+12.1 <span class='dim'>(+0.3)</span></td></tr><tr class='gc' tabindex='0' data-gid='401754537' data-t='183' data-y='2025'><td class='l rank'>8</td><td class='l'><b>Syracuse</b></td><td class='l'>at Clemson <span class='dim'>\u00b7 Wk 4</span><div class='conf tset'>Road + full house = grade +20%</div></td><td class='num'>W 34\u201321</td><td class='num'>+17.5</td><td class='num'>+19.7</td><td class='num tg pos'>+11.5</td><td class='num'>+11.8 <span class='dim'>(+0.3)</span></td></tr><tr class='gc' tabindex='0' data-gid='401752845' data-t='120' data-y='2025'><td class='l rank'>9</td><td class='l'><b>Maryland</b></td><td class='l'>at Wisconsin <span class='dim'>\u00b7 Wk 4</span><div class='conf tset'>Road = grade +10%</div></td><td class='num'>W 27\u201310</td><td class='num'>+10.5</td><td class='num'>+5.1</td><td class='num tg pos'>+11.5</td><td class='num'>+10.8 <span class='dim'>(\u22120.7)</span></td></tr><tr class='gc' tabindex='0' data-gid='401754523' data-t='2628' data-y='2025'><td class='l rank'>10</td><td class='l'><b>TCU</b></td><td class='l'>at North Carolina <span class='dim'>\u00b7 Wk 1</span><div class='conf tset'>Road + night + full house = grade +25%</div></td><td class='num'>W 48\u201314</td><td class='num'>\u22123.5</td><td class='num'>\u22126.7</td><td class='num tg pos'>+11.3</td><td class='num'>+10.9 <span class='dim'>(\u22120.4)</span></td></tr>", "2026": "<tr class='gc' tabindex='0' data-gid='401856817' data-t='239' data-y='2026'><td class='l rank'>1</td><td class='l'><b>Baylor</b></td><td class='l'>at Arizona State <span class='dim'>\u00b7 Wk 5</span><div class='conf tset'>Road + night + full house = grade +25%</div></td><td class='num'>W 55\u201319</td><td class='num'>+3.5</td><td class='num'>+0.3</td><td class='num tg pos'>+13.5</td><td class='num'>+13.1 <span class='dim'>(\u22120.4)</span></td></tr><tr class='gc' tabindex='0' data-gid='401856796' data-t='77' data-y='2026'><td class='l rank'>2</td><td class='l'><b>Northwestern</b></td><td class='l'>vs Colorado <span class='dim'>\u00b7 Wk 3</span><div class='conf tset'>Night = grade +5%</div></td><td class='num'>W 41\u20137</td><td class='num'>\u22123.5</td><td class='num'>\u22128.5</td><td class='num tg pos'>+11.4</td><td class='num'>+10.8 <span class='dim'>(\u22120.6)</span></td></tr><tr class='gc' tabindex='0' data-gid='401858462' data-t='26' data-y='2026'><td class='l rank'>3</td><td class='l'><b>UCLA</b></td><td class='l'>at Maryland <span class='dim'>\u00b7 Wk 4</span><div class='conf tset'>Road = grade +10%</div></td><td class='num'>W 54\u20133</td><td class='num'>\u22122.5</td><td class='num'>+0.2</td><td class='num tg pos'>+11.3</td><td class='num'>+11.7 <span class='dim'>(+0.4)</span></td></tr><tr class='gc' tabindex='0' data-gid='401856708' data-t='142' data-y='2026'><td class='l rank'>4</td><td class='l'><b>Missouri</b></td><td class='l'>vs No. 8 Florida <span class='dim'>\u00b7 Wk 5</span><div class='conf tset'>Top-10 opponent = grade +20%</div></td><td class='num'>W 45\u201317</td><td class='num'>+5.5</td><td class='num'>+1.5</td><td class='num tg pos'>+11.2</td><td class='num'>+10.7 <span class='dim'>(\u22120.5)</span></td></tr><tr class='gc' tabindex='0' data-gid='401858210' data-t='26' data-y='2026'><td class='l rank'>5</td><td class='l'><b>UCLA</b></td><td class='l'>at California <span class='dim'>\u00b7 Wk 1</span><div class='conf tset'>Road + night + full house = grade +25%</div></td><td class='num'>W 45\u201324</td><td class='num'>\u22122.5</td><td class='num'>\u22124.8</td><td class='num tg pos'>+10.2</td><td class='num'>+9.9 <span class='dim'>(\u22120.3)</span></td></tr><tr class='gc' tabindex='0' data-gid='401856696' data-t='333' data-y='2026'><td class='l rank'>6</td><td class='l'><b>Alabama</b></td><td class='l'>vs South Carolina <span class='dim'>\u00b7 Wk 4</span><div class='conf tset'>Night = grade +5%</div></td><td class='num'>W 49\u201318</td><td class='num'>\u221212.5</td><td class='num'>\u221211.8</td><td class='num tg pos'>+10.1</td><td class='num'>+10.2 <span class='dim'>(+0.1)</span></td></tr><tr class='gc' tabindex='0' data-gid='401856677' data-t='344' data-y='2026'><td class='l rank'>7</td><td class='l'><b>Mississippi State</b></td><td class='l'>at Minnesota <span class='dim'>\u00b7 Wk 2</span><div class='conf tset'>Road = grade +10%</div></td><td class='num'>W 38\u201313</td><td class='num'>\u22121.5</td><td class='num'>+4.6</td><td class='num tg pos'>+10.0</td><td class='num'>+10.7 <span class='dim'>(+0.7)</span></td></tr><tr class='gc' tabindex='0' data-gid='401856694' data-t='96' data-y='2026'><td class='l rank'>8</td><td class='l'><b>Kentucky</b></td><td class='l'>at No. 9 Texas A&amp;M <span class='dim'>\u00b7 Wk 3</span><div class='conf tset'>Road + full house + top-10 opponent = grade +40%</div></td><td class='num'>W 31\u201321</td><td class='num'>+16.5</td><td class='num'>+5.7</td><td class='num tg pos'>+9.8</td><td class='num'>+8.2 <span class='dim'>(\u22121.6)</span> <span class=\"tag\" style=\"display:block;margin:2px 0 0\">Opp. overrated</span></td></tr><tr class='gc' tabindex='0' data-gid='401858461' data-t='77' data-y='2026'><td class='l rank'>9</td><td class='l'><b>Northwestern</b></td><td class='l'>at No. 5 Indiana <span class='dim'>\u00b7 Wk 4</span><div class='conf tset'>Road + night + full house + top-10 opponent = grade +45%</div></td><td class='num'>L 23\u201329</td><td class='num'>+20.5</td><td class='num'>+6.3</td><td class='num tg pos'>+9.7</td><td class='num'>+6.9 <span class='dim'>(\u22122.8)</span> <span class=\"tag\" style=\"display:block;margin:2px 0 0\">Opp. overrated</span></td></tr><tr class='gc' tabindex='0' data-gid='401856699' data-t='57' data-y='2026'><td class='l rank'>10</td><td class='l'><b>Florida</b></td><td class='l'>vs No. 4 Ole Miss <span class='dim'>\u00b7 Wk 4</span><div class='conf tset'>Top-10 opponent = grade +20%</div></td><td class='num'>W 52\u201328</td><td class='num'>\u22124.0</td><td class='num'>\u22122.6</td><td class='num tg pos'>+9.5</td><td class='num'>+9.7 <span class='dim'>(+0.2)</span></td></tr>"};
 var GC = {"K": 6.968205650104535, "MU": {"p_ats": -0.6596290152314884, "p_fin": 1.4749991217977315e-16, "p_knife": -1.2533023377497688e-16, "p_cash": -0.822957312186913, "p_ans": 0.06850440264672694}, "SD": {"p_ats": 14.51816361503876, "p_fin": 11.832631469145047, "p_knife": 10.962416739067804, "p_cash": 8.048109925896862, "p_ans": 0.7867883773358731}};
 var TRK = {"season":2026,"baseBlown":0.19864940911648846,"baseCash":0.5229621125143513,"baseCashAll":0.4460140240996664,"teams":[{"id":"77","name":"Northwestern","abbr":"NU","conf":"Big Ten","led":3,"lost":0,"blownGames":[],"ledAll":31,"lostAll":8,"cashN":23,"cashScores":10,"cashTD":10,"cashPts":70,"cashPrevN":68,"cashPrevScores":27},{"id":"26","name":"UCLA","abbr":"UCLA","conf":"Big Ten","led":4,"lost":0,"blownGames":[],"ledAll":44,"lostAll":9,"cashN":25,"cashScores":12,"cashTD":12,"cashPts":84,"cashPrevN":38,"cashPrevScores":17},{"id":"333","name":"Alabama","abbr":"ALA","conf":"SEC","led":5,"lost":0,"blownGames":[],"ledAll":73,"lostAll":7,"cashN":25,"cashScores":20,"cashTD":16,"cashPts":124,"cashPrevN":75,"cashPrevScores":37},{"id":"57","name":"Florida","abbr":"FLA","conf":"SEC","led":4,"lost":0,"blownGames":[],"ledAll":50,"lostAll":12,"cashN":18,"cashScores":12,"cashTD":9,"cashPts":72,"cashPrevN":63,"cashPrevScores":23},{"id":"61","name":"Georgia","abbr":"UGA","conf":"SEC","led":5,"lost":0,"blownGames":[],"ledAll":77,"lostAll":4,"cashN":25,"cashScores":19,"cashTD":17,"cashPts":125,"cashPrevN":77,"cashPrevScores":42},{"id":"150","name":"Duke","abbr":"DUKE","conf":"ACC","led":3,"lost":0,"blownGames":[],"ledAll":46,"lostAll":7,"cashN":26,"cashScores":10,"cashTD":9,"cashPts":66,"cashPrevN":64,"cashPrevScores":36},{"id":"254","name":"Utah","abbr":"UTAH","conf":"Big 12","led":4,"lost":0,"blownGames":[],"ledAll":59,"lostAll":6,"cashN":20,"cashScores":13,"cashTD":9,"cashPts":75,"cashPrevN":72,"cashPrevScores":38},{"id":"2132","name":"Cincinnati","abbr":"CIN","conf":"Big 12","led":3,"lost":0,"blownGames":[],"ledAll":52,"lostAll":6,"cashN":24,"cashScores":15,"cashTD":12,"cashPts":93,"cashPrevN":60,"cashPrevScores":30},{"id":"154","name":"Wake Forest","abbr":"WAKE","conf":"ACC","led":4,"lost":0,"blownGames":[],"ledAll":52,"lostAll":10,"cashN":24,"cashScores":16,"cashTD":9,"cashPts":84,"cashPrevN":87,"cashPrevScores":32},{"id":"158","name":"Nebraska","abbr":"NEB","conf":"Big Ten","led":5,"lost":0,"blownGames":[],"ledAll":50,"lostAll":21,"cashN":31,"cashScores":20,"cashTD":17,"cashPts":128,"cashPrevN":49,"cashPrevScores":28},{"id":"2390","name":"Miami","abbr":"MIA","conf":"ACC","led":5,"lost":0,"blownGames":[],"ledAll":56,"lostAll":9,"cashN":24,"cashScores":17,"cashTD":14,"cashPts":107,"cashPrevN":94,"cashPrevScores":44},{"id":"2116","name":"UCF","abbr":"UCF","conf":"Big 12","led":4,"lost":1,"blownGames":[{"opp":"Houston","site":"away","lead":17,"at":[17,0],"pf":17,"pa":27,"date":"2026-10-03","id":"401856819"}],"ledAll":52,"lostAll":14,"cashN":30,"cashScores":11,"cashTD":8,"cashPts":65,"cashPrevN":60,"cashPrevScores":24},{"id":"87","name":"Notre Dame","abbr":"ND","conf":"Independent","led":5,"lost":0,"blownGames":[],"ledAll":69,"lostAll":5,"cashN":22,"cashScores":14,"cashTD":13,"cashPts":94,"cashPrevN":60,"cashPrevScores":34},{"id":"135","name":"Minnesota","abbr":"MINN","conf":"Big Ten","led":4,"lost":0,"blownGames":[],"ledAll":55,"lostAll":8,"cashN":32,"cashScores":15,"cashTD":10,"cashPts":85,"cashPrevN":52,"cashPrevScores":23},{"id":"9","name":"Arizona State","abbr":"ASU","conf":"Big 12","led":2,"lost":0,"blownGames":[],"ledAll":47,"lostAll":9,"cashN":23,"cashScores":9,"cashTD":6,"cashPts":51,"cashPrevN":89,"cashPrevScores":39},{"id":"344","name":"Mississippi State","abbr":"MSST","conf":"SEC","led":4,"lost":0,"blownGames":[],"ledAll":43,"lostAll":10,"cashN":20,"cashScores":15,"cashTD":13,"cashPts":97,"cashPrevN":74,"cashPrevScores":29},{"id":"248","name":"Houston","abbr":"HOU","conf":"Big 12","led":5,"lost":1,"blownGames":[{"opp":"Texas Tech","site":"away","lead":10,"at":[10,0],"pf":26,"pa":28,"date":"2026-09-18","id":"401856811"}],"ledAll":53,"lostAll":15,"cashN":27,"cashScores":17,"cashTD":14,"cashPts":107,"cashPrevN":82,"cashPrevScores":37},{"id":"96","name":"Kentucky","abbr":"UK","conf":"SEC","led":4,"lost":1,"blownGames":[{"opp":"Alabama","site":"home","lead":7,"at":[7,0],"pf":17,"pa":45,"date":"2026-09-12","id":"401856674"}],"ledAll":49,"lostAll":10,"cashN":27,"cashScores":15,"cashTD":11,"cashPts":89,"cashPrevN":63,"cashPrevScores":24},{"id":"259","name":"Virginia Tech","abbr":"VT","conf":"ACC","led":5,"lost":1,"blownGames":[{"opp":"Pittsburgh","site":"home","lead":14,"at":[14,0],"pf":33,"pa":35,"date":"2026-10-02","id":"401858245"}],"ledAll":48,"lostAll":18,"cashN":29,"cashScores":13,"cashTD":9,"cashPts":75,"cashPrevN":49,"cashPrevScores":22},{"id":"252","name":"BYU","abbr":"BYU","conf":"Big 12","led":4,"lost":0,"blownGames":[],"ledAll":60,"lostAll":9,"cashN":23,"cashScores":13,"cashTD":11,"cashPts":83,"cashPrevN":77,"cashPrevScores":34},{"id":"258","name":"Virginia","abbr":"UVA","conf":"ACC","led":5,"lost":2,"blownGames":[{"opp":"Florida State","site":"away","lead":7,"at":[7,0],"pf":7,"pa":38,"date":"2026-10-03","id":"401858253"},{"opp":"West Virginia","site":"neutral","lead":7,"at":[7,0],"pf":27,"pa":38,"date":"2026-09-19","id":"401856802"}],"ledAll":49,"lostAll":15,"cashN":28,"cashScores":14,"cashTD":12,"cashPts":90,"cashPrevN":91,"cashPrevScores":41},{"id":"277","name":"West Virginia","abbr":"WVU","conf":"Big 12","led":5,"lost":2,"blownGames":[{"opp":"Oklahoma State","site":"home","lead":11,"at":[14,3],"pf":24,"pa":41,"date":"2026-09-26","id":"401856881"},{"opp":"Iowa State","site":"away","lead":7,"at":[7,0],"pf":42,"pa":45,"date":"2026-10-03","id":"401856822"}],"ledAll":43,"lostAll":11,"cashN":29,"cashScores":18,"cashTD":16,"cashPts":118,"cashPrevN":66,"cashPrevScores":24},{"id":"2633","name":"Tennessee","abbr":"TENN","conf":"SEC","led":4,"lost":0,"blownGames":[],"ledAll":66,"lostAll":15,"cashN":31,"cashScores":15,"cashTD":12,"cashPts":93,"cashPrevN":56,"cashPrevScores":31},{"id":"275","name":"Wisconsin","abbr":"WIS","conf":"Big Ten","led":3,"lost":0,"blownGames":[],"ledAll":49,"lostAll":10,"cashN":28,"cashScores":18,"cashTD":12,"cashPts":102,"cashPrevN":66,"cashPrevScores":19},{"id":"197","name":"Oklahoma State","abbr":"OKST","conf":"Big 12","led":3,"lost":0,"blownGames":[],"ledAll":47,"lostAll":9,"cashN":26,"cashScores":15,"cashTD":8,"cashPts":77,"cashPrevN":51,"cashPrevScores":13},{"id":"153","name":"North Carolina","abbr":"UNC","conf":"ACC","led":3,"lost":2,"blownGames":[{"opp":"Clemson","site":"away","lead":14,"at":[17,3],"pf":20,"pa":28,"date":"2026-09-19","id":"401858229"},{"opp":"Notre Dame","site":"home","lead":7,"at":[7,0],"pf":26,"pa":37,"date":"2026-10-03","id":"401858250"}],"ledAll":56,"lostAll":18,"cashN":18,"cashScores":10,"cashTD":7,"cashPts":58,"cashPrevN":63,"cashPrevScores":26},{"id":"239","name":"Baylor","abbr":"BAY","conf":"Big 12","led":4,"lost":0,"blownGames":[],"ledAll":56,"lostAll":12,"cashN":34,"cashScores":14,"cashTD":10,"cashPts":82,"cashPrevN":58,"cashPrevScores":30},{"id":"2483","name":"Oregon","abbr":"ORE","conf":"Big Ten","led":3,"lost":0,"blownGames":[],"ledAll":73,"lostAll":5,"cashN":15,"cashScores":8,"cashTD":7,"cashPts":52,"cashPrevN":70,"cashPrevScores":43},{"id":"228","name":"Clemson","abbr":"CLEM","conf":"ACC","led":3,"lost":0,"blownGames":[],"ledAll":67,"lostAll":10,"cashN":32,"cashScores":13,"cashTD":5,"cashPts":59,"cashPrevN":76,"cashPrevScores":31},{"id":"194","name":"Ohio State","abbr":"OSU","conf":"Big Ten","led":5,"lost":1,"blownGames":[{"opp":"Texas","site":"away","lead":20,"at":[23,3],"pf":23,"pa":24,"date":"2026-09-12","id":"401856682"}],"ledAll":77,"lostAll":5,"cashN":22,"cashScores":17,"cashTD":15,"cashPts":111,"cashPrevN":74,"cashPrevScores":48},{"id":"213","name":"Penn State","abbr":"PSU","conf":"Big Ten","led":4,"lost":1,"blownGames":[{"opp":"Wisconsin","site":"home","lead":17,"at":[17,0],"pf":20,"pa":24,"date":"2026-09-26","id":"401858466"}],"ledAll":64,"lostAll":7,"cashN":31,"cashScores":17,"cashTD":14,"cashPts":107,"cashPrevN":62,"cashPrevScores":30},{"id":"97","name":"Louisville","abbr":"LOU","conf":"ACC","led":2,"lost":0,"blownGames":[],"ledAll":60,"lostAll":12,"cashN":26,"cashScores":12,"cashTD":8,"cashPts":68,"cashPrevN":84,"cashPrevScores":39},{"id":"2294","name":"Iowa","abbr":"IOWA","conf":"Big Ten","led":2,"lost":0,"blownGames":[],"ledAll":55,"lostAll":6,"cashN":24,"cashScores":10,"cashTD":7,"cashPts":58,"cashPrevN":71,"cashPrevScores":34},{"id":"221","name":"Pittsburgh","abbr":"PITT","conf":"ACC","led":5,"lost":0,"blownGames":[],"ledAll":56,"lostAll":13,"cashN":33,"cashScores":20,"cashTD":16,"cashPts":124,"cashPrevN":86,"cashPrevScores":41},{"id":"2","name":"Auburn","abbr":"AUB","conf":"SEC","led":3,"lost":0,"blownGames":[],"ledAll":46,"lostAll":13,"cashN":29,"cashScores":9,"cashTD":6,"cashPts":51,"cashPrevN":61,"cashPrevScores":30},{"id":"251","name":"Texas","abbr":"TEX","conf":"SEC","led":3,"lost":0,"blownGames":[],"ledAll":63,"lostAll":7,"cashN":27,"cashScores":16,"cashTD":12,"cashPts":96,"cashPrevN":83,"cashPrevScores":39},{"id":"356","name":"Illinois","abbr":"ILL","conf":"Big Ten","led":3,"lost":1,"blownGames":[{"opp":"Duke","site":"home","lead":10,"at":[17,7],"pf":27,"pa":31,"date":"2026-09-12","id":"401858217"}],"ledAll":47,"lostAll":10,"cashN":17,"cashScores":9,"cashTD":6,"cashPts":51,"cashPrevN":58,"cashPrevScores":33},{"id":"245","name":"Texas A&M","abbr":"TA&M","conf":"SEC","led":4,"lost":1,"blownGames":[{"opp":"Kentucky","site":"home","lead":7,"at":[7,0],"pf":21,"pa":31,"date":"2026-09-19","id":"401856694"}],"ledAll":52,"lostAll":9,"cashN":25,"cashScores":15,"cashTD":9,"cashPts":81,"cashPrevN":84,"cashPrevScores":39},{"id":"66","name":"Iowa State","abbr":"ISU","conf":"Big 12","led":4,"lost":1,"blownGames":[{"opp":"Iowa","site":"away","lead":10,"at":[10,0],"pf":13,"pa":16,"date":"2026-09-12","id":"401856788"}],"ledAll":47,"lostAll":8,"cashN":31,"cashScores":15,"cashTD":13,"cashPts":97,"cashPrevN":69,"cashPrevScores":33},{"id":"84","name":"Indiana","abbr":"IU","conf":"Big Ten","led":5,"lost":0,"blownGames":[],"ledAll":52,"lostAll":11,"cashN":24,"cashScores":15,"cashTD":13,"cashPts":97,"cashPrevN":86,"cashPrevScores":49},{"id":"2305","name":"Kansas","abbr":"KU","conf":"Big 12","led":3,"lost":1,"blownGames":[{"opp":"Missouri","site":"home","lead":7,"at":[7,0],"pf":21,"pa":38,"date":"2026-09-11","id":"401856678"}],"ledAll":48,"lostAll":19,"cashN":25,"cashScores":11,"cashTD":7,"cashPts":61,"cashPrevN":62,"cashPrevScores":30},{"id":"99","name":"LSU","abbr":"LSU","conf":"SEC","led":4,"lost":0,"blownGames":[],"ledAll":64,"lostAll":12,"cashN":32,"cashScores":22,"cashTD":18,"cashPts":138,"cashPrevN":85,"cashPrevScores":36},{"id":"152","name":"NC State","abbr":"NCSU","conf":"ACC","led":4,"lost":1,"blownGames":[{"opp":"Vanderbilt","site":"away","lead":17,"at":[17,0],"pf":31,"pa":35,"date":"2026-09-19","id":"401856695"}],"ledAll":45,"lostAll":5,"cashN":27,"cashScores":16,"cashTD":12,"cashPts":96,"cashPrevN":58,"cashPrevScores":25},{"id":"142","name":"Missouri","abbr":"MIZ","conf":"SEC","led":5,"lost":1,"blownGames":[{"opp":"Mississippi State","site":"away","lead":7,"at":[24,17],"pf":24,"pa":31,"date":"2026-09-26","id":"401856703"}],"ledAll":49,"lostAll":7,"cashN":31,"cashScores":17,"cashTD":12,"cashPts":99,"cashPrevN":71,"cashPrevScores":29},{"id":"2628","name":"TCU","abbr":"TCU","conf":"Big 12","led":3,"lost":1,"blownGames":[{"opp":"North Carolina","site":"neutral","lead":7,"at":[10,3],"pf":10,"pa":15,"date":"2026-08-29","id":"401856766"}],"ledAll":55,"lostAll":11,"cashN":34,"cashScores":12,"cashTD":9,"cashPts":72,"cashPrevN":73,"cashPrevScores":31},{"id":"183","name":"Syracuse","abbr":"SYR","conf":"ACC","led":3,"lost":1,"blownGames":[{"opp":"California","site":"home","lead":12,"at":[12,0],"pf":18,"pa":21,"date":"2026-09-12","id":"401858216"}],"ledAll":42,"lostAll":7,"cashN":23,"cashScores":11,"cashTD":9,"cashPts":69,"cashPrevN":58,"cashPrevScores":18},{"id":"2306","name":"Kansas State","abbr":"KSU","conf":"Big 12","led":4,"lost":1,"blownGames":[{"opp":"Cincinnati","site":"away","lead":10,"at":[10,0],"pf":26,"pa":31,"date":"2026-09-26","id":"401856814"}],"ledAll":59,"lostAll":11,"cashN":21,"cashScores":14,"cashTD":10,"cashPts":82,"cashPrevN":72,"cashPrevScores":31},{"id":"130","name":"Michigan","abbr":"MICH","conf":"Big Ten","led":5,"lost":2,"blownGames":[{"opp":"Iowa","site":"home","lead":7,"at":[7,0],"pf":19,"pa":20,"date":"2026-09-26","id":"401858463"},{"opp":"Minnesota","site":"away","lead":7,"at":[14,7],"pf":14,"pa":20,"date":"2026-10-03","id":"401858474"}],"ledAll":67,"lostAll":2,"cashN":31,"cashScores":11,"cashTD":8,"cashPts":65,"cashPrevN":75,"cashPrevScores":37},{"id":"52","name":"Florida State","abbr":"FSU","conf":"ACC","led":4,"lost":1,"blownGames":[{"opp":"Alabama","site":"away","lead":15,"at":[21,6],"pf":36,"pa":50,"date":"2026-09-19","id":"401856685"}],"ledAll":51,"lostAll":10,"cashN":27,"cashScores":16,"cashTD":11,"cashPts":92,"cashPrevN":52,"cashPrevScores":28},{"id":"120","name":"Maryland","abbr":"MD","conf":"Big Ten","led":3,"lost":1,"blownGames":[{"opp":"Nebraska","site":"away","lead":9,"at":[16,7],"pf":23,"pa":48,"date":"2026-10-03","id":"401858475"}],"ledAll":43,"lostAll":10,"cashN":27,"cashScores":15,"cashTD":10,"cashPts":85,"cashPrevN":65,"cashPrevScores":27},{"id":"2579","name":"South Carolina","abbr":"SC","conf":"SEC","led":4,"lost":2,"blownGames":[{"opp":"Kentucky","site":"home","lead":17,"at":[17,0],"pf":34,"pa":35,"date":"2026-10-03","id":"401856709"},{"opp":"Mississippi State","site":"home","lead":16,"at":[16,0],"pf":34,"pa":41,"date":"2026-09-19","id":"401856691"}],"ledAll":45,"lostAll":12,"cashN":23,"cashScores":14,"cashTD":9,"cashPts":78,"cashPrevN":67,"cashPrevScores":18},{"id":"30","name":"USC","abbr":"USC","conf":"Big Ten","led":4,"lost":0,"blownGames":[],"ledAll":56,"lostAll":14,"cashN":22,"cashScores":15,"cashTD":13,"cashPts":97,"cashPrevN":60,"cashPrevScores":34},{"id":"164","name":"Rutgers","abbr":"RUTG","conf":"Big Ten","led":2,"lost":1,"blownGames":[{"opp":"Massachusetts","site":"home","lead":7,"at":[7,0],"pf":21,"pa":37,"date":"2026-09-03","id":"401858423"}],"ledAll":37,"lostAll":10,"cashN":16,"cashScores":7,"cashTD":6,"cashPts":45,"cashPrevN":42,"cashPrevScores":23},{"id":"127","name":"Michigan State","abbr":"MSU","conf":"Big Ten","led":2,"lost":0,"blownGames":[],"ledAll":45,"lostAll":13,"cashN":23,"cashScores":13,"cashTD":5,"cashPts":59,"cashPrevN":66,"cashPrevScores":28},{"id":"59","name":"Georgia Tech","abbr":"GT","conf":"ACC","led":2,"lost":1,"blownGames":[{"opp":"Stanford","site":"away","lead":10,"at":[20,10],"pf":27,"pa":34,"date":"2026-09-26","id":"401858240"}],"ledAll":46,"lostAll":14,"cashN":16,"cashScores":6,"cashTD":3,"cashPts":30,"cashPrevN":63,"cashPrevScores":37},{"id":"2509","name":"Purdue","abbr":"PUR","conf":"Big Ten","led":3,"lost":1,"blownGames":[{"opp":"Wake Forest","site":"home","lead":7,"at":[7,0],"pf":36,"pa":38,"date":"2026-09-12","id":"401858224"}],"ledAll":29,"lostAll":5,"cashN":19,"cashScores":11,"cashTD":5,"cashPts":53,"cashPrevN":49,"cashPrevScores":16},{"id":"2567","name":"SMU","abbr":"SMU","conf":"ACC","led":5,"lost":1,"blownGames":[{"opp":"Louisville","site":"away","lead":7,"at":[7,0],"pf":31,"pa":41,"date":"2026-09-19","id":"401858230"}],"ledAll":60,"lostAll":7,"cashN":28,"cashScores":17,"cashTD":15,"cashPts":111,"cashPrevN":90,"cashPrevScores":43},{"id":"145","name":"Ole Miss","abbr":"MISS","conf":"SEC","led":3,"lost":0,"blownGames":[],"ledAll":65,"lostAll":9,"cashN":17,"cashScores":11,"cashTD":6,"cashPts":57,"cashPrevN":79,"cashPrevScores":46},{"id":"24","name":"Stanford","abbr":"STAN","conf":"ACC","led":2,"lost":0,"blownGames":[],"ledAll":30,"lostAll":13,"cashN":18,"cashScores":5,"cashTD":5,"cashPts":35,"cashPrevN":58,"cashPrevScores":20},{"id":"38","name":"Colorado","abbr":"COLO","conf":"Big 12","led":3,"lost":1,"blownGames":[{"opp":"Texas Tech","site":"home","lead":7,"at":[7,0],"pf":7,"pa":29,"date":"2026-10-03","id":"401856821"}],"ledAll":36,"lostAll":11,"cashN":30,"cashScores":9,"cashTD":7,"cashPts":55,"cashPrevN":62,"cashPrevScores":19},{"id":"103","name":"Boston College","abbr":"BC","conf":"ACC","led":3,"lost":1,"blownGames":[{"opp":"Virginia Tech","site":"home","lead":8,"at":[14,6],"pf":14,"pa":21,"date":"2026-09-26","id":"401858242"}],"ledAll":40,"lostAll":14,"cashN":30,"cashScores":8,"cashTD":6,"cashPts":48,"cashPrevN":57,"cashPrevScores":20},{"id":"238","name":"Vanderbilt","abbr":"VAN","conf":"SEC","led":2,"lost":0,"blownGames":[],"ledAll":42,"lostAll":13,"cashN":26,"cashScores":10,"cashTD":8,"cashPts":62,"cashPrevN":55,"cashPrevScores":35},{"id":"12","name":"Arizona","abbr":"ARIZ","conf":"Big 12","led":5,"lost":1,"blownGames":[{"opp":"BYU","site":"away","lead":7,"at":[7,0],"pf":17,"pa":28,"date":"2026-09-12","id":"401856810"}],"ledAll":38,"lostAll":10,"cashN":26,"cashScores":14,"cashTD":11,"cashPts":86,"cashPrevN":75,"cashPrevScores":38},{"id":"264","name":"Washington","abbr":"WASH","conf":"Big Ten","led":4,"lost":1,"blownGames":[{"opp":"USC","site":"away","lead":11,"at":[21,10],"pf":21,"pa":25,"date":"2026-10-03","id":"401858478"}],"ledAll":59,"lostAll":10,"cashN":32,"cashScores":15,"cashTD":9,"cashPts":81,"cashPrevN":59,"cashPrevScores":33},{"id":"8","name":"Arkansas","abbr":"ARK","conf":"SEC","led":2,"lost":0,"blownGames":[],"ledAll":45,"lostAll":16,"cashN":22,"cashScores":8,"cashTD":5,"cashPts":44,"cashPrevN":38,"cashPrevScores":23},{"id":"25","name":"California","abbr":"CAL","conf":"ACC","led":4,"lost":3,"blownGames":[{"opp":"UCLA","site":"home","lead":7,"at":[7,0],"pf":24,"pa":45,"date":"2026-09-05","id":"401858210"},{"opp":"UNLV","site":"away","lead":7,"at":[7,0],"pf":31,"pa":39,"date":"2026-10-03","id":"401858247"},{"opp":"Clemson","site":"home","lead":7,"at":[7,0],"pf":10,"pa":24,"date":"2026-09-25","id":"401858234"}],"ledAll":49,"lostAll":17,"cashN":28,"cashScores":11,"cashTD":10,"cashPts":73,"cashPrevN":73,"cashPrevScores":30},{"id":"2641","name":"Texas Tech","abbr":"TTU","conf":"Big 12","led":5,"lost":0,"blownGames":[],"ledAll":54,"lostAll":9,"cashN":40,"cashScores":19,"cashTD":13,"cashPts":109,"cashPrevN":108,"cashPrevScores":63},{"id":"201","name":"Oklahoma","abbr":"OU","conf":"SEC","led":2,"lost":0,"blownGames":[],"ledAll":64,"lostAll":12,"cashN":20,"cashScores":7,"cashTD":4,"cashPts":37,"cashPrevN":88,"cashPrevScores":43}],"biggest":[{"opp":"Texas","site":"away","lead":20,"at":[23,3],"pf":23,"pa":24,"date":"2026-09-12","id":"401856682","team":"Ohio State","tid":"194"},{"opp":"Houston","site":"away","lead":17,"at":[17,0],"pf":17,"pa":27,"date":"2026-10-03","id":"401856819","team":"UCF","tid":"2116"},{"opp":"Wisconsin","site":"home","lead":17,"at":[17,0],"pf":20,"pa":24,"date":"2026-09-26","id":"401858466","team":"Penn State","tid":"213"},{"opp":"Vanderbilt","site":"away","lead":17,"at":[17,0],"pf":31,"pa":35,"date":"2026-09-19","id":"401856695","team":"NC State","tid":"152"},{"opp":"Kentucky","site":"home","lead":17,"at":[17,0],"pf":34,"pa":35,"date":"2026-10-03","id":"401856709","team":"South Carolina","tid":"2579"},{"opp":"Mississippi State","site":"home","lead":16,"at":[16,0],"pf":34,"pa":41,"date":"2026-09-19","id":"401856691","team":"South Carolina","tid":"2579"},{"opp":"Alabama","site":"away","lead":15,"at":[21,6],"pf":36,"pa":50,"date":"2026-09-19","id":"401856685","team":"Florida State","tid":"52"},{"opp":"Pittsburgh","site":"home","lead":14,"at":[14,0],"pf":33,"pa":35,"date":"2026-10-02","id":"401858245","team":"Virginia Tech","tid":"259"},{"opp":"Clemson","site":"away","lead":14,"at":[17,3],"pf":20,"pa":28,"date":"2026-09-19","id":"401858229","team":"North Carolina","tid":"153"},{"opp":"California","site":"home","lead":12,"at":[12,0],"pf":18,"pa":21,"date":"2026-09-12","id":"401858216","team":"Syracuse","tid":"183"}]};
+var PREVIEW = {
+ "week": 6,
+ "season": 2026,
+ "nt": 68,
+ "games": [
+  {
+   "tier": "Massive",
+   "st": 85,
+   "why": [
+    "Rivalry game",
+    "Neutral site in Dallas"
+   ],
+   "watch": "Texas is 4\u20130 but has played like a 3\u20131 team.",
+   "neutral": true,
+   "when": {
+    "day": "Sat",
+    "date": "Oct 10",
+    "time": "2:30 PM CT",
+    "net": "ABC"
+   },
+   "iso": "2026-10-10T19:30:00+00:00",
+   "away": {
+    "id": "251",
+    "name": "Texas",
+    "ap": 1,
+    "rank": 29,
+    "tier": "mid"
+   },
+   "home": {
+    "id": "201",
+    "name": "Oklahoma",
+    "ap": null,
+    "rank": 68,
+    "tier": "dn"
+   }
+  },
+  {
+   "tier": "Massive",
+   "st": 65,
+   "why": [
+    "Two top-10 teams",
+    "Primetime on ABC"
+   ],
+   "watch": "Alabama has lived up to expectations better so far: 2nd of 68 vs. 5th.",
+   "neutral": false,
+   "when": {
+    "day": "Sat",
+    "date": "Oct 10",
+    "time": "6:30 PM CT",
+    "net": "ABC"
+   },
+   "iso": "2026-10-10T23:30:00+00:00",
+   "away": {
+    "id": "61",
+    "name": "Georgia",
+    "ap": 2,
+    "rank": 5,
+    "tier": "up"
+   },
+   "home": {
+    "id": "333",
+    "name": "Alabama",
+    "ap": 6,
+    "rank": 2,
+    "tier": "up"
+   }
+  },
+  {
+   "tier": "Huge",
+   "st": 55,
+   "why": [
+    "No. 8 BYU",
+    "Primetime on ESPN"
+   ],
+   "watch": "BYU is 4\u20130 but has played like a 3\u20131 team.",
+   "neutral": false,
+   "when": {
+    "day": "Fri",
+    "date": "Oct 9",
+    "time": "9:15 PM CT",
+    "net": "ESPN"
+   },
+   "iso": "2026-10-10T02:15:00+00:00",
+   "away": {
+    "id": "66",
+    "name": "Iowa State",
+    "ap": null,
+    "rank": 28,
+    "tier": "mid"
+   },
+   "home": {
+    "id": "252",
+    "name": "BYU",
+    "ap": 8,
+    "rank": 13,
+    "tier": "up"
+   }
+  },
+  {
+   "tier": "Huge",
+   "st": 55,
+   "why": [
+    "No. 3 Notre Dame",
+    "Non-conference"
+   ],
+   "watch": "Notre Dame has lived up to expectations better so far: 17th of 68 vs. 47th.",
+   "neutral": false,
+   "when": {
+    "day": "Sat",
+    "date": "Oct 10",
+    "time": "2:30 PM CT",
+    "net": "NBC"
+   },
+   "iso": "2026-10-10T19:30:00+00:00",
+   "away": {
+    "id": "24",
+    "name": "Stanford",
+    "ap": null,
+    "rank": 47,
+    "tier": "dn"
+   },
+   "home": {
+    "id": "87",
+    "name": "Notre Dame",
+    "ap": 3,
+    "rank": 17,
+    "tier": "up"
+   }
+  },
+  {
+   "tier": "Huge",
+   "st": 45,
+   "why": [
+    "No. 7 Indiana on the road"
+   ],
+   "watch": "Indiana is ranked No. 7 but 35th of 68 at living up to expectations.",
+   "neutral": false,
+   "when": {
+    "day": "Sat",
+    "date": "Oct 10",
+    "time": "11 AM CT",
+    "net": "Fox"
+   },
+   "iso": "2026-10-10T16:00:00+00:00",
+   "away": {
+    "id": "84",
+    "name": "Indiana",
+    "ap": 7,
+    "rank": 35,
+    "tier": "mid"
+   },
+   "home": {
+    "id": "158",
+    "name": "Nebraska",
+    "ap": null,
+    "rank": 9,
+    "tier": "up"
+   }
+  },
+  {
+   "tier": "Huge",
+   "st": 45,
+   "why": [
+    "No. 9 Ole Miss on the road"
+   ],
+   "watch": "Ole Miss is ranked No. 9 but 44th of 68 at living up to expectations.",
+   "neutral": false,
+   "when": {
+    "day": "Sat",
+    "date": "Oct 10",
+    "time": "2:30 PM CT",
+    "net": "ESPN"
+   },
+   "iso": "2026-10-10T19:30:00+00:00",
+   "away": {
+    "id": "145",
+    "name": "Ole Miss",
+    "ap": 9,
+    "rank": 44,
+    "tier": "mid"
+   },
+   "home": {
+    "id": "238",
+    "name": "Vanderbilt",
+    "ap": null,
+    "rank": 51,
+    "tier": "dn"
+   }
+  },
+  {
+   "tier": "Huge",
+   "st": 45,
+   "why": [
+    "Both teams ranked"
+   ],
+   "watch": "UCLA has lived up to expectations better so far: 3rd of 68 vs. 46th.",
+   "neutral": false,
+   "when": {
+    "day": "Sat",
+    "date": "Oct 10",
+    "time": "2:30 PM CT",
+    "net": "CBS"
+   },
+   "iso": "2026-10-10T19:30:00+00:00",
+   "away": {
+    "id": "26",
+    "name": "UCLA",
+    "ap": 21,
+    "rank": 3,
+    "tier": "up"
+   },
+   "home": {
+    "id": "2483",
+    "name": "Oregon",
+    "ap": 13,
+    "rank": 46,
+    "tier": "dn"
+   }
+  },
+  {
+   "tier": "Huge",
+   "st": 45,
+   "why": [
+    "No. 10 LSU on the road",
+    "Primetime on ESPN"
+   ],
+   "watch": "Kentucky isn't ranked, but is 10th of 68 at living up to expectations.",
+   "neutral": false,
+   "when": {
+    "day": "Sat",
+    "date": "Oct 10",
+    "time": "6 PM CT",
+    "net": "ESPN"
+   },
+   "iso": "2026-10-10T23:00:00+00:00",
+   "away": {
+    "id": "99",
+    "name": "LSU",
+    "ap": 10,
+    "rank": 23,
+    "tier": "mid"
+   },
+   "home": {
+    "id": "96",
+    "name": "Kentucky",
+    "ap": null,
+    "rank": 10,
+    "tier": "up"
+   }
+  },
+  {
+   "tier": "Huge",
+   "st": 45,
+   "why": [
+    "No. 12 Utah",
+    "Primetime on ESPN"
+   ],
+   "watch": "Kansas is 2\u20132 but has played like a 3\u20131 team.",
+   "neutral": false,
+   "when": {
+    "day": "Sat",
+    "date": "Oct 10",
+    "time": "9:15 PM CT",
+    "net": "ESPN"
+   },
+   "iso": "2026-10-11T02:15:00+00:00",
+   "away": {
+    "id": "2305",
+    "name": "Kansas",
+    "ap": null,
+    "rank": 56,
+    "tier": "dn"
+   },
+   "home": {
+    "id": "254",
+    "name": "Utah",
+    "ap": 12,
+    "rank": 8,
+    "tier": "up"
+   }
+  },
+  {
+   "tier": "Big",
+   "st": 35,
+   "why": [
+    "No. 22 Houston on the road"
+   ],
+   "watch": "Houston has lived up to expectations better so far: 24th of 68 vs. 45th.",
+   "neutral": false,
+   "when": {
+    "day": "Sat",
+    "date": "Oct 10",
+    "time": "2:30 PM CT",
+    "net": "Fox"
+   },
+   "iso": "2026-10-10T19:30:00+00:00",
+   "away": {
+    "id": "248",
+    "name": "Houston",
+    "ap": 22,
+    "rank": 24,
+    "tier": "mid"
+   },
+   "home": {
+    "id": "2306",
+    "name": "Kansas State",
+    "ap": null,
+    "rank": 45,
+    "tier": "mid"
+   }
+  },
+  {
+   "tier": "Big",
+   "st": 35,
+   "why": [
+    "No. 5 Ohio State"
+   ],
+   "watch": "Ohio State is 4\u20131 but has played like a 5\u20130 team.",
+   "neutral": false,
+   "when": {
+    "day": "Sat",
+    "date": "Oct 10",
+    "time": "3:15 PM CT",
+    "net": "BTN"
+   },
+   "iso": "2026-10-10T20:15:00+00:00",
+   "away": {
+    "id": "120",
+    "name": "Maryland",
+    "ap": null,
+    "rank": 54,
+    "tier": "dn"
+   },
+   "home": {
+    "id": "194",
+    "name": "Ohio State",
+    "ap": 5,
+    "rank": 33,
+    "tier": "mid"
+   }
+  },
+  {
+   "tier": "Big",
+   "st": 35,
+   "why": [
+    "No. 19 USC on the road",
+    "Primetime on NBC"
+   ],
+   "watch": "USC is 5\u20131 but has played like a 4\u20132 team.",
+   "neutral": false,
+   "when": {
+    "day": "Sat",
+    "date": "Oct 10",
+    "time": "6:30 PM CT",
+    "net": "NBC"
+   },
+   "iso": "2026-10-10T23:30:00+00:00",
+   "away": {
+    "id": "30",
+    "name": "USC",
+    "ap": 19,
+    "rank": 30,
+    "tier": "mid"
+   },
+   "home": {
+    "id": "213",
+    "name": "Penn State",
+    "ap": null,
+    "rank": 42,
+    "tier": "mid"
+   }
+  }
+ ]
+};
 (function(){
   var META = {}; DATA.meta.forEach(function(t){ META[t.id] = t; });
   var $ = function(id){ return document.getElementById(id); };
@@ -1572,8 +1991,9 @@ var TRK = {"season":2026,"baseBlown":0.19864940911648846,"baseCash":0.5229621125
   $("mode-proven").addEventListener("click", function(){ setMode("proven"); });
 
   // ---------- pages ----------
-  var PAGES = ["rankings","team","tend","trackers","coaches","real","method"];
+  var PAGES = ["rankings","team","week","coaches","method"], PALIAS = {tend:"team", trackers:"team", real:"method", matchup:"week"};
   function showPage(pg, keepScroll){
+    if (PALIAS[pg]) pg = PALIAS[pg];
     if (PAGES.indexOf(pg) < 0) pg = "rankings";
     document.querySelectorAll(".page").forEach(function(sec){ sec.hidden = sec.getAttribute("data-page") !== pg; });
     document.querySelectorAll(".topnav a").forEach(function(a){ var on = a.getAttribute("data-p") === pg; a.classList.toggle("on", on); if (on) a.setAttribute("aria-current","page"); else a.removeAttribute("aria-current"); });
@@ -1605,6 +2025,50 @@ var TRK = {"season":2026,"baseBlown":0.19864940911648846,"baseCash":0.5229621125
     var t = "Projection. This season: " + (now === null ? "not enough plays" : (k === "pen" ? now.toFixed(1) : k === "leadEpa" ? signed(now - TAVG.leadEpa, 2) : k === "leadPassAdj" ? signed(now*100,0) + " pts" : Math.round(now*100) + "%")) + " · Last season: " + (last === null ? "n/a" : (k === "pen" ? last.toFixed(1) : k === "leadEpa" ? signed(last - TAVG.leadEpa, 2) : k === "leadPassAdj" ? signed(last*100,0) + " pts" : Math.round(last*100) + "%")) + " · " + p + "th percentile";
     return '<td class="num ' + c + '" title="' + esc(t) + '">' + txt + '</td>';
   }
+  // ---------- team page: habits + trackers (this season) ----------
+  function drawHabits(){
+    var id = state.sel, T = null, K = null;
+    TEND.teams.forEach(function(r){ if (r.id === id) T = r; }); TRK.teams.forEach(function(r){ if (r.id === id) K = r; });
+    if (!T && !K){ $("teamhab").innerHTML = ""; return; }
+    var n = TEND.teams.length;
+    function rk(k, asc){ var arr = TEND.teams.slice().sort(function(a,b){ return asc ? a[k] - b[k] : b[k] - a[k]; }); for (var i = 0; i < arr.length; i++) if (arr[i].id === id) return i + 1; return null; }
+    function ordn(x){ var v = x % 100, q = ["th","st","nd","rd"]; return x + (q[(v - 20) % 10] || q[v] || q[0]); }
+    function card(name, val, cls, rank, what){ return '<div class="hb"><span class="hl">' + name + '</span><span class="hv ' + (cls || "") + '">' + val + '</span><span class="hr">' + rank + '</span><p>' + what + '</p></div>'; }
+    var h = "";
+    if (T){
+      var rp = rk("pen", true), rg = rk("leadEpa", false), r4 = rk("go4", false), rs = rk("leadPassAdj", true), rpp = rk("neuPass", false);
+      var tone = function(r){ return r <= n / 3 ? "pos" : r > n * 2 / 3 ? "neg" : ""; };
+      h += '<h3 class="hbh">Habits <span class="dim">' + LATEST + ' projection</span></h3><p class="note sm">Things a team does that tend to stick from year to year. Early in the season they lean on last year.</p><div class="hbs">' +
+        card("Penalties per game", T.pen.toFixed(1), tone(rp), ordn(rp) + " fewest of " + n, "The stickiest habit we track. Fewer is better.") +
+        card("Foot on the gas", signed(T.leadEpa - TAVG.leadEpa, 2), tone(rg), ordn(rg) + " of " + n, "How well it keeps playing once it's up 9+ in the second half. Above zero keeps attacking.") +
+        card("Goes for it", Math.round(T.go4 * 100) + "%", "", ordn(r4) + " most aggressive of " + n, "How often it goes for it on 4th and 1–3 between the 30s.") +
+        card("Sits on a lead", signed(T.leadPassAdj * 100, 0) + " pts", "", ordn(rs) + " most run-heavy of " + n, "How much its pass rate drops with a lead. Bigger drop = runs the clock.") +
+        card("Pass-first", Math.round(T.neuPass * 100) + "%", "", ordn(rpp) + " most pass-heavy of " + n, "Early-down pass rate in close games. Style, not grit.") + '</div>';
+    }
+    if (K){
+      var blownAll = K.ledAll ? K.lostAll / K.ledAll : null, cash = K.cashN ? K.cashScores / K.cashN : null;
+      h += '<h3 class="hbh">Leads and stops <span class="dim">' + TRK.season + '</span></h3><div class="hbs two">' +
+        card("Blown leads", K.lost + " of " + K.led, K.lost >= 2 ? "neg" : K.led && !K.lost ? "pos" : "", "games lost after leading by 7+",
+          (K.ledAll ? "Since 2019: lost " + K.lostAll + " of " + K.ledAll + " (" + Math.round(blownAll * 100) + "%). The Power 4 average is " + Math.round(TRK.baseBlown * 100) + "%." : "")) +
+        card("Cash-in after stops", cash === null ? "–" : Math.round(cash * 100) + "%", cash === null ? "" : cash >= TRK.baseCash + 0.1 ? "pos" : cash <= TRK.baseCash - 0.1 ? "neg" : "", K.cashN ? K.cashScores + " scores on " + K.cashN + " drives right after a defensive stop" : "no chances yet",
+          "The Power 4 average this season is " + Math.round(TRK.baseCash * 100) + "%.") + '</div>';
+    }
+    $("teamhab").innerHTML = h;
+  }
+  var _drawTeam0 = drawTeam; drawTeam = function(){ _drawTeam0(); try { drawHabits(); } catch(e){} };
+  // ---------- This Week: the week's biggest games as tickets ----------
+  (function(){
+    if (!PREVIEW || !PREVIEW.games || !PREVIEW.games.length){ $("pvgrid").innerHTML = '<p class="note">The next slate shows up here once the schedule is set.</p>'; return; }
+    $("pv-note").textContent = "Week " + PREVIEW.week + " · " + PREVIEW.season;
+    function ordn(x){ var v = x % 100, q = ["th","st","nd","rd"]; return x + (q[(v - 20) % 10] || q[v] || q[0]); }
+    function side(t){ return '<div class="pvt"><img src="logos/' + t.id + '.png" alt="" loading="lazy" onerror="this.style.visibility=\'hidden\'"><div><a class="pvn" href="/' + (META[t.id] ? slugOf(t.id) + '/' : '#') + '">' + esc(t.name) + '</a><div class="pvs"><b>' + (t.ap ? "AP No. " + t.ap : "Unranked") + '</b> · ' + (t.rank ? '<b class="' + t.tier + '">' + ordn(t.rank) + ' of ' + PREVIEW.nt + '</b> at living up to expectations' : 'not graded') + '</div></div></div>'; }
+    $("pvgrid").innerHTML = PREVIEW.games.slice(0, 10).map(function(g, i){
+      return '<div class="pvk' + (i === 0 ? ' feat' : '') + '"><div class="pvm"><div class="pvh"><span class="pvsec">Section: ' + esc(g.tier) + '</span><span class="pvwhy">' + esc(g.why.join(". ")) + (g.why.length ? "." : "") + '</span></div>' +
+        side(g.away) + '<div class="pvvs">' + (g.neutral ? "vs" : "at") + '</div>' + side(g.home) +
+        (g.watch ? '<div class="pvw"><span>Watch</span>' + esc(g.watch) + '</div>' : '') +
+        '</div><div class="pvstub"><b>' + esc(g.when.day) + '</b><i>' + esc(g.when.date) + '</i><b>' + esc(g.when.time.replace(" CT", "")) + '</b><i>CT · ' + esc(g.when.net) + '</i></div></div>';
+    }).join("");
+  })();
   function drawTend(){
     var L = TEND.teams.filter(function(r){ return !tstate.conf || r.conf === tstate.conf; });
     L.sort(function(a,b){ return tstate.dir * (a[tstate.k] - b[tstate.k]); });
@@ -1938,6 +2402,7 @@ var TRK = {"season":2026,"baseBlown":0.19864940911648846,"baseCash":0.5229621125
     ["Blown Leads", "Biggest Blown Leads", "Cash-In After Stops"].forEach(function(n){ var h = h3s(n); if (h) addShare(h, {title:function(){ return n; }, nodes:function(){ return [h.closest(".xrow").nextElementSibling]; }, file:n.toLowerCase().replace(/[^a-z]+/g, "-")}, true); });
     addShare(document.querySelector("#team .teamhead > div"), {title:function(){ return teamName() + " · " + state.season; }, sub:function(){ return $("coachline").textContent; }, nodes:function(){ return [$("teamstats"), document.querySelector("#team .chartbox"), document.querySelector("#team .legend")]; }, slug:function(){ return slugOf(state.sel); }, file:"team"});
     var bw = h3s("Biggest Wins Since 2019");
+    addShare(sh("bb-h"), {title:function(){ return "Biggest blown leads of " + TRK.season; }, sub:function(){ return "The biggest leads that still turned into losses"; }, nodes:function(){ return [wrapOf("biggest")]; }, file:"blown-leads"});
     if (bw) addShare(bw, {title:function(){ return teamName() + ": biggest wins since 2019"; }, sub:function(){ return "Wins in big games, ranked by how big the game was"; }, nodes:function(){ return [bw.closest(".xrow").parentNode.querySelector(".tablewrap")]; }, slug:function(){ return slugOf(state.sel); }, file:"biggest-wins"}, true);
     var bh = h3s("Best Performances Since 2019"), wh = h3s("Worst Performances Since 2019");
     if (bh) addShare(bh, {title:function(){ return teamName() + ": best performances since 2019"; }, nodes:function(){ return [bh.closest(".xrow").nextElementSibling]; }, slug:function(){ return slugOf(state.sel); }, file:"best-games"}, true);
