@@ -1038,7 +1038,7 @@ th{font-size:15px!important}
     <div class="qbtools"><input id="qbq" type="search" placeholder="Search a QB or school" aria-label="Search quarterbacks"><span class="note" id="qbcount"></span></div>
     <div class="tablewrap">
       <table id="qbt">
-        <thead><tr><th class="l rank">#</th><th class="l">QB</th><th data-qk="rating"><button>Rating</button></th><th data-qk="games"><button><span class="hide-sm">Games</span><span class="show-sm">G</span></button></th><th data-qk="raw"><button>Raw</button></th><th data-qk="big" class="hide-sm"><button>Big Games</button></th><th data-qk="to" class="hide-sm"><button>TO %</button></th></tr></thead>
+        <thead><tr><th class="l rank">#</th><th class="l">QB</th><th data-qk="rating" data-tip="qrate"><button>Rating</button></th><th data-qk="games" data-tip="qgames"><button><span class="hide-sm">Games</span><span class="show-sm">G</span></button></th><th data-qk="raw" data-tip="qraw"><button>Raw</button></th><th data-qk="big" data-tip="qbig" class="hide-sm"><button>Big Games</button></th><th data-qk="to" data-tip="qto" class="hide-sm"><button>TO %</button></th></tr></thead>
         <tbody><tr><td class="l" colspan="7"><span class="dim">Loading quarterbacks…</span></td></tr></tbody>
       </table>
     </div>
@@ -2939,6 +2939,13 @@ var TREND = {"season":2026,"weeks":[1,2,3,4,5],"teams":{"158":[[3.4,16,1],[3.8,1
       proutine: ["Routine over time", "Same blend, using each season's routine-game grade."],
       pdrop: ["Big-stage drop over time", "Same blend of each season's big-stage drop. Under the same coach, a team that shrank or rose two years running kept that direction 61% of the time."],
       pcons: ["Consistent", "How many of this coach's seasons, at any school, pointed the same way as the overall drop. 5/5 means every season shrank (or every season rose)."],
+      qrate: ["Rating", "Points per game he adds compared with an average Power 4 QB, on a typical 30 plays. Every pass, sack, run and turnover counts, adjusted for the defense he faced. Early in a season it leans on his last season (or on average if he's new) until more games come in.", "his plays valued by expected points, vs. what that defense usually allows"],
+      qgames: ["Games", "Games he started and played at least 10 snaps in. FCS games are left out."],
+      qraw: ["Raw", "Same scale as Rating, but only this season (or his whole career), with no leaning on last year. Noisier early in the season."],
+      qbig: ["Big games", "Same scale, only in big games (same big-stage rules as the rest of the site). Shows what happened. It doesn't carry over from year to year."],
+      qclutch: ["Clutch", "Same scale, only on 3rd and 4th down or in the 4th quarter within 8 points. Shows what happened. It doesn't carry over from year to year."],
+      qto: ["Turnover %", "Share of his plays that ended in an interception or a lost fumble. About 2% is typical. It swings a lot from year to year."],
+      qpts: ["Pts added", "Points he added in that game compared with an average QB running the same plays against the same defense."],
       slope: ["Trend per year", "How much his season DAWG grade changes per year, from a straight line fit through his seasons. Winning raises expectations, so early winners can trend down.", "slope of season DAWG vs. year"]
     };
     var tip = $("htip"), cur = null;
@@ -2960,6 +2967,8 @@ var TREND = {"season":2026,"weeks":[1,2,3,4,5],"teams":{"158":[[3.4,16,1],[3.8,1
       if (!th.querySelector("button")){ th.tabIndex = 0; }
     });
     window.addEventListener("scroll", hide, {passive:true});
+    document.addEventListener("mouseover", function(e){ var th = e.target.closest && e.target.closest(".qbd th[data-tip]"); if (th && th !== cur) show(th); });
+    document.addEventListener("mouseout", function(e){ var th = e.target.closest && e.target.closest(".qbd th[data-tip]"); if (th && !(e.relatedTarget && th.contains(e.relatedTarget))) hide(); });
     document.addEventListener("scroll", hide, {passive:true, capture:true});
   })();
 
@@ -3041,9 +3050,9 @@ var TREND = {"season":2026,"weeks":[1,2,3,4,5],"teams":{"158":[[3.4,16,1],[3.8,1
     var gy = qst.gy[o.qb] || S[S.length - 1].y, gs = S.filter(function(s){ return s.y === gy; })[0] || S[S.length - 1];
     var log = gs.log.map(function(g){ return '<tr><td class="l">' + fmtDate(g.d) + '</td><td class="l">' + (g.s === "away" ? "at " : "vs ") + esc(g.o) + (g.big ? ' <span class="dim">· big</span>' : '') + '</td><td>' + (g.pf > g.pa ? "W " : g.pf < g.pa ? "L " : "T ") + g.pf + "–" + g.pa + '</td><td class="hide-xs">' + g.n + '</td><td class="' + qcls(g.v) + '"><b>' + signed(g.v) + '</b></td></tr>'; }).join("");
     return '<div class="qbd"><h3>' + esc(o.qb) + '</h3><div class="sub">' + qschools(o.teams) + ' · career rating <b class="' + qcls(o.career.rating) + '">' + signed(o.career.rating) + '</b> over ' + o.career.games + ' games</div>' + bars +
-      '<table><thead><tr><th class="l">Year</th><th class="l">School</th><th>G</th><th>Rating</th><th class="hide-xs">Raw</th><th>Big games</th><th class="hide-xs">Clutch</th><th class="hide-xs">TO %</th></tr></thead><tbody>' + rows + '</tbody></table>' +
+      '<table><thead><tr><th class="l">Year</th><th class="l">School</th><th data-tip="qgames">G</th><th data-tip="qrate">Rating</th><th class="hide-xs" data-tip="qraw">Raw</th><th data-tip="qbig">Big games</th><th class="hide-xs" data-tip="qclutch">Clutch</th><th class="hide-xs" data-tip="qto">TO %</th></tr></thead><tbody>' + rows + '</tbody></table>' +
       '<div class="gl"><div class="gsel" role="group" aria-label="Game log season">' + S.map(function(s){ return '<button type="button" data-gy="' + s.y + '" aria-pressed="' + (s.y === gs.y) + '">' + s.y + '</button>'; }).join("") + '</div>' +
-      '<table><thead><tr><th class="l">Date</th><th class="l">Game</th><th>Result</th><th class="hide-xs">Plays</th><th>Pts added</th></tr></thead><tbody>' + log + '</tbody></table></div>' +
+      '<table><thead><tr><th class="l">Date</th><th class="l">Game</th><th>Result</th><th class="hide-xs">Plays</th><th data-tip="qpts">Pts added</th></tr></thead><tbody>' + log + '</tbody></table></div>' +
       '<p class="dim">Pts added = points he added in that game vs. an average QB on the same plays. Big games and clutch don\'t carry over from year to year; read them as what happened.</p></div>';
   }
   function drawQB(){
