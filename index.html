@@ -1142,6 +1142,7 @@ th{font-size:15px!important}
     <h2 id="chg-h">Changes</h2>
     <ul class="chg">
       <li><b>Oct. 6, 2026</b> Fixed two play-by-play errors: some touchdowns were credited to the wrong play (ESPN occasionally posts the score a play early), and a play followed by a timeout was sometimes read as a turnover. Foot on the Gas and the new QB ratings use the corrected numbers; game grades and team scores were not affected.</li>
+      <li><b>Oct. 7, 2026</b> Share buttons on a computer now save the image and copy one clean version to paste (the share sheet was copying two). Team cards show ranked opponents as "#16 Michigan" instead of running the number into the name. No numbers changed.</li>
       <li><b>Oct. 7, 2026</b> QB share image: "Struggling the most" now lists the lowest-rated QB first, with each QB's true rank (e.g. 58th of 67). No numbers changed.</li>
       <li><b>Oct. 7, 2026</b> QB fix: some games write touchdowns as "Receiver 12 Yd pass from QB" or "QB 5 Yd Run," and those plays weren't being credited to the quarterback (about 1 in 5 TD passes). They are now. QB ratings moved, most by a few tenths; the ratings now carry over from year to year a little better. No team numbers changed.</li>
       <li><b>Oct. 6, 2026</b> Team pages: "Share team card" makes a one-image profile of the season (grades, every game, rank by week, QB, next game). No numbers changed.</li>
@@ -3458,11 +3459,11 @@ var FACTS = {
         btn.disabled = false; if (!blob){ msg.textContent = "Couldn't make the image."; return; }
         var name = "dawg-" + slugOf(gcShare.t) + "-" + gcShare.g.date + ".png"; gcEv("share-ticket-" + slugOf(gcShare.t));
         var file = null; try { file = new File([blob], name, {type:"image/png"}); } catch(e){}
-        if (file && navigator.canShare && navigator.canShare({files:[file]})){
+        if (file && !isDesk() && navigator.canShare && navigator.canShare({files:[file]})){
           navigator.share({files:[file]}).then(function(){ msg.textContent = ""; }).catch(function(){ msg.textContent = ""; });
         } else {
           var a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = name; document.body.appendChild(a); a.click(); a.remove();
-          setTimeout(function(){ URL.revokeObjectURL(a.href); }, 4000); msg.textContent = "Saved. Post it anywhere.";
+          setTimeout(function(){ URL.revokeObjectURL(a.href); }, 4000); msg.textContent = "Saved. Post it anywhere."; copyOne(blob);
         }
       });
     });
@@ -3575,14 +3576,17 @@ var FACTS = {
 
   // ---------- share any section as a formatted image ----------
   function gcEv(p){ try { if (window.goatcounter && window.goatcounter.count) window.goatcounter.count({path:p, title:p, event:true}); } catch(e){} }
+  // computers (mouse/trackpad) get a saved file plus one copied image; the share sheet's "Copy" puts two versions on the clipboard and X pastes both
+  function isDesk(){ try { return matchMedia("(hover: hover) and (pointer: fine)").matches; } catch(e){ return false; } }
+  function copyOne(blob){ try { if (window.ClipboardItem && navigator.clipboard && navigator.clipboard.write) navigator.clipboard.write([new ClipboardItem({"image/png": blob})]).catch(function(){}); } catch(e){} }
   function shareBlob(blob, name, text, msgEl, withText){
     gcEv("share-" + String(name).replace(/^dawg-/, "").replace(/\.png$/, ""));
     var file = null; try { file = new File([blob], name, {type:"image/png"}); } catch(e){}
-    if (file && navigator.canShare && navigator.canShare({files:[file]})){
+    if (file && !isDesk() && navigator.canShare && navigator.canShare({files:[file]})){
       navigator.share(withText ? {files:[file], text:text} : {files:[file]}).then(function(){ if (msgEl) msgEl.textContent = ""; }).catch(function(){ if (msgEl) msgEl.textContent = ""; });
     } else {
       var a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = name; document.body.appendChild(a); a.click(); a.remove();
-      setTimeout(function(){ URL.revokeObjectURL(a.href); }, 4000); if (msgEl) msgEl.textContent = "Saved";
+      setTimeout(function(){ URL.revokeObjectURL(a.href); }, 4000); if (msgEl) msgEl.textContent = "Saved"; copyOne(blob);
     }
   }
   function exportImage(o, btn){
@@ -3699,7 +3703,7 @@ var FACTS = {
       var exp = ln < 0 ? "Favored by " + Math.abs(ln) : ln > 0 ? "Underdog by " + Math.abs(ln) : "Even game";
       var v = g.dawg, w = Math.abs(v) / mx * 50, d = g.date.slice(0, 10).split("-");
       return '<div class="g"><span class="dt">' + MON[+d[1] - 1] + '<br> ' + (+d[2]) + '</span>' + tcImg(g.oid, g.opp) +
-        '<div class="mid"><div class="op">' + at + ' ' + (g.oppRank ? '<i>' + g.oppRank + '</i>' : '') + esc(g.oppName) + (g.big ? '<span class="bg">Big game</span>' : '') + '</div>' +
+        '<div class="mid"><div class="op">' + at + ' ' + (g.oppRank ? '<i>#' + g.oppRank + '</i>' : '') + esc(g.oppName) + (g.big ? '<span class="bg">Big game</span>' : '') + '</div>' +
         '<div class="sm"><b class="' + (won ? 'w' : 'l') + '">' + (won ? 'W' : 'L') + '</b> ' + g.pf + '–' + g.pa + ' · ' + exp + '</div></div>' +
         '<div class="bar"><div class="mid0"></div><div class="fill ' + tcC(v) + '" style="' + (v >= 0 ? 'left:50%' : 'right:50%') + ';width:' + w.toFixed(1) + '%"></div></div>' +
         '<b class="sc ' + tcC(v) + '">' + tcSg(v) + '</b></div>';
@@ -3732,7 +3736,7 @@ var FACTS = {
     if (nx){
       var dt = new Date(nx.dt), DAY = ["Sun.","Mon.","Tue.","Wed.","Thu.","Fri.","Sat."], M2 = ["Jan.","Feb.","March","April","May","June","July","Aug.","Sept.","Oct.","Nov.","Dec."];
       var ct = new Date(dt.getTime() - 5 * 3600e3);
-      NX = '<div class="pl"><div class="h">Next up</div><div class="nx">' + tcImg(nx.id, nx.abbr, true) + '<div><div class="big">' + nx.at + ' ' + (nx.rk ? '<i>' + nx.rk + '</i>' : '') + esc(nx.name) + '</div><div class="sm2">' + DAY[ct.getUTCDay()] + ', ' + M2[ct.getUTCMonth()] + ' ' + ct.getUTCDate() + '</div></div></div></div>';
+      NX = '<div class="pl"><div class="h">Next up</div><div class="nx">' + tcImg(nx.id, nx.abbr, true) + '<div><div class="big">' + nx.at + ' ' + (nx.rk ? '<i>#' + nx.rk + '</i>' : '') + esc(nx.name) + '</div><div class="sm2">' + DAY[ct.getUTCDay()] + ', ' + M2[ct.getUTCMonth()] + ' ' + ct.getUTCDate() + '</div></div></div></div>';
     }
     var nb = s.nBig || 0, nr = (s.n || 0) - nb;
     var vw = function(x){ return x >= 0.5 ? "Above expectations" : x <= -0.5 ? "Below expectations" : "About as expected"; };
@@ -3763,7 +3767,7 @@ var FACTS = {
       ".dt{font-family:'Big Shoulders Display';font-weight:900;font-size:16px;line-height:1;text-transform:uppercase;width:34px;text-align:center;color:#6b5f4c}" +
       ".g img,.ph{width:44px;height:44px;object-fit:contain;flex:none}.ph{display:grid;place-items:center;border-radius:50%;background:#d9cbaa;font-family:'Big Shoulders Display';font-weight:900;font-size:14px;color:#6b5f4c}" +
       ".mid{flex:1;min-width:0}.op{font-family:'Bowlby One';font-size:23px;text-transform:uppercase;line-height:1.05;display:flex;align-items:center;gap:8px;white-space:nowrap}" +
-      ".op i,.big i{font-style:normal;font-family:'Big Shoulders Display';font-weight:900;font-size:.8em;color:#6b5f4c;margin-right:-2px}" +
+      ".op i,.big i{font-style:normal;font-family:'Big Shoulders Display';font-weight:900;font-size:.8em;color:#6b5f4c}.big i{margin-right:.3em}" +
       ".bg{font-family:'Big Shoulders Display';font-weight:900;font-size:12.5px;letter-spacing:.08em;color:#EFE3C6;background:#D8342A;border-radius:999px;padding:2px 9px 3px}" +
       ".sm{font-size:16px;font-weight:600;color:#4a4136;margin-top:4px}.sm b.w{color:#1E7046}.sm b.l{color:#C22E25}" +
       ".bar{position:relative;width:230px;height:16px}.mid0{position:absolute;left:50%;top:-6px;bottom:-6px;border-left:2px solid #9c8e72}" +
