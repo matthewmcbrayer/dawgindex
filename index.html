@@ -492,7 +492,8 @@ select{-webkit-appearance:none;appearance:none;padding:7px 42px 7px 16px!importa
   .tablewrap:has(#board) th,.tablewrap:has(#tend) th,.tablewrap:has(#blown) th,.tablewrap:has(#cashtab) th,.tablewrap:has(#biggest) th,.tablewrap:has(#poll) th,.tablewrap:has(#topgames) th,#coaches-sec .tablewrap th{position:sticky!important;top:var(--navh,64px)!important}
 }
 .tablewrap.wide:is(#z,*){overflow-x:auto!important;overflow-y:hidden!important}.tablewrap.wide:is(#z,*) th{position:static!important}
-.tablewrap table:not(.all) > tbody > tr:nth-child(n+26){display:none}
+.tablewrap table:not(.all) > tbody > tr:not(.tier):nth-child(n+26 of tr:not(.tier)){display:none}
+.tablewrap table:not(.all) > tbody > tr.tier.late{display:none}
 .tablewrap thead th:first-child{border-top-left-radius:14px}.tablewrap thead th:last-child,.tablewrap thead th.lastvis{border-top-right-radius:14px}
 .moreb{display:block;margin:2px auto 0!important}
 #log th,#log td{padding-left:7px!important;padding-right:7px!important}#log td.l{white-space:normal}
@@ -798,6 +799,12 @@ th{font-size:15px!important}
 .xbody #savecard{display:none!important}
 
 .jumpb{align-self:flex-start;all:unset;cursor:pointer;font-family:var(--display);font-weight:800;text-transform:uppercase;letter-spacing:.04em;font-size:15px;color:var(--orange);margin-top:-4px}.jumpb:hover{text-decoration:underline}.jumpb:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+#board tr.tier td{padding:0!important;border:0!important;background:transparent!important;height:30px;position:relative;text-align:left!important}
+#board tr.tier td::before{content:"";position:absolute;left:0;right:0;top:50%;border-top:2px dashed currentColor;opacity:.55}
+#board tr.tier span{position:relative;display:inline-block;margin-left:14px;padding:2px 10px;background:var(--surface);font-family:var(--display);font-weight:800;text-transform:uppercase;letter-spacing:.06em;font-size:14px;border-radius:999px;border:1.5px solid currentColor}
+#board tr.t-dawg{color:var(--good)}#board tr.t-soft{color:var(--bad)}
+#board tr.tier:hover td{background:transparent!important}
+
 /* ---- spacing system (Oct 7 2026): one header pattern, one gap scale ----
    section to section 52 (phone 40) · subsection 28 (phone 24) · block to block 14 · title to its note 6 */
 .wrap{gap:52px!important}
@@ -956,7 +963,7 @@ tr.sk:nth-child(3n+2) i{width:82%}tr.sk:nth-child(3n) i{width:68%}
       <table id="board">
         <thead><tr>
           <th class="l rank">#</th><th class="l">Team</th><th class="l hide-sm" id="confcol">Conf</th><th data-tip="wl">W–L</th>
-          <th data-k="dawg" data-tip="dawg"><button>DAWG</button></th><th data-k="big" data-tip="big"><button>Big<span class="hide-sm"> Games</span></button></th><th data-k="other" data-tip="routine"><button>Routine</button></th><th class="c-drop" data-k="drop" data-tip="drop"><button>Big vs. Routine</button></th><th id="lastcol" data-k="consN" data-tip="pcons" hidden><button>Consistent</button></th>
+          <th data-k="dawg" data-tip="dawg"><button><span class="hide-sm">Season </span>Grade</button></th><th data-k="big" data-tip="big"><button>Big<span class="hide-sm"> Games</span></button></th><th data-k="other" data-tip="routine"><button>Routine</button></th><th class="c-drop" data-k="drop" data-tip="drop"><button>Big vs. Routine</button></th><th id="lastcol" data-k="consN" data-tip="pcons" hidden><button>Consistent</button></th>
         </tr></thead>
         <tbody></tbody>
       </table>
@@ -1211,6 +1218,7 @@ tr.sk:nth-child(3n+2) i{width:82%}tr.sk:nth-child(3n) i{width:68%}
     <h2 id="chg-h">Changes</h2>
     <ul class="chg">
       <li><b>Oct. 6, 2026</b> Fixed two play-by-play errors: some touchdowns were credited to the wrong play (ESPN occasionally posts the score a play early), and a play followed by a timeout was sometimes read as a turnover. Foot on the Gas and the new QB ratings use the corrected numbers; game grades and team scores were not affected.</li>
+      <li><b>Oct. 7, 2026</b> DAWG Rankings: the DAWG/SOFT badges are gone; dashed lines in the table now mark where DAWG (+3) and SOFT (−3) start. No numbers changed.</li>
       <li><b>Oct. 7, 2026</b> Rewrote the "What is this?" card in plain English: what it is, why it matters, why trust it. No numbers changed.</li>
       <li><b>Oct. 7, 2026</b> The leaderboard is now called DAWG Rankings and sits right under the week's highlights. No numbers changed.</li>
       <li><b>Oct. 7, 2026</b> Polish: buttons and game cards press in when tapped, tabs fade in, Share buttons show progress, and on a computer the finished image offers Copy image or Download, the QB list shows placeholder rows while it loads, chart dots pop in. Phone fixes: bigger menu tabs, poll card labels stay inside the card, the floating Share button steps aside when a section has its own, year-chart labels no longer sit on the lines. Layout: every section header now has the title on the left, Share on the right and its note underneath, with more room between sections. No numbers changed.</li>
@@ -2707,12 +2715,23 @@ var FACTS = {
     var k = state.sort, dir = state.dir;
     var list = teamsFor(state.season).filter(function(t){ return !state.conf || t.conf === state.conf; }).sort(function(a,b){ var av = a[k], bv = b[k]; if (av === null) return 1; if (bv === null) return -1; return ((av - bv) * dir) || (a.name < b.name ? -1 : 1); });
     document.querySelectorAll("#board th[data-k]").forEach(function(th){ th.classList.toggle("on", th.getAttribute("data-k") === k); });
+    var TH = state.mode === "proven" ? 0.8 : 3, tiers = k === "dawg", ncol = $("board").tHead.rows[0].querySelectorAll("th:not([hidden])").length, shown = 0;
+    function tierRow(cls_, txt){ return '<tr class="tier ' + cls_ + (shown >= 25 ? ' late' : '') + '" aria-hidden="true"><td colspan="' + ncol + '"><span>' + txt + '</span></td></tr>'; }
     $("board").tBodies[0].innerHTML = list.map(function(t, i){
-      return '<tr class="trow' + (state.picked && t.id === state.sel ? ' sel' : '') + '" data-id="' + t.id + '" tabindex="0">' +
+      var pre = "", prev = list[i-1];
+      if (tiers && prev && prev.dawg !== null && t.dawg !== null){
+        var s = TH.toString(), ms = "−" + s;
+        if (dir < 0 && prev.dawg >= TH && t.dawg < TH) pre = tierRow("t-dawg", "▲ DAWGs · +" + s + " or better");
+        if (dir < 0 && prev.dawg > -TH && t.dawg <= -TH) pre = tierRow("t-soft", "▼ SOFT · " + ms + " or worse");
+        if (dir > 0 && prev.dawg <= -TH && t.dawg > -TH) pre = tierRow("t-soft", "▲ SOFT · " + ms + " or worse");
+        if (dir > 0 && prev.dawg < TH && t.dawg >= TH) pre = tierRow("t-dawg", "▼ DAWGs · +" + s + " or better");
+      }
+      shown++;
+      return pre + '<tr class="trow' + (state.picked && t.id === state.sel ? ' sel' : '') + '" data-id="' + t.id + '" tabindex="0">' +
         '<td class="l rank">' + (i+1) + (function(){ if (state.mode === "proven") return ""; var mv = trendMove(t.id); return mv ? '<i class="mv ' + (mv > 0 ? 'up' : 'dn') + '"><svg viewBox="0 0 10 9" aria-hidden="true"><path d="' + (mv > 0 ? 'M5 0L10 9H0z' : 'M0 0H10L5 9z') + '" fill="currentColor"/></svg>' + Math.abs(mv) + '</i>' : ''; })() + '</td><td class="l"><b>' + esc(t.name) + '</b>' + (state.mode === "proven" ? ' <span class="dim">' + esc(t.coach) + ' · ' + t.seasons + ' yr' + (t.seasons === 1 ? '' : 's') + (t.schools && t.schools.length > 1 ? ' · ' + esc(t.schools.join(", ")) : '') + '</span>' : '') + '</td>' +
         (state.conf ? '' : '<td class="l conf hide-sm">' + esc(t.conf === "Independent" ? "Ind." : t.conf) + '</td>') +
         '<td class="num">' + t.w + '–' + t.l + '</td>' +
-        '<td class="num dg ' + cls(t.dawg) + '">' + signed(t.dawg) + ' ' + verdict(t.dawg, state.mode === "proven" ? 0.8 : 3) + '</td>' +
+        '<td class="num dg ' + cls(t.dawg) + '">' + signed(t.dawg) + '</td>' +
         '<td class="num">' + signed(t.big) + (state.mode === "proven" ? '' : ' <span class="dim">(' + t.nBig + ')</span>') + '</td>' +
         '<td class="num">' + signed(t.other) + '</td>' +
         '<td class="num c-drop">' + signed(t.drop) + bar(t.drop) + '</td>' +
@@ -3652,7 +3671,7 @@ var FACTS = {
     document.querySelectorAll(".tablewrap > table").forEach(function(tb){
       if (tb.id === "topgames" || tb.id === "log" || tb.id === "poll" || !tb.tBodies[0] || tb._capped) return; tb._capped = true;
       var wrap = tb.parentNode, btn = document.createElement("button"); btn.type = "button"; btn.className = "gotit moreb"; btn.hidden = true; wrap.after(btn);
-      function update(){ setTimeout(fitTables, 0); var n = tb.tBodies[0].rows.length; btn.hidden = n <= 25; btn.textContent = tb.classList.contains("all") ? "Show top 25" : "Show all " + n; }
+      function update(){ setTimeout(fitTables, 0); var n = tb.tBodies[0].querySelectorAll("tr:not(.tier)").length; btn.hidden = n <= 25; btn.textContent = tb.classList.contains("all") ? "Show top 25" : "Show all " + n; }
       btn.addEventListener("click", function(){ var open = tb.classList.toggle("all"); update(); if (!open) wrap.scrollIntoView({block:"start"}); });
       new MutationObserver(update).observe(tb.tBodies[0], {childList:true}); update();
     });
