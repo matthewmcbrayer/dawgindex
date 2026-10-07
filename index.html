@@ -3332,14 +3332,18 @@ var TREND = {"season":2026,"weeks":[1,2,3,4,5],"teams":{"158":[[3.4,16,1],[3.8,1
       rr(-sw / 2, -shh / 2, sw, shh, shh / 2); x.fillStyle = good ? "#23885A" : "#E5463A"; x.fill(); x.lineWidth = 5; x.strokeStyle = INK; x.stroke();
       txt(word, 0, 24, "66px " + K, PAPER, "center", 2.5); x.restore();
     }
-    // why
-    var yy = wrap(S.sum, L, 688, R - L, 35, "500 25px " + B, INK);
+    // why: the first two parts of the summary only; each metric explains itself below
+    var cl = String(S.sum || "").replace(/\s*\([^)]*\)/g, "").replace(/\.$/, "").split("; "), short = cl.slice(0, 2).join(", and ");
+    short = short ? short.charAt(0).toUpperCase() + short.slice(1) + "." : "";
+    var yy = wrap(short, L, 688, R - L, 35, "500 25px " + B, INK);
     // parts
-    var py0 = Math.max(yy + 30, 790); x.fillStyle = INK; x.fillRect(L, py0, R - L, 3);
-    var rh = Math.min(52, (PY - 40 - py0) / 5);
+    var py0 = yy + 42; x.fillStyle = INK; x.fillRect(L, py0, R - L, 3);
+    var rh = Math.min(72, (PY - 40 - py0) / 5);
+    var PLAIN = {p_ats:"margin vs. the Vegas line", p_fin:"points vs. what its yards usually score", p_knife:"how much it grew a 9+ point lead", p_cash:"points scored after defensive stops", p_ans:"scored right after the other team did"};
     S.P.forEach(function(p, i){
       var Y = py0 + 3 + i * rh, mid = Y + rh / 2;
-      txt(p[1].toUpperCase(), L, mid + 9, "900 25px " + D, INK, "left", .8);
+      txt(p[1].toUpperCase(), L, mid + 1, "900 25px " + D, INK, "left", .8);
+      txt(PLAIN[p[0]] || "", L, mid + 22, "500 16px " + B, MUT);
       var none = p[2] === null || p[2] === undefined, v = none ? (p[0] === "p_knife" ? "never up 9" : "–") : p[3].replace(" pts on ", " on ").replace(" pts", "");
       txt(v, 500, mid + 9, "800 27px " + D, INK, "right");
       var bx = 520, bw = R - bx, by = mid - 8, bh = 16; rr(bx, by, bw, bh, 8); x.fillStyle = TRACK; x.fill();
@@ -3352,6 +3356,8 @@ var TREND = {"season":2026,"weeks":[1,2,3,4,5],"teams":{"158":[[3.4,16,1],[3.8,1
     txt("TICKET NO.", 122, 1160, "800 16px " + D, MUT, "left", 2.5);
     var no = rk ? ("00" + rk[0]).slice(-3) : "—"; txt(no, 120, 1240, "900 92px " + D, RED); x.font = "900 92px " + D; var nw = x.measureText(no).width;
     if (rk) txt("/ " + rk[1], 126 + nw, 1240, "800 22px " + D, INK, "left", 1);
+    if (rk){ var on = function(v){ var r = v % 100, q = ["th","st","nd","rd"]; return v + (q[(r - 20) % 10] || q[r] || q[0]); };
+      txt((rk[0] === 1 ? "Best of " : on(rk[0]) + " of ") + rk[1] + " games this season", 122, 1268, "600 17px " + B, MUT); }
     var mx = 126 + nw + 90;
     txt(S.y + " SEASON", mx, 1172, "800 16px " + D, MUT, "left", 2.5); var lnTxt = "LINE " + (g.line === null || g.line === undefined ? "–" : g.line === 0 ? "PK" : signed(g.line));
     txt(lnTxt, mx, 1208, "30px " + K, INK); txt("closing spread", mx, 1236, "600 20px " + B, MUT);
