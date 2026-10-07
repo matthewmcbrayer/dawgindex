@@ -805,6 +805,7 @@ th{font-size:15px!important}
 #board tr.t-dawg{color:var(--good)}#board tr.t-soft{color:var(--bad)}
 #board tr.tier:hover td{background:transparent!important}
 
+.thsub{display:block;font-size:.72em;letter-spacing:.02em;opacity:.7;font-weight:600;text-transform:none;font-family:var(--body);white-space:nowrap;margin-top:1px}
 /* ---- spacing system (Oct 7 2026): one header pattern, one gap scale ----
    section to section 52 (phone 40) · subsection 28 (phone 24) · block to block 14 · title to its note 6 */
 .wrap{gap:52px!important}
@@ -1082,7 +1083,7 @@ tr.sk:nth-child(3n+2) i{width:82%}tr.sk:nth-child(3n) i{width:68%}
     <div class="tablewrap">
       <table id="log">
         <thead><tr>
-          <th class="l">Opponent</th><th>Score</th><th data-tip="gdawg"><span class="hide-sm">Game </span>Grade</th><th class="l hide-sm">Date · Site</th><th class="l hide-sm" data-tip="env">Stage</th><th data-tip="line">Line</th><th data-tip="vs">vs Spread</th><th data-tip="fin">Finishing</th><th data-tip="knife">Knife Twist</th><th data-tip="cash">Cash-In</th><th data-tip="ans">Answers</th><th class="l">Starting QB</th>
+          <th class="l">Opponent</th><th>Score</th><th data-tip="gdawg"><span class="hide-sm">Game </span>Grade</th><th class="l hide-sm">Date · Site</th><th class="l hide-sm" data-tip="env">Stage</th><th data-tip="line">Line</th><th data-tip="vs">vs Spread<small class="thsub">excl. garbage time</small></th><th data-tip="fin">Finishing</th><th data-tip="knife">Knife Twist</th><th data-tip="cash">Cash-In</th><th data-tip="ans">Answers</th><th class="l">Starting QB</th>
         </tr></thead>
         <tbody></tbody>
       </table>
@@ -1218,6 +1219,7 @@ tr.sk:nth-child(3n+2) i{width:82%}tr.sk:nth-child(3n) i{width:68%}
     <h2 id="chg-h">Changes</h2>
     <ul class="chg">
       <li><b>Oct. 6, 2026</b> Fixed two play-by-play errors: some touchdowns were credited to the wrong play (ESPN occasionally posts the score a play early), and a play followed by a timeout was sometimes read as a turnover. Foot on the Gas and the new QB ratings use the corrected numbers; game grades and team scores were not affected.</li>
+      <li><b>Oct. 7, 2026</b> Labels: the game log's "vs Spread" column now says "excl. garbage time," and game write-ups say when a team covered in the end even if it was behind the spread before garbage time. No numbers changed.</li>
       <li><b>Oct. 7, 2026</b> DAWG Rankings: the DAWG/SOFT badges are gone; dashed lines in the table now mark where DAWG (+3) and SOFT (−3) start. No numbers changed.</li>
       <li><b>Oct. 7, 2026</b> Rewrote the "What is this?" card in plain English: what it is, why it matters, why trust it. No numbers changed.</li>
       <li><b>Oct. 7, 2026</b> The leaderboard is now called DAWG Rankings and sits right under the week's highlights. No numbers changed.</li>
@@ -3103,7 +3105,7 @@ var FACTS = {
       luck: ["Luck", "Wins above what the team's play earned. Each game gets a win chance from the play-by-play: how often plays succeeded, explosive plays, turnovers the team forced or gave away, penalties and field-goal tries. Who recovers a fumble, tipped interceptions, missed kicks and return touchdowns count as luck. Also shows the record in one-score games.", "wins − expected wins"],
       env: ["Stage", "How big the game was, from 0 up: ranked opponent +15 (top 10 +25), ranked vs. ranked +10, rivalry +20, national TV +10, primetime national +10, bowl or title game +30, neutral showcase +20, non-conference Power 4 +10, packed stadium +10, 10-win opponent last season +10. 25+ is a big game."],
       line: ["Line", "This team's closing spread. Negative means it was favored."],
-      vs: ["vs Spread", "How much the team beat or missed the closing spread by, with garbage time removed.", "margin + line"],
+      vs: ["vs Spread (excl. garbage time)", "How far ahead of or behind the closing spread the team was while the game was still close. Points scored after it got out of hand don't count here, so this can differ from whether the team covered. Final covers count in the season's spread record.", "margin when it was still close + line"],
       fin: ["Finishing", "Did the scoreboard match the yardage? Out-gaining a team and losing shows up negative. Garbage time removed.", "margin − the margin those yards usually produce"],
       ppt: ["Points per takeaway", "Points scored on the drive right after a takeaway, plus return touchdowns. Takeaways in parentheses. About 3 is normal."],
       knife: ["Knife twist", "Once up 9 or more, net points added from that moment until garbage time, compared with what's normal for a team favored by that much. Positive means the lead kept growing.", "net points after first 9+ lead − expected"],
@@ -3442,7 +3444,9 @@ var FACTS = {
   function zOf(k, v){ if (v === null || v === undefined) return null; return (v - GC.MU[k]) / GC.SD[k]; }
   function gameSummary(g){
     var bits = [], final = g.pf - g.pa;
-    if (g.pats !== null && g.pats !== undefined) bits.push((g.pats >= 0 ? "beat the spread by " : "missed the spread by ") + Math.abs(g.pats).toFixed(1) + (g.comp !== null && g.comp !== final ? " (garbage time removed)" : ""));
+    if (g.pats !== null && g.pats !== undefined) bits.push(g.comp !== null && g.comp !== undefined && g.comp !== final
+      ? (g.pats >= 0 ? "was ahead of the spread by " : "was behind the spread by ") + Math.abs(g.pats).toFixed(1) + " before garbage time" + ((g.line !== null && g.line !== undefined && ((final + g.line > 0) !== (g.pats >= 0) && final + g.line !== 0)) ? " (" + (final + g.line > 0 ? "covered" : "missed") + " in the end)" : "")
+      : (g.pats >= 0 ? "beat the spread by " : "missed the spread by ") + Math.abs(g.pats).toFixed(1));
     if (g.pknife !== null && g.pknife !== undefined) bits.push(g.pknife >= 6 ? "kept pulling away after going up 9+" : g.pknife <= -6 ? "let the other team back in after going up 9+" : "held its 9+ lead about as expected");
     if (g.pfin !== null && g.pfin !== undefined && Math.abs(g.pfin) >= 7) bits.push(g.pfin > 0 ? "scored more than its yardage usually buys" : "left points on the field compared with its yardage");
     if (g.cashN) bits.push("scored " + g.cashPts + " points on " + g.cashN + " drive" + (g.cashN === 1 ? "" : "s") + " after defensive stops");
@@ -3527,7 +3531,7 @@ var FACTS = {
     // parts
     var py0 = yy + 42; x.fillStyle = INK; x.fillRect(L, py0, R - L, 3);
     var rh = Math.min(72, (PY - 40 - py0) / 5);
-    var PLAIN = {p_ats:"margin vs. the Vegas line", p_fin:"points vs. what its yards usually score", p_knife:"how much it grew a 9+ point lead", p_cash:"points scored after defensive stops", p_ans:"scored right after the other team did"};
+    var PLAIN = {p_ats:"margin vs. the line, excl. garbage time", p_fin:"points vs. what its yards usually score", p_knife:"how much it grew a 9+ point lead", p_cash:"points scored after defensive stops", p_ans:"scored right after the other team did"};
     S.P.forEach(function(p, i){
       var Y = py0 + 3 + i * rh, mid = Y + rh / 2;
       txt(p[1].toUpperCase(), L, mid + 1, "900 25px " + D, INK, "left", .8);
@@ -3597,7 +3601,7 @@ var FACTS = {
       el.innerHTML = '<summary>How it went</summary><div class="hq"><table><thead><tr><th></th>' + hd + '<th>F</th></tr></thead><tbody>' + rows + '</tbody></table></div>' + sr + (sent ? '<p class="hx">' + sent + "</p>" : "");
       $("gc-big").after(el);
     });
-    var P = [["p_ats","vs Spread", g.pats, signed(g.pats) + " pts", "margin + line, no garbage time"],
+    var P = [["p_ats","vs Spread", g.pats, signed(g.pats) + " pts", "excl. garbage time · margin + line"],
              ["p_fin","Finishing", g.pfin, signed(g.pfin) + " pts", "margin vs what the yardage buys"],
              ["p_knife","Knife twist", g.pknife, signed(g.pknife) + " pts", "net points after first 9+ lead, vs expected"],
              ["p_cash","Cash-in", g.pcash, g.cashN ? g.cashPts + " pts on " + g.cashN : "–", "points after defensive stops, vs expected"],
