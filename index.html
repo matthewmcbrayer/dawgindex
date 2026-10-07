@@ -3681,7 +3681,7 @@ var FACTS = {
   function tcOrd(n){ var v = n % 100, q = ["th","st","nd","rd"]; return n + (q[(v - 20) % 10] || q[v] || q[0]); }
   function tcSg(x){ if (x === null || x === undefined) return "—"; var s = Math.abs(x).toFixed(1); return (x > 0.04 ? "+" : x < -0.04 ? "−" : "") + s; }
   function tcC(x){ return x === null || x === undefined ? "z" : x >= 0.5 ? "p" : x <= -0.5 ? "n" : "z"; }
-  function tcImg(id, abbr){ return id ? '<img src="logos/' + id + '-dark.png" onerror="this.onerror=null;this.src=\'logos/' + id + '.png\'">' : '<span class="ph">' + esc(String(abbr || "").slice(0, 4)) + '</span>'; }
+  function tcImg(id, abbr, dark){ var f = dark ? ["-dark", ""] : ["", "-dark"]; return id ? '<img src="logos/' + id + f[0] + '.png" onerror="this.onerror=null;this.src=\'logos/' + id + f[1] + '.png\'">' : '<span class="ph">' + esc(String(abbr || "").slice(0, 4)) + '</span>'; }
   function teamCardHTML(id, y, qbd){
     y = String(y); var T = DATA.ts[y] || {}, raw = T[id]; if (!raw) return null;
     var c = centers(y), s = Object.assign({}, raw), t = META[id], latest = y === LATEST;
@@ -3731,7 +3731,7 @@ var FACTS = {
     if (nx){
       var dt = new Date(nx.dt), DAY = ["Sun.","Mon.","Tue.","Wed.","Thu.","Fri.","Sat."], M2 = ["Jan.","Feb.","March","April","May","June","July","Aug.","Sept.","Oct.","Nov.","Dec."];
       var ct = new Date(dt.getTime() - 5 * 3600e3);
-      NX = '<div class="pl"><div class="h">Next up</div><div class="nx">' + tcImg(nx.id, nx.abbr) + '<div><div class="big">' + nx.at + ' ' + (nx.rk ? '<i>' + nx.rk + '</i>' : '') + esc(nx.name) + '</div><div class="sm2">' + DAY[ct.getUTCDay()] + ', ' + M2[ct.getUTCMonth()] + ' ' + ct.getUTCDate() + '</div></div></div></div>';
+      NX = '<div class="pl"><div class="h">Next up</div><div class="nx">' + tcImg(nx.id, nx.abbr, true) + '<div><div class="big">' + nx.at + ' ' + (nx.rk ? '<i>' + nx.rk + '</i>' : '') + esc(nx.name) + '</div><div class="sm2">' + DAY[ct.getUTCDay()] + ', ' + M2[ct.getUTCMonth()] + ' ' + ct.getUTCDate() + '</div></div></div></div>';
     }
     var nb = s.nBig || 0, nr = (s.n || 0) - nb;
     var vw = function(x){ return x >= 0.5 ? "Above expectations" : x <= -0.5 ? "Below expectations" : "About as expected"; };
@@ -3748,9 +3748,9 @@ var FACTS = {
     var CSS = "*{margin:0;box-sizing:border-box}html{width:1080px;height:1350px;overflow:hidden;background:#131210}body{margin:0!important;width:1080px;height:1350px;background:#131210;color:#F4EAD2;font-family:'Barlow',sans-serif;padding:44px 52px 0;position:relative;overflow:hidden}" +
       ".top{display:flex;justify-content:space-between;align-items:center}h1{font-size:40px}" +
       ".k{font-family:'Big Shoulders Display';font-weight:900;font-size:19px;letter-spacing:.1em;text-transform:uppercase;border:3px solid #F4EAD2;border-radius:12px;padding:7px 14px;text-align:right;line-height:1.25}" +
-      ".hd{display:flex;align-items:center;gap:24px;margin-top:22px}.lg{width:128px;height:128px;border-radius:24px;background:#EFE3C6;display:grid;place-items:center;box-shadow:5px 5px 0 #0c0b0a;flex:none}.lg img{width:96px;height:96px;object-fit:contain}" +
-      ".hd h2{font-family:'Bowlby One';font-weight:400;font-size:" + (t.name.length > 14 ? 50 : 64) + "px;line-height:.95;text-transform:uppercase}.hd h2 i{font-style:normal;color:#F08A2C;font-size:40px;vertical-align:.35em;margin-right:10px}" +
-      ".hd .sub{font-family:'Big Shoulders Display';font-weight:800;font-size:26px;letter-spacing:.04em;text-transform:uppercase;color:#d9cdb5;margin-top:6px}" +
+      ".thd{display:flex;align-items:center;gap:24px;margin-top:22px}.lg{width:128px;height:128px;border-radius:24px;background:#EFE3C6;display:grid;place-items:center;box-shadow:5px 5px 0 #0c0b0a;flex:none}.lg img{width:96px;height:96px;object-fit:contain}" +
+      ".thd h2{font-family:'Bowlby One';font-weight:400;font-size:" + (t.name.length > 14 ? 50 : 64) + "px;line-height:.95;text-transform:uppercase}.thd h2 i{font-style:normal;color:#F08A2C;font-size:40px;vertical-align:.35em;margin-right:10px}" +
+      ".thd .sub{font-family:'Big Shoulders Display';font-weight:800;font-size:26px;letter-spacing:.04em;text-transform:uppercase;color:#d9cdb5;margin-top:6px}" +
       ".tiles{display:grid;grid-template-columns:1.25fr 1fr 1fr 1fr;gap:12px;margin-top:24px}" +
       ".t{background:#1f1d1a;border:2px solid #3a342c;border-radius:14px;padding:12px 14px}.t:first-child{background:#EFE3C6;color:#1b1712;border-color:#EFE3C6;box-shadow:5px 5px 0 #0c0b0a}" +
       ".t .h{font-family:'Big Shoulders Display';font-weight:900;font-size:17px;letter-spacing:.08em;text-transform:uppercase;color:#b8ad98}.t:first-child .h{color:#6b5f4c}" +
@@ -3775,17 +3775,17 @@ var FACTS = {
       ".bot svg text{font-family:'Big Shoulders Display';font-weight:800;font-size:15px;fill:#857a68}" +
       ".pls{display:flex;flex-direction:column;gap:16px}.pl .big{font-family:'Bowlby One';font-size:26px;text-transform:uppercase;line-height:1.05}.pl .big i{color:#b8ad98}" +
       ".sm2{font-size:16.5px;font-weight:600;color:#d9cdb5;margin-top:3px}.nx{display:flex;align-items:center;gap:12px}.nx img,.nx .ph{width:42px;height:42px}.nx .ph{background:#2c2823;color:#b8ad98}" +
-      ".ft{position:absolute;left:52px;right:52px;bottom:30px;display:flex;justify-content:space-between;align-items:center;font-family:'Big Shoulders Display';font-weight:900;font-size:24px;letter-spacing:.06em;text-transform:uppercase;border-top:2.5px dashed #3a342c;padding-top:12px}" +
+      ".ft{position:absolute;left:52px;right:52px;bottom:30px;display:flex;justify-content:space-between;align-items:center;white-space:nowrap;font-family:'Big Shoulders Display';font-weight:900;font-size:24px;letter-spacing:.06em;text-transform:uppercase;border-top:2.5px dashed #3a342c;padding-top:12px}" +
       ".ft i{font-style:normal;color:#F08A2C}.ft small{font-size:16px;color:#b8ad98;font-weight:800}";
     return '<!doctype html><html><head><meta charset="utf-8"><base href="' + location.href.split("#")[0].split("?")[0].replace(/[^/]*$/, "") + '"><style>' + STK + '</style><style>' + CSS + '</style></head><body>' +
       '<div class="top"><h1>DAWG <span>Index</span></h1><div class="k">' + y + ' season<br>' + asof + '</div></div>' +
-      '<div class="hd"><div class="lg"><img src="logos/' + id + '-dark.png" onerror="this.onerror=null;this.src=\'logos/' + id + '.png\'"></div><div><h2>' + (ap ? '<i>' + ap + '</i>' : '') + esc(t.name) + '</h2><div class="sub">' + sub + '</div></div></div>' +
+      '<div class="thd"><div class="lg"><img src="logos/' + id + '.png" onerror="this.onerror=null;this.src=\'logos/' + id + '-dark.png\'"></div><div><h2>' + (ap ? '<i>' + ap + '</i>' : '') + esc(t.name) + '</h2><div class="sub">' + sub + '</div></div></div>' +
       '<div class="tiles">' + tiles + '</div>' +
       '<div class="vd"><b>The verdict:</b> ' + verdict + '</div>' +
       '<div class="key">Grades = how much better or worse than Vegas expected, plus credit for pulling away and answering back. <b>0 = exactly what Vegas expected.</b></div>' +
       '<div class="lab">Game grade</div><div class="card' + (cp ? ' cp' : '') + '">' + rows + '</div>' +
       '<div class="bot"' + (TRS ? '' : ' style="grid-template-columns:1fr"') + '>' + TRS + '<div class="pls">' + QB + NX + '</div></div>' +
-      '<div class="ft"><span>' + esc(t.name) + ' ' + AR + ' dawgindex<i>.</i>com/' + slugOf(id) + '</span><small>Power 4 teams vs. Vegas · FCS games count less</small></div>' +
+      '<div class="ft"><span>dawgindex<i>.</i>com/' + slugOf(id) + '</span><small>Power 4 teams vs. Vegas</small></div>' +
       '<script src="https://cdn.jsdelivr.net/npm/modern-screenshot@4.7.0/dist/index.js"><\/script></body></html>';
   }
   function shareTeamCard(btn){
@@ -3805,7 +3805,7 @@ var FACTS = {
             .then(function(){ return w.modernScreenshot.domToBlob(w.document.documentElement, {scale:2, backgroundColor:"#131210", type:"image/png", width:1080, height:1350}); })
             .then(function(blob){
               var nm = META[id].name, full = META[id].full || nm;
-              shareBlob(blob, "dawg-" + slugOf(id) + ".png", full + " DAWG Index profile, " + (y === LATEST ? "through " + (DATA.weekLabel || "this week") : y + " season") + ": dawgindex.com/" + slugOf(id) + "/", null, true);
+              shareBlob(blob, "dawg-" + slugOf(id) + ".png", full + " DAWG Index profile, " + (y === LATEST ? "through " + (DATA.weekLabel || "this week") : y + " season") + ": dawgindex.com/" + slugOf(id) + "/");
               f.remove(); done("Saved");
             }).catch(function(){ f.remove(); done("Couldn't make it"); });
         })();
