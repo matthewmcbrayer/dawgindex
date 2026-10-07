@@ -3326,11 +3326,18 @@ var TREND = {"season":2026,"weeks":[1,2,3,4,5],"teams":{"158":[[3.4,16,1],[3.8,1
     txt("GAME GRADE", L, 468, "900 20px " + D, MUT, "left", 3.2);
     txt(signed(g.dawg), L - 4, 634, "900 200px " + D, gc);
     if (g.dawg >= 5 || g.dawg <= -5){
-      var good = g.dawg >= 5, word = good ? "DAWG" : "SOFT"; x.font = "66px " + K; ls(2.5); var sw = x.measureText(word).width + 76, shh = 88; ls(0);
-      x.save(); x.translate(R - sw / 2 - 8, 520); x.rotate(good ? -0.12 : 0.1);
-      rr(-sw / 2 + 7, -shh / 2 + 7, sw, shh, shh / 2); x.fillStyle = INK; x.fill();
-      rr(-sw / 2, -shh / 2, sw, shh, shh / 2); x.fillStyle = good ? "#23885A" : "#E5463A"; x.fill(); x.lineWidth = 5; x.strokeStyle = INK; x.stroke();
-      txt(word, 0, 24, "66px " + K, PAPER, "center", 2.5); x.restore();
+      // a verdict stamp: "Certified DAWG / SOFT", with how rare the game was
+      var good = g.dawg >= 5, word = good ? "DAWG" : "SOFT"; x.font = "64px " + K; ls(2.5); var sw = x.measureText(word).width + 90, shh = 116; ls(0);
+      var rk0 = seasonRankOf(S.y, g.id, S.t), cap = "";
+      if (rk0){ var pc = good ? Math.max(1, Math.ceil(rk0[0] / rk0[1] * 100)) : Math.max(1, Math.ceil((rk0[1] - rk0[0] + 1) / rk0[1] * 100)); cap = (good ? "TOP " : "BOTTOM ") + pc + "% OF " + S.y + " GAMES"; }
+      x.save(); x.translate(R - sw / 2 - 8, 512); x.rotate(good ? -0.1 : 0.08);
+      rr(-sw / 2 + 7, -shh / 2 + 7, sw, shh, 26); x.fillStyle = INK; x.fill();
+      rr(-sw / 2, -shh / 2, sw, shh, 26); x.fillStyle = good ? "#23885A" : "#E5463A"; x.fill(); x.lineWidth = 5; x.strokeStyle = INK; x.stroke();
+      rr(-sw / 2 + 9, -shh / 2 + 9, sw - 18, shh - 18, 18); x.lineWidth = 2; x.strokeStyle = "rgba(239,227,198,.7)"; x.stroke();
+      txt("CERTIFIED", 0, -22, "900 21px " + D, PAPER, "center", 5);
+      txt(word, 0, 38, "64px " + K, PAPER, "center", 2.5);
+      if (cap) txt(cap, 0, shh / 2 + 36, "900 20px " + D, INK, "center", 2.5);
+      x.restore();
     }
     // why: the first two parts of the summary only; each metric explains itself below
     var cl = String(S.sum || "").replace(/\s*\([^)]*\)/g, "").replace(/\.$/, "").split("; "), short = cl.slice(0, 2).join(", and ");
