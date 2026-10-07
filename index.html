@@ -951,7 +951,7 @@ tr.sk:nth-child(3n+2) i{width:82%}tr.sk:nth-child(3n) i{width:68%}
     <p class="keyline">Grades: <b>0</b> = played like Vegas expected · <b class="pos">+5</b> = better than 84% of Power 4 performances since 2019 · <b class="pos">+10</b> = better than 96%</p>
   </section>
   <section class="sec page" data-page="rankings" id="board-sec" aria-labelledby="board-h">
-    <div class="sechead"><h2 id="board-h">Leaderboard</h2><span class="note"><span class="hide-sm">Hover a header for its meaning · tap to sort</span><span class="show-sm">Tap a header to sort · tap a team for its page</span></span></div>
+    <div class="sechead"><h2 id="board-h">DAWG Rankings</h2><span class="note"><span class="hide-sm">Hover a header for its meaning · tap to sort</span><span class="show-sm">Tap a header to sort · tap a team for its page</span></span></div>
     <p class="keyline">Season grade = average game grade. <b class="pos">+3</b> or better = DAWG · <b class="neg">−3</b> or worse = SOFT · 0 = played like Vegas expected</p>
     <div class="tablewrap">
       <table id="board">
@@ -1212,7 +1212,7 @@ tr.sk:nth-child(3n+2) i{width:82%}tr.sk:nth-child(3n) i{width:68%}
     <h2 id="chg-h">Changes</h2>
     <ul class="chg">
       <li><b>Oct. 6, 2026</b> Fixed two play-by-play errors: some touchdowns were credited to the wrong play (ESPN occasionally posts the score a play early), and a play followed by a timeout was sometimes read as a turnover. Foot on the Gas and the new QB ratings use the corrected numbers; game grades and team scores were not affected.</li>
-      <li><b>Oct. 7, 2026</b> The leaderboard now sits right under the week's highlights. No numbers changed.</li>
+      <li><b>Oct. 7, 2026</b> The leaderboard is now called DAWG Rankings and sits right under the week's highlights. No numbers changed.</li>
       <li><b>Oct. 7, 2026</b> Polish: buttons and game cards press in when tapped, tabs fade in, Share buttons show progress, and on a computer the finished image offers Copy image or Download, the QB list shows placeholder rows while it loads, chart dots pop in. Phone fixes: bigger menu tabs, poll card labels stay inside the card, the floating Share button steps aside when a section has its own, year-chart labels no longer sit on the lines. Layout: every section header now has the title on the left, Share on the right and its note underneath, with more room between sections. No numbers changed.</li>
       <li><b>Oct. 7, 2026</b> Share buttons on a computer no longer use the share sheet (its Copy put two versions on the clipboard). Team cards show ranked opponents as "#16 Michigan" instead of running the number into the name. No numbers changed.</li>
       <li><b>Oct. 7, 2026</b> QB share image: "Struggling the most" now lists the lowest-rated QB first, with each QB's true rank (e.g. 58th of 67). No numbers changed.</li>
@@ -2703,7 +2703,7 @@ var FACTS = {
   }
   function drawBoard(){
     $("confcol").hidden = !!state.conf;
-    $("board-h").textContent = state.conf ? (state.conf === "Independent" ? "Notre Dame" : state.conf) + " Leaderboard" : "Leaderboard";
+    $("board-h").textContent = state.conf ? (state.conf === "Independent" ? "Notre Dame" : state.conf) + " DAWG Rankings" : "DAWG Rankings";
     var k = state.sort, dir = state.dir;
     var list = teamsFor(state.season).filter(function(t){ return !state.conf || t.conf === state.conf; }).sort(function(a,b){ var av = a[k], bv = b[k]; if (av === null) return 1; if (bv === null) return -1; return ((av - bv) * dir) || (a.name < b.name ? -1 : 1); });
     document.querySelectorAll("#board th[data-k]").forEach(function(th){ th.classList.toggle("on", th.getAttribute("data-k") === k); });
@@ -3735,7 +3735,7 @@ var FACTS = {
     '.xbodyin #coaches th:nth-child(3),.xbodyin #coaches td:nth-child(3),.xbodyin #coaches th:nth-child(9),.xbodyin #coaches td:nth-child(9),.xbodyin #coaches th:nth-child(10),.xbodyin #coaches td:nth-child(10){display:none}' +
     '.xbodyin .csub{display:none!important}' +
     '.xcoach{display:grid;grid-template-columns:1fr 1fr;gap:22px}.xcoach h3{font-size:24px!important;margin:0 0 10px!important}.xcoach td,.xcoach th{font-size:17px!important}.xcoach td.num{font-size:21px!important}.xcs{display:block;font-size:14px;color:var(--muted);font-weight:500;margin-top:2px}';
-  var SHARES = [], SHLBL = {"qb-rankings":"QB rankings", "qb":"QB profile", "highlights":"This week's highlights", "big-vs-routine":"Big games vs. routine chart", "leaderboard":"Leaderboard", "poll-check":"Poll Check", "conferences":"Conference rankings", "conference-check":"Conference Check", "due-for-a-correction":"Due for a correction", "top-10-games":"Top 10 games", "tendencies":"Team tendencies", "coaches":"Coach résumés", "blown-leads":"Blown leads", "biggest-blown-leads":"Biggest blown leads", "cash-in-after-stops":"Cash-in after stops", "team":"team card", "biggest-wins":"biggest wins", "best-games":"best performances", "worst-games":"worst performances", "game-log":"game log"};
+  var SHARES = [], SHLBL = {"qb-rankings":"QB rankings", "qb":"QB profile", "highlights":"This week's highlights", "big-vs-routine":"Big games vs. routine chart", "dawg-rankings":"DAWG Rankings", "poll-check":"Poll Check", "conferences":"Conference rankings", "conference-check":"Conference Check", "due-for-a-correction":"Due for a correction", "top-10-games":"Top 10 games", "tendencies":"Team tendencies", "coaches":"Coach résumés", "blown-leads":"Blown leads", "biggest-blown-leads":"Biggest blown leads", "cash-in-after-stops":"Cash-in after stops", "team":"team card", "biggest-wins":"biggest wins", "best-games":"best performances", "worst-games":"worst performances", "game-log":"game log"};
   function addShare(anchor, o, inH3){
     if (!anchor) return; var b = document.createElement("button"); b.type = "button"; b.className = "xbtn"; b.textContent = "Share";
     b.title = "Save this as an image"; if (o.label) b.textContent = o.label; b.addEventListener("click", function(){ if (o.card) o.card(b); else exportImage(o, b); }); SHARES.push({o:o, btn:b});
@@ -3749,7 +3749,7 @@ var FACTS = {
     var sh = function(id){ return $(id) ? $(id).closest(".sechead") : null; };
     addShare(sh("week-h"), {title:function(){ return $("week-h").textContent; }, sub:function(){ return "Game grade: 0 = played exactly like Vegas expected · +5 beats 84% of Power 4 games since 2019 · +10 beats 96%"; }, nodes:function(){ return [$("wk")]; }, file:"highlights"});
     addShare(sh("chart-h"), {title:function(){ return $("chart-h").textContent; }, sub:function(){ return "This season so far. Right = better than expected in routine games · Up = better in big games"; }, nodes:function(){ return [document.querySelector("#chart-sec .chartbox")]; }, file:"big-vs-routine"});
-    addShare(sh("board-h"), {title:function(){ return $("board-h").textContent; }, sub:function(){ return "DAWG score = how each team has played vs. what Vegas expected. 0 = as expected · +3 or better = DAWG · −3 or worse = SOFT"; }, nodes:function(){ return [wrapOf("board")]; }, file:"leaderboard"});
+    addShare(sh("board-h"), {title:function(){ return $("board-h").textContent; }, sub:function(){ return "DAWG score = how each team has played vs. what Vegas expected. 0 = as expected · +3 or better = DAWG · −3 or worse = SOFT"; }, nodes:function(){ return [wrapOf("board")]; }, file:"dawg-rankings"});
     addShare(sh("poll-h"), {title:function(){ return "Poll Check"; }, sub:function(){ return "AP rank next to DAWG rank: where each team ranks at living up to expectations, out of 68 Power 4 teams. Fraud Watch = ranked, but bottom half or winning on luck"; }, nodes:function(){ return [wrapOf("poll")]; }, file:"poll-check"});
     addShare(sh("conf-h"), {title:function(){ return "Conference Rankings"; }, nodes:function(){ return [document.querySelector("#conf-sec .tablewrap")]; }, file:"conferences"});
     addShare(sh("cc-h"), {title:function(){ return "Is the SEC actually better?"; }, sub:function(){ return "Every Power 4 vs. Power 4 game between conferences since 2019 (nonconference, bowls, playoff). Avg margin = points per game. Head to head: read across each row"; }, nodes:function(){ return [document.querySelector("#cc-sec .tablewrap"), document.querySelector("#cc-sec h3"), document.querySelector("#cch").closest(".tablewrap")]; }, file:"conference-check"});
