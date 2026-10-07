@@ -783,6 +783,20 @@ th{font-size:15px!important}
 #teamfacts .fk{flex:none;font-family:var(--display);font-weight:900;font-size:14px;letter-spacing:.1em;text-transform:uppercase;color:#F4EAD2;background:var(--red);border-radius:999px;padding:5px 12px 6px;margin-top:2px}
 #teamfacts ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}#teamfacts li{font-size:16.5px;line-height:1.4;font-weight:600}
 @media (max-width:640px){#teamfacts .facts{flex-direction:column;gap:10px}#teamfacts li{font-size:15.5px}}
+#savecard{position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:41;width:300px;max-width:calc(100vw - 32px);background:var(--surface);border:2.5px solid var(--cream);border-radius:16px;box-shadow:5px 5px 0 var(--shade);padding:12px;opacity:0;transform:translateY(12px);transition:opacity .2s ease,transform .2s ease}
+#savecard.on{opacity:1;transform:none}
+#savecard .sc-h{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;font-family:var(--display);font-weight:800;text-transform:uppercase;letter-spacing:.05em;font-size:16px;color:var(--ink)}
+#savecard .sc-x{all:unset;cursor:pointer;width:28px;height:28px;border-radius:8px;text-align:center;line-height:28px;font-size:20px;color:var(--muted)}
+#savecard .sc-x:hover{background:var(--chipbg);color:var(--ink)}
+#savecard img{display:block;width:100%;max-height:220px;object-fit:contain;border-radius:8px;background:#0c0b0a;margin-bottom:10px}
+#savecard .sc-btns{display:flex;gap:8px}
+#savecard .sc-btns button{flex:1;cursor:pointer;font-family:var(--display);font-weight:800;text-transform:uppercase;letter-spacing:.04em;font-size:15px;padding:9px 10px;border-radius:999px;border:2px solid #0c0b0a;transition:transform .08s ease,box-shadow .08s ease}
+#savecard .sc-copy{background:var(--orange);color:#131210;box-shadow:2px 2px 0 var(--cream)}
+#savecard .sc-dl{background:transparent;color:var(--ink);border-color:var(--edge,var(--line))!important}
+#savecard .sc-btns button:active{transform:translate(2px,2px);box-shadow:none}
+#savecard .sc-btns button:focus-visible,#savecard .sc-x:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.xbody #savecard{display:none!important}
+
 /* ---- spacing system (Oct 7 2026): one header pattern, one gap scale ----
    section to section 52 (phone 40) · subsection 28 (phone 24) · block to block 14 · title to its note 6 */
 .wrap{gap:52px!important}
@@ -1197,8 +1211,8 @@ tr.sk:nth-child(3n+2) i{width:82%}tr.sk:nth-child(3n) i{width:68%}
     <h2 id="chg-h">Changes</h2>
     <ul class="chg">
       <li><b>Oct. 6, 2026</b> Fixed two play-by-play errors: some touchdowns were credited to the wrong play (ESPN occasionally posts the score a play early), and a play followed by a timeout was sometimes read as a turnover. Foot on the Gas and the new QB ratings use the corrected numbers; game grades and team scores were not affected.</li>
-      <li><b>Oct. 7, 2026</b> Polish: buttons and game cards press in when tapped, tabs fade in, Share buttons show progress and a "Saved" note, the QB list shows placeholder rows while it loads, chart dots pop in. Phone fixes: bigger menu tabs, poll card labels stay inside the card, the floating Share button steps aside when a section has its own, year-chart labels no longer sit on the lines. Layout: every section header now has the title on the left, Share on the right and its note underneath, with more room between sections. No numbers changed.</li>
-      <li><b>Oct. 7, 2026</b> Share buttons on a computer now save the image and copy one clean version to paste (the share sheet was copying two). Team cards show ranked opponents as "#16 Michigan" instead of running the number into the name. No numbers changed.</li>
+      <li><b>Oct. 7, 2026</b> Polish: buttons and game cards press in when tapped, tabs fade in, Share buttons show progress, and on a computer the finished image offers Copy image or Download, the QB list shows placeholder rows while it loads, chart dots pop in. Phone fixes: bigger menu tabs, poll card labels stay inside the card, the floating Share button steps aside when a section has its own, year-chart labels no longer sit on the lines. Layout: every section header now has the title on the left, Share on the right and its note underneath, with more room between sections. No numbers changed.</li>
+      <li><b>Oct. 7, 2026</b> Share buttons on a computer no longer use the share sheet (its Copy put two versions on the clipboard). Team cards show ranked opponents as "#16 Michigan" instead of running the number into the name. No numbers changed.</li>
       <li><b>Oct. 7, 2026</b> QB share image: "Struggling the most" now lists the lowest-rated QB first, with each QB's true rank (e.g. 58th of 67). No numbers changed.</li>
       <li><b>Oct. 7, 2026</b> QB fix: some games write touchdowns as "Receiver 12 Yd pass from QB" or "QB 5 Yd Run," and those plays weren't being credited to the quarterback (about 1 in 5 TD passes). They are now. QB ratings moved, most by a few tenths; the ratings now carry over from year to year a little better. No team numbers changed.</li>
       <li><b>Oct. 6, 2026</b> Team pages: "Share team card" makes a one-image profile of the season (grades, every game, rank by week, QB, next game). No numbers changed.</li>
@@ -3530,8 +3544,7 @@ var FACTS = {
         if (file && !isDesk() && navigator.canShare && navigator.canShare({files:[file]})){
           navigator.share({files:[file]}).then(function(){ msg.textContent = ""; }).catch(function(){ msg.textContent = ""; });
         } else {
-          var a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = name; document.body.appendChild(a); a.click(); a.remove();
-          setTimeout(function(){ URL.revokeObjectURL(a.href); }, 4000); msg.textContent = ""; copyOne(blob); toast(navigator.clipboard && window.ClipboardItem ? "Saved and copied. Paste it anywhere." : "Saved to your downloads.");
+          msg.textContent = ""; offerSave(blob, name);
         }
       });
     });
@@ -3647,15 +3660,28 @@ var FACTS = {
   // computers (mouse/trackpad) get a saved file plus one copied image; the share sheet's "Copy" puts two versions on the clipboard and X pastes both
   function toast(msg){ var t = $("toast"); if (!t){ t = document.createElement("div"); t.id = "toast"; t.setAttribute("role", "status"); document.body.appendChild(t); } t.textContent = msg; t.classList.remove("on"); void t.offsetWidth; t.classList.add("on"); clearTimeout(toast.h); toast.h = setTimeout(function(){ t.classList.remove("on"); }, 2600); }
   function isDesk(){ try { return matchMedia("(hover: hover) and (pointer: fine)").matches; } catch(e){ return false; } }
-  function copyOne(blob){ try { if (window.ClipboardItem && navigator.clipboard && navigator.clipboard.write) navigator.clipboard.write([new ClipboardItem({"image/png": blob})]).catch(function(){}); } catch(e){} }
+  // computers: finished image waits in a small card with Copy image / Download, nothing saves on its own
+  function canCopy(){ return !!(window.ClipboardItem && navigator.clipboard && navigator.clipboard.write); }
+  function offerSave(blob, name){
+    var c = $("savecard"); if (!c){ c = document.createElement("div"); c.id = "savecard"; c.setAttribute("role", "dialog"); c.setAttribute("aria-label", "Image ready");
+      c.innerHTML = '<div class="sc-h"><b>Image ready</b><button type="button" class="sc-x" aria-label="Close">×</button></div><div class="sc-b"><img alt=""><div class="sc-btns"><button type="button" class="sc-copy">Copy image</button><button type="button" class="sc-dl">Download</button></div></div>';
+      document.body.appendChild(c);
+      c.querySelector(".sc-x").addEventListener("click", function(){ closeSave(); });
+      document.addEventListener("keydown", function(e){ if (e.key === "Escape" && c.classList.contains("on")) closeSave(); }); }
+    if (c._url) URL.revokeObjectURL(c._url); c._url = URL.createObjectURL(blob); c.querySelector("img").src = c._url;
+    var cp = c.querySelector(".sc-copy"), dl = c.querySelector(".sc-dl"); cp.hidden = !canCopy();
+    cp.onclick = function(){ navigator.clipboard.write([new ClipboardItem({"image/png": blob})]).then(function(){ closeSave(); toast("Copied. Paste it anywhere."); }).catch(function(){ toast("Couldn't copy here. Try Download."); }); };
+    dl.onclick = function(){ var a = document.createElement("a"); a.href = c._url; a.download = name; document.body.appendChild(a); a.click(); a.remove(); closeSave(); toast("Saved to your downloads."); };
+    c.hidden = false; void c.offsetWidth; c.classList.add("on"); (cp.hidden ? dl : cp).focus();
+  }
+  function closeSave(){ var c = $("savecard"); if (c){ c.classList.remove("on"); setTimeout(function(){ if (!c.classList.contains("on")) c.hidden = true; }, 200); } }
   function shareBlob(blob, name, text, msgEl, withText){
     gcEv("share-" + String(name).replace(/^dawg-/, "").replace(/\.png$/, ""));
     var file = null; try { file = new File([blob], name, {type:"image/png"}); } catch(e){}
     if (file && !isDesk() && navigator.canShare && navigator.canShare({files:[file]})){
       navigator.share(withText ? {files:[file], text:text} : {files:[file]}).then(function(){ if (msgEl) msgEl.textContent = ""; }).catch(function(){ if (msgEl) msgEl.textContent = ""; });
     } else {
-      var a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = name; document.body.appendChild(a); a.click(); a.remove();
-      setTimeout(function(){ URL.revokeObjectURL(a.href); }, 4000); if (msgEl) msgEl.textContent = "Saved"; copyOne(blob); toast(navigator.clipboard && window.ClipboardItem ? "Saved and copied. Paste it anywhere." : "Saved to your downloads.");
+      if (msgEl) msgEl.textContent = ""; offerSave(blob, name);
     }
   }
   function exportImage(o, btn){
@@ -3684,7 +3710,7 @@ var FACTS = {
         w.document.fonts.ready.then(function(){
           var el = w.document.getElementById("xf");
           return w.modernScreenshot.domToBlob(el, {scale:2, backgroundColor:"#131210", type:"image/png", width:1080, height:el.offsetHeight});
-        }).then(function(blob){ shareBlob(blob, "dawg-" + (o.file || "share") + ".png", "dawgindex.com" + (slug ? "/" + slug : "")); done("Saved"); })
+        }).then(function(blob){ shareBlob(blob, "dawg-" + (o.file || "share") + ".png", "dawgindex.com" + (slug ? "/" + slug : "")); done(); })
           .catch(function(){ done("Couldn't make it"); });
       })();
     };
@@ -3880,7 +3906,7 @@ var FACTS = {
             .then(function(blob){
               var nm = META[id].name, full = META[id].full || nm;
               shareBlob(blob, "dawg-" + slugOf(id) + ".png", full + " DAWG Index profile, " + (y === LATEST ? "through " + (DATA.weekLabel || "this week") : y + " season") + ": dawgindex.com/" + slugOf(id) + "/");
-              f.remove(); done("Saved");
+              f.remove(); done();
             }).catch(function(){ f.remove(); done("Couldn't make it"); });
         })();
       };
