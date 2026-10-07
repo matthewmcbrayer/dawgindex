@@ -783,6 +783,25 @@ th{font-size:15px!important}
 #teamfacts .fk{flex:none;font-family:var(--display);font-weight:900;font-size:14px;letter-spacing:.1em;text-transform:uppercase;color:#F4EAD2;background:var(--red);border-radius:999px;padding:5px 12px 6px;margin-top:2px}
 #teamfacts ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}#teamfacts li{font-size:16.5px;line-height:1.4;font-weight:600}
 @media (max-width:640px){#teamfacts .facts{flex-direction:column;gap:10px}#teamfacts li{font-size:15.5px}}
+/* ---- spacing system (Oct 7 2026): one header pattern, one gap scale ----
+   section to section 52 (phone 40) · subsection 28 (phone 24) · block to block 14 · title to its note 6 */
+.wrap{gap:52px!important}
+.sechead{display:flex!important;flex-wrap:wrap!important;align-items:center!important;gap:6px 16px!important}
+.sechead>h2{order:1!important;flex:1 1 0!important;min-width:0!important;margin:0!important}
+.sechead>.xbtn{order:2!important;margin-left:auto!important;align-self:center!important;flex:none!important;margin-top:0!important}
+.sechead>:not(h2):not(.xbtn){order:3!important;flex:1 0 100%!important;max-width:none!important;margin:0!important}
+.sechead>.note{padding-right:max(0px,calc(100% - 70ch))}
+.sec>h3:not(:first-child),.sec>.xrow:not(:first-child),.sec>.sub-h{margin-top:14px!important}
+.sec>h3,.sec>.xrow h3{margin-bottom:0}
+.sec>.legend{display:flex;flex-wrap:wrap;gap:6px 18px;margin-top:-4px}
+.coachline,.dimcap{font-size:13.5px}
+#biggest td:nth-child(n+3){white-space:nowrap}
+@media (max-width:640px){
+  .wrap{gap:40px!important}
+  .sec>h3:not(:first-child),.sec>.xrow:not(:first-child),.sec>.sub-h{margin-top:10px!important}
+  .sechead{gap:4px 12px!important}
+}
+
 /* ---- polish (Oct 7 2026): press effect, tab fade, share progress, toast, skeletons, phone fixes ---- */
 @keyframes pgIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 .page.pg-in{animation:pgIn .2s ease-out}
@@ -1029,6 +1048,7 @@ tr.sk:nth-child(3n+2) i{width:82%}tr.sk:nth-child(3n) i{width:68%}
     <div id="teamfacts"></div>
     <div class="teamhead" id="teamstats"></div>
     <div id="upnext"></div>
+    <h3 class="sub-h">Year by year</h3>
     <div class="chartbox">
       <svg id="trend" class="chart" viewBox="0 0 900 300" role="img" aria-label="Season-by-season DAWG trend"></svg>
     </div>
@@ -1177,7 +1197,7 @@ tr.sk:nth-child(3n+2) i{width:82%}tr.sk:nth-child(3n) i{width:68%}
     <h2 id="chg-h">Changes</h2>
     <ul class="chg">
       <li><b>Oct. 6, 2026</b> Fixed two play-by-play errors: some touchdowns were credited to the wrong play (ESPN occasionally posts the score a play early), and a play followed by a timeout was sometimes read as a turnover. Foot on the Gas and the new QB ratings use the corrected numbers; game grades and team scores were not affected.</li>
-      <li><b>Oct. 7, 2026</b> Polish: buttons and game cards press in when tapped, tabs fade in, Share buttons show progress and a "Saved" note, the QB list shows placeholder rows while it loads, chart dots pop in. Phone fixes: bigger menu tabs, poll card labels stay inside the card, the floating Share button steps aside when a section has its own, year-chart labels no longer sit on the lines. No numbers changed.</li>
+      <li><b>Oct. 7, 2026</b> Polish: buttons and game cards press in when tapped, tabs fade in, Share buttons show progress and a "Saved" note, the QB list shows placeholder rows while it loads, chart dots pop in. Phone fixes: bigger menu tabs, poll card labels stay inside the card, the floating Share button steps aside when a section has its own, year-chart labels no longer sit on the lines. Layout: every section header now has the title on the left, Share on the right and its note underneath, with more room between sections. No numbers changed.</li>
       <li><b>Oct. 7, 2026</b> Share buttons on a computer now save the image and copy one clean version to paste (the share sheet was copying two). Team cards show ranked opponents as "#16 Michigan" instead of running the number into the name. No numbers changed.</li>
       <li><b>Oct. 7, 2026</b> QB share image: "Struggling the most" now lists the lowest-rated QB first, with each QB's true rank (e.g. 58th of 67). No numbers changed.</li>
       <li><b>Oct. 7, 2026</b> QB fix: some games write touchdowns as "Receiver 12 Yd pass from QB" or "QB 5 Yd Run," and those plays weren't being credited to the quarterback (about 1 in 5 TD passes). They are now. QB ratings moved, most by a few tenths; the ratings now carry over from year to year a little better. No team numbers changed.</li>
