@@ -779,6 +779,10 @@ th{font-size:15px!important}
 .xbodyin #cmpt td.l .cl{font-size:19px}.xbodyin #cmpt td.l .cs{font-size:15px}
 .pvk.cmpable{cursor:pointer;transition:transform .12s ease,box-shadow .12s ease}.pvk.cmpable:hover,.pvk.cmpable:focus-visible{transform:translate(-2px,-2px);box-shadow:7px 7px 0 #0c0b0a;outline:none}
 .pvc{margin-top:10px;font-family:var(--display);font-weight:900;font-size:14px;letter-spacing:.06em;text-transform:uppercase;color:#D8342A}
+#teamfacts .facts{background:var(--cream);color:#1b1712;border-radius:16px;padding:14px 18px 14px;box-shadow:5px 5px 0 var(--dark);display:flex;gap:16px;align-items:flex-start;margin:4px 0 6px}
+#teamfacts .fk{flex:none;font-family:var(--display);font-weight:900;font-size:14px;letter-spacing:.1em;text-transform:uppercase;color:#F4EAD2;background:var(--red);border-radius:999px;padding:5px 12px 6px;margin-top:2px}
+#teamfacts ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}#teamfacts li{font-size:16.5px;line-height:1.4;font-weight:600}
+@media (max-width:640px){#teamfacts .facts{flex-direction:column;gap:10px}#teamfacts li{font-size:15.5px}}
 </style>
 
 <div id="htip" role="tooltip" hidden></div>
@@ -987,6 +991,7 @@ th{font-size:15px!important}
       </div>
       <div class="kv"><label class="lbl" for="teampick">Switch Team</label><select id="teampick"></select></div>
     </div>
+    <div id="teamfacts"></div>
     <div class="teamhead" id="teamstats"></div>
     <div id="upnext"></div>
     <div class="chartbox">
@@ -1185,7 +1190,7 @@ var PREVIEW = {
     "id": "251",
     "name": "Texas",
     "ap": 1,
-    "rank": 29,
+    "rank": 28,
     "tier": "mid"
    },
    "home": {
@@ -1249,7 +1254,7 @@ var PREVIEW = {
     "id": "66",
     "name": "Iowa State",
     "ap": null,
-    "rank": 28,
+    "rank": 27,
     "tier": "mid"
    },
    "home": {
@@ -1268,7 +1273,7 @@ var PREVIEW = {
     "No. 3 Notre Dame",
     "Non-conference"
    ],
-   "watch": "Notre Dame has lived up to expectations better so far: 17th of 68 Power 4 teams vs. 47th.",
+   "watch": "Notre Dame has lived up to expectations better so far: 18th of 68 Power 4 teams vs. 48th.",
    "neutral": false,
    "when": {
     "day": "Sat",
@@ -1281,14 +1286,14 @@ var PREVIEW = {
     "id": "24",
     "name": "Stanford",
     "ap": null,
-    "rank": 47,
+    "rank": 48,
     "tier": "dn"
    },
    "home": {
     "id": "87",
     "name": "Notre Dame",
     "ap": 3,
-    "rank": 17,
+    "rank": 18,
     "tier": "up"
    }
   },
@@ -1350,7 +1355,7 @@ var PREVIEW = {
     "id": "238",
     "name": "Vanderbilt",
     "ap": null,
-    "rank": 51,
+    "rank": 52,
     "tier": "dn"
    }
   },
@@ -1393,7 +1398,7 @@ var PREVIEW = {
     "No. 10 LSU on the road",
     "Primetime on ESPN"
    ],
-   "watch": "Kentucky isn't ranked, but is 10th of 68 Power 4 teams at living up to expectations.",
+   "watch": "Kentucky has lived up to expectations better so far: 11th of 68 Power 4 teams vs. 23rd.",
    "neutral": false,
    "when": {
     "day": "Sat",
@@ -1413,7 +1418,7 @@ var PREVIEW = {
     "id": "96",
     "name": "Kentucky",
     "ap": null,
-    "rank": 10,
+    "rank": 11,
     "tier": "up"
    }
   },
@@ -1487,7 +1492,7 @@ var PREVIEW = {
    "why": [
     "No. 5 Ohio State"
    ],
-   "watch": "Ohio State is 4\u20131 but has played like a 5\u20130 team.",
+   "watch": "Ohio State is ranked No. 5 but 34th of 68 Power 4 teams at living up to expectations.",
    "neutral": false,
    "when": {
     "day": "Sat",
@@ -1507,7 +1512,7 @@ var PREVIEW = {
     "id": "194",
     "name": "Ohio State",
     "ap": 5,
-    "rank": 33,
+    "rank": 34,
     "tier": "mid"
    }
   },
@@ -1562,7 +1567,7 @@ var PREVIEW = {
     "id": "52",
     "name": "Florida State",
     "ap": null,
-    "rank": 22,
+    "rank": 21,
     "tier": "up"
    },
    "home": {
@@ -1590,7 +1595,7 @@ var PREVIEW = {
     "id": "2294",
     "name": "Iowa",
     "ap": 20,
-    "rank": 27,
+    "rank": 26,
     "tier": "mid"
    },
    "home": {
@@ -1619,7 +1624,7 @@ var PREVIEW = {
     "id": "66",
     "name": "Iowa State",
     "ap": null,
-    "rank": 28,
+    "rank": 27,
     "tier": "mid"
    },
    "home": {
@@ -1691,7 +1696,7 @@ var PREVIEW = {
    "why": [
     "No. 18 Oklahoma State"
    ],
-   "watch": "UCF has lived up to expectations better so far: 26th of 68 Power 4 teams vs. 38th.",
+   "watch": "UCF has lived up to expectations better so far: 29th of 68 Power 4 teams vs. 38th.",
    "neutral": false,
    "when": {
     "day": "Sat",
@@ -1703,7 +1708,7 @@ var PREVIEW = {
     "id": "2116",
     "name": "UCF",
     "ap": null,
-    "rank": 26,
+    "rank": 29,
     "tier": "mid"
    },
    "home": {
@@ -1719,7 +1724,7 @@ var PREVIEW = {
    "why": [
     "No. 25 Pittsburgh"
    ],
-   "watch": "North Carolina has lived up to expectations better so far: 18th of 68 Power 4 teams vs. 20th.",
+   "watch": "North Carolina has lived up to expectations better so far: 17th of 68 Power 4 teams vs. 20th.",
    "neutral": false,
    "when": {
     "day": "Sat",
@@ -1731,7 +1736,7 @@ var PREVIEW = {
     "id": "153",
     "name": "North Carolina",
     "ap": null,
-    "rank": 18,
+    "rank": 17,
     "tier": "up"
    },
    "home": {
@@ -1745,7 +1750,7 @@ var PREVIEW = {
   {
    "tier": "",
    "why": [],
-   "watch": "West Virginia has lived up to expectations better so far: 21st of 68 Power 4 teams vs. 32nd.",
+   "watch": "West Virginia has lived up to expectations better so far: 22nd of 68 Power 4 teams vs. 32nd.",
    "neutral": false,
    "when": {
     "day": "Sat",
@@ -1764,7 +1769,7 @@ var PREVIEW = {
     "id": "277",
     "name": "West Virginia",
     "ap": null,
-    "rank": 21,
+    "rank": 22,
     "tier": "up"
    }
   },
@@ -1790,7 +1795,7 @@ var PREVIEW = {
     "id": "152",
     "name": "NC State",
     "ap": null,
-    "rank": 34,
+    "rank": 33,
     "tier": "mid"
    }
   },
@@ -1825,7 +1830,7 @@ var PREVIEW = {
    "why": [
     "No. 16 Florida"
    ],
-   "watch": "Florida has lived up to expectations better so far: 11th of 68 Power 4 teams vs. 66th.",
+   "watch": "Florida has lived up to expectations better so far: 10th of 68 Power 4 teams vs. 66th.",
    "neutral": false,
    "when": {
     "day": "Sat",
@@ -1844,7 +1849,7 @@ var PREVIEW = {
     "id": "57",
     "name": "Florida",
     "ap": 16,
-    "rank": 11,
+    "rank": 10,
     "tier": "up"
    }
   },
@@ -1866,7 +1871,7 @@ var PREVIEW = {
     "id": "251",
     "name": "Texas",
     "ap": 1,
-    "rank": 29,
+    "rank": 28,
     "tier": "mid"
    },
    "home": {
@@ -1883,7 +1888,7 @@ var PREVIEW = {
     "No. 3 Notre Dame",
     "Non-conference"
    ],
-   "watch": "Notre Dame has lived up to expectations better so far: 17th of 68 Power 4 teams vs. 47th.",
+   "watch": "Notre Dame has lived up to expectations better so far: 18th of 68 Power 4 teams vs. 48th.",
    "neutral": false,
    "when": {
     "day": "Sat",
@@ -1895,14 +1900,14 @@ var PREVIEW = {
     "id": "24",
     "name": "Stanford",
     "ap": null,
-    "rank": 47,
+    "rank": 48,
     "tier": "dn"
    },
    "home": {
     "id": "87",
     "name": "Notre Dame",
     "ap": 3,
-    "rank": 17,
+    "rank": 18,
     "tier": "up"
    }
   },
@@ -1930,7 +1935,7 @@ var PREVIEW = {
     "id": "238",
     "name": "Vanderbilt",
     "ap": null,
-    "rank": 51,
+    "rank": 52,
     "tier": "dn"
    }
   },
@@ -2073,7 +2078,7 @@ var PREVIEW = {
    "why": [
     "No. 5 Ohio State"
    ],
-   "watch": "Ohio State is 4\u20131 but has played like a 5\u20130 team.",
+   "watch": "Ohio State is ranked No. 5 but 34th of 68 Power 4 teams at living up to expectations.",
    "neutral": false,
    "when": {
     "day": "Sat",
@@ -2092,7 +2097,7 @@ var PREVIEW = {
     "id": "194",
     "name": "Ohio State",
     "ap": 5,
-    "rank": 33,
+    "rank": 34,
     "tier": "mid"
    }
   },
@@ -2130,7 +2135,7 @@ var PREVIEW = {
     "No. 10 LSU on the road",
     "Primetime on ESPN"
    ],
-   "watch": "Kentucky isn't ranked, but is 10th of 68 Power 4 teams at living up to expectations.",
+   "watch": "Kentucky has lived up to expectations better so far: 11th of 68 Power 4 teams vs. 23rd.",
    "neutral": false,
    "when": {
     "day": "Sat",
@@ -2149,7 +2154,7 @@ var PREVIEW = {
     "id": "96",
     "name": "Kentucky",
     "ap": null,
-    "rank": 10,
+    "rank": 11,
     "tier": "up"
    }
   },
@@ -2285,7 +2290,7 @@ var PREVIEW = {
     "id": "9",
     "name": "Arizona State",
     "ap": null,
-    "rank": 61,
+    "rank": 60,
     "tier": "dn"
    }
   },
@@ -2321,6 +2326,72 @@ var PREVIEW = {
  ]
 };
 var TREND = {"season":2026,"weeks":[1,2,3,4,5],"teams":{"158":[[3.4,16,1],[3.8,10,2],[1.0,28,3],[2.1,12,4],[2.7,9,5]],"59":[[-5.5,62,1],[-4.2,59,2],[-2.6,55,3],[-3.3,60,4],[-3.3,58,4]],"2294":[[1.4,30,1],[-2.6,55,2],[-0.5,42,3],[0.8,24,4],[0.8,27,5]],"120":[[-0.2,40,1],[1.7,21,2],[1.5,23,3],[-1.3,49,4],[-2.4,54,5]],"2579":[[1.4,32,1],[-1.6,46,2],[-2.5,53,3],[-4.4,64,4],[-4.4,66,5]],"38":[[0.5,37,1],[0.0,40,2],[-3.6,60,3],[-3.8,62,4],[-5.0,67,5]],"2483":[[-5.5,60,1],[-5.7,63,2],[-4.0,63,3],[-1.2,48,4],[-1.2,46,4]],"356":[[4.6,10,1],[0.7,33,2],[-0.3,39,3],[-1.0,45,4],[-1.6,49,5]],"96":[[4.2,14,1],[-1.2,44,2],[2.6,13,3],[2.1,14,4],[2.5,11,5]],"135":[[1.6,28,1],[-2.3,51,2],[-1.3,47,3],[0.0,33,4],[0.2,36,5]],"26":[[11.2,1,1],[5.4,4,2],[4.2,4,3],[6.2,2,4],[6.2,3,4]],"127":[[0.7,36,1],[2.1,18,2],[2.7,11,3],[1.1,21,4],[-0.4,39,5]],"2567":[[-1.9,48,1],[1.9,20,2],[-0.1,36,3],[-2.4,53,4],[-2.1,52,5]],"277":[[-3.5,56,1],[-0.4,41,2],[2.1,16,3],[0.5,30,4],[1.4,21,5]],"61":[[-1.0,43,1],[1.7,22,2],[2.7,12,3],[4.4,6,4],[3.9,5,5]],"9":[[2.2,24,1],[-4.4,60,2],[-2.9,58,3],[-2.8,56,3],[-3.7,61,4]],"2390":[[5.8,6,1],[4.4,7,2],[2.3,15,3],[2.1,13,4],[3.1,7,5]],"239":[[-2.8,52,1],[-0.6,42,2],[-0.6,44,3],[-0.6,41,4],[2.3,12,5]],"333":[[4.4,13,1],[6.3,2,2],[4.7,3,3],[6.2,3,4],[6.9,2,5]],"248":[[-1.1,44,1],[0.9,32,2],[0.9,29,3],[1.4,18,4],[1.0,24,5]],"2509":[[2.1,25,1],[0.4,35,2],[0.7,30,3],[-0.7,43,4],[0.4,33,5]],"66":[[2.6,21,1],[1.2,29,2],[1.9,20,3],[0.7,28,4],[0.8,29,5]],"164":[[-13.7,68,1],[-8.0,66,2],[-4.7,65,3],[-3.1,58,4],[-2.8,57,5]],"2628":[[-3.9,58,1],[-3.5,58,2],[-2.0,50,3],[-3.6,61,4],[-4.1,62,5]],"251":[[6.8,5,1],[5.1,5,2],[2.8,10,3],[0.8,25,4],[0.8,28,4]],"228":[[-5.5,59,1],[-5.9,65,2],[-2.9,57,3],[-1.4,50,4],[-2.6,55,5]],"183":[[4.5,11,1],[-1.9,50,2],[-2.7,56,3],[-2.6,54,3],[-2.3,53,4]],"2":[[-3.2,55,1],[-1.0,43,2],[0.3,32,3],[-0.3,38,4],[-1.4,48,5]],"150":[[-3.2,54,1],[0.6,34,2],[2.0,17,3],[1.7,16,4],[1.7,19,4]],"197":[[-13.5,67,1],[-2.6,54,2],[-3.1,59,3],[-0.3,37,4],[-0.3,37,4]],"238":[[-2.8,51,1],[-3.4,57,2],[-1.9,49,3],[-2.3,52,4],[-2.0,51,5]],"2641":[[-7.8,63,1],[-5.8,64,2],[-3.8,62,3],[-3.2,59,4],[-1.8,50,5]],"2305":[[-1.6,47,1],[-2.5,53,2],[-4.6,64,3],[-4.6,65,3],[-2.6,56,4]],"201":[[2.7,19,1],[-2.5,52,2],[-3.7,61,3],[-6.2,68,4],[-6.2,68,4]],"52":[[1.4,33,2],[1.0,30,2],[0.5,31,3],[-0.1,34,4],[1.4,22,5]],"25":[[-5.5,61,1],[-1.8,48,2],[-2.5,52,3],[-2.8,55,4],[-3.4,59,5]],"84":[[3.0,18,1],[1.6,23,2],[-0.2,37,3],[-0.9,44,4],[0.3,35,5]],"87":[[4.5,12,1],[4.0,9,2],[1.4,25,3],[2.8,11,4],[1.8,18,5]],"77":[[2.7,20,1],[2.3,16,1],[7.1,1,2],[8.2,1,3],[8.1,1,4]],"30":[[2.2,23,2],[2.2,17,3],[1.4,24,4],[1.1,22,5],[0.5,30,6]],"194":[[-2.8,50,1],[-1.7,47,2],[-1.5,48,3],[-0.4,39,4],[0.4,32,5]],"213":[[4.8,9,1],[3.1,14,2],[2.0,18,3],[0.6,29,4],[-0.6,42,5]],"259":[[2.5,22,1],[3.7,11,2],[3.7,7,3],[1.2,20,4],[-0.5,41,5]],"97":[[1.2,35,1],[0.3,36,2],[1.6,22,3],[0.3,31,4],[-0.3,38,5]],"2306":[[0.2,39,1],[1.2,28,2],[0.1,35,3],[-1.2,47,4],[-1.2,45,4]],"145":[[1.3,34,1],[-0.0,39,2],[1.3,26,3],[-0.7,42,4],[-0.7,44,4]],"245":[[0.3,38,1],[3.6,13,2],[0.2,33,3],[-1.8,51,4],[-0.5,40,5]],"2116":[[3.3,17,1],[0.2,37,2],[1.1,27,3],[1.7,17,4],[0.8,26,5]],"275":[[-2.8,53,1],[-2.9,56,2],[-0.5,43,3],[0.8,26,4],[1.9,16,5]],"264":[[-3.8,57,1],[-8.0,67,2],[-5.7,66,3],[-5.1,67,4],[-4.1,63,5]],"24":[[-1.3,45,2],[-1.6,45,2],[-2.3,51,3],[-0.4,40,4],[-1.3,47,5]],"8":[[-10.9,65,1],[-9.7,68,2],[-7.5,68,3],[-4.3,63,4],[-4.3,65,5]],"152":[[-2.6,49,1],[0.9,31,2],[-0.4,40,3],[-0.2,36,4],[0.4,31,5]],"252":[[1.7,27,1],[1.3,27,2],[2.9,9,3],[3.0,10,3],[2.2,14,4]],"221":[[7.7,4,1],[1.3,26,2],[1.9,19,3],[1.2,19,4],[1.6,20,5]],"2633":[[-1.3,46,1],[2.0,19,2],[1.6,21,3],[1.0,23,4],[1.0,25,5]],"103":[[-10.1,64,1],[-4.8,62,2],[-7.0,67,3],[-5.0,66,4],[-4.3,64,5]],"99":[[7.8,3,1],[0.2,38,2],[-0.2,38,3],[1.9,15,4],[1.1,23,5]],"254":[[1.4,31,1],[4.7,6,2],[3.7,6,3],[3.1,9,4],[3.1,8,4]],"258":[[4.1,15,1],[1.5,24,2],[-0.6,45,3],[0.7,27,4],[-0.6,43,5]],"153":[[1.9,26,1],[2.3,15,2],[0.1,34,3],[0.2,32,3],[1.8,17,4]],"130":[[-12.2,66,1],[-4.6,61,2],[-2.6,54,3],[-3.0,57,4],[-3.6,60,5]],"2132":[[9.7,2,1],[5.9,3,2],[4.0,5,3],[3.9,7,4],[2.1,15,5]],"12":[[-1.0,42,1],[-1.9,49,2],[-0.9,46,3],[-1.1,46,4],[0.3,34,5]],"57":[[4.9,8,1],[4.0,8,2],[3.2,8,3],[4.9,5,4],[2.5,10,5]],"142":[[-0.9,41,1],[1.3,25,2],[-0.5,41,3],[-0.2,35,4],[2.2,13,5]],"154":[[1.5,29,1],[3.6,12,2],[2.5,14,3],[3.3,8,4],[4.2,4,5]],"344":[[4.9,7,1],[7.6,1,2],[6.9,2,3],[5.5,4,4],[3.2,6,5]]}};
+var FACTS = {
+ "252": [
+  "Beat the spread in all 4 games this season."
+ ],
+ "26": [
+  "3rd-best game of the season by any Power 4 team: at Maryland, 54\u20133.",
+  "Beat the spread in all 4 games this season."
+ ],
+ "158": [
+  "5\u20130 and unranked, but 9th of 68 at living up to expectations."
+ ],
+ "333": [
+  "Best in the SEC at living up to expectations."
+ ],
+ "201": [
+  "Last of 68 Power 4 teams at living up to expectations this season.",
+  "3rd-worst game of the season by any Power 4 team: at Georgia, 13\u201341.",
+  "Worst in big games this season (2 so far), relative to expectations."
+ ],
+ "2390": [
+  "Darian Mensah has been the best QB in the Power 4 this season, by the numbers."
+ ],
+ "87": [
+  "Unbeaten and No. 3 in the AP poll, but 18th of 68 at living up to expectations."
+ ],
+ "239": [
+  "Best single game of the season by any Power 4 team: at Arizona State, 55\u201319.",
+  "Biggest riser this week: 41st to 12th."
+ ],
+ "164": [
+  "Worst single game of the season by any Power 4 team: vs. Massachusetts, 21\u201337."
+ ],
+ "77": [
+  "No. 1 of 68 Power 4 teams at living up to expectations this season, and not even in the AP poll.",
+  "2nd-best game of the season by any Power 4 team: vs. Colorado, 41\u20137.",
+  "Best in big games this season (3 so far), relative to expectations."
+ ],
+ "259": [
+  "Biggest drop this week: 20th to 41st."
+ ],
+ "154": [
+  "Best in the ACC at living up to expectations."
+ ],
+ "197": [
+  "2nd-worst game of the season by any Power 4 team: at Tulsa, 10\u201324."
+ ],
+ "2641": [
+  "The biggest gap in the AP poll: ranked No. 11, but 50th of 68 at living up to expectations."
+ ],
+ "150": [
+  "Beat the spread in all 4 games this season."
+ ],
+ "84": [
+  "Unbeaten and No. 7 in the AP poll, but 35th of 68 at living up to expectations."
+ ],
+ "59": [
+  "Hasn't beaten the spread once in 4 games this season."
+ ],
+ "254": [
+  "Beat the spread in all 4 games this season.",
+  "Best in the Big 12 at living up to expectations."
+ ],
+ "251": [
+  "Unbeaten and No. 1 in the AP poll, but 28th of 68 at living up to expectations."
+ ]
+};
 (function(){
   var META = {}; DATA.meta.forEach(function(t){ META[t.id] = t; });
   var $ = function(id){ return document.getElementById(id); };
@@ -2560,7 +2631,7 @@ var TREND = {"season":2026,"weeks":[1,2,3,4,5],"teams":{"158":[[3.4,16,1],[3.8,1
     $("confcol").hidden = !!state.conf;
     $("board-h").textContent = state.conf ? (state.conf === "Independent" ? "Notre Dame" : state.conf) + " Leaderboard" : "Leaderboard";
     var k = state.sort, dir = state.dir;
-    var list = teamsFor(state.season).filter(function(t){ return !state.conf || t.conf === state.conf; }).sort(function(a,b){ var av = a[k], bv = b[k]; if (av === null) return 1; if (bv === null) return -1; return (av - bv) * dir; });
+    var list = teamsFor(state.season).filter(function(t){ return !state.conf || t.conf === state.conf; }).sort(function(a,b){ var av = a[k], bv = b[k]; if (av === null) return 1; if (bv === null) return -1; return ((av - bv) * dir) || (a.name < b.name ? -1 : 1); });
     document.querySelectorAll("#board th[data-k]").forEach(function(th){ th.classList.toggle("on", th.getAttribute("data-k") === k); });
     $("board").tBodies[0].innerHTML = list.map(function(t, i){
       return '<tr class="trow' + (state.picked && t.id === state.sel ? ' sel' : '') + '" data-id="' + t.id + '" tabindex="0">' +
@@ -2682,7 +2753,7 @@ var TREND = {"season":2026,"weeks":[1,2,3,4,5],"teams":{"158":[[3.4,16,1],[3.8,1
     var tenure = 2026 - m.since + 1;
     $("coachline").textContent = m.coach + ", head coach since " + m.since + (m.since >= 2026 ? " (first season)" : " · " + tenure + " seasons") + (cs.n ? " · career since 2019" + (cs.schools.length > 1 ? " (" + cs.schools.join(", ") + ")" : "") + ": " + cs.w + "–" + cs.l + (cs.avg !== null ? ", avg DAWG " + signed(cs.avg) : "") : "");
     if (!s){ $("teamstats").innerHTML = '<p class="note">No games for this team in ' + state.season + '.</p>'; $("log").tBodies[0].innerHTML = ""; $("log-h").textContent = ""; drawTrend(); return; }
-    var T = seasonTeams(state.season).sort(function(a,b){ return (b.dawg === null ? -99 : b.dawg) - (a.dawg === null ? -99 : a.dawg); });
+    var T = seasonTeams(state.season).sort(function(a,b){ return ((b.dawg === null ? -99 : b.dawg) - (a.dawg === null ? -99 : a.dawg)) || (a.name < b.name ? -1 : 1); });
     var rk = T.findIndex(function(t){ return t.id === m.id; }) + 1;
     var items = [
       ["DAWG " + state.season, signed(s.dawg), "#" + rk + " of " + T.length + " Power 4", s.dawg],
@@ -2992,7 +3063,7 @@ var TREND = {"season":2026,"weeks":[1,2,3,4,5],"teams":{"158":[[3.4,16,1],[3.8,1
       function av(k){ var v = L.filter(function(t){ return t[k] !== null; }); return v.length ? v.reduce(function(a,t){ return a + t[k]; }, 0) / v.length : null; }
       return {c:c, n:L.length, dawg:av("dawg"), big:av("big"), other:av("other"), drop:av("drop"),
         dg:L.filter(function(t){ return t.big !== null && t.other !== null && t.big >= 0 && t.other >= 0; }).length, sf:L.filter(function(t){ return t.big !== null && t.other !== null && t.big < 0 && t.other < 0; }).length};
-    }).sort(function(a,b){ return (b.dawg || -99) - (a.dawg || -99); });
+    }).sort(function(a,b){ return ((b.dawg || -99) - (a.dawg || -99)) || (a.name < b.name ? -1 : 1); });
     $("confs").tBodies[0].innerHTML = rows.map(function(r, i){
       return '<tr class="trow' + (state.conf === r.c ? ' sel' : '') + '" data-c="' + r.c + '" tabindex="0"><td class="l rank">' + (i+1) + '</td><td class="l"><b>' + r.c + '</b></td><td class="num">' + r.n + '</td>' +
         '<td class="num ' + cls(r.dawg) + '">' + signed(r.dawg) + '</td><td class="num ' + cls(r.big) + '">' + signed(r.big) + '</td><td class="num ' + cls(r.other) + '">' + signed(r.other) + '</td>' +
@@ -3165,7 +3236,7 @@ var TREND = {"season":2026,"weeks":[1,2,3,4,5],"teams":{"158":[[3.4,16,1],[3.8,1
     var opp = g.away.id === id ? g.home.id : g.away.id;
     el.innerHTML = '<h3 class="uph">Up next <span class="dim">Week ' + PREVIEW.week + '</span></h3><div class="pvgrid one">' + pvTicket(g, false) + '</div>' + (META[opp] ? '<a class="cmplink" href="#week" data-cmp="' + id + ',' + opp + '">Compare ' + esc(META[id].name) + ' and ' + esc(META[opp].name) + ' side by side →</a>' : '');
   }
-  var _drawTeam0 = drawTeam; drawTeam = function(){ _drawTeam0(); try { drawHabits(); } catch(e){} try { drawUpNext(); } catch(e){} };
+  var _drawTeam0 = drawTeam; drawTeam = function(){ _drawTeam0(); try { var fl = String(state.season) === LATEST ? (FACTS[state.sel] || []) : []; $("teamfacts").innerHTML = fl.length ? '<div class="facts"><span class="fk">Did you know?</span><ul>' + fl.map(function(f){ return '<li>' + esc(f) + '</li>'; }).join("") + '</ul></div>' : ""; } catch(e){} try { drawHabits(); } catch(e){} try { drawUpNext(); } catch(e){} };
   // ---------- This Week: the week's biggest games as tickets ----------
   (function(){
     function ordn(x){ var v = x % 100, q = ["th","st","nd","rd"]; return x + (q[(v - 20) % 10] || q[v] || q[0]); }
@@ -3190,7 +3261,7 @@ var TREND = {"season":2026,"weeks":[1,2,3,4,5],"teams":{"158":[[3.4,16,1],[3.8,1
   function drawCompare(){
     var a = $("cmpa").value, b = $("cmpb").value; if (!a || !b) return;
     function ordn(x){ var v = x % 100, q = ["th","st","nd","rd"]; return x + (q[(v - 20) % 10] || q[v] || q[0]); }
-    var G = seasonTeams(LATEST).filter(function(t){ return t.dawg !== null && t.dawg !== undefined; }).sort(function(x,y){ return y.dawg - x.dawg; }), RK = {}; G.forEach(function(t, i){ RK[t.id] = i + 1; });
+    var G = seasonTeams(LATEST).filter(function(t){ return t.dawg !== null && t.dawg !== undefined; }).sort(function(x,y){ return (y.dawg - x.dawg) || (x.name < y.name ? -1 : 1); }), RK = {}; G.forEach(function(t, i){ RK[t.id] = i + 1; });
     var AP = {}; ((WEEK && WEEK.poll) || []).forEach(function(p){ if (p.ap) AP[p.id] = p.ap; });
     function S(id){ return (SEASONIDX[LATEST] || {})[id] || {}; }
     function TN(id){ var r = null; TEND.teams.forEach(function(x){ if (x.id === id) r = x; }); return r; }
@@ -3779,7 +3850,7 @@ var TREND = {"season":2026,"weeks":[1,2,3,4,5],"teams":{"158":[[3.4,16,1],[3.8,1
   (function(){
     var Y = LATEST, ids = Object.keys(DATA.ts[Y] || {}).filter(function(id){ return META[id]; });
     var CONFS = [["SEC","SEC"],["Big Ten","Big Ten"],["Big 12","Big 12"],["ACC","ACC"],["Independent","Notre Dame"]], cur = null;
-    var graded = seasonTeams(Y).filter(function(t){ return t.dawg !== null && t.dawg !== undefined; }).sort(function(a,b){ return b.dawg - a.dawg; });
+    var graded = seasonTeams(Y).filter(function(t){ return t.dawg !== null && t.dawg !== undefined; }).sort(function(a,b){ return (b.dawg - a.dawg) || (a.name < b.name ? -1 : 1); });
     var RK = {}; graded.forEach(function(t, i){ RK[t.id] = i + 1; });
     function lg(id){ return '<img src="logos/' + id + '-dark.png" alt="" loading="lazy" onerror="this.onerror=null;this.src=\'logos/' + id + '.png\'">'; }
     function tile(id){ return '<a href="/' + slugOf(id) + '/" data-mine="' + id + '">' + lg(id) + '<span>' + esc(META[id].name) + '</span></a>'; }
