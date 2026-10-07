@@ -783,6 +783,41 @@ th{font-size:15px!important}
 #teamfacts .fk{flex:none;font-family:var(--display);font-weight:900;font-size:14px;letter-spacing:.1em;text-transform:uppercase;color:#F4EAD2;background:var(--red);border-radius:999px;padding:5px 12px 6px;margin-top:2px}
 #teamfacts ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}#teamfacts li{font-size:16.5px;line-height:1.4;font-weight:600}
 @media (max-width:640px){#teamfacts .facts{flex-direction:column;gap:10px}#teamfacts li{font-size:15.5px}}
+/* ---- polish (Oct 7 2026): press effect, tab fade, share progress, toast, skeletons, phone fixes ---- */
+@keyframes pgIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.page.pg-in{animation:pgIn .2s ease-out}
+.xbtn,.topnav a,.fconfs button,.csorts button,.gsel button,#qbmode button{transition:transform .08s ease,box-shadow .08s ease,background-color .15s ease}
+.xbtn:active:not(:disabled),.fconfs button:active,.csorts button:active,.gsel button:active,.topnav a:active{transform:translate(2px,2px);box-shadow:0 0 0 transparent!important}
+#fab:active{transform:translate(3px,3px)!important;box-shadow:0 0 0 transparent!important}
+.wk>div[data-gid]:active,.wk>div[data-id]:active{transform:translate(3px,3px)!important;box-shadow:1px 1px 0 var(--shade)!important;transition-duration:.06s}
+tr.trow:active td,tr.qrow:active td,tr.gc:active td{background:var(--chipbg)}
+@keyframes shim{from{background-position:160% 0}to{background-position:-60% 0}}
+.xbtn:disabled,#gc-share:disabled{opacity:1!important;cursor:progress;background-image:linear-gradient(110deg,transparent 30%,rgba(255,255,255,.5) 50%,transparent 70%)!important;background-size:220% 100%!important;background-repeat:no-repeat!important;animation:shim 1.1s linear infinite}
+#toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));z-index:40;transform:translate(-50%,16px);opacity:0;pointer-events:none;background:var(--cream);color:#131210;font-weight:700;font-size:15px;line-height:1.3;padding:10px 16px;border-radius:12px;border:2.5px solid #0c0b0a;box-shadow:4px 4px 0 #0c0b0a;transition:opacity .2s ease,transform .2s ease;max-width:calc(100vw - 32px);text-align:center}
+#toast.on{opacity:1;transform:translate(-50%,0)}
+.sr{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+tr.sk td{padding:16px 12px!important}
+tr.sk i{display:block;height:16px;border-radius:6px;background:linear-gradient(90deg,var(--chipbg) 30%,#3d362d 50%,var(--chipbg) 70%);background-size:220% 100%;animation:shim 1.3s linear infinite}
+tr.sk:nth-child(3n+2) i{width:82%}tr.sk:nth-child(3n) i{width:68%}
+@keyframes dotPop{0%{transform:scale(0)}70%{transform:scale(1.18)}100%{transform:scale(1)}}
+#chart.pre g[role=button]>circle:first-child{transform-box:fill-box;transform-origin:center;transform:scale(0)}
+#chart.pre.go g[role=button]>circle:first-child{animation:dotPop .38s cubic-bezier(.3,1.4,.6,1) both;animation-delay:calc(var(--i,0) * 6ms)}
+/* phone: poll card labels wrap instead of running off the card */
+.pc span{white-space:normal!important;min-width:0;flex:0 1 auto}.pc span:first-child{white-space:nowrap!important;flex:none}
+/* chip rows that scroll get a soft fade on the right edge */
+.fconfs{-webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 28px),transparent);mask-image:linear-gradient(90deg,#000 calc(100% - 28px),transparent);padding-right:24px!important}
+.fconfs.end{-webkit-mask-image:none;mask-image:none}
+/* floating Share steps aside when a section's own Share button is on screen */
+#fab.near{transform:translateY(140%);opacity:0;pointer-events:none}
+@media (max-width:480px){
+  .topnav{gap:6px!important}
+  .topnav a{font-size:14px!important;padding:6px 12px!important;letter-spacing:.02em!important}
+  #fab{font-size:0!important;padding:0!important;width:54px;height:54px}
+  #fab::before{left:50%!important;margin-left:-10px;width:20px!important;height:20px!important}
+}
+@media (prefers-reduced-motion:reduce){.page.pg-in,#chart.pre.go g[role=button]>circle:first-child,tr.sk i,.xbtn:disabled,#gc-share:disabled{animation:none!important}#chart.pre g[role=button]>circle:first-child{transform:none}*:active{transform:none!important}}
+.xbody *,.xbody *::before{animation:none!important;transition:none!important}
+.xbody #chart.pre g[role=button]>circle:first-child{transform:none!important}
 </style>
 
 <div id="htip" role="tooltip" hidden></div>
@@ -1050,7 +1085,7 @@ th{font-size:15px!important}
     <div class="tablewrap">
       <table id="qbt">
         <thead><tr><th class="l rank">#</th><th class="l">QB</th><th data-qk="rating" data-tip="qrate"><button>Rating</button></th><th data-qk="games" data-tip="qgames"><button><span class="hide-sm">Games</span><span class="show-sm">G</span></button></th><th data-qk="raw" data-tip="qraw"><button>Raw</button></th><th data-qk="big" data-tip="qbig" class="hide-sm"><button>Big Games</button></th><th data-qk="to" data-tip="qto" class="hide-sm"><button>TO %</button></th></tr></thead>
-        <tbody><tr><td class="l" colspan="7"><span class="dim">Loading quarterbacks…</span></td></tr></tbody>
+        <tbody><tr class="sk" aria-hidden="true"><td colspan="7"><i></i></td></tr><tr class="sk" aria-hidden="true"><td colspan="7"><i></i></td></tr><tr class="sk" aria-hidden="true"><td colspan="7"><i></i></td></tr><tr class="sk" aria-hidden="true"><td colspan="7"><i></i></td></tr><tr class="sk" aria-hidden="true"><td colspan="7"><i></i></td></tr><tr class="sk" aria-hidden="true"><td colspan="7"><i></i></td></tr><tr class="sk" aria-hidden="true"><td colspan="7"><i></i></td></tr><tr class="sk" aria-hidden="true"><td colspan="7"><i></i></td></tr><tr><td class="l" colspan="7"><span class="sr">Loading quarterbacks…</span></td></tr></tbody>
       </table>
     </div>
     <p class="note" style="margin-top:10px">Rating pulls small samples toward average; Raw is the number with no pulling. Tap a QB for his year-by-year line, big games and game log. This season needs 3+ starts; career needs 10+.</p>
@@ -1142,6 +1177,7 @@ th{font-size:15px!important}
     <h2 id="chg-h">Changes</h2>
     <ul class="chg">
       <li><b>Oct. 6, 2026</b> Fixed two play-by-play errors: some touchdowns were credited to the wrong play (ESPN occasionally posts the score a play early), and a play followed by a timeout was sometimes read as a turnover. Foot on the Gas and the new QB ratings use the corrected numbers; game grades and team scores were not affected.</li>
+      <li><b>Oct. 7, 2026</b> Polish: buttons and game cards press in when tapped, tabs fade in, Share buttons show progress and a "Saved" note, the QB list shows placeholder rows while it loads, chart dots pop in. Phone fixes: bigger menu tabs, poll card labels stay inside the card, the floating Share button steps aside when a section has its own, year-chart labels no longer sit on the lines. No numbers changed.</li>
       <li><b>Oct. 7, 2026</b> Share buttons on a computer now save the image and copy one clean version to paste (the share sheet was copying two). Team cards show ranked opponents as "#16 Michigan" instead of running the number into the name. No numbers changed.</li>
       <li><b>Oct. 7, 2026</b> QB share image: "Struggling the most" now lists the lowest-rated QB first, with each QB's true rank (e.g. 58th of 67). No numbers changed.</li>
       <li><b>Oct. 7, 2026</b> QB fix: some games write touchdowns as "Receiver 12 Yd pass from QB" or "QB 5 Yd Run," and those plays weren't being credited to the quarterback (about 1 in 5 TD passes). They are now. QB ratings moved, most by a few tenths; the ratings now carry over from year to year a little better. No team numbers changed.</li>
@@ -2564,7 +2600,7 @@ var FACTS = {
     dots.sort(function(a,b){ return hiOf(a.t) - hiOf(b.t); }).forEach(function(d){
       var t = d.t, on = hiOf(t), cx = d.x, cy = d.y, r = d.r;
       var g = el("g", {tabindex:0, role:"button", "aria-label": t.full + ": big games " + signed(t.big) + ", routine " + signed(t.other)}, svg);
-      g.style.cursor = "pointer";
+      g.style.cursor = "pointer"; g.style.setProperty("--i", dots.indexOf(d));
       el("circle", {cx:cx, cy:cy, r:r, fill: t.other >= 0 ? (t.big >= 0 ? "var(--qc-dawg)" : "var(--qc-front)") : (t.big >= 0 ? "var(--qc-rise)" : "var(--qc-soft)"), "fill-opacity": 1, stroke: on ? "var(--ink)" : "none", "stroke-width":2.5}, g);
       el("circle", {cx:cx, cy:cy, r:Math.max(r+6, 14), fill:"transparent"}, g);
       function show(){ showTip(t, cx, cy); }
@@ -2823,7 +2859,12 @@ var FACTS = {
     }
     series("big", "var(--accent)", 2);
     var main = series("dawg", "var(--ink)", 2.5);
-    main.forEach(function(p){ if (p) txt(tv, p[0], p[1] - 10, signed(p[2]), {"text-anchor":"middle", "font-size": MOBT ? 14 : 12, fill:"var(--ink)", "font-weight":600, "paint-order":"stroke", stroke:"var(--surface)", "stroke-width":3}); });
+    var bigPts = []; seasons.forEach(function(yr, i){ var s = SEASONIDX[yr] && SEASONIDX[yr][m.id]; bigPts.push(s && s.big !== null ? [x(i), y(s.big)] : null); });
+    function lineY(P, X){ for (var k = 0; k < P.length - 1; k++){ var a = P[k], b = P[k+1]; if (a && b && X >= a[0] && X <= b[0]) return a[1] + (b[1] - a[1]) * (X - a[0]) / (b[0] - a[0]); } return null; }
+    function room(x0, x1, y0, y1){ var d = 99; [main, bigPts].forEach(function(P){ for (var t = 0; t <= 6; t++){ var X = x0 + (x1 - x0) * t / 6, Y = lineY(P, X); if (Y === null) continue; d = Math.min(d, Y < y0 ? y0 - Y : Y > y1 ? Y - y1 : 0); } P.forEach(function(q){ if (!q) return; var dx = q[0] < x0 ? x0 - q[0] : q[0] > x1 ? q[0] - x1 : 0, dy = q[1] < y0 ? y0 - q[1] : q[1] > y1 ? q[1] - y1 : 0; d = Math.min(d, Math.max(dx, dy) - 5); }); }); return d; }
+    main.forEach(function(p, i){ if (!p) return; var w = MOBT ? 30 : 28, h = 13, C = [[p[0], p[1] - 10, "middle", 0], [p[0], p[1] + 22, "middle", 0.5], [p[0] + 9, p[1] + 5, "start", 1], [p[0] - 9, p[1] + 5, "end", 1], [p[0] + 9, p[1] - 8, "start", 1.5], [p[0] - 9, p[1] - 8, "end", 1.5], [p[0] + 9, p[1] + 18, "start", 1.5], [p[0] - 9, p[1] + 18, "end", 1.5]], best = null, bs = -1e9;
+      C.forEach(function(c){ var x0 = c[2] === "middle" ? c[0] - w/2 : c[2] === "start" ? c[0] : c[0] - w, y1 = c[1] + 2, y0 = y1 - h; if (x0 < L + 2 || x0 + w > TW - R - 2 || y0 < Tp + 2 || y1 > TH - B - 2) return; var sc = room(x0, x0 + w, y0, y1) - c[3]; if (sc > bs){ bs = sc; best = c; } });
+      if (!best) best = C[0]; txt(tv, best[0], best[1], signed(p[2]), {"text-anchor":best[2], "font-size": MOBT ? 14 : 12, fill:"var(--ink)", "font-weight":600, "paint-order":"stroke", stroke:"var(--surface)", "stroke-width":3}); });
     txt(tv, L, 14, MOBT ? "Season DAWG by year · *2020 empty stadiums" : "Season DAWG · * 2020 played in empty or limited stadiums", {"font-size": MOBT ? 13 : 12});
   }
 
@@ -3102,10 +3143,17 @@ var FACTS = {
       history.replaceState(null, "", web ? (pg === "team" && state.sel ? "/?team=" + slugOf(state.sel) + "#team" : "/#" + pg) : "#" + pg); } catch(e){}
     try { localStorage.setItem("dawg-page", pg); } catch(e){}
     if (!keepScroll) window.scrollTo(0, 0);
+    if (showPage.cur && showPage.cur !== pg) document.querySelectorAll('.page[data-page="' + pg + '"]').forEach(function(sec){ sec.classList.remove("pg-in"); void sec.offsetWidth; sec.classList.add("pg-in"); });
+    showPage.cur = pg; try { var na = document.querySelector('.topnav a.on'); if (na && na.scrollIntoView) na.scrollIntoView({block:"nearest", inline:"nearest"}); } catch(e){}
     if (pg === "qbs") drawQB();
     setTimeout(function(){ if (typeof fitTables === "function") fitTables(); }, 0);
   }
   document.querySelectorAll(".topnav a").forEach(function(a){ a.addEventListener("click", function(e){ e.preventDefault(); showPage(a.getAttribute("data-p")); }); });
+  // scrolling chip rows: drop the right-edge fade once you reach the end
+  document.querySelectorAll(".topnav,.fconfs").forEach(function(r){ function f(){ r.classList.toggle("end", r.scrollLeft + r.clientWidth >= r.scrollWidth - 4); } r.addEventListener("scroll", f, {passive:true}); window.addEventListener("resize", f); setTimeout(f, 0); });
+  // scatter dots pop in the first time the chart scrolls into view
+  (function(){ var c = $("chart"); if (!c || !window.IntersectionObserver || (window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches)) return; c.classList.add("pre");
+    var io = new IntersectionObserver(function(es){ es.forEach(function(e){ if (e.isIntersecting){ c.classList.add("go"); io.disconnect(); setTimeout(function(){ c.classList.remove("pre", "go"); }, 1200); } }); }, {threshold:.25}); io.observe(c); })();
 
 
   // ---------- quarterbacks (separate QB model; data loads when the tab opens) ----------
@@ -3463,7 +3511,7 @@ var FACTS = {
           navigator.share({files:[file]}).then(function(){ msg.textContent = ""; }).catch(function(){ msg.textContent = ""; });
         } else {
           var a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = name; document.body.appendChild(a); a.click(); a.remove();
-          setTimeout(function(){ URL.revokeObjectURL(a.href); }, 4000); msg.textContent = "Saved. Post it anywhere."; copyOne(blob);
+          setTimeout(function(){ URL.revokeObjectURL(a.href); }, 4000); msg.textContent = ""; copyOne(blob); toast(navigator.clipboard && window.ClipboardItem ? "Saved and copied. Paste it anywhere." : "Saved to your downloads.");
         }
       });
     });
@@ -3577,6 +3625,7 @@ var FACTS = {
   // ---------- share any section as a formatted image ----------
   function gcEv(p){ try { if (window.goatcounter && window.goatcounter.count) window.goatcounter.count({path:p, title:p, event:true}); } catch(e){} }
   // computers (mouse/trackpad) get a saved file plus one copied image; the share sheet's "Copy" puts two versions on the clipboard and X pastes both
+  function toast(msg){ var t = $("toast"); if (!t){ t = document.createElement("div"); t.id = "toast"; t.setAttribute("role", "status"); document.body.appendChild(t); } t.textContent = msg; t.classList.remove("on"); void t.offsetWidth; t.classList.add("on"); clearTimeout(toast.h); toast.h = setTimeout(function(){ t.classList.remove("on"); }, 2600); }
   function isDesk(){ try { return matchMedia("(hover: hover) and (pointer: fine)").matches; } catch(e){ return false; } }
   function copyOne(blob){ try { if (window.ClipboardItem && navigator.clipboard && navigator.clipboard.write) navigator.clipboard.write([new ClipboardItem({"image/png": blob})]).catch(function(){}); } catch(e){} }
   function shareBlob(blob, name, text, msgEl, withText){
@@ -3586,7 +3635,7 @@ var FACTS = {
       navigator.share(withText ? {files:[file], text:text} : {files:[file]}).then(function(){ if (msgEl) msgEl.textContent = ""; }).catch(function(){ if (msgEl) msgEl.textContent = ""; });
     } else {
       var a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = name; document.body.appendChild(a); a.click(); a.remove();
-      setTimeout(function(){ URL.revokeObjectURL(a.href); }, 4000); if (msgEl) msgEl.textContent = "Saved"; copyOne(blob);
+      setTimeout(function(){ URL.revokeObjectURL(a.href); }, 4000); if (msgEl) msgEl.textContent = "Saved"; copyOne(blob); toast(navigator.clipboard && window.ClipboardItem ? "Saved and copied. Paste it anywhere." : "Saved to your downloads.");
     }
   }
   function exportImage(o, btn){
@@ -3839,6 +3888,9 @@ var FACTS = {
     fab.classList.add("hid"); var shown = false;
     function onScroll(){ var up = window.scrollY > 600; fab.classList.toggle("hid", !up); if (up && !shown){ shown = true; maybeTip(); } }
     window.addEventListener("scroll", onScroll, {passive:true}); onScroll();
+    // step aside while a section's own Share button is on screen, so there aren't two Share buttons at once
+    if (window.IntersectionObserver){ var vis = new Set(), nio = new IntersectionObserver(function(es){ es.forEach(function(e){ if (e.isIntersecting && e.target.offsetParent) vis.add(e.target); else vis.delete(e.target); }); fab.classList.toggle("near", vis.size > 0); }, {rootMargin:"0px 0px -10% 0px"});
+      document.querySelectorAll(".xbtn").forEach(function(b){ nio.observe(b); }); }
     function maybeTip(){
     var seen = false; try { seen = localStorage.getItem("dawg-share-tip") === "1"; } catch(e){}
     if (!seen){ var tip = document.createElement("div"); tip.id = "fabtip"; tip.textContent = "Like something? Share it as an image"; document.body.appendChild(tip);
