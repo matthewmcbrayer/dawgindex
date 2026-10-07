@@ -1137,6 +1137,7 @@ th{font-size:15px!important}
     <h2 id="chg-h">Changes</h2>
     <ul class="chg">
       <li><b>Oct. 6, 2026</b> Fixed two play-by-play errors: some touchdowns were credited to the wrong play (ESPN occasionally posts the score a play early), and a play followed by a timeout was sometimes read as a turnover. Foot on the Gas and the new QB ratings use the corrected numbers; game grades and team scores were not affected.</li>
+      <li><b>Oct. 7, 2026</b> QB fix: some games write touchdowns as "Receiver 12 Yd pass from QB" or "QB 5 Yd Run," and those plays weren't being credited to the quarterback (about 1 in 5 TD passes). They are now. QB ratings moved, most by a few tenths; the ratings now carry over from year to year a little better. No team numbers changed.</li>
       <li><b>Oct. 6, 2026</b> Team pages: "Share team card" makes a one-image profile of the season (grades, every game, rank by week, QB, next game). No numbers changed.</li>
       <li><b>Oct. 6, 2026</b> Added the QBs tab: a separate QB rating built from every pass, sack, run and turnover. It doesn't change any team numbers.</li>
       <li><b>Oct. 4, 2026</b> A game against a team outside the Power 4 only counts as a big game if that team is ranked or it's a bowl, playoff or title game. A night game on TV against an unranked Group of 5 or FCS team isn't a test.</li>
@@ -3035,7 +3036,7 @@ var TREND = {"season":2026,"weeks":[1,2,3,4,5],"teams":{"158":[[3.4,16,1],[3.8,1
 
 
   // ---------- quarterbacks (separate QB model; data loads when the tab opens) ----------
-  var QBV = "440ff20c", QBD = null, QBWAIT = null, qst = {mode: "season", k: "rating", dir: -1, open: null, q: "", gy: {}};
+  var QBV = "4669cff9", QBD = null, QBWAIT = null, qst = {mode: "season", k: "rating", dir: -1, open: null, q: "", gy: {}};
   function loadQB(){ if (QBD) return Promise.resolve(QBD); if (QBWAIT) return QBWAIT; QBWAIT = fetch("/data/qb.json?v=" + QBV).then(function(r){ if (!r.ok) throw new Error("qb"); return r.json(); }).then(function(d){ QBD = d; return d; }).catch(function(e){ QBWAIT = null; throw e; }); return QBWAIT; }
   function qcls(x){ return x === null || x === undefined ? "dim" : x >= 1 ? "pos" : x <= -1 ? "neg" : ""; }
   function olg(id){ return id ? '<img class="olg" src="logos/' + id + '-dark.png" alt="" loading="lazy" onerror="if(this.dataset.f){this.remove()}else{this.dataset.f=1;this.src=\'logos/' + id + '.png\'}">' : ''; }
