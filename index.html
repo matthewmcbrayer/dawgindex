@@ -797,6 +797,7 @@ th{font-size:15px!important}
 #savecard .sc-btns button:focus-visible,#savecard .sc-x:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
 .xbody #savecard{display:none!important}
 
+.jumpb{align-self:flex-start;all:unset;cursor:pointer;font-family:var(--display);font-weight:800;text-transform:uppercase;letter-spacing:.04em;font-size:15px;color:var(--orange);margin-top:-4px}.jumpb:hover{text-decoration:underline}.jumpb:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
 /* ---- spacing system (Oct 7 2026): one header pattern, one gap scale ----
    section to section 52 (phone 40) · subsection 28 (phone 24) · block to block 14 · title to its note 6 */
 .wrap{gap:52px!important}
@@ -949,6 +950,19 @@ tr.sk:nth-child(3n+2) i{width:82%}tr.sk:nth-child(3n) i{width:68%}
     <div class="wk" id="wk"></div>
     <p class="keyline">Grades: <b>0</b> = played like Vegas expected · <b class="pos">+5</b> = better than 84% of Power 4 performances since 2019 · <b class="pos">+10</b> = better than 96%</p>
   </section>
+  <section class="sec page" data-page="rankings" id="board-sec" aria-labelledby="board-h">
+    <div class="sechead"><h2 id="board-h">Leaderboard</h2><span class="note"><span class="hide-sm">Hover a header for its meaning · tap to sort</span><span class="show-sm">Tap a header to sort · tap a team for its page</span></span></div>
+    <p class="keyline">Season grade = average game grade. <b class="pos">+3</b> or better = DAWG · <b class="neg">−3</b> or worse = SOFT · 0 = played like Vegas expected</p>
+    <div class="tablewrap">
+      <table id="board">
+        <thead><tr>
+          <th class="l rank">#</th><th class="l">Team</th><th class="l hide-sm" id="confcol">Conf</th><th data-tip="wl">W–L</th>
+          <th data-k="dawg" data-tip="dawg"><button>DAWG</button></th><th data-k="big" data-tip="big"><button>Big<span class="hide-sm"> Games</span></button></th><th data-k="other" data-tip="routine"><button>Routine</button></th><th class="c-drop" data-k="drop" data-tip="drop"><button>Big vs. Routine</button></th><th id="lastcol" data-k="consN" data-tip="pcons" hidden><button>Consistent</button></th>
+        </tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </section>
   <section class="sec page" data-page="rankings" id="chart-sec" aria-labelledby="chart-h">
     <div class="sechead">
       <h2 id="chart-h">Big Games vs. Routine Games</h2>
@@ -977,19 +991,6 @@ tr.sk:nth-child(3n+2) i{width:82%}tr.sk:nth-child(3n) i{width:68%}
     <div class="tablewrap">
       <table id="poll">
         <thead><tr><th class="l" data-tip="paprank"><span class="hide-sm">AP Rank</span><span class="show-sm">AP</span></th><th class="l">Team</th><th data-tip="wl">W–L</th><th data-tip="pdrank"><span class="hide-sm">DAWG Rank</span><span class="show-sm">DAWG</span></th><th class="hide-sm" data-tip="dawg">Season Grade</th><th class="hide-sm" data-tip="luck">Luck</th><th class="l">Verdict</th></tr></thead>
-        <tbody></tbody>
-      </table>
-    </div>
-  </section>
-  <section class="sec page" data-page="rankings" id="board-sec" aria-labelledby="board-h">
-    <div class="sechead"><h2 id="board-h">Leaderboard</h2><span class="note"><span class="hide-sm">Hover a header for its meaning · tap to sort</span><span class="show-sm">Tap a header to sort · tap a team for its page</span></span></div>
-    <p class="keyline">Season grade = average game grade. <b class="pos">+3</b> or better = DAWG · <b class="neg">−3</b> or worse = SOFT · 0 = played like Vegas expected</p>
-    <div class="tablewrap">
-      <table id="board">
-        <thead><tr>
-          <th class="l rank">#</th><th class="l">Team</th><th class="l hide-sm" id="confcol">Conf</th><th data-tip="wl">W–L</th>
-          <th data-k="dawg" data-tip="dawg"><button>DAWG</button></th><th data-k="big" data-tip="big"><button>Big<span class="hide-sm"> Games</span></button></th><th data-k="other" data-tip="routine"><button>Routine</button></th><th class="c-drop" data-k="drop" data-tip="drop"><button>Big vs. Routine</button></th><th id="lastcol" data-k="consN" data-tip="pcons" hidden><button>Consistent</button></th>
-        </tr></thead>
         <tbody></tbody>
       </table>
     </div>
@@ -1211,6 +1212,7 @@ tr.sk:nth-child(3n+2) i{width:82%}tr.sk:nth-child(3n) i{width:68%}
     <h2 id="chg-h">Changes</h2>
     <ul class="chg">
       <li><b>Oct. 6, 2026</b> Fixed two play-by-play errors: some touchdowns were credited to the wrong play (ESPN occasionally posts the score a play early), and a play followed by a timeout was sometimes read as a turnover. Foot on the Gas and the new QB ratings use the corrected numbers; game grades and team scores were not affected.</li>
+      <li><b>Oct. 7, 2026</b> The leaderboard now sits right under the week's highlights. No numbers changed.</li>
       <li><b>Oct. 7, 2026</b> Polish: buttons and game cards press in when tapped, tabs fade in, Share buttons show progress, and on a computer the finished image offers Copy image or Download, the QB list shows placeholder rows while it loads, chart dots pop in. Phone fixes: bigger menu tabs, poll card labels stay inside the card, the floating Share button steps aside when a section has its own, year-chart labels no longer sit on the lines. Layout: every section header now has the title on the left, Share on the right and its note underneath, with more room between sections. No numbers changed.</li>
       <li><b>Oct. 7, 2026</b> Share buttons on a computer no longer use the share sheet (its Copy put two versions on the clipboard). Team cards show ranked opponents as "#16 Michigan" instead of running the number into the name. No numbers changed.</li>
       <li><b>Oct. 7, 2026</b> QB share image: "Struggling the most" now lists the lowest-rated QB first, with each QB's true rank (e.g. 58th of 67). No numbers changed.</li>
@@ -3183,6 +3185,7 @@ var FACTS = {
     setTimeout(function(){ if (typeof fitTables === "function") fitTables(); }, 0);
   }
   document.querySelectorAll(".topnav a").forEach(function(a){ a.addEventListener("click", function(e){ e.preventDefault(); showPage(a.getAttribute("data-p")); }); });
+  document.querySelectorAll("[data-jump]").forEach(function(b){ b.addEventListener("click", function(){ var t = $(b.getAttribute("data-jump")); if (t) t.scrollIntoView({behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block:"start"}); }); });
   // scrolling chip rows: drop the right-edge fade once you reach the end
   document.querySelectorAll(".topnav,.fconfs").forEach(function(r){ function f(){ r.classList.toggle("end", r.scrollLeft + r.clientWidth >= r.scrollWidth - 4); } r.addEventListener("scroll", f, {passive:true}); window.addEventListener("resize", f); setTimeout(f, 0); });
   // scatter dots pop in the first time the chart scrolls into view
