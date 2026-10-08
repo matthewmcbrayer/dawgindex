@@ -1,0 +1,357 @@
+{
+ "version": "v3.0",
+ "frozen_at": "2026-10-08T18:59Z",
+ "description": "DAWG Index V3 methodology. DAWG = competitive margin minus expected competitive margin given the closing spread. PLAY = points-equivalent of competitive net EPA per play above what the spread implied. DAWG and PLAY are never combined.",
+ "competitive_window": {
+  "rule_id": "cfbd-38-28-22-preplay",
+  "q2_lead_over": 38,
+  "q3_lead_over": 28,
+  "q4_lead_over": 22,
+  "q1_garbage": false,
+  "ot_garbage": false,
+  "re_entry": true,
+  "score": "pre-play cleaned score (monotone, capped at the final)"
+ },
+ "ep_model": {
+  "file": "model/ep_model.ubj",
+  "source": "cfbfastR / sportsdataverse cfb_model_artifacts",
+  "model_version": "2026.09.09",
+  "sha256": "44516f5618363c1d3d935eec74784a46f22010a2b0fde95e4cf2c2b6ed51da6e",
+  "features": [
+   "TimeSecsRem",
+   "yards_to_goal",
+   "distance",
+   "down_1",
+   "down_2",
+   "down_3",
+   "down_4",
+   "pos_score_diff_start"
+  ],
+  "point_values": [
+   7,
+   -7,
+   3,
+   -3,
+   2,
+   -2,
+   0
+  ],
+  "class_order": [
+   "TD",
+   "Opp_TD",
+   "FG",
+   "Opp_FG",
+   "Safety",
+   "Opp_Safety",
+   "No_Score"
+  ],
+  "training_seasons": [
+   2004,
+   2025
+  ],
+  "ot": "undefined in overtime: OT scrimmage plays are excluded from PLAY and counted in a flag (E2)"
+ },
+ "epa_conventions": "DAWG play-value conventions (pbp_value.py) with the pinned EP: scoring play = points - EP; next snap same offense = EP_next - EP; next snap by the other team = -EP_next - EP; play that ends the half = 0 - EP (E12)",
+ "margin_curve": {
+  "id": "S-prime",
+  "form": "natural cubic spline, intercept + linear + 9 truncated-cubic terms, fit by least squares on both perspectives of every game (odd-symmetric by construction)",
+  "knots": [
+   -42,
+   -28,
+   -21,
+   -14,
+   -7,
+   0,
+   7,
+   14,
+   21,
+   28,
+   42
+  ],
+  "post_hoc_note": "Outer knots at +-42 were added after the originally specified spline (knots to +-28) overpredicted the 45+ point tail on validation data. Approved as E3 (Oct 8 2026) and frozen; no further curve changes."
+ },
+ "efficiency_curve": {
+  "id": "L",
+  "form": "expected competitive net EPA per play = slope x spread (through the origin)"
+ },
+ "play_conversion": {
+  "id": "c",
+  "form": "PLAY = conv x (net EPA/play - expected) x (competitive plays / mean competitive plays)",
+  "coef_name": "conv",
+  "plays_name": "mean_plays",
+  "display": "whole number",
+  "reference_fit_2014_2022": {
+   "conv": 45.3,
+   "mean_plays": 125.2
+  }
+ },
+ "look_ahead": {
+  "policy": "expanding window (E1a): each graded season uses curves and conversion fit only on earlier seasons; 2014-16 burn-in; 2017 onward graded. A season's fit is frozen once made and never refit.",
+  "first_graded_season": 2017,
+  "burn_in": [
+   2014,
+   2016
+  ],
+  "training_rows": "both perspectives of every stored game with a closing line and play-by-play that reconciles to the final score; efficiency and conversion also need competitive plays on both sides"
+ },
+ "thresholds": {
+  "certified_soft": -24.0,
+  "soft": -12.3,
+  "dawg": 12.3,
+  "certified_dawg": 24.0,
+  "applies_to": "DAWG only (rounded to one decimal); PLAY never gets a label",
+  "source": "5/20/80/95 percentiles of 2014-22 Power 4 DAWG, rounded symmetric (E5)"
+ },
+ "play_minimum": {
+  "off": 20,
+  "def": 20,
+  "rule": "PLAY needs at least 20 competitive offensive AND 20 competitive defensive plays; otherwise 'too few plays' (E6)"
+ },
+ "availability": {
+  "no_line": "no DAWG and no PLAY",
+  "dawg_needs": "closing line + a scoring timeline that reconciles to the final score (play-by-play, or ESPN scoring plays with periods)",
+  "play_needs": "closing line + play-by-play that reconciles to the final + the play minimum"
+ },
+ "fits": {
+  "2017": {
+   "train_seasons": [
+    2014,
+    2016
+   ],
+   "n_rows_margin": 3164,
+   "n_rows_eff": 3164,
+   "margin_coef": [
+    -21.2901036032028,
+    0.2307015325436854,
+    0.07689694539696897,
+    -0.3023813636359051,
+    0.37789443080059537,
+    -0.1395132459960457,
+    -0.06007698208370168,
+    -4.087370212298518e-13,
+    0.042912130060359044,
+    0.06975662299776628,
+    -0.1259648102668082
+   ],
+   "eff_slope": 0.01454696407430958,
+   "conv": 43.947281846256786,
+   "mean_plays": 128.6510745891277
+  },
+  "2018": {
+   "train_seasons": [
+    2014,
+    2017
+   ],
+   "n_rows_margin": 4216,
+   "n_rows_eff": 4216,
+   "margin_coef": [
+    -18.845184544748633,
+    0.2861982059078587,
+    0.0547065028211749,
+    -0.20251426593123817,
+    0.3065432608393967,
+    -0.23350839520113184,
+    0.0689392677102914,
+    -6.961954339890848e-13,
+    -0.04924233407773641,
+    0.11675419759996435,
+    -0.10218108694621915
+   ],
+   "eff_slope": 0.01467859254781551,
+   "conv": 44.58839462869989,
+   "mean_plays": 127.57542694497154
+  },
+  "2019": {
+   "train_seasons": [
+    2014,
+    2018
+   ],
+   "n_rows_margin": 5268,
+   "n_rows_eff": 5268,
+   "margin_coef": [
+    -16.319994452617802,
+    0.34807086936583653,
+    0.034760751877880906,
+    -0.08052239668821244,
+    0.12061324403147779,
+    -0.15167064516396447,
+    0.08779280545109788,
+    5.059182721041866e-13,
+    -0.06270914675174755,
+    0.07583532258292988,
+    -0.0402044146778154
+   ],
+   "eff_slope": 0.01451844435179511,
+   "conv": 45.1012042631309,
+   "mean_plays": 127.03113135914958
+  },
+  "2020": {
+   "train_seasons": [
+    2014,
+    2019
+   ],
+   "n_rows_margin": 6470,
+   "n_rows_eff": 6470,
+   "margin_coef": [
+    -17.84912998951882,
+    0.3226103593261874,
+    0.05679255790383884,
+    -0.23880920148352053,
+    0.40028961808578817,
+    -0.3522474360112054,
+    0.15231571564330157,
+    -4.2150164232842934e-13,
+    -0.10879693974437628,
+    0.17612371800472298,
+    -0.13342987269463155
+   ],
+   "eff_slope": 0.014884443135970716,
+   "conv": 44.89021732551706,
+   "mean_plays": 126.10726429675425
+  },
+  "2021": {
+   "train_seasons": [
+    2014,
+    2020
+   ],
+   "n_rows_margin": 7230,
+   "n_rows_eff": 7230,
+   "margin_coef": [
+    -17.23542013122443,
+    0.33846110987433553,
+    0.054619011918671835,
+    -0.2184501937365035,
+    0.3309558232299438,
+    -0.23458285349345787,
+    0.05878374015724055,
+    -2.4935493828355377e-14,
+    -0.04198838582680521,
+    0.11729142674729048,
+    -0.11031860774383445
+   ],
+   "eff_slope": 0.014929995204683986,
+   "conv": 45.46609515695144,
+   "mean_plays": 126.21936376210235
+  },
+  "2022": {
+   "train_seasons": [
+    2014,
+    2021
+   ],
+   "n_rows_margin": 8324,
+   "n_rows_eff": 8324,
+   "margin_coef": [
+    -14.7778083310029,
+    0.3979593452861546,
+    0.03999702894587115,
+    -0.15527086257664702,
+    0.27049361191611404,
+    -0.2507349392176909,
+    0.10240319639717022,
+    8.856137514319952e-13,
+    -0.07314514028524206,
+    0.12536746961013473,
+    -0.0901645373061468
+   ],
+   "eff_slope": 0.01495523900329072,
+   "conv": 45.640617455482534,
+   "mean_plays": 125.65977895242672
+  },
+  "2023": {
+   "train_seasons": [
+    2014,
+    2022
+   ],
+   "n_rows_margin": 9466,
+   "n_rows_eff": 9466,
+   "margin_coef": [
+    -14.917893059209389,
+    0.3996655583534681,
+    0.04653062957987595,
+    -0.20032225636310313,
+    0.3354792366499001,
+    -0.2700226401007418,
+    0.08779984894699139,
+    -3.304592053516505e-14,
+    -0.06271417781916667,
+    0.1350113200501854,
+    -0.1118264122164755
+   ],
+   "eff_slope": 0.014940549139599768,
+   "conv": 45.326221929196855,
+   "mean_plays": 125.22079019649271
+  },
+  "2024": {
+   "train_seasons": [
+    2014,
+    2023
+   ],
+   "n_rows_margin": 10712,
+   "n_rows_eff": 10712,
+   "margin_coef": [
+    -14.844826396188017,
+    0.39942916148166163,
+    0.04553847310108656,
+    -0.20197713363519673,
+    0.35249059267636546,
+    -0.2961063340305957,
+    0.1018593533001488,
+    -1.7956647809370153e-13,
+    -0.0727566809283134,
+    0.1480531670149132,
+    -0.11749686422518406
+   ],
+   "eff_slope": 0.015000061110891994,
+   "conv": 45.20823496135835,
+   "mean_plays": 124.39040328603436
+  },
+  "2025": {
+   "train_seasons": [
+    2014,
+    2024
+   ],
+   "n_rows_margin": 11848,
+   "n_rows_eff": 11848,
+   "margin_coef": [
+    -13.748824394533926,
+    0.4254205255430162,
+    0.03417031810574603,
+    -0.1140434512607325,
+    0.17426823592004043,
+    -0.1304625361643311,
+    0.021409104634047726,
+    1.5254273108721817e-13,
+    -0.01529221759601752,
+    0.06523126808240035,
+    -0.05808941197349942
+   ],
+   "eff_slope": 0.015165871380006397,
+   "conv": 45.27707518021369,
+   "mean_plays": 123.74004051316678
+  },
+  "2026": {
+   "train_seasons": [
+    2014,
+    2025
+   ],
+   "n_rows_margin": 13000,
+   "n_rows_eff": 13000,
+   "margin_coef": [
+    -15.17448966230057,
+    0.3921670101051371,
+    0.04106002912751277,
+    -0.14164695124206053,
+    0.20504719222332826,
+    -0.14103713650495342,
+    0.021272901894026516,
+    1.0178842814851309e-13,
+    -0.015194929924596076,
+    0.07051856825290535,
+    -0.06834906407479543
+   ],
+   "eff_slope": 0.01532128248860945,
+   "conv": 45.18049918004541,
+   "mean_plays": 123.12123076923076
+  }
+ }
+}

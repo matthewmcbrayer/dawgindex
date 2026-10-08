@@ -1,0 +1,19 @@
+{
+ "what": "DAWG Index V2 as last published, archived at the V3 launch",
+ "site_commit": "05544639e6a7e327c37c37bda740b939a80a1142",
+ "pipeline_backup": "production backup artifact Dpj5K5K5kLt5EgpTLvhKob, dawg.tgz sha256 0dde8415bb212c0ad4b189fcfde7994536c250fb6d5879bd81fbc197a7d5dce4",
+ "changes": "index.html: asset paths point into /v2/, noindex tag, archive banner. Every other file is byte-identical to the original.",
+ "sha256_of_originals": {
+  "index.html": "fc676b543be880ad52d1fa67188fce4a9da4ec4bc5ce721ad6a49cba0d376928",
+  "dawg-index-games.csv": "f8b7191c2ab81bf61d5a1f25997772de622a16f78667b25fcea2edf88150e302",
+  "hiw.json": "62f895fdda60bbfd4dac489ed3b6e411e802ec25daa1463e274fc779c8c70406",
+  "data/g2019.json": "d9913c7816f2e32d90dc4e5ad90a4c1b7812108870c747760add5e189b9cdc10",
+  "data/g2020.json": "406840c0b2df2fbdc98402b1cd1608e01dbf4dba85c14d437da825064e2607ce",
+  "data/g2021.json": "6cef57076e3916901b41b7b4d35341928f07ba7564066cf320d94d039be7530c",
+  "data/g2022.json": "cd1d6856cbaa97dab5878946221bffa686b1ea3573fc6f256b8b8d889722902e",
+  "data/g2023.json": "f08ad407d548e8227d9892b5d9cd8358bc4b80a825da6e5e348a1ebcfd0f713a",
+  "data/g2024.json": "500dc8aca45c10bb4692626f3e6db107ab56cb648143423b7cf3b6ecacf686dd",
+  "data/g2025.json": "7b610c5d150e8e4fa46daab54a175eb59f30f7c088f922e3dc35893870fdeeae",
+  "data/qb.json": "c6ac6dfaec0bd11728425261c63201e26d77c63b328605a6161f64199f805465"
+ }
+}
