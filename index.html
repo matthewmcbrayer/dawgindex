@@ -875,6 +875,91 @@ tr.sk:nth-child(3n+2) i{width:82%}tr.sk:nth-child(3n) i{width:68%}
 /* V3 homepage: the site's own header, nav, pages and footer stay out of the way while #home-host is showing */
 body.on-home{background:#F4EAD2;margin:0}body.on-home>.wrap,body.on-home #fab,body.on-home #fabmenu,body.on-home #fabtip{display:none}
 @font-face{font-family:"Barlow Condensed Logo";src:url("/brand/BarlowCondensed-Bold.ttf") format("truetype");font-weight:700;font-display:swap}
+
+/* Phase 3B game card */
+/* Phase 3B: the game card (#gcard) and the share "Image ready" card in the DAWG 2.0 identity.
+   Light-DOM CSS (the modal is the site's own, outside the 2.0 shadow root), scoped to body.on-home so it applies only while a
+   2.0 page is showing. Markup, data and behavior are the site's: this file only restyles. !important beats the site's own
+   !important theme rules for the same elements. */
+body.on-home{--g2-paper:#F4EAD2;--g2-paper2:#FBF4E2;--g2-paper3:#EADFC4;--g2-ink:#131210;--g2-ink2:#3B362E;--g2-muted:#6E6557;--g2-rule:rgba(19,18,16,.16);--g2-rule2:rgba(19,18,16,.34);
+  --g2-red:#E5463A;--g2-blue:#2F64C0;--g2-yellow:#F5C030;--g2-pos:#1E7A50;--g2-neg:#D13A2F;
+  --g2-display:"Big Shoulders Display","Arial Narrow",sans-serif;--g2-body:Barlow,system-ui,sans-serif;--g2-cond:"Barlow Condensed","Arial Narrow",sans-serif;--g2-mono:"IBM Plex Mono",ui-monospace,Menlo,monospace}
+body.on-home #gcard{background:rgba(19,18,16,.62)!important;padding:20px!important;font-family:var(--g2-body)!important}
+body.on-home #gcard .box{background:var(--g2-paper2)!important;color:var(--g2-ink)!important;border:2px solid var(--g2-ink)!important;border-top:2px solid var(--g2-ink)!important;border-radius:0!important;
+  box-shadow:6px 7px 0 var(--g2-ink)!important;width:min(680px,100%)!important;padding:0!important;gap:0!important;position:relative}
+/* header: the stub of a ticket, red kicker band */
+body.on-home #gcard .hd{position:sticky;top:0;z-index:2;background:var(--g2-paper2);padding:18px 22px 14px!important;border-bottom:2px dashed var(--g2-ink);align-items:flex-start}
+body.on-home #gcard .hd>div::before{content:"Game card";display:inline-block;background:var(--g2-red);color:#fff;font-family:var(--g2-cond);font-weight:800;font-size:12px;letter-spacing:.14em;text-transform:uppercase;padding:3px 9px 2px;transform:rotate(-1.5deg);margin-bottom:6px}
+body.on-home #gcard h3{font-family:var(--g2-display)!important;font-weight:900!important;font-size:34px!important;line-height:.92!important;letter-spacing:.005em!important;text-transform:uppercase;color:var(--g2-ink)!important;-webkit-text-stroke:0!important;text-shadow:none!important;margin:4px 0 0!important;text-wrap:balance}
+body.on-home #gcard .meta{font-family:var(--g2-mono)!important;font-size:12.5px!important;letter-spacing:.01em;color:var(--g2-ink2)!important;margin-top:8px!important;line-height:1.45}
+body.on-home #gcard .close{all:unset;cursor:pointer;flex:0 0 auto;width:38px;height:38px;border-radius:50%;background:var(--g2-ink);color:var(--g2-paper2)!important;display:grid;place-items:center;font-size:22px;line-height:1;font-family:var(--g2-body)}
+body.on-home #gcard .close:hover{background:var(--g2-red)!important}
+body.on-home #gcard .close:focus-visible{outline:3px solid var(--g2-blue)!important;outline-offset:2px}
+/* the grade */
+body.on-home #gcard #gc-big{padding:18px 22px 6px;gap:10px 14px!important;align-items:baseline}
+body.on-home #gcard .big b{font-family:var(--g2-display)!important;font-weight:900!important;font-size:68px!important;line-height:.85!important;letter-spacing:-.01em}
+body.on-home #gcard .big b.pos,body.on-home #gcard .pos{color:var(--g2-pos)!important}
+body.on-home #gcard .big b.neg,body.on-home #gcard .neg{color:var(--g2-neg)!important}
+body.on-home #gcard #gc-big>span:not(.lchip):not(.gcplay){font-family:var(--g2-body);font-weight:600;font-size:15px;color:var(--g2-ink2)}
+body.on-home #gcard .gcl{font-family:var(--g2-cond)!important;font-weight:800!important;font-size:13px!important;letter-spacing:.14em!important;color:var(--g2-red)!important}
+body.on-home #gcard #gc-big .gcplay{font-size:14.5px!important;color:var(--g2-ink2)!important;border-top:1px dashed var(--g2-rule2);padding-top:8px;margin-top:6px!important}
+body.on-home #gcard #gc-big .gcplay b{font-size:32px!important}
+body.on-home #gcard .dim{color:var(--g2-muted)!important}
+body.on-home #gcard .lchip{font-family:var(--g2-cond)!important;font-weight:800!important;font-size:12px!important;letter-spacing:.1em!important;text-transform:uppercase;padding:3px 8px 2px!important;border-radius:3px!important;border:1.5px solid currentColor!important;background:transparent!important;vertical-align:middle}
+body.on-home #gcard .lchip.l-d{color:var(--g2-pos)!important}body.on-home #gcard .lchip.l-s{color:var(--g2-neg)!important}
+body.on-home #gcard .lchip.l-cd{background:var(--g2-pos)!important;color:var(--g2-paper2)!important;border-color:var(--g2-pos)!important}
+body.on-home #gcard .lchip.l-cs{background:var(--g2-neg)!important;color:var(--g2-paper2)!important;border-color:var(--g2-neg)!important}
+/* the plain-English summary */
+body.on-home #gcard .sum{padding:8px 22px 14px!important;margin:0!important;font-family:var(--g2-body)!important;font-size:16.5px!important;line-height:1.5!important;color:var(--g2-ink)!important}
+/* how it went */
+body.on-home #gcard .hiw{margin:0 22px 14px!important;border:1.5px solid var(--g2-ink)!important;border-radius:0!important;background:var(--g2-paper);padding:10px 14px!important}
+body.on-home #gcard .hiw summary{font-family:var(--g2-cond)!important;font-weight:800!important;font-size:13.5px!important;letter-spacing:.14em!important;color:var(--g2-ink)!important}
+body.on-home #gcard .hq th{color:var(--g2-muted)!important;font-family:var(--g2-mono)!important;font-size:11.5px!important;font-weight:500!important}
+body.on-home #gcard .hq td{font-family:var(--g2-display)!important;color:var(--g2-muted)!important;font-size:19px!important;border-top:1px dashed var(--g2-rule2)!important}
+body.on-home #gcard .hq tr.me td{color:var(--g2-ink)!important}
+body.on-home #gcard .hs .k,body.on-home #gcard .hs .h{font-family:var(--g2-cond)!important;color:var(--g2-muted)!important;letter-spacing:.1em}
+body.on-home #gcard .hs .t,body.on-home #gcard .hs .v{font-family:var(--g2-display)!important;color:var(--g2-muted)!important}
+body.on-home #gcard .hs .v.me{color:var(--g2-ink)!important}
+body.on-home #gcard .hx{font-family:var(--g2-body)!important;font-size:15px!important;color:var(--g2-ink2)!important}
+body.on-home #gcard .hx b{color:var(--g2-ink)!important}
+/* the parts: a receipt */
+body.on-home #gcard #gc-parts{margin:0 22px;border-top:2px solid var(--g2-ink);border-bottom:2px solid var(--g2-ink)}
+body.on-home #gcard #gc-parts .gp{border-bottom:1px dashed var(--g2-rule2)!important;padding:9px 0!important;gap:12px!important}
+body.on-home #gcard #gc-parts .gp:last-child{border-bottom:0!important}
+body.on-home #gcard #gc-parts .gp .n b{font-family:var(--g2-body)!important;font-weight:700;font-size:15px;color:var(--g2-ink)}
+body.on-home #gcard #gc-parts .gp .n span{font-family:var(--g2-body)!important;font-size:13px!important;color:var(--g2-muted)!important;line-height:1.35}
+body.on-home #gcard #gc-parts .gp .v{font-family:var(--g2-display)!important;font-weight:800!important;font-size:22px!important;color:var(--g2-ink)!important;white-space:nowrap}
+/* context notes (garbage time, overtime, setting) and actions */
+body.on-home #gcard #gc-form{padding:12px 22px 0!important;font-family:var(--g2-body)!important;font-size:14px!important;line-height:1.5;color:var(--g2-ink2)!important}
+body.on-home #gcard #gc-form:empty{display:none}
+body.on-home #gcard .gcact{padding:14px 22px 20px!important;gap:12px!important}
+body.on-home #gcard #gc-share{background:var(--g2-ink)!important;color:var(--g2-paper2)!important;border:2px solid var(--g2-ink)!important;border-radius:0!important;box-shadow:none!important;
+  font-family:var(--g2-body)!important;font-weight:700!important;font-size:13.5px!important;letter-spacing:.1em!important;text-transform:uppercase;padding:12px 18px!important;-webkit-text-stroke:0!important;text-shadow:none!important}
+body.on-home #gcard #gc-share:hover{background:var(--g2-red)!important;border-color:var(--g2-red)!important}
+body.on-home #gcard #gc-share-msg{font-family:var(--g2-body)!important;font-size:14px;color:var(--g2-ink2)!important}
+/* the share "Image ready" card and toasts */
+body.on-home #savecard{background:var(--g2-paper2)!important;color:var(--g2-ink)!important;border:2px solid var(--g2-ink)!important;border-radius:0!important;box-shadow:5px 6px 0 var(--g2-ink)!important;font-family:var(--g2-body)!important}
+body.on-home #savecard .sc-h b{font-family:var(--g2-cond)!important;font-weight:800!important;letter-spacing:.14em!important;text-transform:uppercase;color:var(--g2-ink)!important}
+body.on-home #savecard .sc-x{color:var(--g2-ink)!important}
+body.on-home #savecard .sc-b img{border:1.5px solid var(--g2-ink)!important;border-radius:0!important}
+body.on-home #savecard .sc-btns button{background:var(--g2-paper2)!important;color:var(--g2-ink)!important;border:2px solid var(--g2-ink)!important;border-radius:0!important;box-shadow:none!important;font-family:var(--g2-body)!important;font-weight:700!important;letter-spacing:.08em;text-transform:uppercase;font-size:13px!important;-webkit-text-stroke:0!important;text-shadow:none!important}
+body.on-home #savecard .sc-btns .sc-copy{background:var(--g2-ink)!important;color:var(--g2-paper2)!important}
+body.on-home #toast{background:var(--g2-ink)!important;color:var(--g2-paper2)!important;border-radius:0!important;font-family:var(--g2-body)!important}
+@media (max-width:640px){
+  body.on-home #gcard{padding:0!important;place-items:end stretch!important}
+  body.on-home #gcard .box{width:100%!important;max-height:calc(100% - 28px)!important;box-shadow:0 -4px 0 var(--g2-ink)!important;border-left:0!important;border-right:0!important;border-bottom:0!important}
+  body.on-home #gcard .hd{padding:16px 16px 12px!important}
+  body.on-home #gcard h3{font-size:28px!important}
+  body.on-home #gcard .meta{font-size:12.5px!important}
+  body.on-home #gcard #gc-big{padding:14px 16px 4px}
+  body.on-home #gcard .big b{font-size:58px!important}
+  body.on-home #gcard .sum{padding:8px 16px 12px!important;font-size:16px!important}
+  body.on-home #gcard .hiw{margin:0 16px 12px!important}
+  body.on-home #gcard #gc-parts{margin:0 16px}
+  body.on-home #gcard #gc-form{padding:12px 16px 0!important}
+  body.on-home #gcard .gcact{padding:14px 16px 22px!important}
+  body.on-home #gcard #gc-share{width:100%}
+}
 </style>
 
 <div id="htip" role="tooltip" hidden></div>
@@ -4595,14 +4680,19 @@ var FACTS = {
     var yy = wrap(short, L, 688, R - L, 35, "500 25px " + B, INK);
     // parts
     var py0 = yy + 42; x.fillStyle = INK; x.fillRect(L, py0, R - L, 3);
-    var rh = Math.min(72, (PY - 40 - py0) / 5);
+    var nr = Math.ceil(S.P.length / 2), cg = 40, cw = (R - L - cg) / 2, rh = Math.min(72, (PY - 40 - py0) / nr);
+    function fit(t, maxW, size, fam){ var f = size; x.font = "500 " + f + "px " + fam; while (x.measureText(t).width > maxW && f > 12){ f -= .5; x.font = "500 " + f + "px " + fam; }
+      if (x.measureText(t).width > maxW){ while (t.length > 1 && x.measureText(t + "…").width > maxW) t = t.slice(0, -1); t += "…"; } return {t: t, f: "500 " + f + "px " + fam}; }
     S.P.forEach(function(p, i){
-      var Y = py0 + 3 + i * rh, mid = Y + rh / 2;
-      txt(p[0].toUpperCase(), L, mid + 1, "900 25px " + D, INK, "left", .8);
-      txt(p[2] || "", L, mid + 22, "500 16px " + B, MUT);
-      txt(p[1], R, mid + 9, "800 27px " + D, INK, "right");
-      x.strokeStyle = "rgba(27,23,18,.35)"; x.lineWidth = 1.5; x.setLineDash([4, 4]); x.beginPath(); x.moveTo(L, Y + rh); x.lineTo(R, Y + rh); x.stroke(); x.setLineDash([]);
+      var c2 = i < nr ? 0 : 1, row = c2 ? i - nr : i, X0 = L + c2 * (cw + cg), X1 = X0 + cw, Y = py0 + 3 + row * rh, mid = Y + rh / 2;
+      x.font = "800 27px " + D; var vw = x.measureText(p[1]).width;
+      var lf = 25; x.font = "900 " + lf + "px " + D; while (x.measureText(p[0].toUpperCase()).width + vw + 18 > cw && lf > 17){ lf--; x.font = "900 " + lf + "px " + D; }
+      txt(p[0].toUpperCase(), X0, mid + 1, "900 " + lf + "px " + D, INK, "left", .8);
+      var sub = fit(p[2] || "", cw, 16, B); txt(sub.t, X0, mid + 22, sub.f, MUT);
+      txt(p[1], X1, mid + 9, "800 27px " + D, INK, "right");
+      x.strokeStyle = "rgba(27,23,18,.35)"; x.lineWidth = 1.5; x.setLineDash([4, 4]); x.beginPath(); x.moveTo(X0, Y + rh); x.lineTo(X1, Y + rh); x.stroke(); x.setLineDash([]);
     });
+    x.fillStyle = INK; x.fillRect(L + cw + cg / 2 - 1, py0 + 12, 2, nr * rh - 18);
     // stub
     var rk = seasonRankOf(S.y, g.id, S.t);
     txt("TICKET NO.", 122, 1160, "800 16px " + D, MUT, "left", 2.5);
@@ -4679,7 +4769,7 @@ var FACTS = {
     if (g.set) notes.push("Setting: " + g.set + " (description only).");
     $("gc-form").textContent = notes.join(" ");
     gcShare = {g:g, m:m, t:t, y:y, P:P, head:$("gc-h").textContent, sum:gameSummary(g)}; $("gc-share-msg").textContent = "";
-    gcLast = document.activeElement; $("gcard").hidden = false; $("gc-x").focus();
+    gcLast = document.activeElement; while (gcLast && gcLast.shadowRoot && gcLast.shadowRoot.activeElement) gcLast = gcLast.shadowRoot.activeElement; $("gcard").hidden = false; $("gc-x").focus();
   }
   function closeCard(){ $("gcard").hidden = true; if (gcLast && gcLast.focus) gcLast.focus(); }
   $("gc-x").addEventListener("click", closeCard);
