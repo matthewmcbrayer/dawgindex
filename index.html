@@ -1664,6 +1664,129 @@ h2{font-family:var(--display);font-weight:900;font-size:clamp(34px,4vw,52px);lin
   .yrow .yv b{display:block;font-family:var(--display);font-weight:900;font-size:20px;line-height:1}
   .yrow .yv small{display:block;font-family:var(--display);font-weight:700;font-size:15px;color:var(--blue);margin-top:2px}
 }
+/* ---------- Phase 3A: This Week (2.0). Same ticket and strip language as the homepage slate. ---------- */
+.weekpage{--gold:#9A6B00;padding-bottom:40px}
+.wk-feat{display:grid;grid-template-columns:minmax(0,1.12fr) minmax(0,1fr);gap:48px;align-items:start}
+.wk-feat-tk .ticket{transform:rotate(-1.2deg);cursor:pointer;min-height:300px}
+.wk-feat-tk .ticket .side{min-height:300px}
+.wk-feat-tk .ticket .side .nm{font-size:34px}
+.wk-feat-tk .ticket .side .lg{width:104px;height:104px}.wk-feat-tk .ticket .side .lg img{width:76px;height:76px}
+.wk-feat-tk .ticket .side .sc{font-size:17px!important}
+.wk-feat-tk .ticket .stub .dt{font-size:11px}
+.wk-feat-tk .ticket:focus-visible{outline:3px solid var(--blue);outline-offset:4px}
+.wk-feat-copy>h3{font-family:var(--display);font-weight:900;font-size:clamp(40px,4.4vw,56px);line-height:.9;text-transform:uppercase;margin:2px 0 12px;text-wrap:balance}
+.wk-feat-copy>h3 a{text-decoration:none}.wk-feat-copy>h3 a:hover{color:var(--red)}
+.wk-feat-copy>h3 .vs{font-family:var(--body);font-weight:700;font-size:.42em;letter-spacing:.06em;color:var(--muted);vertical-align:middle;text-transform:lowercase}
+.wk-kick{margin:0 0 14px;font-family:var(--mono);font-size:14px;letter-spacing:.02em;text-transform:uppercase;color:var(--ink)}
+.wk-kick b{font-weight:600}.wk-kick span:not(.dim){display:block;font-family:var(--body);text-transform:none;font-size:14px;color:var(--ink-2);margin-top:2px}
+.wk-ledger{position:static;width:100%;max-width:520px;transform:rotate(.4deg);margin:16px 0 18px;font-size:13px}
+.wk-ledger td{padding:7px 0}
+.wk-ledger td.v{width:30%;text-align:right;font-family:var(--body);font-weight:700;font-size:15px}
+.wk-ledger tr.hd td{border-top:0;padding-bottom:4px;font-family:var(--cond);font-weight:800;font-size:12.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink)}
+.wk-ledger td.k small{font-size:12px}
+.wk-ledger td.v small{display:block;font-family:var(--body);font-weight:500;font-size:12px;color:var(--muted)}
+.wk-ledger .tier{font-family:var(--display);font-weight:900;font-size:24px;line-height:1}
+.tier.up{color:var(--pos)}.tier.mid{color:var(--gold)}.tier.dn{color:var(--neg)}
+.wk-watch{font-size:17px;line-height:1.5;color:var(--ink);margin:0 0 18px;max-width:560px}
+.wk-acts{display:flex;flex-wrap:wrap;gap:14px;align-items:center}
+.wk-acts .btn{cursor:pointer}
+.wk-rest{margin-top:64px}
+.wk-subhead{display:flex;align-items:baseline;justify-content:space-between;gap:16px;border-bottom:2px solid var(--ink);padding-bottom:10px;margin-bottom:22px}
+.wk-subhead .kicker{margin:0;font-size:14px}.wk-subhead .dim{font-size:14px}
+.wk-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:30px 34px}
+.wg{display:flex;flex-direction:column;gap:10px;min-width:0}
+.wg-h{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;min-height:22px}
+.wg-tier{background:var(--red);color:#fff;font-family:var(--cond);font-weight:800;font-size:12px;letter-spacing:.12em;text-transform:uppercase;padding:3px 8px 2px;transform:rotate(-1.5deg)}
+.wg-why{font-family:var(--cond);font-weight:700;font-size:14.5px;letter-spacing:.04em;text-transform:uppercase;color:var(--ink-2)}
+.wg-mini{cursor:pointer;grid-template-columns:72px 1fr 136px;min-height:84px}
+.wg-mini:hover{box-shadow:4px 4px 0 var(--red)}
+.wg-mini .tm .n{font-size:22px}
+.wg-mini .tm .n a{text-decoration:none}.wg-mini .tm .n a:hover{text-decoration:underline}
+.wg-mini .tm .n small{font-size:11.5px}
+.wg-mini .stub{font-size:12px}
+.wg-mini .stub b{font-size:13.5px}
+.wg-f{display:flex;align-items:flex-start;justify-content:space-between;gap:16px}
+.wg-f p{margin:0;font-size:14.5px;line-height:1.45;color:var(--ink-2)}
+.wg-f .linkbtn{flex:0 0 auto;margin-top:2px}
+.wk-foot{margin:34px 0 0}
+.t-cmplink{display:block;width:fit-content;max-width:100%;white-space:normal;line-height:1.35;margin:0 0 12px}
+/* compare: a ledger, the two teams as colored column heads, the better side marked like a highlighter */
+.cmppage{border-top:2px solid var(--ink);padding-top:56px}
+.cmp-ctl{display:flex;align-items:flex-end;gap:12px;flex-wrap:wrap;margin-bottom:22px}
+.cmp-pick{display:flex;flex-direction:column;gap:4px;flex:0 1 280px;min-width:0}
+.cmp-pick select{border:1.5px solid var(--ink);background:var(--paper-2);color:var(--ink);font:inherit;font-size:16px;font-weight:700;padding:10px 12px;border-radius:0;width:100%}
+.cmp-swap{background:var(--ink);color:var(--paper);border:0;width:44px;height:44px;border-radius:50%;font-size:20px;line-height:1;cursor:pointer;flex:0 0 auto}
+.cmp-swap:hover{background:var(--red)}
+.cmp-share{margin-left:auto;margin-bottom:12px}
+.cmp{border:2px solid var(--ink);background:var(--paper-2);box-shadow:5px 6px 0 rgba(19,18,16,.9)}
+.cmp-hd,.cmp-r{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr) minmax(0,1fr)}
+.cmp-hd{position:sticky;top:0;z-index:2;border-bottom:2px solid var(--ink)}
+.cmp-corner{display:flex;align-items:flex-end;padding:12px 16px;background:var(--paper-2);font-family:var(--cond);font-weight:800;font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.cmp-th{display:flex;align-items:center;gap:10px;padding:12px 14px;color:var(--paper-2);font-family:var(--display);font-weight:900;font-size:24px;line-height:.95;text-transform:uppercase;border-left:2px solid var(--ink);min-width:0}
+.cmp-th.dark-text{color:var(--ink)}
+.cmp-th img{width:40px;height:40px;object-fit:contain;background:var(--paper-2);border-radius:50%;padding:4px;border:1.5px solid var(--ink);flex:0 0 auto}
+.cmp-th a{text-decoration:none;overflow-wrap:anywhere}.cmp-th a:hover{text-decoration:underline}
+.cmp-r{border-top:1px dashed var(--rule-2)}
+.cmp-r:first-of-type{border-top:0}
+.cmp-k{padding:12px 16px}
+.cmp-k b{display:block;font-weight:700;font-size:15.5px;line-height:1.2}
+.cmp-k small{display:block;font-size:13px;color:var(--muted);line-height:1.35;margin-top:2px}
+.cmp-v{display:flex;align-items:center;justify-content:center;padding:10px 14px;border-left:2px solid var(--ink);text-align:center}
+.cmp-who{display:none}
+.cmp-n{font-family:var(--display);font-weight:800;font-size:24px;line-height:1.1;font-variant-numeric:tabular-nums}
+.cmp-val{display:inline-flex;align-items:baseline;justify-content:center;flex-wrap:wrap;gap:0 6px}
+.cmp-sub{font-family:var(--body);font-weight:500;font-size:13px;color:var(--muted)}
+.cmp-v.win .cmp-n{background:linear-gradient(transparent 12%,var(--yellow) 12%,var(--yellow) 88%,transparent 88%);padding:0 6px;box-decoration-break:clone;-webkit-box-decoration-break:clone}
+.cmp-foot{margin-top:16px}
+@media (max-width:1100px){
+  .wk-feat{grid-template-columns:minmax(0,1fr);gap:34px}
+  .wk-feat-tk{max-width:720px}
+  .wk-grid{grid-template-columns:minmax(0,1fr)}
+}
+@media (max-width:820px){
+  .wk-feat-tk .ticket,.wk-feat-tk .ticket .side{min-height:0}
+  .wk-feat-tk .ticket .side{min-height:176px}
+  .wk-feat-tk .ticket .side .nm{font-size:25px}
+  .wk-feat-tk .ticket .side .lg{width:72px;height:72px}.wk-feat-tk .ticket .side .lg img{width:52px;height:52px}
+  .wk-feat-tk .ticket .side .sc{font-size:15px!important}
+  .wk-feat-tk .ticket .stub .dt{font-size:11.5px}
+  .wk-feat-copy>h3{font-size:clamp(34px,10vw,44px)}
+  .wk-kick{font-size:13.5px}
+  .wk-ledger{transform:none;max-width:none}
+  .wk-ledger td.v{font-size:15px}
+  .wk-watch{font-size:16.5px}
+  .wk-acts .btn{width:100%;justify-content:center}
+  .wk-rest{margin-top:48px}
+  .wk-subhead{flex-direction:column;gap:2px}
+  .wk-grid{gap:30px}
+  .wg-why{font-size:14px}
+  .wg-mini{grid-template-columns:64px 1fr;min-height:0}
+  .wg-mini .tm .n{font-size:20px}
+  .wg-mini .tm .n small{font-size:12px}
+  .wg-mini .stub{font-size:12.5px}
+  .wg-mini .stub b{font-size:14px}
+  .wg-f{flex-direction:column;gap:8px}
+  .wg-f p{font-size:15px}
+  .cmppage{padding-top:40px}
+  .cmp-ctl{display:grid;grid-template-columns:minmax(0,1fr) 44px minmax(0,1fr);align-items:end;gap:8px}
+  .cmp-pick{flex:none}
+  .cmp-pick select{font-size:15px;padding:10px 8px}
+  .cmp-share{grid-column:1/-1;justify-self:start;margin:6px 0 0}
+  .cmp-hd{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+  .cmp-corner{display:none}
+  .cmp-th{border-left:0;font-size:19px;padding:10px;gap:8px}
+  .cmp-th.b{border-left:2px solid var(--ink)}
+  .cmp-th img{width:32px;height:32px}
+  .cmp-r{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+  .cmp-k{grid-column:1/-1;padding:12px 12px 4px}
+  .cmp-k b{font-size:15.5px}.cmp-k small{font-size:13px}
+  .cmp-v{border-left:0;padding:4px 12px 12px;justify-content:space-between;gap:8px}
+  .cmp-v.b{border-left:1px dashed var(--rule-2)}
+  .cmp-who{display:block;font-family:var(--cond);font-weight:800;font-size:12px;letter-spacing:.1em;color:var(--muted)}
+  .cmp-n{font-size:22px}
+  .cmp-val{flex-direction:column;align-items:flex-end;text-align:right}
+  .cmp-sub{font-size:12.5px;line-height:1.3}
+}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 <div class="home" id="home">
@@ -1965,6 +2088,40 @@ h2{font-family:var(--display);font-weight:900;font-size:clamp(34px,4vw,52px);lin
       </div>
     </section>
 
+  </div>
+</section>
+</main>
+
+<!-- ================= THIS WEEK (2.0): the week's slate from preview_site.json, and Compare two teams (rows from the site's own compare) ================= -->
+<main class="view" data-view="week" hidden>
+<section class="v2page weekpage" aria-labelledby="wk-h">
+  <div class="wrap">
+    <div class="sechead">
+      <div><span class="kicker" id="wk-kicker">This week</span><h2 id="wk-h">This week’s biggest stages</h2></div>
+      <p class="sechead-note">The week’s games, ranked by the size of the stage. Each team’s number is where it stands at living up to expectations this season, out of 68 Power 4 teams. It describes the season so far, not Saturday.</p>
+    </div>
+    <div class="wk-feat" id="wk-feat"></div>
+    <div class="wk-rest" id="wk-rest-wrap">
+      <div class="wk-subhead"><span class="kicker">Also on the slate</span><span class="dim" id="wk-count"></span></div>
+      <div class="wk-grid" id="wk-grid"></div>
+    </div>
+    <p class="note wk-foot">Every game is graded Sunday. Then come back to see who showed up.</p>
+  </div>
+</section>
+<section class="v2page cmppage" id="wk-cmp" aria-labelledby="cmp-h2">
+  <div class="wrap">
+    <div class="sechead">
+      <div><span class="kicker" id="cmp-kicker">Compare two teams</span><h2 id="cmp-h2">Side by side, this season</h2></div>
+      <p class="sechead-note">No predictions, just how each team has played. The highlighted number is the better side in that category.</p>
+    </div>
+    <div class="cmp-ctl">
+      <div class="cmp-pick"><label class="t-lbl" for="cmpa2">First team</label><select id="cmpa2"></select></div>
+      <button type="button" class="cmp-swap" id="cmp-swap" aria-label="Swap the two teams" title="Swap">⇄</button>
+      <div class="cmp-pick"><label class="t-lbl" for="cmpb2">Second team</label><select id="cmpb2"></select></div>
+      <button type="button" class="linkbtn cmp-share" id="cmp-share">Share as image</button>
+    </div>
+    <div class="cmp" id="cmp2" role="table" aria-label="Compare two teams"></div>
+    <p class="note cmp-foot">Everything here describes how each team has played this season; none of it predicts the game.</p>
   </div>
 </section>
 </main>
@@ -4114,7 +4271,7 @@ var FACTS = {
     try { localStorage.setItem("dawg-page", pg); } catch(e){}
     if (!keepScroll) window.scrollTo(0, 0);
     if (showPage.cur && showPage.cur !== pg) document.querySelectorAll('.page[data-page="' + pg + '"]').forEach(function(sec){ sec.classList.remove("pg-in"); void sec.offsetWidth; sec.classList.add("pg-in"); });
-    showPage.cur = pg; (function(){ var v2 = ["home","qbs"].indexOf(pg) >= 0 || (pg === "team" && !!(window.HOME && HOME.team && HOME.team[state.sel])), hh = document.getElementById("home-host"); document.body.classList.toggle("on-home", v2); if (hh){ hh.hidden = !v2; hh.setAttribute("data-view", pg); hh.setAttribute("data-requested", pgReq); hh.setAttribute("data-team", state.sel || ""); } try { document.dispatchEvent(new CustomEvent("dawg:page", {detail: {page: pg, requested: pgReq, team: state.sel}})); } catch(e){} })(); try { var na = document.querySelector('.topnav a.on'); if (na && na.scrollIntoView) na.scrollIntoView({block:"nearest", inline:"nearest"}); } catch(e){}
+    showPage.cur = pg; (function(){ var v2 = ["home","qbs","week"].indexOf(pg) >= 0 || (pg === "team" && !!(window.HOME && HOME.team && HOME.team[state.sel])), hh = document.getElementById("home-host"); document.body.classList.toggle("on-home", v2); if (hh){ hh.hidden = !v2; hh.setAttribute("data-view", pg); hh.setAttribute("data-requested", pgReq); hh.setAttribute("data-team", state.sel || ""); } try { document.dispatchEvent(new CustomEvent("dawg:page", {detail: {page: pg, requested: pgReq, team: state.sel}})); } catch(e){} })(); try { var na = document.querySelector('.topnav a.on'); if (na && na.scrollIntoView) na.scrollIntoView({block:"nearest", inline:"nearest"}); } catch(e){}
     setTimeout(function(){ if (typeof fitTables === "function") fitTables(); }, 0);
   }
   document.querySelectorAll(".topnav a").forEach(function(a){ a.addEventListener("click", function(e){ e.preventDefault(); showPage(a.getAttribute("data-p")); }); });
@@ -4278,8 +4435,8 @@ var FACTS = {
   // ---------- Compare two teams ----------
   function cmpOpts(){ var ids = Object.keys(DATA.ts[LATEST] || {}).filter(function(id){ return META[id]; }).sort(function(a,b){ return META[a].name.localeCompare(META[b].name); });
     var o = ids.map(function(id){ return '<option value="' + id + '">' + esc(META[id].name) + '</option>'; }).join(""); $("cmpa").innerHTML = o; $("cmpb").innerHTML = o; }
-  function drawCompare(){
-    var a = $("cmpa").value, b = $("cmpb").value; if (!a || !b) return;
+  function drawCompare(A, B, dataOnly){
+    var a = dataOnly === true ? A : $("cmpa").value, b = dataOnly === true ? B : $("cmpb").value; if (!a || !b) return;
     function ordn(x){ var v = x % 100, q = ["th","st","nd","rd"]; return x + (q[(v - 20) % 10] || q[v] || q[0]); }
     var G = seasonTeams(LATEST).filter(function(t){ return t.dawg !== null && t.dawg !== undefined; }).sort(function(x,y){ return (y.dawg - x.dawg) || (x.name < y.name ? -1 : 1); }), RK = {}; G.forEach(function(t, i){ RK[t.id] = i + 1; });
     var AP = {}; ((WEEK && WEEK.poll) || []).forEach(function(p){ if (p.ap) AP[p.id] = p.ap; });
@@ -4301,6 +4458,9 @@ var FACTS = {
       ["Penalties", "Per game. Fewer is better", function(id){ var t = TN(id); return t ? t.pen.toFixed(1) + ' <span class="dim">(' + ordn(rkT("pen", id, true)) + ' fewest)</span>' : "–"; }, function(id){ var t = TN(id); return t ? t.pen : null; }, "lo"],
       ["Goes for it on 4th and short", "Between the 30s, instead of kicking", function(id){ var t = TN(id); return t ? Math.round(t.go4 * 100) + "%" : "–"; }, null, null]
     ];
+    if (dataOnly === true) return rows.map(function(r){ var va = r[3] ? r[3](a) : null, vb = r[3] ? r[3](b) : null, w = "";
+      if (r[4] && va !== null && vb !== null && va !== undefined && vb !== undefined && va !== vb){ w = (r[4] === "hi" ? va > vb : va < vb) ? "a" : "b"; }
+      return {k: r[0], s: r[1], a: r[2](a), b: r[2](b), win: w}; });
     function lg(id){ return '<img src="logos/' + id + '-dark.png" alt="" onerror="this.onerror=null;this.src=\'logos/' + id + '.png\'">'; }
     $("cmpt").tHead.innerHTML = '<tr><th class="l"></th><th class="cmph">' + lg(a) + '<span>' + esc(META[a].name) + '</span></th><th class="cmph">' + lg(b) + '<span>' + esc(META[b].name) + '</span></th></tr>';
     $("cmpt").tBodies[0].innerHTML = rows.map(function(r){
@@ -4975,7 +5135,8 @@ var FACTS = {
   $("season").addEventListener("change", drawPoll);
   drawAll();
   showPage(linkTeam ? "team" : ((location.hash || "").replace("#","") || "home"), true);
-  window.DAWG = {select: select, showPage: showPage, openCard: openCard};
+  window.DAWG = {select: select, showPage: showPage, openCard: openCard, openCompare: openCompare, compareData: function(a, b){ return drawCompare(a, b, true); },
+    shareCompare: function(btn){ var s = SHARES.filter(function(x){ return x.o.file === "compare"; })[0]; if (!s) return false; exportImage(s.o, btn); return true; }};
 })();
 </script>
 <script>
@@ -5024,13 +5185,14 @@ var FACTS = {
         '<div class="lg">' + logo(t.id) + '</div>' +
         (t.score != null ? '<div class="sc">' + t.score + '</div>' : '<div class="sc" style="font-size:15px;font-family:var(--body);letter-spacing:.02em;font-weight:700">' + esc(t.foot || "") + '</div>') + '</div>';
     }
-    var open = o.card ? '<div class="ticket" role="link" tabindex="0" data-gid="' + esc(o.card.gid) + '" data-t="' + esc(o.card.t) + '" data-y="' + esc(o.card.y) + '" aria-label="Open the game card">' : '<a class="ticket" href="' + esc(o.href) + '" data-p="week">';
+    var open = o.card ? '<div class="ticket" role="link" tabindex="0" data-gid="' + esc(o.card.gid) + '" data-t="' + esc(o.card.t) + '" data-y="' + esc(o.card.y) + '" aria-label="Open the game card">' :
+      o.cmp ? '<div class="ticket" role="button" tabindex="0" data-cmp="' + esc(o.cmp) + '" aria-label="Compare ' + esc(o.away.name) + ' and ' + esc(o.home.name) + ' side by side">' : '<a class="ticket" href="' + esc(o.href) + '" data-p="week">';
     return open + side(o.away, ca, "a") + side(o.home, ch, "h") +
       '<div class="at">' + (o.neutral ? "VS" : "AT") + '</div>' +
       '<div class="stub"><div><div class="wk">' + esc(o.week) + '</div><div class="dt">' + esc(o.dateLine) + '</div><div class="ven">' + esc(o.venue) + (o.city ? '<br>' + esc(o.city) : '') + '</div></div>' +
       '<div><div class="bc" style="background:' + barcode(o.gid) + '"></div><div class="gid">NO. ' + esc(o.gid) + '</div></div></div>' +
       (o.stamp ? '<div class="stampmark ' + o.stamp.cls + '">' + o.stamp.text + (o.stamp.small ? '<small>' + esc(o.stamp.small) + '</small>' : '') + '</div>' : '') +
-      (o.card ? '</div>' : '</a>');
+      ((o.card || o.cmp) ? '</div>' : '</a>');
   }
 
   // ---------- hero ----------
@@ -5330,7 +5492,8 @@ var FACTS = {
   function goTeam(id){ if (DAWG.select) DAWG.select(id, true); }
   function goPage(p, jump){ if (!DAWG.showPage) return false; DAWG.showPage(p); if (jump){ var el = document.getElementById(jump); if (el) setTimeout(function(){ el.scrollIntoView({block:"start"}); }, 0); } return true; }
   function act(e){
-    var t = e.target.closest("[data-team],[data-p],[data-gid],[data-scroll],[data-jumpin]"); if (!t) return;
+    var t = e.target.closest("[data-team],[data-p],[data-gid],[data-scroll],[data-jumpin],[data-cmp]"); if (!t) return;
+    if (t.hasAttribute("data-cmp")){ e.preventDefault(); var pr = t.getAttribute("data-cmp").split(","); openCmp(pr[0], pr[1], true); return; }
     if (t.hasAttribute("data-jumpin")){ e.preventDefault(); var id = t.getAttribute("data-jumpin"); if (curView !== "home" && DAWG.showPage) DAWG.showPage("home"); jumpIn(id); return; }
     if (t.hasAttribute("data-team")){ if (!DAWG.select) return; e.preventDefault(); goTeam(t.getAttribute("data-team")); }
     else if (t.hasAttribute("data-gid")){ if (!DAWG.openCard) return; e.preventDefault(); DAWG.openCard(t.getAttribute("data-y"), t.getAttribute("data-t"), t.getAttribute("data-gid")); }
@@ -5338,17 +5501,18 @@ var FACTS = {
     else if (t.hasAttribute("data-p")){ if (goPage(t.getAttribute("data-p"), t.getAttribute("data-jump"))) e.preventDefault(); }
   }
   root.addEventListener("click", act);
-  root.addEventListener("keydown", function(e){ if (e.key === "Enter" && e.target.closest && e.target.closest("[data-gid],[data-team]:not(a)")) act(e); });
+  root.addEventListener("keydown", function(e){ if ((e.key === "Enter" || (e.key === " " && e.target.matches && e.target.matches("div[data-cmp]"))) && e.target.closest && e.target.closest("[data-gid],[data-team]:not(a),div[data-cmp]")){ if (e.key === " ") e.preventDefault(); act(e); } });
   // ---------- views: the homepage and Quarterbacks (#qbs) share the masthead and footer ----------
   var curView = "home";
   function setView(v, team){
-    if (["home","qbs","team"].indexOf(v) < 0) return;
+    if (["home","qbs","team","week"].indexOf(v) < 0) return;
     if (v === "team"){ if (!protoTeam(team)) return; if (team !== tp.id){ tp.id = team; tp.season = null; tp.all = false; } }
     curView = v;
     qa(".view").forEach(function(m){ m.hidden = m.getAttribute("data-view") !== v; });
     qa(".nav a[data-p]").forEach(function(a){ var on = a.getAttribute("data-p") === v; a.classList.toggle("on", on); if (on) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current"); });
     if (v === "qbs") drawQBPage();
     if (v === "team") drawTeamPage();
+    if (v === "week") drawWeekPage();
   }
   document.addEventListener("dawg:page", function(e){ var d = e.detail || {}; var pg = typeof d === "string" ? d : d.page; setView(pg, d.team); if (pg === "home" && d.requested === "rankings") jumpIn("rankings-sec"); });
   function jumpIn(id){ var el = $(id); if (el) setTimeout(function(){ el.scrollIntoView({block:"start"}); }, 0); }
@@ -5534,7 +5698,7 @@ var FACTS = {
     if (U && U.game){ var g = U.game, oppId = g.away.id === T.id ? g.home.id : g.away.id;
       nx = '<span class="kicker">Up next · Week ' + U.week + '</span>' + ticket(D, {away: {id: g.away.id, name: g.away.name, rank: g.away.ap, foot: ord(g.away.rank) + " of " + D.n}, home: {id: g.home.id, name: g.home.name, rank: g.home.ap, foot: ord(g.home.rank) + " of " + D.n},
         neutral: g.neutral, week: "Week " + U.week, dateLine: (g.when.day + " · " + g.when.date + " · " + g.when.time).toUpperCase() + (g.when.net ? " · " + g.when.net.toUpperCase() : ""), venue: "", city: "", gid: g.gid || (T.id + "-" + oppId), href: "/#week"}) +
-        '<p class="t-watch">' + esc(g.watch) + '</p><a class="link" href="/#week" data-p="week">This week’s slate <span aria-hidden="true">→</span></a>'; }
+        '<p class="t-watch">' + esc(g.watch) + '</p>' + (D.meta[oppId] ? '<a class="link t-cmplink" href="/#week" data-cmp="' + T.id + ',' + oppId + '">Compare ' + esc(T.name) + ' and ' + esc(D.meta[oppId].name) + ' side by side <span aria-hidden="true">→</span></a> ' : '') + '<a class="link" href="/#week" data-p="week">This week’s slate <span aria-hidden="true">→</span></a>'; }
     else if (U){ nx = '<span class="kicker">Up next · Week ' + U.week + '</span><div class="t-bye"><div class="stampmark e">Bye<small>Week ' + U.week + '</small></div><p>' + esc(T.name) + ' is off this week.</p></div>'; }
     var dupe = U && U.game && T.after && (U.game.away.id === T.after.id || U.game.home.id === T.after.id);   // next_games.json can hold this week's game itself
     if (cur && T.after && D.meta[T.after.id] && !dupe){ var a = T.after, d = new Date(a.dt); nx += '<div class="t-after"><span class="kicker">' + (U && !U.game ? 'After the bye' : 'Then') + '</span><div class="t-after-g">' + logo(a.id) + '<div><b>' + (a.at === "at" ? "at " : "vs ") + (a.rk ? 'No. ' + a.rk + ' ' : '') + tlink(a.id, a.name) + esc(a.name) + '</a></b><small>' + DAYS[d.getUTCDay()] + ', ' + MON[d.getUTCMonth()] + ' ' + d.getUTCDate() + '</small></div></div></div>'; }
@@ -5630,6 +5794,95 @@ var FACTS = {
       var hits = D.rankings.filter(function(r){ return r.name.toLowerCase().indexOf(v) === 0 || r.name.toLowerCase().indexOf(" " + v) >= 0 || r.abbr.toLowerCase() === v || r.conf.toLowerCase() === v; }).slice(0, 8);
       res.hidden = false; res.innerHTML = hits.length ? hits.map(function(r){ return tlink(r.id, r.name) + '<span class="r">' + r.rk + '</span>' + logo(r.id) + '<span>' + esc(r.name) + ' <span class="dim">' + r.w + '–' + r.l + '</span></span><span class="g">' + signed(r.dawg) + '</span></a>'; }).join("") : '<div class="none">No Power 4 team matches that.</div>'; });
     root.addEventListener("click", function(e){ if (!e.target.closest || !e.target.closest(".t-find")){ res.hidden = true; } });
+  })();
+
+
+  // ---------- This Week (2.0). The slate is HOME.slate (preview_site.json, the file the current This Week page draws), first 10 games as before.
+  // Compare reads its rows from the site's own compare (DAWG.compareData), so every metric, definition and "better side" is the current page's. ----------
+  var TIERW = {up:"top third", mid:"middle third", dn:"bottom third"};
+  function kick(w){   // kickoff pieces, tolerant of a missing time or network
+    w = w || {}; var t = (w.time || "").trim(); if (!t || /^(tbd|tba)$/i.test(t)) t = ""; 
+    return {day: w.day || "", date: w.date || "", time: t, net: (w.net || "").trim(), when: [w.day, w.date].filter(Boolean).join(", ") || "Date TBA"};
+  }
+  function kickLine(w){ var k = kick(w); return [k.day, k.date, k.time || "Time TBA", k.net].filter(Boolean).join(" · "); }
+  function rankTxt(t, n){ return t.rank ? ord(t.rank) + " of " + n : "Not graded"; }
+  function teamName(t){ return window.HOME.meta[t.id] ? tlink(t.id, t.name) + esc(t.name) + '</a>' : esc(t.name); }
+  function canCmp(g){ var M = window.HOME.meta; return !!(M[g.away.id] && M[g.home.id]); }
+  function drawWeekPage(){
+    var D = window.HOME, S = (D.slate || []).slice(0, 10), n = D.n || 68;
+    $("wk-kicker").textContent = D.nextWeek ? "Week " + D.nextWeek + " · " + D.season : "This week";
+    if (!S.length){ $("wk-feat").innerHTML = '<p class="note">The next slate shows up here once the schedule is set.</p>'; $("wk-rest-wrap").hidden = true; }
+    else {
+      var g = S[0], k = kick(g.when), fc = canCmp(g) ? g.away.id + "," + g.home.id : null;
+      var tk = ticket(D, {away:{id:g.away.id, name:g.away.name, rank:g.away.ap, foot:rankTxt(g.away, n)}, home:{id:g.home.id, name:g.home.name, rank:g.home.ap, foot:rankTxt(g.home, n)},
+        neutral:g.neutral, week:D.nextWeek ? "Week " + D.nextWeek : "This week", dateLine:kickLine(g.when).toUpperCase(), venue:g.venue || "", city:g.city || "", gid:g.gid, href:"/#week", cmp:fc});
+      function rrow(lbl, fa, fb){ return '<tr><td class="k">' + lbl + '</td><td class="v">' + fa + '</td><td class="v">' + fb + '</td></tr>'; }
+      function rk(t){ return t.rank ? '<b class="tier ' + esc(t.tier || "") + '">' + ord(t.rank) + '</b> <small>of ' + n + (TIERW[t.tier] ? ' · ' + TIERW[t.tier] : '') + '</small>' : '<span class="dim">Not graded</span>'; }
+      var receipt = '<div class="ledger wk-ledger"><h3><span>Where they stand</span><span>' + esc(D.season) + ' season</span></h3><table>' +
+        '<tr class="hd"><td class="k"></td><td class="v">' + esc(g.away.name) + '</td><td class="v">' + esc(g.home.name) + '</td></tr>' +
+        rrow("AP poll", g.away.ap ? "No. " + g.away.ap : '<span class="dim">Unranked</span>', g.home.ap ? "No. " + g.home.ap : '<span class="dim">Unranked</span>') +
+        rrow('Living up to expectations<small>Rank among ' + n + ' Power 4 teams</small>', rk(g.away), rk(g.home)) + '</table></div>';
+      $("wk-feat").innerHTML = '<div class="wk-feat-tk">' + tk + '</div><div class="wk-feat-copy">' +
+        '<span class="kicker">Game of the week' + (g.tier ? ' · ' + esc(g.tier) + ' stage' : '') + '</span>' +
+        '<h3>' + teamName(g.away) + ' <span class="vs">' + (g.neutral ? 'vs.' : 'at') + '</span> ' + teamName(g.home) + '</h3>' +
+        '<p class="wk-kick"><b>' + esc(k.when) + '</b>' + (k.time ? ' · ' + esc(k.time) : ' · <span class="dim">Time TBA</span>') + (k.net ? ' · ' + esc(k.net) : '') + (g.venue ? '<span>' + esc(g.venue) + (g.city ? ', ' + esc(g.city) : '') + '</span>' : '') + '</p>' +
+        (g.why && g.why.length ? '<div class="why">' + g.why.map(function(w){ return '<span>' + esc(w) + '</span>'; }).join("") + '</div>' : '') +
+        receipt + (g.watch ? '<p class="wk-watch">' + esc(g.watch) + '</p>' : '') +
+        '<div class="wk-acts">' + (fc ? '<button type="button" class="btn" data-cmp="' + fc + '">Compare side by side <span aria-hidden="true">→</span></button>' : '') + '</div></div>';
+      var R = S.slice(1); $("wk-rest-wrap").hidden = !R.length; $("wk-count").textContent = R.length ? R.length + " more game" + (R.length === 1 ? "" : "s") + ", biggest stage first" : "";
+      $("wk-grid").innerHTML = R.map(function(g){
+        var ca = teamColor(D, g.away.id), ch = teamColor(D, g.home.id), k = kick(g.when), c = canCmp(g) ? g.away.id + "," + g.home.id : null;
+        function tm(t, col, cls){ return '<div class="tm ' + cls + ' ' + textCls(col) + '" style="background:' + col + '">' + logo(t.id) + '<div class="n">' + (t.ap ? '<small>No. ' + t.ap + ' AP</small>' : '') + teamName(t) + '<small>' + rankTxt(t, n) + '</small></div></div>'; }
+        return '<article class="wg" data-gid-pv="' + esc(g.gid) + '">' +
+          '<div class="wg-h">' + (g.tier ? '<span class="wg-tier">' + esc(g.tier) + ' stage</span>' : '') + '<span class="wg-why">' + esc((g.why || []).join(". ")) + ((g.why || []).length ? "." : "") + '</span></div>' +
+          '<div class="mini wg-mini"' + (c ? ' data-cmp="' + c + '"' : '') + '><div class="wk">' + esc(k.day || "TBA") + '<b>' + esc((k.date || "").replace(/^\w+ /, "")) + '</b><span>' + esc((k.date || "").split(" ")[0]) + '</span></div>' +
+          '<div class="mid">' + tm(g.away, ca, "a") + tm(g.home, ch, "h") + '<div class="at">' + (g.neutral ? 'VS' : 'AT') + '</div></div>' +
+          '<div class="stub"><b>' + (k.time ? esc(k.time) : 'Time TBA') + (k.net ? ' · ' + esc(k.net) : '') + '</b>' + (g.venue || g.city ? '<span>' + esc(g.venue || g.city) + '</span>' : '') + '</div></div>' +
+          '<div class="wg-f">' + (g.watch ? '<p>' + esc(g.watch) + '</p>' : '<p></p>') + (c ? '<button type="button" class="linkbtn" data-cmp="' + c + '">Compare <span aria-hidden="true">→</span></button>' : '') + '</div></article>';
+      }).join("");
+    }
+    cmpInit(); drawCmp();
+  }
+  // ---- Compare two teams ----
+  var cmp = {a: null, b: null};
+  function cmpInit(){
+    if (cmp.a) return;
+    var la = document.getElementById("cmpa"), lb = document.getElementById("cmpb");   // the site's own default (your team's game, else the top game)
+    cmp.a = la && la.value; cmp.b = lb && lb.value;
+    var M = window.HOME.meta, ids = Object.keys(M).sort(function(x, y){ return M[x].name.localeCompare(M[y].name); });
+    if (!M[cmp.a]) cmp.a = ids[0]; if (!M[cmp.b] || cmp.b === cmp.a) cmp.b = ids.filter(function(x){ return x !== cmp.a; })[0];
+    var o = ids.map(function(id){ return '<option value="' + id + '">' + esc(M[id].name) + '</option>'; }).join("");
+    $("cmpa2").innerHTML = o; $("cmpb2").innerHTML = o;
+  }
+  function drawCmp(){
+    var D = window.HOME, M = D.meta, a = cmp.a, b = cmp.b; if (!a || !b) return;
+    $("cmpa2").value = a; $("cmpb2").value = b;
+    var rows = DAWG.compareData ? DAWG.compareData(a, b) : null;
+    if (!rows){ $("cmp2").innerHTML = '<p class="dim">Comparison unavailable.</p>'; return; }
+    var ca = teamColor(D, a), cb = teamColor(D, b);
+    function cell(v, cls, win, ab){   // the site's value as-is; a trailing note (e.g. "· 21% since 2019") sits beside the number, outside the highlight
+      var i = String(v).indexOf('<span class="dim">'), main = i >= 0 ? String(v).slice(0, i).trim() : v, sub = i >= 0 ? String(v).slice(i) : "";
+      return '<div class="cmp-v ' + cls + (win ? ' win' : '') + '" role="cell"><span class="cmp-who">' + esc(ab) + '</span><span class="cmp-val"><span class="cmp-n">' + main + '</span>' + (sub ? ' <span class="cmp-sub">' + sub + '</span>' : '') + '</span></div>'; }
+    function head(id, col, cls){ return '<div class="cmp-th ' + cls + ' ' + textCls(col) + '" role="columnheader" style="background:' + col + '">' + logo(id) + tlink(id, M[id].name) + esc(M[id].name) + '</a></div>'; }
+    $("cmp2").innerHTML = '<div class="cmp-hd" role="row"><div class="cmp-corner" role="columnheader"><span>' + esc(D.season) + ' season</span></div>' + head(a, ca, "a") + head(b, cb, "b") + '</div>' +
+      rows.map(function(r){
+        return '<div class="cmp-r" role="row"><div class="cmp-k" role="rowheader"><b>' + esc(r.k) + '</b>' + (r.s ? '<small>' + esc(r.s) + '</small>' : '') + '</div>' +
+          cell(r.a, "a", r.win === "a", M[a].abbr) + cell(r.b, "b", r.win === "b", M[b].abbr) + '</div>';
+      }).join("");
+  }
+  function openCmp(a, b, scroll){
+    var M = window.HOME.meta; if (!M[a] || !M[b]) return;
+    cmpInit(); cmp.a = a; cmp.b = b;
+    if (DAWG.openCompare) DAWG.openCompare(a, b);   // keeps the site's compare (and its share image) on the same two teams
+    if (curView !== "week" && DAWG.showPage) DAWG.showPage("week"); else drawCmp();
+    if (scroll){ var el = $("wk-cmp"); if (el) setTimeout(function(){ el.scrollIntoView({block:"start"}); }, 0); }
+  }
+  (function(){
+    if (!$("cmpa2")) return;
+    $("cmpa2").addEventListener("change", function(){ openCmp(this.value, cmp.b, false); });
+    $("cmpb2").addEventListener("change", function(){ openCmp(cmp.a, this.value, false); });
+    $("cmp-swap").addEventListener("click", function(){ openCmp(cmp.b, cmp.a, false); });
+    $("cmp-share").addEventListener("click", function(){ if (!DAWG.shareCompare || !DAWG.shareCompare(this)) this.textContent = "Share unavailable"; });
   })();
 
   var D = window.HOME;
