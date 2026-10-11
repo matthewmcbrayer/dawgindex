@@ -6966,10 +6966,15 @@ var FACTS = {
   setView(host.getAttribute("data-view") || "home", host.getAttribute("data-team"));
   // a deep link's in-page jump (#rankings, #real) waits for load, so the browser's own scroll restore can't undo it
   (function(){ var want = {rankings: "rankings-sec", real: "m2-real-sec"}[host.getAttribute("data-requested")]; if (!want) return;
-    var el = $(want), y0 = null; if (!el) return;
-    setTimeout(function(){ el.scrollIntoView({block:"start"}); y0 = window.scrollY; }, 0);   // right away
-    var again = function(){ setTimeout(function(){ if (y0 === null || Math.abs(window.scrollY - y0) < 4 || window.scrollY === 0) el.scrollIntoView({block:"start"}); }, 30); };   // and once more after load, unless the reader has scrolled
-    if (document.readyState === "complete") again(); else window.addEventListener("load", again); })();
+    var el = $(want), t0 = Date.now(), user = false; if (!el) return;
+    ["wheel", "touchstart", "keydown", "mousedown"].forEach(function(t){ window.addEventListener(t, function(){ user = true; }, {once: true, passive: true}); });
+    var land = function(){ if (!user && Date.now() - t0 < 5000 && el.getClientRects().length && Math.abs(el.getBoundingClientRect().top) > 1) el.scrollIntoView({block:"start"}); };
+    setTimeout(function(){ el.scrollIntoView({block:"start"}); }, 0);   // right away
+    // and again after load, and after late web fonts reflow the masthead and the page above the section (which moves scrollY without
+    // the reader touching anything), for the first few seconds only and never once the reader has started scrolling
+    var again = function(){ setTimeout(land, 30); };
+    if (document.readyState === "complete") again(); else window.addEventListener("load", again);
+    if (document.fonts){ if (document.fonts.ready) document.fonts.ready.then(again); if (document.fonts.addEventListener) document.fonts.addEventListener("loadingdone", again); } })();
 })();
 
 </script>
