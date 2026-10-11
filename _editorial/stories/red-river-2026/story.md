@@ -30,7 +30,7 @@ scoreboard:
     pts: 27
   mid:
   - Final
-  - Red River
+  - Red River Rivalry
   right:
     name: Texas
     note: No. 1 · 4–0

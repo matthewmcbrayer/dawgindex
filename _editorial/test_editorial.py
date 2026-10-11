@@ -69,7 +69,8 @@ def main():
     live_page, live_og = git_main("stories/red-river-2026/index.html"), git_main("stories/red-river-2026/og.png")
     # corrections Matthew approved after publication: the built page must equal main with exactly these applied
     CORRECTIONS = [(b'A single game\'s PLAY is good to about \xc2\xb112 points.',
-                    b'Snap-by-snap results vary a lot, so a single game\'s PLAY has a margin of error of roughly \xc2\xb121 points (a 95% range; one standard error is about \xc2\xb111).')]
+                    b'Snap-by-snap results vary a lot, so a single game\'s PLAY has a margin of error of roughly \xc2\xb121 points (a 95% range; one standard error is about \xc2\xb111).'),
+                   (b'<div class="mid">Final<span>Red River</span></div>', b'<div class="mid">Final<span>Red River Rivalry</span></div>')]
     for a, b_ in CORRECTIONS:
         if a in live_page: live_page = live_page.replace(a, b_)
 
