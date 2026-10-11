@@ -1,0 +1,31 @@
+/* /stories/ index (added to story.css) */
+.st-head{padding:44px 0 26px;border-bottom:2px solid var(--ink);margin-bottom:30px}
+.kicker{display:inline-block;font-family:var(--cond);font-weight:800;font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:var(--red);margin-bottom:8px}
+.st-h{font-family:var(--display);font-weight:900;text-transform:uppercase;line-height:.86;font-size:clamp(56px,9vw,112px);margin:0}
+.st-note{font-size:19px;line-height:1.45;color:var(--ink-2);margin:16px 0 0;max-width:640px}
+.st-list{padding:0 0 64px}
+.st-card{display:grid;grid-template-columns:1fr;border:2px solid var(--ink);background:var(--paper-2);text-decoration:none;color:inherit;transition:transform .15s,box-shadow .15s}
+.st-card:hover{transform:translate(-2px,-2px);box-shadow:4px 4px 0 var(--ink)}
+.st-card.lead{grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);margin-bottom:28px}
+.st-art{background:var(--ink);aspect-ratio:16/9;overflow:hidden;border-bottom:2px solid var(--ink)}
+.st-card.lead .st-art{border-bottom:0;border-right:2px solid var(--ink);aspect-ratio:auto}
+.st-art img{width:100%;height:100%;object-fit:cover;display:block}
+.st-copy{padding:20px 22px 22px;display:flex;flex-direction:column;gap:10px}
+.st-cat{display:inline-block;align-self:flex-start;background:var(--red);color:#fff;font-family:var(--cond);font-weight:800;font-size:13px;letter-spacing:.14em;text-transform:uppercase;padding:6px 10px 5px;transform:rotate(-1.5deg)}
+.st-t{font-family:var(--display);font-weight:900;text-transform:uppercase;line-height:.92;margin:4px 0 0;font-size:30px;text-wrap:balance}
+.st-card.lead .st-t{font-size:clamp(34px,3.6vw,50px)}
+.st-d{font-size:16px;line-height:1.45;color:var(--ink-2);margin:0}
+.st-card.lead .st-d{font-size:17.5px}
+.st-m{font-family:var(--mono);font-size:12px;color:var(--muted);margin-top:auto}
+.st-go{font-weight:700;font-size:12.5px;letter-spacing:.08em;text-transform:uppercase;border-bottom:2px solid var(--ink);align-self:flex-start;padding-bottom:1px}
+.st-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px}
+.st-empty{font-size:18px;color:var(--ink-2)}
+@media (max-width:760px){
+  .st-head{padding:30px 0 20px;margin-bottom:22px}
+  .st-note{font-size:17px}
+  .st-card.lead{grid-template-columns:1fr}
+  .st-card.lead .st-art{border-right:0;border-bottom:2px solid var(--ink);aspect-ratio:16/9}
+  .st-copy{padding:16px 16px 18px}
+  .st-grid{grid-template-columns:1fr;gap:18px}
+  .st-t{font-size:28px}
+}

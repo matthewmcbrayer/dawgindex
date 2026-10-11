@@ -1,0 +1,25 @@
+{
+ "version": 1,
+ "stories": [
+  {
+   "slug": "red-river-2026",
+   "url": "/stories/red-river-2026/",
+   "title": "BOOMER SOONER! What Did We Actually Learn?",
+   "headline": {
+    "big": "Boomer Sooner!",
+    "sub": "What did we actually learn?"
+   },
+   "tab": "Red River Rivalry · Week 6",
+   "category": "Game story",
+   "date": "2026-10-11",
+   "teams": [
+    "oklahoma",
+    "texas"
+   ],
+   "dek": "Oklahoma beat No. 1 Texas while getting outgained by 144 yards. Its defense and special teams scored 14 points. Its offense scored 13.",
+   "image": "/stories/red-river-2026/card.png",
+   "image_alt": "Where the points came from: Oklahoma's offense scored 13 points, its defense and special teams 14; Texas's offense scored all 24.",
+   "og_image": "/stories/red-river-2026/og.png"
+  }
+ ]
+}
