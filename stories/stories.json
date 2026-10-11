@@ -3,6 +3,7 @@
  "stories": [
   {
    "slug": "red-river-2026",
+   "status": "published",
    "url": "/stories/red-river-2026/",
    "title": "BOOMER SOONER! What Did We Actually Learn?",
    "headline": {
@@ -15,6 +16,14 @@
    "teams": [
     "oklahoma",
     "texas"
+   ],
+   "team_ids": [
+    "201",
+    "251"
+   ],
+   "team_names": [
+    "Oklahoma",
+    "Texas"
    ],
    "dek": "Oklahoma beat No. 1 Texas while getting outgained by 144 yards. Its defense and special teams scored 14 points. Its offense scored 13.",
    "image": "/stories/red-river-2026/card.png",

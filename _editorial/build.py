@@ -108,6 +108,16 @@ def team_slugs(repo):
     return slugs
 
 
+def team_ids(repo):
+    """slug -> ESPN team id, from the published team data files (the same files the team pages read)."""
+    import glob
+    out = {}
+    for f in glob.glob(os.path.join(repo, "data", "team", "*.json")):
+        d = json.loads(read(f))
+        out[re.sub(r"['&]", "", d["name"].lower().replace(" ", "-"))] = str(d["id"])
+    return out
+
+
 def team_names(repo, slugs):
     out = {}
     for s in slugs:
@@ -254,11 +264,13 @@ def story_page(fm, body, tpl_dir, preview=False):
     return page
 
 
-def manifest_entry(fm):
+def manifest_entry(fm, ids, names):
     base = f"/stories/{fm['slug']}/"
     h = fm.get("headline") or {}
-    e = {"slug": fm["slug"], "url": base, "title": fm["title"], "headline": {"big": h.get("big") or fm["title"], "sub": h.get("sub")},
-         "tab": fm["tab"], "category": fm["category"], "date": fm["date"], "teams": list(fm.get("teams") or []),
+    teams = list(fm.get("teams") or [])
+    e = {"slug": fm["slug"], "status": "published", "url": base, "title": fm["title"], "headline": {"big": h.get("big") or fm["title"], "sub": h.get("sub")},
+         "tab": fm["tab"], "category": fm["category"], "date": fm["date"], "teams": teams,
+         "team_ids": [ids[x] for x in teams if x in ids], "team_names": [names.get(x, x) for x in teams],
          "dek": fm.get("card_dek") or fm["dek"], "image": base + "card.png", "image_alt": fm["image_alt"], "og_image": base + "og.png"}
     if fm.get("updated"):
         e["updated"] = fm["updated"]
@@ -272,8 +284,8 @@ def legacy_entry(repo, slug):
     g = lambda pat: (html.unescape(m.group(1)) if (m := re.search(pat, s)) else "")
     title = g(r'<meta property="og:title" content="([^"]*)"')
     base = f"/stories/{slug}/"
-    return {"slug": slug, "url": base, "title": title, "headline": {"big": title, "sub": None}, "tab": "", "category": "Story",
-            "date": g(r'<meta property="article:published_time" content="([^"]*)"') or "1970-01-01", "teams": [],
+    return {"slug": slug, "status": "published", "url": base, "title": title, "headline": {"big": title, "sub": None}, "tab": "", "category": "Story",
+            "date": g(r'<meta property="article:published_time" content="([^"]*)"') or "1970-01-01", "teams": [], "team_ids": [], "team_names": [],
             "dek": g(r'<meta name="description" content="([^"]*)"'), "og_image": base + "og.png",
             "image": base + ("card.png" if os.path.isfile(os.path.join(repo, "stories", slug, "card.png")) else "og.png"), "image_alt": title}
 
@@ -282,7 +294,7 @@ def index_page(entries, tpl_dir, names):
     page = read(os.path.join(tpl_dir, "index.html"))
     css = read(os.path.join(tpl_dir, "story.css")).rstrip("\n") + "\n" + read(os.path.join(tpl_dir, "index.css")).rstrip("\n")
     def teams(e):
-        return " · ".join(t(names.get(x, x)) for x in e["teams"])
+        return " · ".join(t(n) for n in (e.get("team_names") or [names.get(x, x) for x in e["teams"]]))
     def card(e, lead):
         meta = t(nice_date(e["date"])) + (" · " + teams(e) if e["teams"] else "")
         cls = "st-card lead" if lead else "st-card"
@@ -387,11 +399,15 @@ def build(repo, dry=False, quiet=False):
         old = {e["slug"]: e for e in json.loads(read(mp)).get("stories", [])}
     live_dirs = {d for d in os.listdir(out) if os.path.isfile(os.path.join(out, d, "index.html"))} if os.path.isdir(out) else set()
     entries = {}
+    ids, names = team_ids(repo), team_names(repo, teams)
+    missing_ids = sorted(t for t in teams if t not in ids)
+    if missing_ids:
+        raise BuildError("no team id for: " + ", ".join(missing_ids) + " (data/team/*.json)")
     if dry:
         log.append(("check", f"{len(stories)} approved source(s) valid"))
     for d, fm, body in stories:
         slug = fm["slug"]
-        entries[slug] = manifest_entry(fm)
+        entries[slug] = manifest_entry(fm, ids, names)
         if dry:
             continue
         dest = os.path.join(out, slug)
@@ -411,7 +427,6 @@ def build(repo, dry=False, quiet=False):
         entries[slug] = old.get(slug) or legacy_entry(repo, slug)
     ordered = sorted(entries.values(), key=lambda e: (e["date"], e["slug"]), reverse=True)
     if not dry:
-        names = team_names(repo, teams)
         write_if_changed(os.path.join(out, "stories.json"), json.dumps({"version": 1, "stories": ordered}, ensure_ascii=False, indent=1) + "\n", log)
         write_if_changed(os.path.join(out, "index.html"), index_page(ordered, tpl, names), log)
         write_if_changed(os.path.join(out, "sitemap.xml"), sitemap(ordered), log)

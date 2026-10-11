@@ -1092,6 +1092,50 @@ h2{font-family:var(--display);font-weight:900;font-size:clamp(34px,4vw,52px);lin
 .col .score{font-family:var(--display);font-weight:900;font-size:60px;line-height:.85;margin:2px 0 10px}
 .col .score span{color:var(--muted);font-weight:700;font-size:.5em;margin:0 6px}
 
+/* ---------- beyond the score (editorial; published stories only, from /stories/stories.json) ---------- */
+.beyond{padding:56px 0 60px;border-bottom:2px solid var(--ink)}
+.beyond .sechead-note .link{margin-left:4px}
+.bt-grid{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(0,1fr);gap:32px;align-items:start}
+.bt-grid.solo{grid-template-columns:1fr}
+.bt-lead{display:grid;grid-template-columns:1fr;border:2px solid var(--ink);background:var(--paper-2);text-decoration:none;color:inherit;transition:transform .15s,box-shadow .15s}
+.bt-grid.solo .bt-lead{grid-template-columns:minmax(0,1.15fr) minmax(0,1fr)}
+.bt-lead:hover,.bt-lead:focus-visible{transform:translate(-2px,-2px);box-shadow:4px 4px 0 var(--ink)}
+.bt-art{background:var(--ink);aspect-ratio:16/9;overflow:hidden;border-bottom:2px solid var(--ink)}
+.bt-grid.solo .bt-art{border-bottom:0;border-right:2px solid var(--ink);aspect-ratio:auto;min-height:100%}
+.bt-art img{width:100%;height:100%;object-fit:cover}
+.bt-copy{padding:22px 24px 24px;display:flex;flex-direction:column;gap:10px}
+.bt-cat{display:inline-block;align-self:flex-start;background:var(--red);color:#fff;font-family:var(--cond);font-weight:800;font-size:13px;letter-spacing:.14em;text-transform:uppercase;padding:6px 10px 5px;transform:rotate(-1.5deg)}
+.bt-t{font-family:var(--display);font-weight:900;text-transform:uppercase;line-height:.9;margin:4px 0 0;font-size:clamp(34px,3.6vw,52px);text-wrap:balance}
+.bt-d{font-size:17px;line-height:1.45;color:var(--ink-2);margin:0}
+.bt-m{font-family:var(--mono);font-size:12px;color:var(--muted);margin-top:auto}
+.bt-go{font-family:var(--body);font-weight:700;font-size:12.5px;letter-spacing:.08em;text-transform:uppercase;border-bottom:2px solid var(--ink);align-self:flex-start;padding-bottom:1px}
+.bt-list{display:flex;flex-direction:column;border-top:2px solid var(--ink)}
+.bt-item{display:grid;grid-template-columns:112px minmax(0,1fr);gap:16px;padding:16px 0;border-bottom:1px solid var(--rule-2);text-decoration:none;color:inherit}
+.bt-item img{width:112px;height:63px;object-fit:cover;border:1.5px solid var(--ink);background:var(--ink)}
+.bt-item .c{font-family:var(--cond);font-weight:800;font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--red)}
+.bt-item h3{font-family:var(--display);font-weight:900;font-size:23px;line-height:.95;text-transform:uppercase;margin:3px 0 5px;text-wrap:balance}
+.bt-item p{font-size:13.5px;color:var(--ink-2);margin:0;line-height:1.4}
+.bt-item:hover h3,.bt-item:focus-visible h3{color:var(--red)}
+.t-stories .sechead{margin-bottom:22px}
+.t-stories-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px}
+.t-stories-grid .bt-lead{grid-template-columns:1fr}
+.t-stories-grid .bt-t{font-size:28px}
+.t-stories-grid .bt-d{font-size:15px}
+.t-stories-all{margin:18px 0 0}
+@media (max-width:1100px){.t-stories-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:820px){
+  .beyond{padding:40px 0 44px}
+  .bt-grid,.bt-grid.solo{grid-template-columns:1fr;gap:22px}
+  .bt-grid.solo .bt-lead{grid-template-columns:1fr}
+  .bt-grid.solo .bt-art{border-right:0;border-bottom:2px solid var(--ink);aspect-ratio:16/9;min-height:0}
+  .bt-copy{padding:18px 16px 20px}
+  .bt-d{font-size:16px}
+  .bt-item{grid-template-columns:96px minmax(0,1fr);gap:12px}
+  .bt-item img{width:96px;height:54px}
+  .bt-item h3{font-size:21px}
+  .t-stories-grid{grid-template-columns:1fr;gap:18px}
+}
+
 /* ---------- rankings ---------- */
 .rank{padding:64px 0 56px}
 .rank-grid{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:48px;align-items:start}
@@ -2044,6 +2088,9 @@ h2{font-family:var(--display);font-weight:900;font-size:clamp(34px,4vw,52px);lin
   .idx-filters{gap:4px 10px}
 }
 @media (max-width:374px){.nav a{font-size:11.5px;letter-spacing:.02em;padding:12px 2px}}
+/* six nav items (STORIES added Oct 11 2026) on one row: 11.5px on phones, 11px at 374px and below; under 360px the row scrolls as before */
+@media (max-width:430px){.nav a{font-size:11.5px;letter-spacing:.01em;padding:12px 2px}}
+@media (max-width:374px){.nav a{font-size:11px;letter-spacing:0;padding:12px 2px}}
 
 /* ---------- rank by DAWG or PLAY; single-game leaderboard by either ---------- */
 .board td.dg,.board td.pl{transition:font-size .12s}
@@ -2129,6 +2176,7 @@ h2{font-family:var(--display);font-weight:900;font-size:clamp(34px,4vw,52px);lin
       <a href="/#team" data-p="team">Teams</a>
       <a href="/#qbs" data-p="qbs">QBs</a>
       <a href="/#week" data-p="week">This Week</a>
+      <a href="/stories/">Stories</a>
       <a href="/#method" data-p="method">How It Works</a>
     </nav>
     <div class="mast-r">
@@ -2169,6 +2217,14 @@ h2{font-family:var(--display);font-weight:900;font-size:clamp(34px,4vw,52px);lin
 <section class="four" id="four-sec" aria-label="The week in four">
   <div class="wrap">
     <div class="four-grid" id="four"></div>
+  </div>
+</section>
+
+<!-- ================= BEYOND THE SCORE: published stories from /stories/stories.json (filled by home.js; hidden until a story loads) ================= -->
+<section class="beyond" id="beyond-sec" aria-labelledby="bt-h" hidden>
+  <div class="wrap">
+    <div class="sechead"><div><span class="kicker">DAWG editorial</span><h2 id="bt-h">Beyond the score</h2></div><p class="sechead-note">Stories built on the numbers: what happened, why it matters, and what it doesn't tell us. <a class="link" href="/stories/">All stories <span aria-hidden="true">→</span></a></p></div>
+    <div class="bt-grid" id="bt-grid"></div>
   </div>
 </section>
 
@@ -2374,6 +2430,13 @@ h2{font-family:var(--display);font-weight:900;font-size:clamp(34px,4vw,52px);lin
       </div>
     </section>
 
+    <!-- beyond the score: published stories tagged with this team (filled by home.js; hidden when there are none) -->
+    <section class="t-sec t-stories" id="t-stories" aria-labelledby="t-stories-h" hidden>
+      <div class="sechead compact"><div><span class="kicker">DAWG editorial</span><h2 id="t-stories-h" class="t-h2">Beyond the score</h2></div></div>
+      <div class="t-stories-grid" id="t-stories-list"></div>
+      <p class="t-stories-all"><a class="link" href="/stories/">All stories <span aria-hidden="true">→</span></a></p>
+    </section>
+
     <!-- season performance -->
     <section class="t-sec" aria-labelledby="t-season-h">
       <div class="sechead compact"><div><span class="kicker" id="t-season-k">Season performance</span><h2 id="t-season-h" class="t-h2">This season by the numbers</h2></div></div>
@@ -2540,7 +2603,7 @@ h2{font-family:var(--display);font-weight:900;font-size:clamp(34px,4vw,52px);lin
       <p>More than the score.</p>
     </div>
     <nav class="foot-nav" aria-label="Footer">
-      <a href="/#rankings" data-p="home" data-jumpin="rankings-sec">Rankings</a><a href="/#team" data-p="team">Teams</a><a href="/#qbs" data-p="qbs">QBs</a><a href="/#week" data-p="week">This Week</a><a href="/#method" data-p="method">How It Works</a><a href="/dawg-index-games.csv">Open data</a>
+      <a href="/#rankings" data-p="home" data-jumpin="rankings-sec">Rankings</a><a href="/#team" data-p="team">Teams</a><a href="/#qbs" data-p="qbs">QBs</a><a href="/#week" data-p="week">This Week</a><a href="/stories/">Stories</a><a href="/#method" data-p="method">How It Works</a><a href="/dawg-index-games.csv">Open data</a>
     </nav>
     <div class="foot-r">
       <a href="https://x.com/dawgindex" aria-label="DAWG Index on X">@dawgindex</a>
@@ -6131,6 +6194,59 @@ var FACTS = {
     t.tBodies[0].addEventListener("keydown", function(e){ if (e.key === "Enter" && e.target.classList.contains("qrow")){ e.preventDefault(); e.target.click(); } });
   })();
 
+  // ---------- Beyond the Score: published stories. /stories/stories.json is written by the editorial build (_editorial/build.py), which only
+  // ever lists stories Matthew approved; this filter is a second guard, so a draft or unapproved entry can never be drawn here.
+  var STORIES = null, SWAIT = null;
+  function loadStories(){
+    if (STORIES) return Promise.resolve(STORIES); if (SWAIT) return SWAIT;
+    SWAIT = fetch("/stories/stories.json?v=" + Math.floor(Date.now() / 600000)).then(function(r){ if (!r.ok) throw new Error("stories"); return r.json(); })
+      .then(function(d){ STORIES = ((d && d.stories) || []).filter(function(s){ return s && s.status === "published" && /^\/stories\/[a-z0-9-]+\/$/.test(s.url || "") && s.title; })
+        .sort(function(a, b){ return a.date < b.date ? 1 : a.date > b.date ? -1 : (a.slug < b.slug ? 1 : -1); }); return STORIES; })
+      .catch(function(e){ SWAIT = null; throw e; });
+    return SWAIT;
+  }
+  function storyDate(d){ var m = ["Jan.", "Feb.", "March", "April", "May", "June", "July", "Aug.", "Sept.", "Oct.", "Nov.", "Dec."], p = String(d).split("-"); return p.length === 3 ? m[+p[1] - 1] + " " + (+p[2]) + ", " + p[0] : ""; }
+  function storyMeta(s){ return esc(storyDate(s.date)) + ((s.team_names || []).length ? " · " + s.team_names.map(esc).join(" · ") : ""); }
+  function storyLead(s){
+    return '<a class="bt-lead" href="' + esc(s.url) + '"><div class="bt-art"><img src="' + esc(s.image) + '" alt="' + esc(s.image_alt || "") + '" loading="lazy"></div>' +
+      '<div class="bt-copy"><span class="bt-cat">' + esc(s.category || "Story") + '</span><h3 class="bt-t">' + esc(s.title) + '</h3><p class="bt-d">' + esc(s.dek || "") + '</p>' +
+      '<div class="bt-m">' + storyMeta(s) + '</div><span class="bt-go">Read the story <span aria-hidden="true">→</span></span></div></a>';
+  }
+  function storyItem(s){
+    return '<a class="bt-item" href="' + esc(s.url) + '"><img src="' + esc(s.image) + '" alt="" loading="lazy"><div><span class="c">' + esc(s.category || "Story") + '</span>' +
+      '<h3>' + esc(s.title) + '</h3><p>' + esc(storyDate(s.date)) + '</p></div></a>';
+  }
+  // Stories arrive after the page has drawn (and maybe after a deep link like /#rankings has scrolled). Showing a section that sits
+  // above where the reader is would push the page down, so keep the content they are looking at in place.
+  function revealSteady(sec, next, show){
+    var top0 = next && next.getBoundingClientRect().top, above = next && top0 < 1 && window.scrollY > 0;   // reader is at or past the insertion point
+    show();
+    if (above){ var d = next.getBoundingClientRect().top - top0; if (Math.abs(d) > 0.5) window.scrollBy(0, d); }
+  }
+  // homepage: one lead story, up to three more (newest first); with a single story the lead runs full width
+  function drawBeyond(){
+    var sec = $("beyond-sec"); if (!sec) return;
+    loadStories().then(function(S){
+      if (!S.length){ sec.hidden = true; return; }
+      var more = S.slice(1, 4);
+      revealSteady(sec, $("rankings-sec"), function(){
+        $("bt-grid").className = "bt-grid" + (more.length ? "" : " solo");
+        $("bt-grid").innerHTML = storyLead(S[0]) + (more.length ? '<div class="bt-list">' + more.map(storyItem).join("") + '</div>' : '');
+        sec.hidden = false;
+      });
+    }).catch(function(){ sec.hidden = true; });
+  }
+  // team page: up to three published stories tagged with this team's ID (newest first); hidden when there are none
+  function drawTeamStories(id){
+    var sec = $("t-stories"); if (!sec) return; sec.hidden = true;
+    loadStories().then(function(S){
+      if (String(tp.id) !== String(id) || curView !== "team") return;
+      var mine = S.filter(function(s){ return (s.team_ids || []).map(String).indexOf(String(id)) >= 0; }).slice(0, 3);
+      if (!mine.length) return;
+      revealSteady(sec, sec.nextElementSibling, function(){ $("t-stories-list").innerHTML = mine.map(storyLead).join(""); sec.hidden = false; });
+    }).catch(function(){ sec.hidden = true; });
+  }
+
   // ---------- team pages (2.0, all 68). HOME.team lists which teams have one; each team's data is /data/team/{id}.json,
   // built by home_data.team_page() from the files the current team page reads, and fetched the first time the page opens. ----------
   var tp = {id: null, season: null, all: false}, TD = {}, TWAIT = {};
@@ -6227,6 +6343,7 @@ var FACTS = {
           '<button type="button" class="linkbtn t-tix-share" data-share="game" data-gid="' + g.id + '" data-t="' + T.id + '" data-y="' + y + '" data-tab="' + (k === "hi" ? "Highest grade" : "Lowest grade") + '" data-kick="' + esc(T.name) + '’s ' + (k === "hi" ? "highest" : "lowest") + ' grade of ' + y + '">Share this game</button></div>'; }
       $("t-story-art").innerHTML = tix(bestG, "hi") + (worstG && worstG !== bestG ? tix(worstG, "lo") : '');
     }
+    drawTeamStories(T.id);
     // ---- season performance: rank by week, the receipt, up next ----
     $("t-season-k").textContent = cur ? "Season performance · " + D.week : "Season performance · " + y;
     $("t-season-h").textContent = cur ? "This season by the numbers" : y + " by the numbers";
@@ -6845,7 +6962,7 @@ var FACTS = {
 
   var D = window.HOME;
   host.__redrawFour = function(){ drawFour(window.HOME); };   // test hook: the poll-gap graphic is checked with extreme gaps (home/test_home.py)
-  if (D && D.rankings && D.rankings.length){ drawHero(D); drawFour(D); wireBoard(D); drawBoard(D); drawChart(D); drawPoll(D); drawSlate(D); drawMore(D); host.setAttribute("data-ready", "1"); }
+  if (D && D.rankings && D.rankings.length){ drawHero(D); drawFour(D); drawBeyond(); wireBoard(D); drawBoard(D); drawChart(D); drawPoll(D); drawSlate(D); drawMore(D); host.setAttribute("data-ready", "1"); }
   setView(host.getAttribute("data-view") || "home", host.getAttribute("data-team"));
   // a deep link's in-page jump (#rankings, #real) waits for load, so the browser's own scroll restore can't undo it
   (function(){ var want = {rankings: "rankings-sec", real: "m2-real-sec"}[host.getAttribute("data-requested")]; if (!want) return;

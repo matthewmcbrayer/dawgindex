@@ -50,6 +50,7 @@ a{color:inherit}
 .nav{display:flex;gap:4px;flex-wrap:wrap;justify-content:flex-end}
 .nav a{font-weight:600;font-size:13.5px;letter-spacing:.06em;text-transform:uppercase;text-decoration:none;padding:8px 12px;border-bottom:3px solid transparent}
 .nav a:hover{border-bottom-color:var(--ink)}
+.nav a[aria-current="page"]{border-bottom-color:var(--red)}
 
 /* article head */
 .ahead{padding:44px 0 30px;border-bottom:2px solid var(--ink)}
@@ -212,7 +213,7 @@ figure{margin:30px 0 34px;padding:22px 22px 18px;background:var(--paper-2);borde
       <span class="descriptor">College Football</span>
     </a>
     <nav class="nav" aria-label="Pages">
-      <a href="/#rankings">Rankings</a><a href="/#team">Teams</a><a href="/#qbs">QBs</a><a href="/#week">This Week</a><a href="/#method">How It Works</a>
+      <a href="/#rankings">Rankings</a><a href="/#team">Teams</a><a href="/#qbs">QBs</a><a href="/#week">This Week</a><a href="/stories/" aria-current="page">Stories</a><a href="/#method">How It Works</a>
     </nav>
   </div>
 </header>
@@ -238,7 +239,7 @@ figure{margin:30px 0 34px;padding:22px 22px 18px;background:var(--paper-2);borde
       <p>More than the score.</p>
     </div>
     <nav class="foot-nav" aria-label="Footer">
-      <a href="/#rankings">Rankings</a><a href="/#team">Teams</a><a href="/#qbs">QBs</a><a href="/#week">This Week</a><a href="/#method">How It Works</a><a href="/dawg-index-games.csv">Open data</a>
+      <a href="/#rankings">Rankings</a><a href="/#team">Teams</a><a href="/#qbs">QBs</a><a href="/#week">This Week</a><a href="/stories/">Stories</a><a href="/#method">How It Works</a><a href="/dawg-index-games.csv">Open data</a>
     </nav>
     <div class="foot-r">
       <a href="https://x.com/dawgindex" aria-label="DAWG Index on X">@dawgindex</a>
