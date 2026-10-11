@@ -92,7 +92,17 @@ def parse_story(path):
     for k in ("date", "approved_at"):
         if isinstance(fm.get(k), (dt.date, dt.datetime)):
             fm[k] = fm[k].isoformat()[:10]
+    if isinstance(fm.get("published_at"), dt.datetime):
+        fm["published_at"] = fm["published_at"].astimezone(dt.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
     return fm, body
+
+
+def local_now():
+    try:
+        from zoneinfo import ZoneInfo
+        return dt.datetime.now(ZoneInfo("America/Chicago"))
+    except Exception:
+        return dt.datetime.now(dt.timezone.utc)
 
 
 def team_slugs(repo):
@@ -272,6 +282,8 @@ def manifest_entry(fm, ids, names):
          "tab": fm["tab"], "category": fm["category"], "date": fm["date"], "teams": teams,
          "team_ids": [ids[x] for x in teams if x in ids], "team_names": [names.get(x, x) for x in teams],
          "dek": fm.get("card_dek") or fm["dek"], "image": base + "card.png", "image_alt": fm["image_alt"], "og_image": base + "og.png"}
+    if fm.get("published_at"):
+        e["published_at"] = str(fm["published_at"])
     if fm.get("updated"):
         e["updated"] = fm["updated"]
     return e
@@ -425,7 +437,7 @@ def build(repo, dry=False, quiet=False):
         else:
             notes.append(f"{slug}: no source in _editorial/stories; kept live and untouched")
         entries[slug] = old.get(slug) or legacy_entry(repo, slug)
-    ordered = sorted(entries.values(), key=lambda e: (e["date"], e["slug"]), reverse=True)
+    ordered = sorted(entries.values(), key=lambda e: (e["date"], e.get("published_at", ""), e["slug"]), reverse=True)   # newest first; same day: latest published first
     if not dry:
         write_if_changed(os.path.join(out, "stories.json"), json.dumps({"version": 1, "stories": ordered}, ensure_ascii=False, indent=1) + "\n", log)
         write_if_changed(os.path.join(out, "index.html"), index_page(ordered, tpl, names), log)
@@ -509,7 +521,10 @@ def approve(repo, draft_dir, by):
     dest = os.path.join(repo, "_editorial", "stories", fm.get("slug", ""))
     if os.path.exists(dest):
         raise BuildError(f"{dest} already exists; edit it there instead")
-    fm["status"], fm["approved_by"], fm["approved_at"] = "published", by.strip(), dt.date.today().isoformat()
+    now = local_now()   # publication is stamped in DAWG's home time zone (Central), not the server's
+    fm["status"], fm["approved_by"], fm["approved_at"] = "published", by.strip(), now.date().isoformat()
+    fm["date"] = now.date().isoformat()                                   # the story's date is the day it goes live
+    fm["published_at"] = now.astimezone(dt.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")   # orders same-day stories
     errs = validate(fm, body, draft_dir, team_slugs(repo), "publish")
     if errs:
         raise BuildError("not approved:\n  - " + "\n  - ".join(errs))

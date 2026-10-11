@@ -68,6 +68,10 @@ new = [e for e in man if e["slug"] == "flow-test-story"]
 check(len(man) == len(man0) + 1 and new and new[0]["status"] == "published" and new[0]["team_ids"] == ["239", "201"],
       "manifest gains the new story automatically (published, team IDs Baylor 239 and Oklahoma 201)", str(new))
 check(not any(e["slug"] == "flow-unapproved" for e in man), "the unapproved draft is not in the manifest")
+import datetime as _dt
+from zoneinfo import ZoneInfo as _Z
+check(new and new[0]["date"] == _dt.datetime.now(_Z("America/Chicago")).date().isoformat() and new[0].get("published_at", "").endswith("Z"),
+      "approve sets the story date to the day it goes live (Central) and records published_at", str(new[:1]))
 check(os.path.isfile(os.path.join(site, "stories/flow-test-story/index.html")) and os.path.isfile(os.path.join(site, "stories/flow-test-story/og.png")),
       "story page and social image are generated")
 check(tree(site) == before, "no file outside stories/ and _editorial/ changed: homepage, team pages and data are not edited by hand or by the build")

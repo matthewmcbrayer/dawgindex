@@ -11,7 +11,7 @@ Separate from the V3 grading pipeline. The build reads `_editorial/` plus `sitem
    - `card.png`: 16:9, at least 1200 wide, the homepage and index art
    - optional `og.png`: 1200×630; generated automatically if missing
 2. **Preview privately:** `python3 _editorial/build.py preview /home/claude/editorial-drafts/<slug>`. This writes outside the repo, marks the page noindex with a "not published" banner, and makes desktop and phone screenshots for Matthew.
-3. **Only after Matthew explicitly approves:** `python3 _editorial/build.py approve /home/claude/editorial-drafts/<slug> --by "Matthew McBrayer"`
+3. **Only after Matthew explicitly approves:** `python3 _editorial/build.py approve /home/claude/editorial-drafts/<slug> --by "Matthew McBrayer"`. This sets the story's date to the day it goes live (Central time) and records `published_at`, which orders stories published the same day (latest first).
 4. **Build:** `python3 _editorial/build.py build`. This writes the page, card, social image, `/stories/` index, `stories.json` and `stories/sitemap.xml`.
 5. **Test:** `python3 _editorial/test_editorial.py` must end with every check passing.
 6. **Commit only `_editorial/` and `stories/`.** Fetch and rebase on `origin/main`, push without force, then verify the live page.
@@ -58,3 +58,11 @@ A pull quote.
 - A live story whose source goes missing stays live, untouched, and stays listed in the manifest, on `/stories/` and in the sitemap.
 - Validation stops the build on any of these: missing fields, unknown team slugs, a slug that clashes with a site folder, a future date, wrong image sizes, or "2.0" in the copy.
 - The same sources always produce byte-identical files.
+
+## House style
+
+**Rivalry names.** Use the full name on first reference, including the word that makes it a name: the Red River Rivalry (never just "Red River"), the Iron Bowl, the Egg Bowl, The Game, the Big Game, the Apple Cup, the Territorial Cup, the Lone Star Showdown, the Sunshine Showdown, the Backyard Brawl, the Holy War, Bedlam. After that, say "the rivalry" or the team names, not a clipped version. For trophy games, name the trophy and the game separately (Paul Bunyan's Axe is the trophy; the game is Minnesota–Wisconsin). Don't use retired or discouraged names ("Civil War" for Oregon–Oregon State, "Red River Shootout", "World's Largest Outdoor Cocktail Party") or sponsor names. When unsure, use the matchup ("Texas–Oklahoma"), and confirm any rivalry name with a quick search before it's published.
+
+**Single-game PLAY variation.** Say: "Single-game PLAY results vary a lot: about 95% of them land within roughly ±21 points, and the standard deviation is about 11 points." Don't call ±21 a margin of error. (6,055 graded games: SD 10.5; 95.5% within ±20.6.)
+
+**Season-average noise.** "Random swings alone put an n-game average anywhere within about ±X points of zero (a 95% range)", with X = 1.96 × 14.1 / √n for DAWG and 1.96 × 10.5 / √n for PLAY.
