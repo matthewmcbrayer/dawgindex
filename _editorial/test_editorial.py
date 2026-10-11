@@ -67,13 +67,19 @@ def make_draft(root, slug="test-sample-story", text=SAMPLE):
 
 def main():
     live_page, live_og = git_main("stories/red-river-2026/index.html"), git_main("stories/red-river-2026/og.png")
+    # corrections Matthew approved after publication: the built page must equal main with exactly these applied
+    CORRECTIONS = [(b'A single game\'s PLAY is good to about \xc2\xb112 points.',
+                    b'Snap-by-snap results vary a lot, so a single game\'s PLAY has a margin of error of roughly \xc2\xb121 points (a 95% range; one standard error is about \xc2\xb111).')]
+    for a, b_ in CORRECTIONS:
+        if a in live_page: live_page = live_page.replace(a, b_)
 
     # ---- 1. Red River survives unchanged
     r = copy_repo(); code, out = run(r, "build")
     check(code == 0, "build succeeds on the current sources", out[-300:])
     page = open(os.path.join(r, "stories/red-river-2026/index.html"), "rb").read()
     art = lambda x: x[x.index(b"<article"):x.index(b"</article>")]
-    check(art(page) == art(live_page), "Red River article (headline through method note) byte-for-byte identical to the live page on main")
+    check(art(page) == art(live_page), "Red River article (headline through method note) byte-for-byte identical to the live page on main, apart from approved corrections")
+    check(b"\xc2\xb112 points" not in page and b"roughly \xc2\xb121 points (a 95% range" in page, "Red River carries the corrected PLAY margin of error (about \u00b121 at 95%), not \u00b112")
     nav_only = lambda x: re.sub(rb'<a href="/stories/"( aria-current="page")?>Stories</a>', b"", x).replace(b'\n.nav a[aria-current="page"]{border-bottom-color:var(--red)}', b"")
     check(nav_only(page) == nav_only(live_page), "the only other change to the Red River page is the Stories nav link and its style")
     check(open(os.path.join(r, "stories/red-river-2026/og.png"), "rb").read() == live_og, "Red River og.png identical to live")
