@@ -2,6 +2,33 @@
  "version": 1,
  "stories": [
   {
+   "slug": "which-florida",
+   "status": "published",
+   "url": "/stories/which-florida/",
+   "title": "Which Florida? From Beating No. 4 Ole Miss to Two Straight Certified SOFTs",
+   "headline": {
+    "big": "Which Florida?",
+    "sub": "A DAWG win over No. 4 Ole Miss, then two Certified SOFTs in a row."
+   },
+   "tab": "Florida · Weeks 4–6",
+   "category": "Analysis",
+   "date": "2026-10-11",
+   "teams": [
+    "florida"
+   ],
+   "team_ids": [
+    "57"
+   ],
+   "team_names": [
+    "Florida"
+   ],
+   "dek": "Florida beat No. 4 Ole Miss by 24, then lost its next two by a combined 47. No other Power 4 team since 2019 has gone DAWG, Certified SOFT, Certified SOFT.",
+   "image": "/stories/which-florida/card.png",
+   "image_alt": "Which Florida? Florida beat No. 4 Ole Miss 52–28 (DAWG +19.6), then lost 45–17 at Missouri (−34.0) and 38–19 to South Carolina (−36.2).",
+   "og_image": "/stories/which-florida/og.png",
+   "published_at": "2026-10-11T23:11:37Z"
+  },
+  {
    "slug": "oregon-ucla-seven-turnovers",
    "status": "published",
    "url": "/stories/oregon-ucla-seven-turnovers/",
