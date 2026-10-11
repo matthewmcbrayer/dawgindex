@@ -2,6 +2,36 @@
  "version": 1,
  "stories": [
   {
+   "slug": "oregon-ucla-seven-turnovers",
+   "status": "published",
+   "url": "/stories/oregon-ucla-seven-turnovers/",
+   "title": "Seven Turnovers. Two Points. Oregon Nearly Won a Game Nobody Wins.",
+   "headline": {
+    "big": "Seven turnovers.",
+    "sub": "Two points. Oregon nearly won a game nobody wins."
+   },
+   "tab": "UCLA at Oregon · Week 6",
+   "category": "Analysis",
+   "date": "2026-10-11",
+   "teams": [
+    "ucla",
+    "oregon"
+   ],
+   "team_ids": [
+    "26",
+    "2483"
+   ],
+   "team_names": [
+    "UCLA",
+    "Oregon"
+   ],
+   "dek": "Seventeen teams have turned it over seven or more times since 2014. All lost. Oregon came closest, and on every other snap it played UCLA about even.",
+   "image": "/stories/oregon-ucla-seven-turnovers/card.png",
+   "image_alt": "Seven turnovers, two points: UCLA 17, Oregon 15. Every team with seven or more giveaways since 2014 lost; Oregon came closest.",
+   "og_image": "/stories/oregon-ucla-seven-turnovers/og.png",
+   "published_at": "2026-10-11T23:00:44Z"
+  },
+  {
    "slug": "red-river-2026",
    "status": "published",
    "url": "/stories/red-river-2026/",

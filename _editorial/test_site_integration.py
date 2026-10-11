@@ -24,7 +24,7 @@ def sample(slug, date, title, status="published", teams=(("baylor", "239", "Bayl
             "dek": "Layout sample for the test suite. Not a real story.", "image": "/stories/red-river-2026/card.png", "image_alt": "", "og_image": "/stories/red-river-2026/og.png"}
 FOUR = {"version": 1, "stories": [
     sample("sample-newest", "2026-10-14", "Sample: the newest story leads the section"),
-    REAL["stories"][0],
+    [e for e in REAL["stories"] if e["slug"] == "red-river-2026"][0],
     sample("sample-third", "2026-10-09", "Sample: a third story in the list"),
     sample("sample-fourth", "2026-10-08", "Sample: a fourth story in the list"),
     sample("sample-fifth", "2026-10-07", "Sample: a fifth story should not show"),
@@ -79,8 +79,10 @@ with sync_playwright() as p:
               all: [...sec.querySelectorAll('a')].some(a => a.getAttribute('href') === '/stories/')};""")
         i4, ib, ir = o["ids"].index("four-sec"), o["ids"].index("beyond-sec"), o["ids"].index("rankings-sec")
         check(ib == i4 + 1 and ir == ib + 1, f"{w}px: Beyond the Score sits right after the four cards and before Rankings", str(o["ids"][:5]))
-        check(not o["hidden"] and o["solo"] and o["lead"] == "/stories/red-river-2026/" and o["items"] == 0, f"{w}px: one published story shows as a full-width lead", str(o))
-        check(o["title"] == "BOOMER SOONER! What Did We Actually Learn?" and "Oct. 11, 2026" in o["meta"] and "Oklahoma" in o["meta"], f"{w}px: lead card shows the title, date and teams from the story list")
+        L = [e for e in REAL["stories"] if e.get("status") == "published"]; top = L[0]
+        check(not o["hidden"] and o["solo"] == (len(L) == 1) and o["lead"] == top["url"] and o["items"] == min(len(L) - 1, 3), f"{w}px: the newest published story leads ({len(L)} live: lead + {min(len(L) - 1, 3)} more)", str(o))
+        mo = ["Jan.", "Feb.", "March", "April", "May", "June", "July", "Aug.", "Sept.", "Oct.", "Nov.", "Dec."]; y, m_, d_ = top["date"].split("-")
+        check(o["title"] == top["title"] and f"{mo[int(m_) - 1]} {int(d_)}, {y}" in o["meta"] and top["team_names"][0] in o["meta"], f"{w}px: lead card shows the title, date and teams from the story list")
         check(o["all"], f"{w}px: section links to /stories/")
         check(o["nav"] == "/stories/" and o["foot"] == "/stories/", f"{w}px: STORIES is in the header nav and footer nav, linking to /stories/")
         check(o["navVisible"] and o["navFits"], f"{w}px: every header nav item, STORIES included, is visible without scrolling the nav", f"visible {o['navVisible']} fits {o['navFits']}")
@@ -137,14 +139,15 @@ with sync_playwright() as p:
     c.close()
 
     # team pages: stories tagged with the team's ID
-    for slug, tid, expect in (("oklahoma", "201", True), ("texas", "251", True), ("baylor", "239", False)):
+    for slug, tid in (("oklahoma", "201"), ("texas", "251"), ("baylor", "239"), ("ucla", "26"), ("oregon", "2483"), ("florida", "57")):
+        want = [e["url"] for e in REAL["stories"] if e.get("status") == "published" and tid in (e.get("team_ids") or [])][:3]; expect = bool(want)
         for w in (1280, 390, 360):
             c, pg, errs = page(b, w, url=f"https://preview.local/?team={slug}")
             pg.wait_for_timeout(1500)
             o = js(pg, """const s = r.getElementById('t-stories'); return {view: [...r.querySelectorAll('main.view')].filter(m => !m.hidden).map(m => m.getAttribute('data-view')),
                 hidden: s.hidden, links: [...s.querySelectorAll('.bt-lead')].map(a => a.getAttribute('href'))};""")
-            ok = (not o["hidden"] and o["links"] == ["/stories/red-river-2026/"]) if expect else (o["hidden"] and not o["links"])
-            check(o["view"] == ["team"] and ok, f"{slug} team page ({tid}) at {w}px: " + ("shows the Red River story" if expect else "no tagged stories, section hidden"), str(o))
+            ok = (not o["hidden"] and o["links"] == want) if expect else (o["hidden"] and not o["links"])
+            check(o["view"] == ["team"] and ok, f"{slug} team page ({tid}) at {w}px: " + (f"shows its {len(want)} tagged stor{'y' if len(want) == 1 else 'ies'}, newest first" if expect else "no tagged stories, section hidden"), str(o))
             sec_ov = js(pg, "const s = r.getElementById('t-stories'); if (s.hidden) return 0; return Math.max(0, ...[s, ...s.querySelectorAll('*')].map(e => e.getBoundingClientRect().right - document.documentElement.clientWidth));")
             check(sec_ov <= 0.5 and not errs, f"{slug} team page at {w}px: stories section fits the screen, no script errors", f"{sec_ov} {errs}")
             if SHOTS and expect and slug == "oklahoma":

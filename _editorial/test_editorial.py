@@ -65,6 +65,8 @@ def make_draft(root, slug="test-sample-story", text=SAMPLE):
     shutil.copy(os.path.join(REPO, "_editorial", "stories", "red-river-2026", "card.png"), os.path.join(d, "card.png"))
     return d
 
+N_LIVE = len(json.load(open(os.path.join(REPO, "stories", "stories.json")))["stories"])   # stories live in the repo right now
+
 def main():
     live_page, live_og = git_main("stories/red-river-2026/index.html"), git_main("stories/red-river-2026/og.png")
     # corrections Matthew approved after publication: the built page must equal main with exactly these applied
@@ -84,7 +86,7 @@ def main():
     nav_only = lambda x: re.sub(rb'<a href="/stories/"( aria-current="page")?>Stories</a>', b"", x).replace(b'\n.nav a[aria-current="page"]{border-bottom-color:var(--red)}', b"")
     check(nav_only(page) == nav_only(live_page), "the only other change to the Red River page is the Stories nav link and its style")
     check(open(os.path.join(r, "stories/red-river-2026/og.png"), "rb").read() == live_og, "Red River og.png identical to live")
-    m1 = json.load(open(os.path.join(r, "stories/stories.json")))["stories"][0]
+    m1 = [e for e in json.load(open(os.path.join(r, "stories/stories.json")))["stories"] if e["slug"] == "red-river-2026"][0]
     check(m1["status"] == "published" and m1["team_ids"] == ["201", "251"] and m1["team_names"] == ["Oklahoma", "Texas"], "manifest entries carry status, team IDs (Oklahoma 201, Texas 251) and team names")
     code2, out2 = run(r, "build")
     check(code2 == 0 and "0 file(s) written" in out2, "second build writes nothing (deterministic)", out2[-200:])
@@ -97,13 +99,14 @@ def main():
     check(all(after.get(k) == v for k, v in before.items() if k.startswith("red-river-2026/")), "Red River files untouched when its source is missing")
     check(set(before) <= set(after), "no file under stories/ was deleted")
     man = json.load(open(os.path.join(r, "stories/stories.json")))
-    check([e["slug"] for e in man["stories"]] == ["red-river-2026"], "Red River stays in the manifest")
+    check("red-river-2026" in [e["slug"] for e in man["stories"]] and len(man["stories"]) == N_LIVE, "Red River stays in the manifest (and every other live story with it)")
     check("/stories/red-river-2026/" in open(os.path.join(r, "stories/index.html")).read(), "Red River stays on /stories/")
     check("/stories/red-river-2026/" in open(os.path.join(r, "stories/sitemap.xml")).read(), "Red River stays in the sitemap")
     # even with no manifest at all (a hand-made live page): described from its own meta tags, never dropped
     os.remove(os.path.join(r, "stories/stories.json")); code, out = run(r, "build")
     man = json.load(open(os.path.join(r, "stories/stories.json")))
-    check(code == 0 and man["stories"][0]["slug"] == "red-river-2026" and man["stories"][0]["title"].startswith("BOOMER SOONER"), "with no manifest and no source, the live page is still listed (from its meta tags)")
+    rr = [e for e in man["stories"] if e["slug"] == "red-river-2026"]
+    check(code == 0 and rr and rr[0]["title"].startswith("BOOMER SOONER"), "with no manifest and no source, the live page is still listed (from its meta tags)")
 
     # ---- 3. nothing publishes without approval; drafts never enter the public output
     for label, edit in [
@@ -166,11 +169,11 @@ def main():
     check('<aside class="doesnt"' in html and '<table class="tbl">' in html and "<h2>A section heading</h2>" in html, "Markdown body renders with the article styles (heading, table, 'doesn't tell us' box)")
     check("noindex" not in html and "Preview" not in html, "published page has no preview banner or noindex")
     man = json.load(open(os.path.join(r, "stories/stories.json")))["stories"]
-    check(len(man) == 2 and all(man[i]["date"] >= man[i + 1]["date"] for i in range(len(man) - 1)), "manifest lists both stories, newest first")
+    check(len(man) == N_LIVE + 1 and all(man[i]["date"] >= man[i + 1]["date"] for i in range(len(man) - 1)), "manifest lists every live story plus the new one, newest first")
     idx = open(os.path.join(r, "stories/index.html")).read()
-    check(idx.count('class="st-card') == 2, "/stories/ shows both stories")
+    check(idx.count('class="st-card') == N_LIVE + 1, "/stories/ shows every story")
     sm = open(os.path.join(r, "stories/sitemap.xml")).read(); xml.dom.minidom.parseString(sm)
-    check(sm.count("<loc>") == 3, "sitemap is valid XML with /stories/ and both stories")
+    check(sm.count("<loc>") == N_LIVE + 2, "sitemap is valid XML with /stories/ and every story")
     published_copy = r
 
     # ---- 6. every published page: social tags, links, images, phone layout
