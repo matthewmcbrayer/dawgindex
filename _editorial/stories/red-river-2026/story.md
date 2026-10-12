@@ -5,7 +5,7 @@ approved_by: Matthew McBrayer
 approved_at: '2026-10-11'
 title: BOOMER SOONER! What Did We Actually Learn?
 card_title: 'BOOMER SOONER! What Did We Actually Learn?'
-card_style: graphic
+card_style: image
 headline:
   big: Boomer Sooner!
   sub: What did we actually learn?
