@@ -72,7 +72,13 @@ def main():
     # corrections Matthew approved after publication: the built page must equal main with exactly these applied
     CORRECTIONS = [(b'A single game\'s PLAY is good to about \xc2\xb112 points.',
                     b'Single-game PLAY results vary a lot: about 95% of them land within roughly \xc2\xb121 points, and the standard deviation is about 11 points.'),
-                   (b'<div class="mid">Final<span>Red River</span></div>', b'<div class="mid">Final<span>Red River Rivalry</span></div>')]
+                   (b'<div class="mid">Final<span>Red River</span></div>', b'<div class="mid">Final<span>Red River Rivalry</span></div>'),
+                   # Oct. 11: game PLAY shown to one decimal from the stored value (playRaw 1.07), matching the site
+                   ('PLAY \u00b7 the snaps</div>\n            <div class="val">+1</div>'.encode(), 'PLAY \u00b7 the snaps</div>\n            <div class="val">+1.1</div>'.encode()),
+                   (b"Oklahoma's snaps came out 1 point better", b"Oklahoma's snaps came out 1.1 points better"),
+                   (b"The difference between +11 and +1 is mostly", b"The difference between +11.2 and +1.1 is mostly"),
+                   (b'+1 means "about as expected,"', b'+1.1 means "about as expected,"'),
+                   ('<td class="pos">+1</td><td class="neg">\u22121</td>'.encode(), '<td class="pos">+1.1</td><td class="neg">\u22121.1</td>'.encode())]
     for a, b_ in CORRECTIONS:
         if a in live_page: live_page = live_page.replace(a, b_)
 

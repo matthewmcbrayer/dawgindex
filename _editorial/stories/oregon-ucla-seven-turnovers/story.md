@@ -198,7 +198,7 @@ published_at: '2026-10-11T23:00:44Z'
 
       <h2>What the DAWG numbers say</h2>
       <p>DAWG grades the scoreboard against what the closing line expected. UCLA won by two as a 10-point underdog, which is <strong>+12.7, a DAWG game</strong>. Oregon gets the mirror image, −12.7, SOFT.</p>
-      <p>PLAY, which grades the snaps, is harsher: <strong>+17 for UCLA, −17 for Oregon</strong>. That's the turnovers again. The scoreboard says Oregon nearly escaped. The snaps say it was worse than the score, and the only reason it wasn't worse still is that UCLA kept handing some of it back.</p>
+      <p>PLAY, which grades the snaps, is harsher: <strong>+16.8 for UCLA, −16.8 for Oregon</strong>. That's the turnovers again. The scoreboard says Oregon nearly escaped. The snaps say it was worse than the score, and the only reason it wasn't worse still is that UCLA kept handing some of it back.</p>
 
       <h2>This didn't start Saturday</h2>
       <p>For UCLA, it's more of the same. The Bruins are 5–0, first among 68 Power 4 teams in PLAY and second in DAWG, and the defense has 18 takeaways in five games, the most in the Power 4. They were unranked until last week. They're No. 12 now.</p>
@@ -226,7 +226,7 @@ published_at: '2026-10-11T23:00:44Z'
           <li><strong>Turnovers are noisy.</strong> Fumbles especially swing on bounces. One seven-turnover game says little about how Oregon will handle the ball the rest of the way.</li>
           <li><strong>Backup quarterbacks.</strong> Oregon played without its starter, then went to its third-stringer. This isn't a read on Oregon's full-strength offense.</li>
           <li><strong>Small samples.</strong> Oregon's season PLAY (−12.9) is four graded games. Random swings alone put a four-game average anywhere within about ±10 points of zero (a 95% range), and with 68 teams, a few land outside that range by chance every week. Oregon is outside it, which isn't proof of anything lasting.</li>
-          <li><strong>One game's PLAY is noisy.</strong> Single-game PLAY results vary a lot: about 95% of them land within roughly ±21 points, and the standard deviation is about 11 points. Saturday's +17 and −17 are inside that range.</li>
+          <li><strong>One game's PLAY is noisy.</strong> Single-game PLAY results vary a lot: about 95% of them land within roughly ±21 points, and the standard deviation is about 11 points. Saturday's +16.8 and −16.8 are inside that range.</li>
           <li><strong>Expected points are a model.</strong> The split above uses the same open-source model as PLAY. It measures the value of field position, down and distance, not the quality of each decision.</li>
           <li><strong>History's coverage.</strong> "Since 2014" means games involving today's 68 Power 4 teams. Turnover counts come from ESPN box scores.</li>
         </ul>
@@ -243,7 +243,7 @@ published_at: '2026-10-11T23:00:44Z'
           <tr><th scope="row">Expected points, turnover plays</th><td class="neg">−12.8</td><td class="neg">−23.4</td></tr>
           <tr><th scope="row">Expected points per snap, other snaps</th><td>−0.09</td><td>−0.10</td></tr>
           <tr><th scope="row">DAWG</th><td class="pos">+12.7</td><td class="neg">−12.7</td></tr>
-          <tr><th scope="row">PLAY</th><td class="pos">+17</td><td class="neg">−17</td></tr>
+          <tr><th scope="row">PLAY</th><td class="pos">+16.8</td><td class="neg">−16.8</td></tr>
         </tbody>
       </table>
 

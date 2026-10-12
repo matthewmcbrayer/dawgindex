@@ -170,9 +170,9 @@ published_at: '2026-10-11T23:11:37Z'
         <p class="fig-k">Three games, 15 days</p>
         <p class="fig-h" id="f1h">From a DAWG win to two Certified SOFTs</p>
         <div class="fx-tiles">
-          <div class="fx-t"><div class="when">Sat., Sept. 26 · Gainesville</div><div class="opp"><img class="dx-logo" src="/logos/145.png" alt="" width="30" height="30" loading="lazy"><span>vs. No. 4 Ole Miss</span></div><div class="res w">W 52–28</div><div class="ln">Line: Florida −4</div><div class="dv"><b style="color:var(--pos)">+19.6</b><span class="dx-chip d">DAWG</span></div><div class="pl">PLAY +3</div><div class="rk">Florida entering: No. 21</div></div>
-          <div class="fx-t"><div class="when">Sat., Oct. 3 · Columbia, Mo.</div><div class="opp"><img class="dx-logo" src="/logos/142.png" alt="" width="30" height="30" loading="lazy"><span>at No. 25 Missouri</span></div><div class="res l">L 17–45</div><div class="ln">Line: Florida −5.5</div><div class="dv"><b style="color:var(--neg)">−34.0</b><span class="dx-chip cs">Certified SOFT</span></div><div class="pl">PLAY −21</div><div class="rk">Florida entering: No. 8</div></div>
-          <div class="fx-t"><div class="when">Sat., Oct. 10 · Gainesville</div><div class="opp"><img class="dx-logo" src="/logos/2579.png" alt="" width="30" height="30" loading="lazy"><span>vs. South Carolina</span></div><div class="res l">L 19–38</div><div class="ln">Line: Florida −10.5</div><div class="dv"><b style="color:var(--neg)">−36.2</b><span class="dx-chip cs">Certified SOFT</span></div><div class="pl">PLAY −24</div><div class="rk">Florida entering: No. 16</div></div>
+          <div class="fx-t"><div class="when">Sat., Sept. 26 · Gainesville</div><div class="opp"><img class="dx-logo" src="/logos/145.png" alt="" width="30" height="30" loading="lazy"><span>vs. No. 4 Ole Miss</span></div><div class="res w">W 52–28</div><div class="ln">Line: Florida −4</div><div class="dv"><b style="color:var(--pos)">+19.6</b><span class="dx-chip d">DAWG</span></div><div class="pl">PLAY +3.3</div><div class="rk">Florida entering: No. 21</div></div>
+          <div class="fx-t"><div class="when">Sat., Oct. 3 · Columbia, Mo.</div><div class="opp"><img class="dx-logo" src="/logos/142.png" alt="" width="30" height="30" loading="lazy"><span>at No. 25 Missouri</span></div><div class="res l">L 17–45</div><div class="ln">Line: Florida −5.5</div><div class="dv"><b style="color:var(--neg)">−34.0</b><span class="dx-chip cs">Certified SOFT</span></div><div class="pl">PLAY −20.6</div><div class="rk">Florida entering: No. 8</div></div>
+          <div class="fx-t"><div class="when">Sat., Oct. 10 · Gainesville</div><div class="opp"><img class="dx-logo" src="/logos/2579.png" alt="" width="30" height="30" loading="lazy"><span>vs. South Carolina</span></div><div class="res l">L 19–38</div><div class="ln">Line: Florida −10.5</div><div class="dv"><b style="color:var(--neg)">−36.2</b><span class="dx-chip cs">Certified SOFT</span></div><div class="pl">PLAY −23.8</div><div class="rk">Florida entering: No. 16</div></div>
         </div>
         <div class="fx-ride" aria-label="Florida's AP rank: No. 21, then No. 8, then No. 16, then unranked in the poll of Oct. 11"><img class="dx-logo" src="/logos/57.png" alt="" width="24" height="24" loading="lazy"> AP rank <span class="r">21</span><i>→</i><span class="r">8</span><i>→</i><span class="r">16</span><i>→</i><span class="r out">Unranked</span></div>
         <p class="src" style="margin-top:12px">DAWG Index v3.0 · ranks are the AP poll in effect at each kickoff, then the poll of Oct. 11</p>
@@ -185,16 +185,16 @@ published_at: '2026-10-11T23:11:37Z'
       <h2>The high: Ole Miss</h2>
       <p>This wasn't a fluke win. Florida outgained Ole Miss 498 yards to 426, had zero turnovers to Ole Miss's two, and led 17–6 at halftime. It was also closer than the final score: Ole Miss scored early in the third quarter and again late in it, and it was 24–21 with about five minutes left in the third.</p>
       <p>From there, Florida outscored Ole Miss 28–7. One of those touchdowns came right after Florida sacked Ole Miss's quarterback and recovered the fumble at the Florida 43.</p>
-      <p>Here's the wrinkle. On the scoreboard, Florida beat its line by almost 20 points. Snap for snap, it was only a little better than a four-point favorite usually is: PLAY +3. Ole Miss moved the ball well too, at about two-tenths of an expected point per snap. Florida was better, and it finished drives. But the snaps say "good win," not "24-point statement."</p>
+      <p>Here's the wrinkle. On the scoreboard, Florida beat its line by almost 20 points. Snap for snap, it was only a little better than a four-point favorite usually is: PLAY +3.3. Ole Miss moved the ball well too, at about two-tenths of an expected point per snap. Florida was better, and it finished drives. But the snaps say "good win," not "24-point statement."</p>
 
       <figure aria-labelledby="f2h">
         <p class="fig-k">The scoreboard and the snaps</p>
         <p class="fig-h" id="f2h">The win was bigger on the scoreboard. The losses weren't.</p>
         <div class="legend"><span><i style="background:var(--ink)"></i>DAWG · the scoreboard</span><span><i style="background:var(--blue)"></i>PLAY · the snaps</span></div>
         <div class="fx-pair">
-          <div class="fx-g"><div class="nm"><img class="dx-logo" src="/logos/145.png" alt="" width="26" height="26" loading="lazy">Ole Miss</div><div class="fx-bars" role="img" aria-label="Ole Miss: DAWG +19.6, PLAY +3"><div class="fx-b"><div class="f dg" style="left:50%;width:24.5%"></div><div class="t" style="left:calc(50% + 24.5% + 6px)">DAWG +19.6</div></div><div class="fx-b"><div class="f pl" style="left:50%;width:3.8%"></div><div class="t" style="left:calc(50% + 3.8% + 6px)">PLAY +3</div></div></div></div>
-          <div class="fx-g"><div class="nm"><img class="dx-logo" src="/logos/142.png" alt="" width="26" height="26" loading="lazy">Missouri</div><div class="fx-bars" role="img" aria-label="Missouri: DAWG −34.0, PLAY −21"><div class="fx-b"><div class="f dg" style="right:50%;width:42.5%"></div><div class="t" style="left:calc(50% + 6px)">DAWG −34.0</div></div><div class="fx-b"><div class="f pl" style="right:50%;width:26.2%"></div><div class="t" style="left:calc(50% + 6px)">PLAY −21</div></div></div></div>
-          <div class="fx-g"><div class="nm"><img class="dx-logo" src="/logos/2579.png" alt="" width="26" height="26" loading="lazy">South Carolina</div><div class="fx-bars" role="img" aria-label="South Carolina: DAWG −36.2, PLAY −24"><div class="fx-b"><div class="f dg" style="right:50%;width:45.2%"></div><div class="t" style="left:calc(50% + 6px)">DAWG −36.2</div></div><div class="fx-b"><div class="f pl" style="right:50%;width:30.0%"></div><div class="t" style="left:calc(50% + 6px)">PLAY −24</div></div></div></div>
+          <div class="fx-g"><div class="nm"><img class="dx-logo" src="/logos/145.png" alt="" width="26" height="26" loading="lazy">Ole Miss</div><div class="fx-bars" role="img" aria-label="Ole Miss: DAWG +19.6, PLAY +3.3"><div class="fx-b"><div class="f dg" style="left:50%;width:24.5%"></div><div class="t" style="left:calc(50% + 24.5% + 6px)">DAWG +19.6</div></div><div class="fx-b"><div class="f pl" style="left:50%;width:4.1%"></div><div class="t" style="left:calc(50% + 4.1% + 6px)">PLAY +3.3</div></div></div></div>
+          <div class="fx-g"><div class="nm"><img class="dx-logo" src="/logos/142.png" alt="" width="26" height="26" loading="lazy">Missouri</div><div class="fx-bars" role="img" aria-label="Missouri: DAWG −34.0, PLAY −20.6"><div class="fx-b"><div class="f dg" style="right:50%;width:42.5%"></div><div class="t" style="left:calc(50% + 6px)">DAWG −34.0</div></div><div class="fx-b"><div class="f pl" style="right:50%;width:25.8%"></div><div class="t" style="left:calc(50% + 6px)">PLAY −20.6</div></div></div></div>
+          <div class="fx-g"><div class="nm"><img class="dx-logo" src="/logos/2579.png" alt="" width="26" height="26" loading="lazy">South Carolina</div><div class="fx-bars" role="img" aria-label="South Carolina: DAWG −36.2, PLAY −23.8"><div class="fx-b"><div class="f dg" style="right:50%;width:45.2%"></div><div class="t" style="left:calc(50% + 6px)">DAWG −36.2</div></div><div class="fx-b"><div class="f pl" style="right:50%;width:29.8%"></div><div class="t" style="left:calc(50% + 6px)">PLAY −23.8</div></div></div></div>
         </div>
         <div class="dx-axis fx-axis"><span>← Worse than expected</span><span>Better →</span></div>
         <p class="dx-note">Both grades are in points against what the closing line expected. DAWG grades the final margin with garbage time out; PLAY grades every competitive snap with expected points.</p>
@@ -203,13 +203,13 @@ published_at: '2026-10-11T23:11:37Z'
 
       <h2>The first low: Missouri</h2>
       <p>No turnovers by either team, no fluky bounces. Missouri just beat Florida, 560 yards to 325. It scored on eight of its first 10 possessions, led 20–10 at the half and 45–10 early in the fourth quarter. Florida's last touchdown came in garbage time, which DAWG doesn't count.</p>
-      <p>Florida was a 5.5-point favorite. That's a −34.0 on the scoreboard and a −21 on the snaps. In fairness to the Gators, Missouri looks a lot better now than it did at kickoff. The Tigers were No. 25 that day; they're 5–1, No. 13 in the new poll and fifth among 68 Power 4 teams in season DAWG.</p>
+      <p>Florida was a 5.5-point favorite. That's a −34.0 on the scoreboard and a −20.6 on the snaps. In fairness to the Gators, Missouri looks a lot better now than it did at kickoff. The Tigers were No. 25 that day; they're 5–1, No. 13 in the new poll and fifth among 68 Power 4 teams in season DAWG.</p>
 
       <h2>The second low: South Carolina</h2>
       <p>Saturday looked different on paper. South Carolina outgained Florida by just six yards, 393 to 387. The difference was what happened at the ends of drives.</p>
       <p>Florida led 7–0 and 10–7. At 10–10 late in the second quarter, South Carolina intercepted Aaron Philo and returned it to the Florida 26, and LaNorris Sellers threw a touchdown pass five plays later. Florida missed a 43-yard field goal at the end of the half. From 10–10 until Florida's touchdown with a minute left, South Carolina outscored Florida 28–3. Sellers threw four touchdown passes and ran for another.</p>
       <p>Florida had chances to make it a game. Down 31–13 early in the fourth quarter, Philo fumbled at the South Carolina 15. A few minutes later, Florida turned it over on downs at its own 27, and South Carolina scored three plays after that.</p>
-      <p>Turnovers decided the margin, but they weren't the whole story. Leave Florida's giveaways out and South Carolina was still better per snap, by about a quarter of an expected point to under a tenth. That's −36.2 on the scoreboard and −24 on the snaps. Against the 2026 Power 4 field, only one game has graded worse than that −36.2. Florida's loss at Missouri is third.</p>
+      <p>Turnovers decided the margin, but they weren't the whole story. Leave Florida's giveaways out and South Carolina was still better per snap, by about a quarter of an expected point to under a tenth. That's −36.2 on the scoreboard and −23.8 on the snaps. Against the 2026 Power 4 field, only one game has graded worse than that −36.2. Florida's loss at Missouri is third.</p>
 
       <figure aria-labelledby="f3h">
         <p class="fig-k">Season DAWG rank among 68 Power 4 teams</p>
@@ -235,8 +235,8 @@ published_at: '2026-10-11T23:11:37Z'
 
       <h2>So which Florida is real?</h2>
       <p>Three games can't answer that, and we'd be guessing if we pretended they could. Here's what the grades do establish.</p>
-      <p><strong>The Ole Miss win was real, and the margin outran the snaps.</strong> Florida beat what its line expected by 19.6 points on the scoreboard. Snap for snap, it was +3, about what a four-point favorite usually does. It played well and finished drives. It didn't dominate the way 52–28 suggests.</p>
-      <p><strong>Both losses were bad on both measures.</strong> −34.0 and −21 at Missouri, −36.2 and −24 against South Carolina. Neither was a scoreboard fluke. Missouri outgained Florida by 235 yards with no turnovers on either side, and South Carolina was better per snap even with Florida's giveaways set aside.</p>
+      <p><strong>The Ole Miss win was real, and the margin outran the snaps.</strong> Florida beat what its line expected by 19.6 points on the scoreboard. Snap for snap, it was +3.3, about what a four-point favorite usually does. It played well and finished drives. It didn't dominate the way 52–28 suggests.</p>
+      <p><strong>Both losses were bad on both measures.</strong> −34.0 and −20.6 at Missouri, −36.2 and −23.8 against South Carolina. Neither was a scoreboard fluke. Missouri outgained Florida by 235 yards with no turnovers on either side, and South Carolina was better per snap even with Florida's giveaways set aside.</p>
       <p><strong>Over six games, Florida has played below its lines.</strong> It's −5.8 in season DAWG, 60th of 68, and −7.9 in PLAY over five graded games, after being favored in all six. That's the season so far. It isn't a verdict on the team: random swings alone put a six-game average anywhere within about ±11 points of zero (a 95% range), and −5.8 is inside it.</p>
       <p>That's as far as the evidence goes. One very good afternoon, two very bad ones, all within 15 days.</p>
       <p>Next up is a trip to No. 7 Texas on Saturday. We're not going to tell you what happens there. We're just going to grade it.</p>
@@ -246,7 +246,7 @@ published_at: '2026-10-11T23:11:37Z'
         <ul>
           <li><strong>Nothing about Saturday.</strong> DAWG and PLAY describe games that happened. Neither predicts the next one.</li>
           <li><strong>Nothing about the coaching staff.</strong> This is Jon Sumrall's first season at Florida. Three games can't tell you anything fair about a coach, and we're not going to pretend they can.</li>
-          <li><strong>One game's PLAY is noisy.</strong> Single-game PLAY results vary a lot: about 95% of them land within roughly ±21 points, and the standard deviation is about 11 points. PLAY +3 against Ole Miss means "about as expected," not a precise measurement.</li>
+          <li><strong>One game's PLAY is noisy.</strong> Single-game PLAY results vary a lot: about 95% of them land within roughly ±21 points, and the standard deviation is about 11 points. PLAY +3.3 against Ole Miss means "about as expected," not a precise measurement.</li>
           <li><strong>Nothing about Florida's "true" level.</strong> Six games of DAWG and PLAY describe how Florida has played against its lines, not how good it is.</li>
           <li><strong>Rankings.</strong> AP ranks are the poll in effect at each kickoff, plus the poll of Oct. 11.</li>
         </ul>
@@ -261,7 +261,7 @@ published_at: '2026-10-11T23:11:37Z'
           <tr><th scope="row">Total yards</th><td>498–426</td><td>325–560</td><td>387–393</td></tr>
           <tr><th scope="row">Turnovers</th><td>0–2</td><td>0–0</td><td>3–0</td></tr>
           <tr><th scope="row">DAWG</th><td class="pos">+19.6</td><td class="neg">−34.0</td><td class="neg">−36.2</td></tr>
-          <tr><th scope="row">PLAY</th><td class="pos">+3</td><td class="neg">−21</td><td class="neg">−24</td></tr>
+          <tr><th scope="row">PLAY</th><td class="pos">+3.3</td><td class="neg">−20.6</td><td class="neg">−23.8</td></tr>
         </tbody>
       </table>
       <p class="dx-note" style="margin-top:0">Yards and turnovers are Florida's first.</p>
