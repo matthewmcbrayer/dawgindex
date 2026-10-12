@@ -110,8 +110,8 @@ format: html
           </div>
           <div class="metric">
             <div class="lab">PLAY · the snaps</div>
-            <div class="val">+1</div>
-                        <p>Every snap valued with expected points. Oklahoma's snaps came out 1 point better than a 7.5-point underdog's usually do. The pick-six counts here. The blocked punt doesn't.</p>
+            <div class="val">+1.1</div>
+                        <p>Every snap valued with expected points. Oklahoma's snaps came out 1.1 points better than a 7.5-point underdog's usually do. The pick-six counts here. The blocked punt doesn't.</p>
           </div>
         </div>
         <div class="scale" role="img" aria-label="DAWG scale from minus 30 to plus 30. Oklahoma's +11.2 sits just below the +12.3 DAWG cutoff.">
@@ -123,7 +123,7 @@ format: html
         <p class="src" style="margin-top:14px">DAWG Index v3.0 · closing line Texas −7.5</p>
       </figure>
 
-      <p>Put those two numbers next to each other and the story of the game falls out. On the scoreboard, Oklahoma blew past expectations. Snap for snap, it played about the way a 7.5-point underdog usually does against a team that good. The difference between +11 and +1 is mostly a blocked punt, plus the timing of Texas's mistakes.</p>
+      <p>Put those two numbers next to each other and the story of the game falls out. On the scoreboard, Oklahoma blew past expectations. Snap for snap, it played about the way a 7.5-point underdog usually does against a team that good. The difference between +11.2 and +1.1 is mostly a blocked punt, plus the timing of Texas's mistakes.</p>
       <p>That doesn't make the win smaller. Blocking a punt is football. Jumping a route with the game tied is football. It just tells you how Oklahoma won: not by out-gaining Texas, but by winning the plays that swing a game seven points at a time. About one team in five beats its line by 11 or more on a given week. Doing it against the No. 1 team, in this rivalry, is the part Sooner fans will remember.</p>
       <p>It also wasn't a quarterback's game. DAWG's QB ratings had both Mateer and Manning below an average Power 4 quarterback for the afternoon.</p>
 
@@ -142,7 +142,7 @@ format: html
         <ul>
           <li><strong>One game is one game.</strong> Across the Power 4, how a team plays against expectations in one half of a season barely predicts the other half. This result doesn't forecast Oklahoma's or Texas's next game.</li>
           <li><strong>Season numbers are still small samples.</strong> After five games, Oklahoma's season DAWG is −4.7 (52nd of 68 Power 4 teams) and Texas's is −1.7 (40th). Both are well inside what random swings produce over five games.</li>
-          <li><strong>One game's PLAY is noisy.</strong> Single-game PLAY results vary a lot: about 95% of them land within roughly ±21 points, and the standard deviation is about 11 points. +1 means "about as expected," not "exactly."</li>
+          <li><strong>One game's PLAY is noisy.</strong> Single-game PLAY results vary a lot: about 95% of them land within roughly ±21 points, and the standard deviation is about 11 points. +1.1 means "about as expected," not "exactly."</li>
           <li><strong>Rankings.</strong> "No. 1" is Texas's AP rank going into the game. This story doesn't use the new poll.</li>
         </ul>
       </aside>
@@ -157,7 +157,7 @@ format: html
           <tr><th scope="row">Total yards</th><td>238</td><td>382</td></tr>
           <tr><th scope="row">Turnovers</th><td>0</td><td>2</td></tr>
           <tr><th scope="row">DAWG</th><td class="pos">+11.2</td><td class="neg">−11.2</td></tr>
-          <tr><th scope="row">PLAY</th><td class="pos">+1</td><td class="neg">−1</td></tr>
+          <tr><th scope="row">PLAY</th><td class="pos">+1.1</td><td class="neg">−1.1</td></tr>
         </tbody>
       </table>
 
