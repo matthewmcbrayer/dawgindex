@@ -91,7 +91,10 @@ def main():
     allm = json.load(open(os.path.join(r, "stories/stories.json")))["stories"]
     idx0 = open(os.path.join(r, "stories/index.html")).read()
     check(m1.get("card_title") == "BOOMER SOONER! What Did We Actually Learn?" and all(e.get("card_title") for e in allm), "every manifest entry carries a short card_title (Red River's is its headline)")
-    check(all(f'<h2 class="st-t">{B.t(e["card_title"])}</h2>' in idx0 for e in allm) and idx0.count('class="st-art"') == len(allm), "/stories/ cards show the card_title, each led by its graphic")
+    ok_cards = all((f'<h2 class="sr-only">{B.t(e["title"])}</h2>' in idx0 and f'<h2 class="st-t">{B.t(e["card_title"])}</h2>' not in idx0) if e.get("card_style") == "graphic"
+                   else f'<h2 class="st-t">{B.t(e["card_title"])}</h2>' in idx0 for e in allm)
+    check(ok_cards and idx0.count('class="st-art"') == len(allm), "/stories/ cards: graphic-led ones show no duplicate headline (title kept for screen readers); image-led ones show the card_title")
+    check(all(e.get("card_style") in ("graphic", "image") for e in allm), "every manifest entry has a card_style (graphic or image)")
     code2, out2 = run(r, "build")
     check(code2 == 0 and "0 file(s) written" in out2, "second build writes nothing (deterministic)", out2[-200:])
 
@@ -128,6 +131,7 @@ def main():
         "unknown team slug": approved.replace("teams: [baylor]", "teams: [baylorr]"),
         "missing dek": approved.replace("dek: A sample dek that only exists inside the test suite.\n", ""),
         "card_title over 60 characters": approved.replace("status: published", "status: published\ncard_title: '" + "X" * 61 + "'"),
+        "unknown card_style": approved.replace("status: published", "status: published\ncard_style: poster"),
         "'2.0' in the copy": approved.replace("The opening paragraph", "The DAWG 2.0 opening paragraph"),
         "future date": approved.replace("date: '2026-10-11'", "date: '2030-01-01'"),
         "slug that collides with a team page": approved,
@@ -177,6 +181,9 @@ def main():
     check(len(man) == N_LIVE + 1 and all(man[i]["date"] >= man[i + 1]["date"] for i in range(len(man) - 1)), "manifest lists every live story plus the new one, newest first")
     idx = open(os.path.join(r, "stories/index.html")).read()
     check(idx.count('class="st-card') == N_LIVE + 1, "/stories/ shows every story")
+    smp = [e for e in man if e["slug"] == "test-sample-story"]
+    check(smp and smp[0]["card_style"] == "image" and f'<a class="st-card i" href="/stories/test-sample-story/">' in idx and f'<h2 class="st-t">{B.t(smp[0]["card_title"])}</h2>' in idx,
+          "a story without card_style defaults to image-led: its title shows under the image")
     sm = open(os.path.join(r, "stories/sitemap.xml")).read(); xml.dom.minidom.parseString(sm)
     check(sm.count("<loc>") == N_LIVE + 2, "sitemap is valid XML with /stories/ and every story")
     published_copy = r

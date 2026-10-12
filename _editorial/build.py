@@ -191,9 +191,13 @@ def validate(fm, body, src_dir, teams, mode):
                 errs.append(f"scoreboard needs {k}")
     if fm.get("format", "markdown") not in ("markdown", "html"):
         errs.append("format must be markdown or html")
-    copy = " ".join(str(fm.get(k, "")) for k in ("title", "dek", "description", "social_description", "card_dek", "tab")) + " " + re.sub(r"<[^>]+>", " ", body)
+    copy = " ".join(str(fm.get(k, "")) for k in ("title", "dek", "description", "social_description", "card_dek", "card_title", "card_teaser", "tab")) + " " + re.sub(r"<[^>]+>", " ", body)
     if TWO_POINT_OH.search(copy):
         errs.append("'2.0' appears in the copy (internal name; never public)")
+    if fm.get("card_style", "image") not in ("graphic", "image"):
+        errs.append("card_style must be graphic (the card graphic carries the headline) or image (headline shown under the image)")
+    if fm.get("card_teaser") and len(str(fm["card_teaser"])) > 110:
+        errs.append("card_teaser over 110 characters (one short line that adds something the graphic doesn't)")
     if fm.get("card_title") and len(str(fm["card_title"])) > 60:
         errs.append("card_title over 60 characters (it's the short title on homepage and Stories cards)")
     if len(str(fm.get("description", ""))) > 200:
@@ -281,10 +285,13 @@ def manifest_entry(fm, ids, names):
     h = fm.get("headline") or {}
     teams = list(fm.get("teams") or [])
     e = {"slug": fm["slug"], "status": "published", "url": base, "title": fm["title"], "card_title": fm.get("card_title") or fm["title"],
+         "card_style": fm.get("card_style") or "image",
          "headline": {"big": h.get("big") or fm["title"], "sub": h.get("sub")},
          "tab": fm["tab"], "category": fm["category"], "date": fm["date"], "teams": teams,
          "team_ids": [ids[x] for x in teams if x in ids], "team_names": [names.get(x, x) for x in teams],
          "dek": fm.get("card_dek") or fm["dek"], "image": base + "card.png", "image_alt": fm["image_alt"], "og_image": base + "og.png"}
+    if fm.get("card_teaser"):
+        e["card_teaser"] = fm["card_teaser"]
     if fm.get("published_at"):
         e["published_at"] = str(fm["published_at"])
     if fm.get("updated"):
@@ -299,7 +306,7 @@ def legacy_entry(repo, slug):
     g = lambda pat: (html.unescape(m.group(1)) if (m := re.search(pat, s)) else "")
     title = g(r'<meta property="og:title" content="([^"]*)"')
     base = f"/stories/{slug}/"
-    return {"slug": slug, "status": "published", "url": base, "title": title, "card_title": title, "headline": {"big": title, "sub": None}, "tab": "", "category": "Story",
+    return {"slug": slug, "status": "published", "url": base, "title": title, "card_title": title, "card_style": "image", "headline": {"big": title, "sub": None}, "tab": "", "category": "Story",
             "date": g(r'<meta property="article:published_time" content="([^"]*)"') or "1970-01-01", "teams": [], "team_ids": [], "team_names": [],
             "dek": g(r'<meta name="description" content="([^"]*)"'), "og_image": base + "og.png",
             "image": base + ("card.png" if os.path.isfile(os.path.join(repo, "stories", slug, "card.png")) else "og.png"), "image_alt": title}
@@ -313,10 +320,15 @@ def index_page(entries, tpl_dir, names):
         nm = e.get("team_names") or []
         return "".join(f'<img class="st-logo" src="/logos/{i}.png" alt="{a(nm[k]) if k < len(nm) else ""}" width="26" height="26" loading="lazy">' for k, i in enumerate(ids))
     def card(e, first):
-        # image first, short title second, then team logos and the date: the graphic does the selling
-        return (f'<a class="st-card" href="{e["url"]}"><div class="st-art"><img src="{e["image"]}" alt="{a(e["image_alt"])}" width="1200" height="675" loading="{"eager" if first else "lazy"}"></div>'
-                f'<div class="st-body"><span class="st-cat">{t(e["category"])}</span><h2 class="st-t">{t(e.get("card_title") or e["title"])}</h2>'
-                f'<div class="st-m"><span class="st-logos">{logos(e)}</span><time datetime="{e["date"]}">{t(nice_date(e["date"]))}</time></div></div></a>')
+        # graphic: the card graphic carries the headline, so only a slim row (and an optional teaser) sits under it, with the title
+        # kept for screen readers. image (default): the short title is shown under the image.
+        g = e.get("card_style") == "graphic"
+        art = f'<div class="st-art"><img src="{e["image"]}" alt="{a(e["image_alt"])}" width="1200" height="675" loading="{"eager" if first else "lazy"}"></div>'
+        meta = (f'<div class="st-m"><span class="st-cat">{t(e["category"])}</span><span class="st-logos">{logos(e)}</span>'
+                f'<time datetime="{e["date"]}">{t(nice_date(e["date"]))}</time></div>')
+        head = (f'<h2 class="sr-only">{t(e["title"])}</h2>' + (f'<p class="st-teaser">{t(e["card_teaser"])}</p>' if e.get("card_teaser") else "")
+                if g else f'<h2 class="st-t">{t(e.get("card_title") or e["title"])}</h2>')
+        return f'<a class="st-card {"g" if g else "i"}" href="{e["url"]}">{art}<div class="st-body">{head}{meta}</div></a>'
     if entries:
         cards = '<div class="st-grid">\n' + "\n".join(card(e, i < 3) for i, e in enumerate(entries)) + "\n</div>"
     else:

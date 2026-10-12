@@ -26,6 +26,8 @@ slug: my-story                # folder name; lowercase-and-hyphens
 status: draft                 # build only publishes 'published' + approved_by + approved_at
 title: Full headline for search and sharing
 card_title: Short title for homepage, team-page and Stories cards   # optional, 60 characters max; defaults to title
+card_style: image             # image (default): headline shown under the picture; graphic: card.png already carries the headline, so the card shows no headline text
+card_teaser: Optional one line for graphic cards that adds something the graphic doesn't (110 characters max)
 headline: {big: Big line, sub: Second line}   # optional; on-page h1
 tab: Red River Rivalry · Week 6
 category: Game story
@@ -68,4 +70,4 @@ A pull quote.
 
 **Season-average noise.** "Random swings alone put an n-game average anywhere within about ±X points of zero (a 95% range)", with X = 1.96 × 14.1 / √n for DAWG and 1.96 × 10.5 / √n for PLAY.
 
-**Story cards.** Homepage, team pages and /stories/ all use one card: the story's card.png first, then `card_title`, then team logos and the date. No dek on cards. Keep `card_title` short (a few words; 60 characters max) and make card.png do the selling: a score, a stat or a chart, legible at 360px wide.
+**Story cards.** Homepage, team pages and /stories/ all use one card, image first, then a slim row: category, team logos, date. No dek. Two styles: `card_style: graphic` when card.png is an editorial graphic that already says the headline (the card shows no headline text; the article title stays in the card for screen readers; an optional `card_teaser` can add one new fact), or `card_style: image` (the default) for a photo or plain image, with `card_title` shown under it. Keep `card_title` short (60 characters max) and make card.png legible at 360px wide.

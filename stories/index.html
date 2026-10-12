@@ -181,10 +181,15 @@ figure{margin:30px 0 34px;padding:22px 22px 18px;background:var(--paper-2);borde
 .st-art{background:var(--ink);aspect-ratio:16/9;overflow:hidden;border-bottom:2px solid var(--ink)}
 .st-art img{width:100%;height:100%;object-fit:cover;display:block}
 .st-body{flex:1;display:flex;flex-direction:column;gap:8px;padding:14px 16px 12px}
-.st-cat{align-self:flex-start;font-family:var(--cond);font-weight:800;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--red)}
+.st-cat{font-family:var(--cond);font-weight:800;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--red)}
 .st-t{font-family:var(--display);font-weight:900;text-transform:uppercase;line-height:.92;margin:0;font-size:clamp(26px,2.4vw,34px);text-wrap:balance}
 .st-card:hover .st-t,.st-card:focus-visible .st-t{color:var(--red)}
-.st-m{margin-top:auto;display:flex;align-items:center;justify-content:space-between;gap:10px;border-top:1.5px solid var(--rule);padding-top:10px;font-family:var(--mono);font-size:12px;color:var(--muted)}
+.st-m{margin-top:auto;display:flex;align-items:center;gap:10px;border-top:1.5px solid var(--rule);padding-top:10px;font-family:var(--mono);font-size:12px;color:var(--muted)}
+.st-m time{margin-left:auto;white-space:nowrap}
+.st-card.g .st-body{gap:6px;padding:10px 14px}
+.st-card.g .st-m{border-top:0;padding-top:0}
+.st-teaser{margin:0;font-size:15px;line-height:1.35;color:var(--ink-2)}
+.sr-only{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
 .st-logos{display:flex;gap:6px;align-items:center;min-height:26px}
 .st-logo{width:26px;height:26px;object-fit:contain}
 .st-empty{font-size:18px;color:var(--ink-2)}
@@ -221,9 +226,9 @@ figure{margin:30px 0 34px;padding:22px 22px 18px;background:var(--paper-2);borde
   </header>
   <section class="st-list" aria-label="Stories">
 <div class="st-grid">
-<a class="st-card" href="/stories/which-florida/"><div class="st-art"><img src="/stories/which-florida/card.png" alt="Which Florida? Florida beat No. 4 Ole Miss 52–28 (DAWG +19.6), then lost 45–17 at Missouri (−34.0) and 38–19 to South Carolina (−36.2)." width="1200" height="675" loading="eager"></div><div class="st-body"><span class="st-cat">Analysis</span><h2 class="st-t">Which Florida?</h2><div class="st-m"><span class="st-logos"><img class="st-logo" src="/logos/57.png" alt="Florida" width="26" height="26" loading="lazy"></span><time datetime="2026-10-11">Oct. 11, 2026</time></div></div></a>
-<a class="st-card" href="/stories/oregon-ucla-seven-turnovers/"><div class="st-art"><img src="/stories/oregon-ucla-seven-turnovers/card.png" alt="Seven turnovers, two points: UCLA 17, Oregon 15. Every team with seven or more giveaways since 2014 lost; Oregon came closest." width="1200" height="675" loading="eager"></div><div class="st-body"><span class="st-cat">Analysis</span><h2 class="st-t">Seven Turnovers. Two Points.</h2><div class="st-m"><span class="st-logos"><img class="st-logo" src="/logos/26.png" alt="UCLA" width="26" height="26" loading="lazy"><img class="st-logo" src="/logos/2483.png" alt="Oregon" width="26" height="26" loading="lazy"></span><time datetime="2026-10-11">Oct. 11, 2026</time></div></div></a>
-<a class="st-card" href="/stories/red-river-2026/"><div class="st-art"><img src="/stories/red-river-2026/card.png" alt="Where the points came from: Oklahoma's offense scored 13 points, its defense and special teams 14; Texas's offense scored all 24." width="1200" height="675" loading="eager"></div><div class="st-body"><span class="st-cat">Game story</span><h2 class="st-t">BOOMER SOONER! What Did We Actually Learn?</h2><div class="st-m"><span class="st-logos"><img class="st-logo" src="/logos/201.png" alt="Oklahoma" width="26" height="26" loading="lazy"><img class="st-logo" src="/logos/251.png" alt="Texas" width="26" height="26" loading="lazy"></span><time datetime="2026-10-11">Oct. 11, 2026</time></div></div></a>
+<a class="st-card g" href="/stories/which-florida/"><div class="st-art"><img src="/stories/which-florida/card.png" alt="Which Florida? Florida beat No. 4 Ole Miss 52–28 (DAWG +19.6), then lost 45–17 at Missouri (−34.0) and 38–19 to South Carolina (−36.2)." width="1200" height="675" loading="eager"></div><div class="st-body"><h2 class="sr-only">Which Florida? From Beating No. 4 Ole Miss to Two Straight Certified SOFTs</h2><div class="st-m"><span class="st-cat">Analysis</span><span class="st-logos"><img class="st-logo" src="/logos/57.png" alt="Florida" width="26" height="26" loading="lazy"></span><time datetime="2026-10-11">Oct. 11, 2026</time></div></div></a>
+<a class="st-card g" href="/stories/oregon-ucla-seven-turnovers/"><div class="st-art"><img src="/stories/oregon-ucla-seven-turnovers/card.png" alt="Seven turnovers, two points: UCLA 17, Oregon 15. Every team with seven or more giveaways since 2014 lost; Oregon came closest." width="1200" height="675" loading="eager"></div><div class="st-body"><h2 class="sr-only">Seven Turnovers. Two Points. Oregon Nearly Won a Game Nobody Wins.</h2><div class="st-m"><span class="st-cat">Analysis</span><span class="st-logos"><img class="st-logo" src="/logos/26.png" alt="UCLA" width="26" height="26" loading="lazy"><img class="st-logo" src="/logos/2483.png" alt="Oregon" width="26" height="26" loading="lazy"></span><time datetime="2026-10-11">Oct. 11, 2026</time></div></div></a>
+<a class="st-card g" href="/stories/red-river-2026/"><div class="st-art"><img src="/stories/red-river-2026/card.png" alt="Where the points came from: Oklahoma's offense scored 13 points, its defense and special teams 14; Texas's offense scored all 24." width="1200" height="675" loading="eager"></div><div class="st-body"><h2 class="sr-only">BOOMER SOONER! What Did We Actually Learn?</h2><div class="st-m"><span class="st-cat">Game story</span><span class="st-logos"><img class="st-logo" src="/logos/201.png" alt="Oklahoma" width="26" height="26" loading="lazy"><img class="st-logo" src="/logos/251.png" alt="Texas" width="26" height="26" loading="lazy"></span><time datetime="2026-10-11">Oct. 11, 2026</time></div></div></a>
 </div>
   </section>
 </main>
