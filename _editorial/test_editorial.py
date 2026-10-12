@@ -3,7 +3,7 @@
 
   python3 _editorial/test_editorial.py            (needs Playwright + Chromium; the social-card and layout checks render pages)
 """
-import hashlib, json, os, re, shutil, subprocess, sys, tempfile, xml.dom.minidom
+import html, hashlib, json, os, re, shutil, subprocess, sys, tempfile, xml.dom.minidom
 HERE = os.path.dirname(os.path.abspath(__file__)); REPO = os.path.dirname(HERE)
 sys.path.insert(0, HERE)
 import build as B
@@ -88,6 +88,10 @@ def main():
     check(open(os.path.join(r, "stories/red-river-2026/og.png"), "rb").read() == live_og, "Red River og.png identical to live")
     m1 = [e for e in json.load(open(os.path.join(r, "stories/stories.json")))["stories"] if e["slug"] == "red-river-2026"][0]
     check(m1["status"] == "published" and m1["team_ids"] == ["201", "251"] and m1["team_names"] == ["Oklahoma", "Texas"], "manifest entries carry status, team IDs (Oklahoma 201, Texas 251) and team names")
+    allm = json.load(open(os.path.join(r, "stories/stories.json")))["stories"]
+    idx0 = open(os.path.join(r, "stories/index.html")).read()
+    check(m1.get("card_title") == "BOOMER SOONER! What Did We Actually Learn?" and all(e.get("card_title") for e in allm), "every manifest entry carries a short card_title (Red River's is its headline)")
+    check(all(f'<h2 class="st-t">{B.t(e["card_title"])}</h2>' in idx0 for e in allm) and idx0.count('class="st-art"') == len(allm), "/stories/ cards show the card_title, each led by its graphic")
     code2, out2 = run(r, "build")
     check(code2 == 0 and "0 file(s) written" in out2, "second build writes nothing (deterministic)", out2[-200:])
 
@@ -123,6 +127,7 @@ def main():
     bad = {
         "unknown team slug": approved.replace("teams: [baylor]", "teams: [baylorr]"),
         "missing dek": approved.replace("dek: A sample dek that only exists inside the test suite.\n", ""),
+        "card_title over 60 characters": approved.replace("status: published", "status: published\ncard_title: '" + "X" * 61 + "'"),
         "'2.0' in the copy": approved.replace("The opening paragraph", "The DAWG 2.0 opening paragraph"),
         "future date": approved.replace("date: '2026-10-11'", "date: '2030-01-01'"),
         "slug that collides with a team page": approved,

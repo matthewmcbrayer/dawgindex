@@ -91,12 +91,12 @@ with sync_playwright() as p:
     for w in (1280, 390):
         c = b.new_context(viewport={"width": w, "height": 900}, is_mobile=w < 600, has_touch=w < 600); c.route("**/*", route); pg = c.new_page()
         pg.goto("https://preview.local/"); pg.wait_for_function("document.getElementById('home-host').getAttribute('data-ready') === '1'"); pg.wait_for_timeout(1200)
-        o = pg.evaluate(f"(() => {{ const r = {R}; return {{lead: r.querySelector('#bt-grid .bt-lead').getAttribute('href'), items: [...r.querySelectorAll('#bt-grid .bt-item')].map(a => a.getAttribute('href')), text: r.getElementById('beyond-sec').textContent}}; }})()")
+        o = pg.evaluate(f"(() => {{ const r = {R}; const c = [...r.querySelectorAll('#bt-grid .bt-card')].map(a => a.getAttribute('href')); return {{lead: c[0], items: c.slice(1), text: r.getElementById('beyond-sec').textContent}}; }})()")
         check(o["lead"] == "/stories/flow-test-story/" and o["items"] == [e["url"] for e in man0][:3], f"{w}px homepage: the new story leads Beyond the Score, the earlier stories move to the list in order", str(o))
         check("UNAPPROVED" not in o["text"], f"{w}px homepage: the unapproved draft never appears")
         for slug, expect in (("baylor", ["/stories/flow-test-story/"]), ("oklahoma", ["/stories/flow-test-story/", "/stories/red-river-2026/"]), ("texas", ["/stories/red-river-2026/"])):
             pg.goto(f"https://preview.local/?team={slug}"); pg.wait_for_timeout(2500)
-            links = pg.evaluate(f"(() => {{ const r = {R}; const s = r.getElementById('t-stories'); return s.hidden ? [] : [...s.querySelectorAll('.bt-lead')].map(a => a.getAttribute('href')); }})()")
+            links = pg.evaluate(f"(() => {{ const r = {R}; const s = r.getElementById('t-stories'); return s.hidden ? [] : [...s.querySelectorAll('.bt-card')].map(a => a.getAttribute('href')); }})()")
             check(links == expect, f"{w}px {slug} team page lists {len(expect)} stor{'y' if len(expect) == 1 else 'ies'}, newest first", str(links))
         pg.goto("https://preview.local/stories/"); pg.wait_for_timeout(600)
         cards = pg.evaluate("[...document.querySelectorAll('a.st-card')].map(a => a.getAttribute('href'))")

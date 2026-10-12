@@ -69,10 +69,11 @@ with sync_playwright() as p:
         o = js(pg, """const ids = [...r.querySelectorAll('main[data-view="home"] > section')].map(s => s.id || s.className);
             const sec = r.getElementById('beyond-sec'); const nav = r.querySelector('header .nav'); const st = [...nav.querySelectorAll('a')].find(a => a.textContent.trim() === 'Stories');
             const fst = [...r.querySelectorAll('.foot-nav a')].find(a => a.textContent.trim() === 'Stories');
-            const lead = r.querySelector('#bt-grid .bt-lead'); const img = lead && lead.querySelector('img');
+            const cards = [...r.querySelectorAll('#bt-grid .bt-card')]; const lead = cards[0]; const img = lead && lead.querySelector('.bt-art img');
             const sb = st ? st.getBoundingClientRect() : null;
             return {ids, hidden: sec.hidden, solo: r.getElementById('bt-grid').classList.contains('solo'), lead: lead && lead.getAttribute('href'),
-              items: r.querySelectorAll('#bt-grid .bt-item').length, title: lead && lead.querySelector('.bt-t').textContent,
+              items: cards.length - 1, title: lead && lead.querySelector('.bt-t').textContent, artFirst: !!(lead && lead.firstElementChild.classList.contains('bt-art')),
+              logos: lead ? [...lead.querySelectorAll('.bt-logos img')].map(i => i.alt) : [], boxes: cards.map(c => { const b = c.getBoundingClientRect(); return [Math.round(b.top), Math.round(b.width), Math.round(b.height)]; }),
               meta: lead && lead.querySelector('.bt-m').textContent, imgOk: !!(img && img.complete && img.naturalWidth > 0) || (img && img.loading === 'lazy'),
               nav: st && st.getAttribute('href'), navVisible: !!(sb && sb.width > 0 && sb.left >= 0 && sb.right <= window.innerWidth),
               navFits: nav.scrollWidth <= nav.clientWidth + 1, foot: fst && fst.getAttribute('href'),
@@ -82,7 +83,11 @@ with sync_playwright() as p:
         L = [e for e in REAL["stories"] if e.get("status") == "published"]; top = L[0]
         check(not o["hidden"] and o["solo"] == (len(L) == 1) and o["lead"] == top["url"] and o["items"] == min(len(L) - 1, 3), f"{w}px: the newest published story leads ({len(L)} live: lead + {min(len(L) - 1, 3)} more)", str(o))
         mo = ["Jan.", "Feb.", "March", "April", "May", "June", "July", "Aug.", "Sept.", "Oct.", "Nov.", "Dec."]; y, m_, d_ = top["date"].split("-")
-        check(o["title"] == top["title"] and f"{mo[int(m_) - 1]} {int(d_)}, {y}" in o["meta"] and top["team_names"][0] in o["meta"], f"{w}px: lead card shows the title, date and teams from the story list")
+        check(o["title"] == (top.get("card_title") or top["title"]) and f"{mo[int(m_) - 1]} {int(d_)}, {y}" in o["meta"] and o["logos"][:1] == top["team_names"][:1], f"{w}px: newest card shows its short card title, date and team logos from the story list", str(o["title"]))
+        rows = {}
+        for t_, w_, h_ in o["boxes"]: rows.setdefault(t_, []).append((w_, h_))
+        same = all(len({x for x in r_}) == 1 for r_ in rows.values())
+        check(o["artFirst"] and same, f"{w}px: every card leads with its graphic, and cards side by side are the same size", str(o["boxes"]))
         check(o["all"], f"{w}px: section links to /stories/")
         check(o["nav"] == "/stories/" and o["foot"] == "/stories/", f"{w}px: STORIES is in the header nav and footer nav, linking to /stories/")
         check(o["navVisible"] and o["navFits"], f"{w}px: every header nav item, STORIES included, is visible without scrolling the nav", f"visible {o['navVisible']} fits {o['navFits']}")
@@ -104,8 +109,8 @@ with sync_playwright() as p:
     # scaling: lead + up to three more, newest first; drafts and entries without status never show
     for w in (1280, 390):
         c, pg, errs = page(b, w, FOUR)
-        o = js(pg, """return {lead: r.querySelector('#bt-grid .bt-lead').getAttribute('href'), solo: r.getElementById('bt-grid').classList.contains('solo'),
-            items: [...r.querySelectorAll('#bt-grid .bt-item')].map(a => a.getAttribute('href')), text: r.getElementById('beyond-sec').textContent};""")
+        o = js(pg, """const c = [...r.querySelectorAll('#bt-grid .bt-card')].map(a => a.getAttribute('href')); return {lead: c[0], solo: r.getElementById('bt-grid').classList.contains('solo'),
+            items: c.slice(1), text: r.getElementById('beyond-sec').textContent};""")
         check(o["lead"] == "/stories/sample-newest/" and not o["solo"], f"{w}px, five published + drafts: the newest published story leads")
         check(o["items"] == ["/stories/red-river-2026/", "/stories/sample-third/", "/stories/sample-fourth/"], f"{w}px: exactly three more, newest first", str(o["items"]))
         check("DRAFT MUST NOT SHOW" not in o["text"] and "NO STATUS MUST NOT SHOW" not in o["text"] and "fifth" not in o["text"], f"{w}px: drafts and entries without published status never show")
@@ -145,7 +150,7 @@ with sync_playwright() as p:
             c, pg, errs = page(b, w, url=f"https://preview.local/?team={slug}")
             pg.wait_for_timeout(1500)
             o = js(pg, """const s = r.getElementById('t-stories'); return {view: [...r.querySelectorAll('main.view')].filter(m => !m.hidden).map(m => m.getAttribute('data-view')),
-                hidden: s.hidden, links: [...s.querySelectorAll('.bt-lead')].map(a => a.getAttribute('href'))};""")
+                hidden: s.hidden, links: [...s.querySelectorAll('.bt-card')].map(a => a.getAttribute('href'))};""")
             ok = (not o["hidden"] and o["links"] == want) if expect else (o["hidden"] and not o["links"])
             check(o["view"] == ["team"] and ok, f"{slug} team page ({tid}) at {w}px: " + (f"shows its {len(want)} tagged stor{'y' if len(want) == 1 else 'ies'}, newest first" if expect else "no tagged stories, section hidden"), str(o))
             sec_ov = js(pg, "const s = r.getElementById('t-stories'); if (s.hidden) return 0; return Math.max(0, ...[s, ...s.querySelectorAll('*')].map(e => e.getBoundingClientRect().right - document.documentElement.clientWidth));")

@@ -194,6 +194,8 @@ def validate(fm, body, src_dir, teams, mode):
     copy = " ".join(str(fm.get(k, "")) for k in ("title", "dek", "description", "social_description", "card_dek", "tab")) + " " + re.sub(r"<[^>]+>", " ", body)
     if TWO_POINT_OH.search(copy):
         errs.append("'2.0' appears in the copy (internal name; never public)")
+    if fm.get("card_title") and len(str(fm["card_title"])) > 60:
+        errs.append("card_title over 60 characters (it's the short title on homepage and Stories cards)")
     if len(str(fm.get("description", ""))) > 200:
         errs.append("description over 200 characters")
     return errs
@@ -278,7 +280,8 @@ def manifest_entry(fm, ids, names):
     base = f"/stories/{fm['slug']}/"
     h = fm.get("headline") or {}
     teams = list(fm.get("teams") or [])
-    e = {"slug": fm["slug"], "status": "published", "url": base, "title": fm["title"], "headline": {"big": h.get("big") or fm["title"], "sub": h.get("sub")},
+    e = {"slug": fm["slug"], "status": "published", "url": base, "title": fm["title"], "card_title": fm.get("card_title") or fm["title"],
+         "headline": {"big": h.get("big") or fm["title"], "sub": h.get("sub")},
          "tab": fm["tab"], "category": fm["category"], "date": fm["date"], "teams": teams,
          "team_ids": [ids[x] for x in teams if x in ids], "team_names": [names.get(x, x) for x in teams],
          "dek": fm.get("card_dek") or fm["dek"], "image": base + "card.png", "image_alt": fm["image_alt"], "og_image": base + "og.png"}
@@ -296,7 +299,7 @@ def legacy_entry(repo, slug):
     g = lambda pat: (html.unescape(m.group(1)) if (m := re.search(pat, s)) else "")
     title = g(r'<meta property="og:title" content="([^"]*)"')
     base = f"/stories/{slug}/"
-    return {"slug": slug, "status": "published", "url": base, "title": title, "headline": {"big": title, "sub": None}, "tab": "", "category": "Story",
+    return {"slug": slug, "status": "published", "url": base, "title": title, "card_title": title, "headline": {"big": title, "sub": None}, "tab": "", "category": "Story",
             "date": g(r'<meta property="article:published_time" content="([^"]*)"') or "1970-01-01", "teams": [], "team_ids": [], "team_names": [],
             "dek": g(r'<meta name="description" content="([^"]*)"'), "og_image": base + "og.png",
             "image": base + ("card.png" if os.path.isfile(os.path.join(repo, "stories", slug, "card.png")) else "og.png"), "image_alt": title}
@@ -305,16 +308,17 @@ def legacy_entry(repo, slug):
 def index_page(entries, tpl_dir, names):
     page = read(os.path.join(tpl_dir, "index.html"))
     css = read(os.path.join(tpl_dir, "story.css")).rstrip("\n") + "\n" + read(os.path.join(tpl_dir, "index.css")).rstrip("\n")
-    def teams(e):
-        return " · ".join(t(n) for n in (e.get("team_names") or [names.get(x, x) for x in e["teams"]]))
-    def card(e, lead):
-        meta = t(nice_date(e["date"])) + (" · " + teams(e) if e["teams"] else "")
-        cls = "st-card lead" if lead else "st-card"
-        return (f'<a class="{cls}" href="{e["url"]}"><div class="st-art"><img src="{e["image"]}" alt="{a(e["image_alt"])}" loading="{"eager" if lead else "lazy"}"></div>'
-                f'<div class="st-copy"><span class="st-cat">{t(e["category"])}</span><h2 class="st-t">{t(e["title"])}</h2>'
-                f'<p class="st-d">{t(e["dek"])}</p><div class="st-m">{meta}</div><span class="st-go">Read the story <span aria-hidden="true">→</span></span></div></a>')
+    def logos(e):
+        ids = [i for i in (e.get("team_ids") or []) if re.fullmatch(r"\d+", str(i))][:3]
+        nm = e.get("team_names") or []
+        return "".join(f'<img class="st-logo" src="/logos/{i}.png" alt="{a(nm[k]) if k < len(nm) else ""}" width="26" height="26" loading="lazy">' for k, i in enumerate(ids))
+    def card(e, first):
+        # image first, short title second, then team logos and the date: the graphic does the selling
+        return (f'<a class="st-card" href="{e["url"]}"><div class="st-art"><img src="{e["image"]}" alt="{a(e["image_alt"])}" width="1200" height="675" loading="{"eager" if first else "lazy"}"></div>'
+                f'<div class="st-body"><span class="st-cat">{t(e["category"])}</span><h2 class="st-t">{t(e.get("card_title") or e["title"])}</h2>'
+                f'<div class="st-m"><span class="st-logos">{logos(e)}</span><time datetime="{e["date"]}">{t(nice_date(e["date"]))}</time></div></div></a>')
     if entries:
-        cards = card(entries[0], True) + ('\n<div class="st-grid">' + "\n".join(card(e, False) for e in entries[1:]) + "</div>" if len(entries) > 1 else "")
+        cards = '<div class="st-grid">\n' + "\n".join(card(e, i < 3) for i, e in enumerate(entries)) + "\n</div>"
     else:
         cards = '<p class="st-empty">No stories yet.</p>'
     ld = {"@context": "https://schema.org", "@type": "CollectionPage", "name": "Beyond the score · DAWG Index", "url": SITE + "/stories/",

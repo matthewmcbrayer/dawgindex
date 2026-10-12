@@ -2,6 +2,7 @@
 slug: oregon-ucla-seven-turnovers
 status: published
 title: Seven Turnovers. Two Points. Oregon Nearly Won a Game Nobody Wins.
+card_title: 'Seven Turnovers. Two Points.'
 headline:
   big: Seven turnovers.
   sub: Two points. Oregon nearly won a game nobody wins.

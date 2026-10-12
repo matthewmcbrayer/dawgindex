@@ -25,6 +25,7 @@ Separate from the V3 grading pipeline. The build reads `_editorial/` plus `sitem
 slug: my-story                # folder name; lowercase-and-hyphens
 status: draft                 # build only publishes 'published' + approved_by + approved_at
 title: Full headline for search and sharing
+card_title: Short title for homepage, team-page and Stories cards   # optional, 60 characters max; defaults to title
 headline: {big: Big line, sub: Second line}   # optional; on-page h1
 tab: Red River Rivalry · Week 6
 category: Game story
@@ -66,3 +67,5 @@ A pull quote.
 **Single-game PLAY variation.** Say: "Single-game PLAY results vary a lot: about 95% of them land within roughly ±21 points, and the standard deviation is about 11 points." Don't call ±21 a margin of error. (6,055 graded games: SD 10.5; 95.5% within ±20.6.)
 
 **Season-average noise.** "Random swings alone put an n-game average anywhere within about ±X points of zero (a 95% range)", with X = 1.96 × 14.1 / √n for DAWG and 1.96 × 10.5 / √n for PLAY.
+
+**Story cards.** Homepage, team pages and /stories/ all use one card: the story's card.png first, then `card_title`, then team logos and the date. No dek on cards. Keep `card_title` short (a few words; 60 characters max) and make card.png do the selling: a score, a stat or a chart, legible at 360px wide.

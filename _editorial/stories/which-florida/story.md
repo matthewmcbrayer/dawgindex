@@ -2,6 +2,7 @@
 slug: which-florida
 status: published
 title: Which Florida? From Beating No. 4 Ole Miss to Two Straight Certified SOFTs
+card_title: 'Which Florida?'
 headline:
   big: Which Florida?
   sub: A DAWG win over No. 4 Ole Miss, then two Certified SOFTs in a row.
