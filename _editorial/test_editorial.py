@@ -96,7 +96,12 @@ def main():
                    (b"Oklahoma's snaps came out 1 point better", b"Oklahoma's snaps came out 1.1 points better"),
                    (b"The difference between +11 and +1 is mostly", b"The difference between +11.2 and +1.1 is mostly"),
                    (b'+1 means "about as expected,"', b'+1.1 means "about as expected,"'),
-                   ('<td class="pos">+1</td><td class="neg">\u22121</td>'.encode(), '<td class="pos">+1.1</td><td class="neg">\u22121.1</td>'.encode())]
+                   ('<td class="pos">+1</td><td class="neg">\u22121</td>'.encode(), '<td class="pos">+1.1</td><td class="neg">\u22121.1</td>'.encode()),
+                   # Oct. 12: PLAY described as offense + defense vs. expectations in the labels and the method note (narrative unchanged)
+                   (b'<p class="fig-k">The scoreboard and the snaps</p>', b'<p class="fig-k">The scoreboard and offense + defense</p>'),
+                   ('<div class="lab">PLAY \u00b7 the snaps</div>'.encode(), '<div class="lab">PLAY \u00b7 offense + defense</div>'.encode()),
+                   (b"PLAY asks the same question snap by snap, using the open-source cfbfastR expected-points model.",
+                    b"PLAY asks the same question of the offense and defense, using expected points added (EPA) from the open-source cfbfastR model; special teams aren't in it.")]
     for a, b_ in CORRECTIONS:
         if a in live_page: live_page = live_page.replace(a, b_)
 

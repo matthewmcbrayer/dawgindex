@@ -183,8 +183,9 @@ th[data-tip]>button,th[data-tip]:not(:has(button)){text-decoration:underline dot
 tr.gc{cursor:pointer}
 tr.gc:hover td{background:var(--bg)}
 tr.gc:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
-#gcard{position:fixed;inset:0;z-index:30;display:grid;place-items:center;padding:16px;background:rgba(10,12,14,.55)}
-#gcard .box{background:var(--surface);color:var(--ink);border:1px solid var(--line);border-top:5px solid var(--accent);width:min(640px,100%);max-height:calc(100% - 32px);overflow:auto;padding:18px 20px;display:grid;gap:14px;box-shadow:0 12px 40px rgba(0,0,0,.3)}
+#gcard{position:fixed;inset:0;z-index:30;display:grid;place-items:center;padding:16px;background:rgba(10,12,14,.55);overscroll-behavior:contain}
+html.gc-lock,html.gc-lock body{overflow:hidden!important}
+#gcard .box{background:var(--surface);color:var(--ink);border:1px solid var(--line);border-top:5px solid var(--accent);width:min(640px,100%);max-height:calc(100vh - 32px);max-height:calc(100dvh - 32px);overflow:auto;overflow-x:hidden;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;padding:18px 20px;display:grid;gap:14px;box-shadow:0 12px 40px rgba(0,0,0,.3)}
 #gcard .hd{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
 #gcard h3{font-family:var(--display);font-weight:800;font-size:26px;line-height:1.05;text-transform:uppercase;margin:0}
 #gcard .meta{color:var(--muted);font-size:13px;margin-top:4px}
@@ -963,6 +964,15 @@ body.on-home #toast{background:var(--g2-ink)!important;color:var(--g2-paper2)!im
 /* Oct 11, 2026: what the two numbers are, said on the card itself; PLAY carries the key's blue */
 body.on-home #gcard .gcw{font-family:var(--g2-body);font-weight:700;font-size:14px;color:var(--g2-ink);letter-spacing:0}
 body.on-home #gcard #gc-big .gcplay .gcl{color:var(--g2-blue)!important}
+/* Oct 12, 2026: the card fits the screen on every browser. Height comes from the viewport itself (dvh where supported, so the
+   mobile Safari toolbar can't hide the bottom); the card scrolls inside, the header with the close button stays put, and
+   scrolling never spills over to the page behind. */
+body.on-home #gcard{overscroll-behavior:contain}
+body.on-home #gcard .box{max-height:calc(100vh - 48px)!important;max-height:calc(100dvh - 48px)!important;overflow-y:auto!important;overflow-x:hidden!important;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
+@media (max-width:640px){
+  body.on-home #gcard .box{max-height:calc(100vh - 28px)!important;max-height:calc(100dvh - 28px)!important}
+  body.on-home #gcard .gcact{padding-bottom:calc(22px + env(safe-area-inset-bottom,0px))!important}
+}
 </style>
 
 <div id="htip" role="tooltip" hidden></div>
@@ -2190,6 +2200,53 @@ h2{font-family:var(--display);font-weight:900;font-size:clamp(34px,4vw,52px);lin
   .mk-note{margin:4px 2px 0}
   .mh-s{font-size:10px}
 }
+/* Oct 12, 2026: the team page's tickets ("Up next", best and worst game) sit in narrow columns on laptop screens; a long school name
+   (Northwestern, Mississippi State) pushed the 134px stub past the column and the page scrolled sideways at 1280px. The halves can
+   now shrink and home.js shrinks a name that doesn't fit; the "Up next" stub is narrower. */
+@media (max-width:820px){ .t-tix .ticket,.t-next .ticket{grid-template-columns:minmax(0,1fr) minmax(0,1fr)} }
+@media (min-width:821px){
+  .t-tix .ticket{grid-template-columns:minmax(0,1fr) minmax(0,1fr) 134px}
+  .t-next .ticket{grid-template-columns:minmax(0,1fr) minmax(0,1fr) 100px}
+  .t-next .ticket .at{left:calc(50% - 50px)}
+  .t-next .ticket .side{padding:12px 9px 10px}
+  .t-next .ticket .side .nm{font-size:22px}
+  .t-next .ticket .side .lg{width:72px;height:72px}.t-next .ticket .side .lg img{width:52px;height:52px}
+  .t-next .ticket .stub{padding:12px 8px 12px 11px}
+}
+/* Oct 12, 2026: in-between widths. 821–1020px: the six-link nav, the date and "Find your team" didn't fit on one line (the page
+   scrolled sideways), so the date and the button's label hide there, as they already do on phones. 1101–1240px: the
+   homepage's rankings stickers get a little smaller, and the slate stacks (as it already does at 1100px and below) because its
+   tickets didn't fit beside the game of the week. */
+@media (min-width:821px) and (max-width:1020px){
+  .mast-in{gap:16px}
+  .asof{display:none}
+  .findbtn span{display:none}.findbtn{padding:9px}
+  .nav{gap:0}.nav a{padding:8px 9px}
+}
+@media (min-width:1101px) and (max-width:1240px){
+  .rank-side .stickerrow{gap:8px;padding:6px 4px 0}
+  .rank-side .stickerrow .sticker{width:116px;padding:11px 6px 9px}
+  .rank-side .stickerrow .sticker .v{font-size:40px}
+  .slate-grid{grid-template-columns:minmax(0,1fr);gap:36px}
+  .gotw,.slate-list{min-width:0}
+}
+/* Oct 12, 2026: at 1101–1260px the "Up next" column is at its narrowest, so its ticket uses the phone layout (the two teams side by
+   side, the stub underneath) instead of shrinking long school names below a readable size. */
+@media (min-width:1101px) and (max-width:1260px){
+  .t-next .ticket{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+  .t-next .ticket .side{padding:12px}
+  .t-next .ticket .at{left:50%;top:50%}
+  .t-next .ticket .stub{grid-column:1/-1;border-left:0;border-top:2px dashed var(--ink);flex-direction:row;align-items:center;gap:14px;padding:10px 12px}
+  .t-next .ticket .stub::before,.t-next .ticket .stub::after{top:-11px;bottom:auto;width:11px;height:20px}
+  .t-next .ticket .stub::before{left:-2px;right:auto;border:2px solid var(--ink);border-left:0;border-radius:0 11px 11px 0}
+  .t-next .ticket .stub::after{right:-2px;left:auto;border:2px solid var(--ink);border-right:0;border-radius:11px 0 0 11px}
+  .t-next .ticket .stub>div:first-child{flex:1 1 0;min-width:0}
+  .t-next .ticket .stub .bc{flex:1;margin:0;height:30px}
+  .t-next .ticket .stub .wk{font-size:20px}
+  .t-next .ticket .stub .bcw{flex:1 1 0;min-width:0;max-width:150px;margin:0 0 0 auto}
+  .t-next .ticket .stub .bcw .bcs{height:34px}
+  .t-next .ticket .stub .bcw .gid{display:block;font-size:9px;text-align:center}
+}
 </style>
 <div class="home" id="home">
 <header class="mast">
@@ -2310,11 +2367,11 @@ h2{font-family:var(--display);font-weight:900;font-size:clamp(34px,4vw,52px);lin
   </div>
 </section>
 
-<!-- ================= SCOREBOARD vs THE SNAPS ================= -->
+<!-- ================= SCOREBOARD vs OFFENSE + DEFENSE ================= -->
 <section class="snaps" id="snaps" aria-labelledby="snaps-h">
   <div class="wrap">
     <div class="sechead">
-      <div><span class="kicker">The map of the season</span><h2 id="snaps-h">Scoreboard vs. the snaps</h2></div>
+      <div><span class="kicker">The map of the season</span><h2 id="snaps-h">Scoreboard vs. offense + defense</h2></div>
       <p class="sechead-note">Every Power 4 team placed by its two grades: the scoreboard (DAWG) and its offense and defense (PLAY). Both are points per game against what the closing line expected. Teams off the dashed line had results running ahead of, or behind, how they played.</p>
     </div>
     <div class="snaps-grid">
@@ -2723,14 +2780,14 @@ h2{font-family:var(--display);font-weight:900;font-size:clamp(34px,4vw,52px);lin
   </section>
   <section class="sec page" data-page="rankings" id="chart-sec" aria-labelledby="chart-h">
     <div class="sechead">
-      <h2 id="chart-h">Scoreboard vs. the Snaps</h2>
+      <h2 id="chart-h">Scoreboard vs. Offense + Defense</h2>
       <div class="modebar">
                 <select id="confsel" aria-label="Conference"><option value="">All Conferences</option><option>SEC</option><option>Big Ten</option><option>Big 12</option><option>ACC</option><option value="Independent">Notre Dame</option></select>
       </div>
     </div>
-    <p class="note">This season so far. Up = the scoreboard beat expectations (DAWG) · Right = the snaps did (PLAY) <button type="button" class="ib" id="chart-why" aria-expanded="false" aria-label="More about this chart" title="More about this chart">i</button></p>
+    <p class="note">This season so far. Up = the scoreboard beat expectations (DAWG) · Right = offense + defense did (PLAY) <button type="button" class="ib" id="chart-why" aria-expanded="false" aria-label="More about this chart" title="More about this chart">i</button></p>
     <div class="modenote" id="chart-why-t" hidden>
-      <p>Both numbers are points per game against what the closing line expected. DAWG comes from the scoreboard with garbage time out; PLAY comes from every competitive snap, valued with an expected-points model. Most teams sit near the diagonal. Teams far from it had results that ran ahead of, or behind, how they played snap to snap. PLAY only counts scrimmage plays, so kicks, returns and how the big plays bunched together show up in DAWG but not in PLAY. The two are never added together.</p><p>Zero means exactly as expected. The scale stretches to fit wherever teams are, so check the numbers on the edges.</p>
+      <p>Both numbers are points per game against what the closing line expected. DAWG comes from the scoreboard with garbage time out; PLAY comes from every competitive snap, valued with an expected-points model. Most teams sit near the diagonal. Teams far from it had results that ran ahead of, or behind, how their offense and defense played. PLAY only counts scrimmage plays, so kicks, returns and how the big plays bunched together show up in DAWG but not in PLAY. The two are never added together.</p><p>Zero means exactly as expected. The scale stretches to fit wherever teams are, so check the numbers on the edges.</p>
     </div>
     <div class="chartbox">
       <svg id="chart" class="chart" viewBox="0 0 900 720" role="img" aria-labelledby="chart-h"></svg>
@@ -2757,7 +2814,7 @@ h2{font-family:var(--display);font-weight:900;font-size:clamp(34px,4vw,52px);lin
   </section>
   <section class="sec page" data-page="rankings" id="top-sec" aria-labelledby="top-h">
     <div class="sechead"><h2 id="top-h">Top 10 Games</h2><span class="note" id="top-note">Single-game DAWG</span></div>
-    <p class="note">The season's best single-game performances against expectations. DAWG is points better than the closing spread said to expect, garbage time out. PLAY is how well the team actually played, snap by snap, in the same points. Tap a game for the full card.</p>
+    <p class="note">The season's best single-game performances against expectations. DAWG is points better than the closing spread said to expect, garbage time out. PLAY is the offense and defense vs. expectations, from expected points added (EPA), in the same points; special teams aren’t in it. Tap a game for the full card.</p>
     <div class="tablewrap">
       <table id="topgames">
         <thead><tr><th class="l rank">#</th><th class="l">Team</th><th class="l" data-tip="tgame">Game</th><th data-tip="wl">Score</th><th data-tip="line">Spread</th><th data-tip="expm">Expected</th><th data-tip="compm">Margin<small class="thsub">excl. garbage time</small></th><th data-tip="gdawg">DAWG</th><th data-tip="gplay">PLAY</th></tr></thead>
@@ -2827,7 +2884,7 @@ h2{font-family:var(--display);font-weight:900;font-size:clamp(34px,4vw,52px);lin
         <tbody></tbody>
       </table>
     </div>
-    <p class="lognote">Tap a game for the full card: what the line expected, what happened with garbage time out, and how the snaps graded.</p>
+    <p class="lognote">Tap a game for the full card: what the line expected, what happened with garbage time out, and how the offense and defense graded (PLAY).</p>
     <div id="teamhab"></div>
     <div class="tbwrap">
       <div><h3>Best Performances Since 2019</h3><div class="tablewrap"><table class="tbt"><thead><tr><th class="l">Game</th><th class="l hide-sm">Date</th><th data-tip="wl">Score</th><th data-tip="gdawg">DAWG</th><th data-tip="gplay">PLAY</th></tr></thead><tbody id="tb-top"></tbody></table></div></div>
@@ -2937,6 +2994,7 @@ h2{font-family:var(--display);font-weight:900;font-size:clamp(34px,4vw,52px);lin
   <section class="sec page" data-page="method" id="changes-sec" aria-labelledby="chg-h">
     <h2 id="chg-h">Changes</h2>
     <ul class="chg">
+      <li><b>Oct. 12, 2026</b> The game card now fits any screen: it scrolls inside itself with the close button always in view, and the page behind it stays put. Remaining labels that called PLAY "the snaps" now say offense + defense. No grade, rank or label changed.</li>
       <li><b>Oct. 11, 2026</b> DAWG and PLAY are now explained where they first appear: DAWG is the scoreboard vs. expectations, PLAY is the offense and defense vs. expectations. A game's PLAY is now shown to one decimal, like DAWG, from the same unrounded value the grade has always stored (the open-data CSV keeps whole numbers). No grade, rank or label changed.</li>
       <li><b>Oct. 11, 2026</b> Corrected how much one game's PLAY varies: about 95% of single-game PLAY results land within roughly ±21 points (standard deviation about 11). The old "±12" understated it. No numbers changed.</li>
       <li><b>Oct. 8, 2026</b> <b>DAWG Index V3 (methodology v3.0).</b> The game grade is now DAWG: points better or worse than the closing line expected, with garbage time out, against expectations built only from earlier seasons. PLAY is new: the same check snap by snap, using the open-source cfbfastR expected-points model. New labels: DAWG +12.3, Certified DAWG +24, SOFT −12.3, Certified SOFT −24. Retired: the five-part grade, setting multipliers, the big-game split, Luck, Due for a Correction, hindsight grades and the Matchup Builder. The QB ratings and team habits now use the same expected-points model. Every number since 2019 was regraded, so ranks and records moved. Each game's play-by-play scoring is now checked against ESPN's scoring summary; where they disagree, DAWG uses the summary and PLAY isn't shown (37 games since 2019), and 10 games whose scoring order couldn't be verified aren't graded. The old site is archived at <a href="/v2/" style="color:var(--accent)">/v2/</a>.</li>
@@ -4393,10 +4451,10 @@ var FACTS = {
     while (svg.firstChild) svg.removeChild(svg.firstChild);
     var x0 = sx(0), y0 = sy(0);
     var Q = [
-      {x:x0, y:sy(hi), w:sx(XH)-x0, h:y0-sy(hi), fill:"var(--q-dawg)", t:"ABOVE ON BOTH", s:"Scoreboard and snaps beat expectations", c:"var(--qc-dawg)", ax:"end", tx:sx(XH)-(MOB?8:14), ty:sy(hi)+(MOB?18:24), f:function(t){ return t.play >= 0 && t.dawg >= 0; }},
-      {x:sx(XL), y:sy(hi), w:x0-sx(XL), h:y0-sy(hi), fill:"var(--q-rise)", t:"SCOREBOARD AHEAD", s:"Results better than the snaps", c:"var(--qc-rise)", ax:"start", tx:sx(XL)+(MOB?8:14), ty:sy(hi)+(MOB?18:24), f:function(t){ return t.play < 0 && t.dawg >= 0; }},
-      {x:x0, y:y0, w:sx(XH)-x0, h:sy(lo)-y0, fill:"var(--q-front)", t:"SNAPS AHEAD", s:"Played better than the results", c:"var(--qc-front)", ax:"end", tx:sx(XH)-(MOB?8:14), ty:sy(lo)-(MOB?20:30), f:function(t){ return t.play >= 0 && t.dawg < 0; }},
-      {x:sx(XL), y:y0, w:x0-sx(XL), h:sy(lo)-y0, fill:"var(--q-soft)", t:"BELOW ON BOTH", s:"Scoreboard and snaps fell short", c:"var(--qc-soft)", ax:"start", tx:sx(XL)+(MOB?8:14), ty:sy(lo)-(MOB?20:30), f:function(t){ return t.play < 0 && t.dawg < 0; }}
+      {x:x0, y:sy(hi), w:sx(XH)-x0, h:y0-sy(hi), fill:"var(--q-dawg)", t:"ABOVE ON BOTH", s:"Scoreboard and PLAY beat expectations", c:"var(--qc-dawg)", ax:"end", tx:sx(XH)-(MOB?8:14), ty:sy(hi)+(MOB?18:24), f:function(t){ return t.play >= 0 && t.dawg >= 0; }},
+      {x:sx(XL), y:sy(hi), w:x0-sx(XL), h:y0-sy(hi), fill:"var(--q-rise)", t:"SCOREBOARD AHEAD", s:"Results better than PLAY", c:"var(--qc-rise)", ax:"start", tx:sx(XL)+(MOB?8:14), ty:sy(hi)+(MOB?18:24), f:function(t){ return t.play < 0 && t.dawg >= 0; }},
+      {x:x0, y:y0, w:sx(XH)-x0, h:sy(lo)-y0, fill:"var(--q-front)", t:"PLAY AHEAD", s:"Played better than the results", c:"var(--qc-front)", ax:"end", tx:sx(XH)-(MOB?8:14), ty:sy(lo)-(MOB?20:30), f:function(t){ return t.play >= 0 && t.dawg < 0; }},
+      {x:sx(XL), y:y0, w:x0-sx(XL), h:sy(lo)-y0, fill:"var(--q-soft)", t:"BELOW ON BOTH", s:"Scoreboard and PLAY fell short", c:"var(--qc-soft)", ax:"start", tx:sx(XL)+(MOB?8:14), ty:sy(lo)-(MOB?20:30), f:function(t){ return t.play < 0 && t.dawg < 0; }}
     ];
     Q.forEach(function(q){ el("rect", {x:q.x, y:q.y, width:q.w, height:q.h, fill:q.fill}, svg); });
     for (var xv = XL; xv <= XH + 1e-9; xv += XS){
@@ -4590,7 +4648,7 @@ var FACTS = {
     var yr = String(state.season) === LATEST ? "this season" : "in " + state.season;
     lines.push([nd > ns ? "up" : ns > nd ? "dn" : "eq", "<b>" + nd + " DAWG game" + (nd === 1 ? "" : "s") + " and " + ns + " SOFT game" + (ns === 1 ? "" : "s") + "</b> " + yr + " out of " + s.nG + " graded" + ((s.nCD || s.nCS) ? " (" + (s.nCD || 0) + " Certified DAWG, " + (s.nCS || 0) + " Certified SOFT)." : ".")]);
     if (s.play !== null && s.play !== undefined){ var pr = Math.round(s.play);
-      lines.push([pr > 0 ? "up" : pr < 0 ? "dn" : "eq", "<b>Offense and defense: PLAY " + pl(s.play) + " a game</b> over " + s.nP + " game" + (s.nP === 1 ? "" : "s") + "." + (pr !== 0 && s.dawg !== 0 && (pr > 0) !== (s.dawg > 0) ? " The scoreboard and the snaps point different ways " + yr + "." : "")]); }
+      lines.push([pr > 0 ? "up" : pr < 0 ? "dn" : "eq", "<b>Offense and defense: PLAY " + pl(s.play) + " a game</b> over " + s.nP + " game" + (s.nP === 1 ? "" : "s") + "." + (pr !== 0 && s.dawg !== 0 && (pr > 0) !== (s.dawg > 0) ? " DAWG and PLAY point different ways " + yr + "." : "")]); }
     if (s.nG < s.n) lines.push(["dot", (s.n - s.nG) + " game" + (s.n - s.nG === 1 ? "" : "s") + " not graded (no closing line, or the scoring record didn't match the final)."]);
     var IC = {up:"▲", dn:"▼", eq:"=", warn:"!", good:"+", dot:"·"};
     var vw = s.dawg >= 0.5 ? "Above expectations" : s.dawg <= -0.5 ? "Below expectations" : "Right around expectations";
@@ -5262,9 +5320,23 @@ var FACTS = {
     if (g.set) notes.push("Setting: " + g.set + " (description only).");
     $("gc-form").textContent = notes.join(" ");
     gcShare = {g:g, m:m, t:t, y:y, P:P, head:$("gc-h").textContent, sum:gameSummary(g)}; $("gc-share-msg").textContent = "";
-    gcLast = document.activeElement; while (gcLast && gcLast.shadowRoot && gcLast.shadowRoot.activeElement) gcLast = gcLast.shadowRoot.activeElement; $("gcard").hidden = false; $("gc-x").focus();
+    gcLast = document.activeElement; while (gcLast && gcLast.shadowRoot && gcLast.shadowRoot.activeElement) gcLast = gcLast.shadowRoot.activeElement; $("gcard").hidden = false; gcLock(); $("gcard").querySelector(".box").scrollTop = 0; try { $("gc-x").focus({preventScroll:true}); } catch(e){ $("gc-x").focus(); }
   }
-  function closeCard(){ $("gcard").hidden = true; if (gcLast && gcLast.focus) gcLast.focus(); }
+  function closeCard(){ $("gcard").hidden = true; gcUnlock(); if (gcLast && gcLast.focus) { try { gcLast.focus({preventScroll:true}); } catch(e){ gcLast.focus(); } } }
+  // Oct 12, 2026: while the card is open the page behind it doesn't scroll (wheel, trackpad or touch), and Tab stays inside the card
+  var gcLocked = false, gcSb = "";
+  function gcLock(){ if (gcLocked) return; gcLocked = true; var sb = window.innerWidth - document.documentElement.clientWidth; gcSb = document.body.style.paddingRight;
+    if (sb > 0) document.body.style.paddingRight = sb + "px"; document.documentElement.classList.add("gc-lock"); }
+  function gcUnlock(){ if (!gcLocked) return; gcLocked = false; document.documentElement.classList.remove("gc-lock"); document.body.style.paddingRight = gcSb; }
+  $("gcard").addEventListener("touchmove", function(e){ var b = this.querySelector(".box"); if (!b.contains(e.target) || b.scrollHeight <= b.clientHeight) e.preventDefault(); }, {passive:false});
+  function gcFocusables(){ return Array.prototype.filter.call($("gcard").querySelectorAll('button:not([disabled]), [href], summary, input, select, textarea, [tabindex]:not([tabindex="-1"])'), function(el){ return el.offsetWidth || el.offsetHeight || el.getClientRects().length; }); }
+  document.addEventListener("keydown", function(e){
+    if (e.key !== "Tab" || $("gcard").hidden) return;
+    var sc = $("savecard"); if (sc && sc.classList.contains("on") && sc.contains(document.activeElement)) return;   // the "Image ready" card sits on top and keeps its own focus
+    var f = gcFocusables(); if (!f.length) return; var first = f[0], last = f[f.length - 1], a = document.activeElement, inside = $("gcard").contains(a);
+    if (e.shiftKey && (a === first || !inside)) { e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey && (a === last || !inside)) { e.preventDefault(); first.focus(); }
+  });
   $("gc-x").addEventListener("click", closeCard);
   $("gcard").addEventListener("click", function(e){ if (e.target === this) closeCard(); });
   document.addEventListener("keydown", function(e){ if (e.key === "Escape" && !$("gcard").hidden) closeCard(); });
@@ -5404,7 +5476,7 @@ var FACTS = {
     '.xbodyin #coaches th:nth-child(3),.xbodyin #coaches td:nth-child(3),.xbodyin #coaches th:nth-child(9),.xbodyin #coaches td:nth-child(9),.xbodyin #coaches th:nth-child(10),.xbodyin #coaches td:nth-child(10){display:none}' +
     '.xbodyin .csub{display:none!important}' +
     '.xcoach{display:grid;grid-template-columns:1fr 1fr;gap:22px}.xcoach h3{font-size:24px!important;margin:0 0 10px!important}.xcoach td,.xcoach th{font-size:17px!important}.xcoach td.num{font-size:21px!important}.xcs{display:block;font-size:14px;color:var(--muted);font-weight:500;margin-top:2px}';
-  var SHARES = [], SHLBL = {"qb-rankings":"QB rankings", "qb":"QB profile", "highlights":"This week's highlights", "scoreboard-vs-snaps":"Scoreboard vs. the snaps chart", "dawg-rankings":"DAWG Rankings", "poll-check":"Poll Check", "conferences":"Conference rankings", "conference-check":"Conference Check", "top-10-games":"Top 10 games", "tendencies":"Team tendencies", "coaches":"Coach résumés", "blown-leads":"Blown leads", "biggest-blown-leads":"Biggest blown leads", "cash-in-after-stops":"Cash-in after stops", "team":"team card", "biggest-wins":"biggest wins", "best-games":"best performances", "worst-games":"worst performances", "game-log":"game log"};
+  var SHARES = [], SHLBL = {"qb-rankings":"QB rankings", "qb":"QB profile", "highlights":"This week's highlights", "scoreboard-vs-snaps":"Scoreboard vs. offense + defense chart", "dawg-rankings":"DAWG Rankings", "poll-check":"Poll Check", "conferences":"Conference rankings", "conference-check":"Conference Check", "top-10-games":"Top 10 games", "tendencies":"Team tendencies", "coaches":"Coach résumés", "blown-leads":"Blown leads", "biggest-blown-leads":"Biggest blown leads", "cash-in-after-stops":"Cash-in after stops", "team":"team card", "biggest-wins":"biggest wins", "best-games":"best performances", "worst-games":"worst performances", "game-log":"game log"};
   function addShare(anchor, o, inH3){
     if (!anchor) return; var b = document.createElement("button"); b.type = "button"; b.className = "xbtn"; b.textContent = "Share";
     b.title = "Save this as an image"; if (o.label) b.textContent = o.label; b.addEventListener("click", function(){ if (o.card) o.card(b); else exportImage(o, b); }); SHARES.push({o:o, btn:b});
@@ -5417,7 +5489,7 @@ var FACTS = {
   (function(){
     var sh = function(id){ return $(id) ? $(id).closest(".sechead") : null; };
     addShare(sh("week-h"), {title:function(){ return $("week-h").textContent; }, sub:function(){ return "DAWG: points vs. what the closing line expected, garbage time out · +12.3 = DAWG game · −12.3 = SOFT"; }, nodes:function(){ return [$("wk")]; }, file:"highlights"});
-    addShare(sh("chart-h"), {title:function(){ return $("chart-h").textContent; }, sub:function(){ return "This season so far. Up = the scoreboard beat expectations (DAWG) · Right = the snaps did (PLAY)"; }, nodes:function(){ return [document.querySelector("#chart-sec .chartbox")]; }, file:"scoreboard-vs-snaps"});
+    addShare(sh("chart-h"), {title:function(){ return $("chart-h").textContent; }, sub:function(){ return "This season so far. Up = the scoreboard beat expectations (DAWG) · Right = offense + defense did (PLAY)"; }, nodes:function(){ return [document.querySelector("#chart-sec .chartbox")]; }, file:"scoreboard-vs-snaps"});
     addShare(sh("board-h"), {title:function(){ return $("board-h").textContent; }, sub:function(){ return "Average DAWG = points a game vs. what the closing line expected, garbage time out. 0 = as expected. PLAY = offense + defense vs. expectations"; }, nodes:function(){ return [wrapOf("board")]; }, file:"dawg-rankings"});
     addShare(sh("poll-h"), {title:function(){ return "Poll Check"; }, sub:function(){ return "AP rank next to DAWG rank: where each team ranks at living up to expectations, out of 68 Power 4 teams. Fraud Watch = ranked, but in the bottom half of the DAWG Rankings"; }, nodes:function(){ return [wrapOf("poll")]; }, file:"poll-check"});
     addShare(sh("conf-h"), {title:function(){ return "Conference Rankings"; }, nodes:function(){ return [document.querySelector("#conf-sec .tablewrap")]; }, file:"conferences"});
@@ -6000,7 +6072,7 @@ var FACTS = {
     $("findbtn").addEventListener("click", function(){ var tq = curView === "team" ? $("tfindq") : q; tq.scrollIntoView({behavior:"smooth", block:"center"}); setTimeout(function(){ tq.focus(); }, 350); });
   }
 
-  // ---------- scoreboard vs the snaps ----------
+  // ---------- scoreboard vs. offense + defense (DAWG vs. PLAY) ----------
   function drawChart(D){
     var svg = $("chart"), compact = window.matchMedia("(max-width: 820px)").matches;
     var W = compact ? 640 : 1000, H = compact ? 660 : 640, m = compact ? {l:38, r:18, t:44, b:52} : {l:56, r:26, t:48, b:56};
@@ -6058,7 +6130,7 @@ var FACTS = {
         (L ? '<text class="lab" style="font-size:' + lf + 'px" x="' + L.x + '" y="' + L.y + '" text-anchor="' + L.a + '">' + esc(p.abbr) + ' <tspan class="g">' + signed(p.dawg) + '</tspan></text>' : '') + '</g>';
     });
     svg.innerHTML = h;
-    var kick = $("snaps-h"); if (kick) kick.textContent = "Scoreboard vs. the snaps" + (curC ? "" : " \u00b7 " + yC);
+    var kick = $("snaps-h"); if (kick) kick.textContent = "Scoreboard vs. offense + defense" + (curC ? "" : " \u00b7 " + yC);
     $("offchart").innerHTML = off.length ? '<b>Off this zoom</b> (DAWG / PLAY): ' + off.map(function(p){ return '<a href="' + teamUrl(p.name) + '" data-team="' + p.id + '">' + esc(p.abbr) + ' ' + signed(p.dawg) + ' / ' + signed(p.play) + '</a>'; }).join(' \u00b7 ') : '';
     if (svg.__wired) return; svg.__wired = true;
     var tip = $("ctip"), byId = {}; all.forEach(function(p){ byId[p.id] = p; });
@@ -6376,8 +6448,14 @@ var FACTS = {
     while (fs > min && h.scrollWidth > h.clientWidth + 1){ fs -= 2; h.style.fontSize = fs + "px"; }
     if (sm && fs !== fs0) sm.style.fontSize = (fs0 * .38).toFixed(1) + "px";
   }
-  (function(){ var t = null; window.addEventListener("resize", function(){ clearTimeout(t); t = setTimeout(function(){ if (curView === "team") fitName(); }, 80); });
-    if (document.fonts && document.fonts.ready) document.fonts.ready.then(function(){ if (curView === "team") fitName(); }); })();
+  // Oct 12, 2026: the same for the school names on the team page's tickets ("Up next", best and worst game), which sit in narrow columns
+  function fitNext(){
+    Array.prototype.forEach.call(root.querySelectorAll("#t-next .ticket .side .nm, .t-tix .ticket .side .nm"), function(h){ if (!h.offsetWidth) return; h.style.fontSize = "";
+      var fs0 = parseFloat(getComputedStyle(h).fontSize), fs = fs0, min = Math.max(11, fs0 * .5);
+      while (fs > min && h.scrollWidth > h.clientWidth + 1){ fs -= 1; h.style.fontSize = fs + "px"; } });
+  }
+  (function(){ var t = null; window.addEventListener("resize", function(){ clearTimeout(t); t = setTimeout(function(){ if (curView === "team") { fitName(); fitNext(); } }, 80); });
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(function(){ if (curView === "team") { fitName(); fitNext(); } }); })();
   function protoTeam(id){ return !!(window.HOME && window.HOME.team && window.HOME.team[id]); }
   function lchip(code){ var N = {CD:"Certified DAWG", D:"DAWG", S:"SOFT", CS:"Certified SOFT"}; return code && N[code] ? '<span class="lchip ' + code.toLowerCase() + '">' + N[code] + '</span>' : ''; }
   function wl(pf, pa){ return (pf > pa ? "W " : pf < pa ? "L " : "T ") + pf + "–" + pa; }
@@ -6442,7 +6520,7 @@ var FACTS = {
           ticket(D, {away: g.site === "home" ? op : me, home: g.site === "home" ? me : op, neutral: g.site === "neutral", week: g.stype === 3 ? "Bowl" : "Week " + g.wk, dateLine: fmtDate(g.date), venue: g.set || "", city: "", gid: g.id,
             card: {gid: g.id, t: T.id, y: y}, bc: T.id, stamp: {cls: (g.lab || "e").toLowerCase(), text: ({CD:"Certified<br>DAWG", D:"DAWG", S:"SOFT", CS:"Certified<br>SOFT"}[g.lab] || "As expected"), small: T.name + " " + signed(g.dawg)}}) +
           '<button type="button" class="linkbtn t-tix-share" data-share="game" data-gid="' + g.id + '" data-t="' + T.id + '" data-y="' + y + '" data-tab="' + (k === "hi" ? "Highest grade" : "Lowest grade") + '" data-kick="' + esc(T.name) + '’s ' + (k === "hi" ? "highest" : "lowest") + ' grade of ' + y + '">Share this game</button></div>'; }
-      $("t-story-art").innerHTML = tix(bestG, "hi") + (worstG && worstG !== bestG ? tix(worstG, "lo") : '');
+      $("t-story-art").innerHTML = tix(bestG, "hi") + (worstG && worstG !== bestG ? tix(worstG, "lo") : ''); fitNext();
     }
     drawTeamStories(T.id);
     // ---- season performance: rank by week, the receipt, up next ----
@@ -6480,7 +6558,7 @@ var FACTS = {
     var dupe = U && U.game && T.after && (U.game.away.id === T.after.id || U.game.home.id === T.after.id);   // next_games.json can hold this week's game itself
     if (cur && T.after && D.meta[T.after.id] && !dupe){ var a = T.after, d = new Date(a.dt); nx += '<div class="t-after"><span class="kicker">' + (U && U.unlisted ? 'Up next · Week ' + U.week : U && !U.game ? 'After the bye' : 'Then') + '</span><div class="t-after-g">' + logo(a.id) + '<div><b>' + (a.at === "at" ? "at " : "vs ") + (a.rk ? 'No. ' + a.rk + ' ' : '') + tlink(a.id, a.name) + esc(a.name) + '</a></b><small>' + DAYS[d.getUTCDay()] + ', ' + MON[d.getUTCMonth()] + ' ' + d.getUTCDate() + '</small></div></div></div>'; }
     $("t-next").innerHTML = nx || (cur ? '' : '<span class="kicker">Up next</span><p class="dim">Pick ' + D.season + ' to see the next game.</p>');
-    $("t-next").hidden = !cur;
+    $("t-next").hidden = !cur; fitNext();
     // ---- game by game: DAWG and PLAY for every graded game of the season, on one honest zero line ----
     (function(){
       var G = S ? S.games.filter(function(g){ return g.dawg != null || g.play != null; }) : [];

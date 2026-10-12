@@ -198,9 +198,9 @@ published_at: '2026-10-11T23:11:37Z'
       <p>Here's the wrinkle. On the scoreboard, Florida beat its line by almost 20 points. Snap for snap, it was only a little better than a four-point favorite usually is: PLAY +3.3. Ole Miss moved the ball well too, at about two-tenths of an expected point per snap. Florida was better, and it finished drives. But the snaps say "good win," not "24-point statement."</p>
 
       <figure aria-labelledby="f2h">
-        <p class="fig-k">The scoreboard and the snaps</p>
+        <p class="fig-k">The scoreboard and offense + defense</p>
         <p class="fig-h" id="f2h">The win was bigger on the scoreboard. The losses weren't.</p>
-        <div class="legend"><span><i style="background:var(--ink)"></i>DAWG · the scoreboard</span><span><i style="background:var(--blue)"></i>PLAY · the snaps</span></div>
+        <div class="legend"><span><i style="background:var(--ink)"></i>DAWG · the scoreboard</span><span><i style="background:var(--blue)"></i>PLAY · offense + defense</span></div>
         <div class="fx-pair">
           <div class="fx-g"><div class="nm"><img class="dx-logo" src="/logos/145.png" alt="" width="26" height="26" loading="lazy">Ole Miss</div><div class="fx-bars" role="img" aria-label="Ole Miss: DAWG +19.6, PLAY +3.3"><div class="fx-b"><div class="f dg" style="left:50%;width:24.5%"></div><div class="t" style="left:calc(50% + 24.5% + 6px)">DAWG +19.6</div></div><div class="fx-b"><div class="f pl" style="left:50%;width:4.1%"></div><div class="t" style="left:calc(50% + 4.1% + 6px)">PLAY +3.3</div></div></div></div>
           <div class="fx-g"><div class="nm"><img class="dx-logo" src="/logos/142.png" alt="" width="26" height="26" loading="lazy">Missouri</div><div class="fx-bars" role="img" aria-label="Missouri: DAWG −34.0, PLAY −20.6"><div class="fx-b"><div class="f dg" style="right:50%;width:42.5%"></div><div class="t" style="left:calc(50% + 6px)">DAWG −34.0</div></div><div class="fx-b"><div class="f pl" style="right:50%;width:25.8%"></div><div class="t" style="left:calc(50% + 6px)">PLAY −20.6</div></div></div></div>
@@ -276,4 +276,4 @@ published_at: '2026-10-11T23:11:37Z'
       </table>
       <p class="dx-note" style="margin-top:0">Yards and turnovers are Florida's first.</p>
 
-      <p class="method"><strong>How the grades work.</strong> DAWG compares the final margin, with garbage time removed, to the margin teams usually produce at that closing spread. PLAY asks the same question snap by snap, using the open-source cfbfastR expected-points model. Neither is a power rating, and neither predicts anything. <a href="/#method">How it works</a> · <a href="/florida/">Florida's season</a> · <a href="/dawg-index-games.csv">Every game (CSV)</a></p>
+      <p class="method"><strong>How the grades work.</strong> DAWG compares the final margin, with garbage time removed, to the margin teams usually produce at that closing spread. PLAY asks the same question of the offense and defense, using expected points added (EPA) from the open-source cfbfastR model; special teams aren't in it. Neither is a power rating, and neither predicts anything. <a href="/#method">How it works</a> · <a href="/florida/">Florida's season</a> · <a href="/dawg-index-games.csv">Every game (CSV)</a></p>
