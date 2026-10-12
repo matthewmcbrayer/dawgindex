@@ -117,6 +117,7 @@ def main():
     check(m1.get("card_title") == "BOOMER SOONER! What Did We Actually Learn?" and all(e.get("card_title") for e in allm), "every manifest entry carries a short card_title (Red River's is its headline)")
     ok_cards = all(f'<h2 class="st-t">{B.t(e["card_title"])}</h2>' in idx0 and f'<img src="{e["image"]}"' in idx0 for e in allm)
     check(ok_cards and idx0.count('class="st-art"') == len(allm) and "sr-only" not in idx0, "/stories/ cards: every card shows its thumbnail and its headline underneath")
+    check(not re.search(r'<div class="st-m">(?:(?!</div>).)*<img', idx0), "/stories/ cards: the row under the headline is category and date only (no team logos)")
     thumbs_ok = all(e["image"] == e["url"] + "thumb.png" and B.png_size(os.path.join(r, e["image"].lstrip("/"))) == (1200, 675) and len(e["image_alt"]) > 20 for e in allm)
     check(thumbs_ok and not any("card_style" in e or "card_teaser" in e for e in allm), "every card picture is the story's own 1200x675 thumb.png (not the detailed story graphic), with alt text")
     for e in allm:

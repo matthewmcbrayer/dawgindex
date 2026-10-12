@@ -73,7 +73,7 @@ with sync_playwright() as p:
             const sb = st ? st.getBoundingClientRect() : null;
             return {ids, hidden: sec.hidden, solo: r.getElementById('bt-grid').classList.contains('solo'), lead: lead && lead.getAttribute('href'),
               items: cards.length - 1, title: lead && (lead.querySelector('.bt-t') || {}).textContent, srTitle: lead && (lead.querySelector('.sr-only') || {}).textContent, style: lead && (lead.classList.contains('g') ? 'graphic' : 'image'), altOk: !!(img && img.alt.length > 10), artFirst: !!(lead && lead.firstElementChild.classList.contains('bt-art')),
-              logos: lead ? [...lead.querySelectorAll('.bt-logos img')].map(i => i.alt) : [], boxes: cards.map(c => { const b = c.querySelector('.bt-art').getBoundingClientRect(); return [Math.round(b.top), Math.round(b.width), Math.round(b.height)]; }), titles: cards.map(c => { const t = c.querySelector('.bt-t'); return t && t.offsetHeight > 10 ? t.textContent : null; }), srcs: cards.map(c => c.querySelector('.bt-art img').getAttribute('src')),
+              logos: cards.reduce((n, c) => n + c.querySelectorAll('.bt-m img').length, 0), boxes: cards.map(c => { const b = c.querySelector('.bt-art').getBoundingClientRect(); return [Math.round(b.top), Math.round(b.width), Math.round(b.height)]; }), titles: cards.map(c => { const t = c.querySelector('.bt-t'); return t && t.offsetHeight > 10 ? t.textContent : null; }), srcs: cards.map(c => c.querySelector('.bt-art img').getAttribute('src')),
               cardH: cards.map(c => [Math.round(c.getBoundingClientRect().top), Math.round(c.getBoundingClientRect().height)]),
               meta: lead && lead.querySelector('.bt-m').textContent, imgOk: !!(img && img.complete && img.naturalWidth > 0) || (img && img.loading === 'lazy'),
               nav: st && st.getAttribute('href'), navVisible: !!(sb && sb.width > 0 && sb.left >= 0 && sb.right <= window.innerWidth),
@@ -87,7 +87,7 @@ with sync_playwright() as p:
         shown = L[:4]
         check(o["titles"] == [e.get("card_title") or e["title"] for e in shown] and o["altOk"], f"{w}px: every card shows its headline under the thumbnail", str(o["titles"]))
         check(o["srcs"] == [e["url"] + "thumb.png" for e in shown], f"{w}px: every card picture is the story's simple thumbnail, not the detailed story graphic", str(o["srcs"]))
-        check(f"{mo[int(m_) - 1]} {int(d_)}, {y}" in o["meta"] and o["logos"][:1] == top["team_names"][:1], f"{w}px: newest card shows its date and team logos from the story list")
+        check(f"{mo[int(m_) - 1]} {int(d_)}, {y}" in o["meta"] and top["category"].lower() in o["meta"].lower() and o["logos"] == 0, f"{w}px: under the headline, only category and date (no team logos; the thumbnail carries them)", str(o["meta"]))
         rows = {}
         for t_, w_, h_ in o["boxes"]: rows.setdefault(t_, []).append((w_, h_))
         same = all(len({x for x in r_}) == 1 for r_ in rows.values())

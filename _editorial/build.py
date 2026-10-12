@@ -353,14 +353,10 @@ def legacy_entry(repo, slug):
 def index_page(entries, tpl_dir, names):
     page = read(os.path.join(tpl_dir, "index.html"))
     css = read(os.path.join(tpl_dir, "story.css")).rstrip("\n") + "\n" + read(os.path.join(tpl_dir, "index.css")).rstrip("\n")
-    def logos(e):
-        ids = [i for i in (e.get("team_ids") or []) if re.fullmatch(r"\d+", str(i))][:3]
-        nm = e.get("team_names") or []
-        return "".join(f'<img class="st-logo" src="/logos/{i}.png" alt="{a(nm[k]) if k < len(nm) else ""}" width="26" height="26" loading="lazy">' for k, i in enumerate(ids))
     def card(e, first):
-        # every card: a simple thumbnail (never the headline), the short headline under it, then category, team logos and date
+        # every card: a simple thumbnail (never the headline), the short headline under it, then category and date
         art = f'<div class="st-art"><img src="{e["image"]}" alt="{a(e["image_alt"])}" width="1200" height="675" loading="{"eager" if first else "lazy"}"></div>'
-        meta = (f'<div class="st-m"><span class="st-cat">{t(e["category"])}</span><span class="st-logos">{logos(e)}</span>'
+        meta = (f'<div class="st-m"><span class="st-cat">{t(e["category"])}</span>'
                 f'<time datetime="{e["date"]}">{t(nice_date(e["date"]))}</time></div>')
         return f'<a class="st-card" href="{e["url"]}">{art}<div class="st-body"><h2 class="st-t">{t(e.get("card_title") or e["title"])}</h2>{meta}</div></a>'
     if entries:

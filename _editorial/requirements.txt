@@ -1,0 +1,5 @@
+# What _editorial/build.py, thumbs.py and the editorial tests need (Python 3.11+).
+pyyaml          # story.md front matter
+markdown        # story bodies written in Markdown
+requests        # Google Fonts for rendered images; ESPN team logos and colours for thumbs.py (cached in _editorial/thumbs/)
+playwright      # renders thumb.png and the auto og.png, and runs the browser tests (uses the preinstalled Chromium; no "playwright install")
