@@ -6,6 +6,7 @@
 .st-list{padding:0 0 64px}
 .st-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px}
 .st-card{display:flex;flex-direction:column;border:2px solid var(--ink);background:var(--paper-2);text-decoration:none;color:inherit;transition:transform .15s,box-shadow .15s}
+.st-card.g{align-self:start}
 .st-card:hover,.st-card:focus-visible{transform:translate(-2px,-2px);box-shadow:5px 5px 0 var(--ink)}
 .st-art{background:var(--ink);aspect-ratio:16/9;overflow:hidden;border-bottom:2px solid var(--ink)}
 .st-art img{width:100%;height:100%;object-fit:cover;display:block}

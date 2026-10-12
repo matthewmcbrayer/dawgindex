@@ -73,7 +73,7 @@ with sync_playwright() as p:
             const sb = st ? st.getBoundingClientRect() : null;
             return {ids, hidden: sec.hidden, solo: r.getElementById('bt-grid').classList.contains('solo'), lead: lead && lead.getAttribute('href'),
               items: cards.length - 1, title: lead && (lead.querySelector('.bt-t') || {}).textContent, srTitle: lead && (lead.querySelector('.sr-only') || {}).textContent, style: lead && (lead.classList.contains('g') ? 'graphic' : 'image'), altOk: !!(img && img.alt.length > 10), artFirst: !!(lead && lead.firstElementChild.classList.contains('bt-art')),
-              logos: lead ? [...lead.querySelectorAll('.bt-logos img')].map(i => i.alt) : [], boxes: cards.map(c => { const b = c.getBoundingClientRect(); return [Math.round(b.top), Math.round(b.width), Math.round(b.height)]; }),
+              logos: lead ? [...lead.querySelectorAll('.bt-logos img')].map(i => i.alt) : [], boxes: cards.map(c => { const b = c.querySelector('.bt-art').getBoundingClientRect(); return [Math.round(b.top), Math.round(b.width), Math.round(b.height)]; }), gfill: cards.filter(c => c.classList.contains('g')).map(c => Math.round(c.getBoundingClientRect().height - c.querySelector('.bt-art').getBoundingClientRect().height)),
               meta: lead && lead.querySelector('.bt-m').textContent, imgOk: !!(img && img.complete && img.naturalWidth > 0) || (img && img.loading === 'lazy'),
               nav: st && st.getAttribute('href'), navVisible: !!(sb && sb.width > 0 && sb.left >= 0 && sb.right <= window.innerWidth),
               navFits: nav.scrollWidth <= nav.clientWidth + 1, foot: fst && fst.getAttribute('href'),
@@ -91,7 +91,8 @@ with sync_playwright() as p:
         rows = {}
         for t_, w_, h_ in o["boxes"]: rows.setdefault(t_, []).append((w_, h_))
         same = all(len({x for x in r_}) == 1 for r_ in rows.values())
-        check(o["artFirst"] and same, f"{w}px: every card leads with its graphic, and cards side by side are the same size", str(o["boxes"]))
+        check(o["artFirst"] and same, f"{w}px: every card leads with its graphic, and the graphics side by side are the same size and top-aligned", str(o["boxes"]))
+        check(all(h_ <= 64 for h_ in o["gfill"]), f"{w}px: graphic-led cards end at their slim meta row (no empty space under the graphic)", str(o["gfill"]))
         check(o["all"], f"{w}px: section links to /stories/")
         check(o["nav"] == "/stories/" and o["foot"] == "/stories/", f"{w}px: STORIES is in the header nav and footer nav, linking to /stories/")
         check(o["navVisible"] and o["navFits"], f"{w}px: every header nav item, STORIES included, is visible without scrolling the nav", f"visible {o['navVisible']} fits {o['navFits']}")
