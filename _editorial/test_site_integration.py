@@ -73,7 +73,8 @@ with sync_playwright() as p:
             const sb = st ? st.getBoundingClientRect() : null;
             return {ids, hidden: sec.hidden, solo: r.getElementById('bt-grid').classList.contains('solo'), lead: lead && lead.getAttribute('href'),
               items: cards.length - 1, title: lead && (lead.querySelector('.bt-t') || {}).textContent, srTitle: lead && (lead.querySelector('.sr-only') || {}).textContent, style: lead && (lead.classList.contains('g') ? 'graphic' : 'image'), altOk: !!(img && img.alt.length > 10), artFirst: !!(lead && lead.firstElementChild.classList.contains('bt-art')),
-              logos: lead ? [...lead.querySelectorAll('.bt-logos img')].map(i => i.alt) : [], boxes: cards.map(c => { const b = c.querySelector('.bt-art').getBoundingClientRect(); return [Math.round(b.top), Math.round(b.width), Math.round(b.height)]; }), gfill: cards.filter(c => c.classList.contains('g')).map(c => Math.round(c.getBoundingClientRect().height - c.querySelector('.bt-art').getBoundingClientRect().height)),
+              logos: lead ? [...lead.querySelectorAll('.bt-logos img')].map(i => i.alt) : [], boxes: cards.map(c => { const b = c.querySelector('.bt-art').getBoundingClientRect(); return [Math.round(b.top), Math.round(b.width), Math.round(b.height)]; }), titles: cards.map(c => { const t = c.querySelector('.bt-t'); return t && t.offsetHeight > 10 ? t.textContent : null; }), srcs: cards.map(c => c.querySelector('.bt-art img').getAttribute('src')),
+              cardH: cards.map(c => [Math.round(c.getBoundingClientRect().top), Math.round(c.getBoundingClientRect().height)]),
               meta: lead && lead.querySelector('.bt-m').textContent, imgOk: !!(img && img.complete && img.naturalWidth > 0) || (img && img.loading === 'lazy'),
               nav: st && st.getAttribute('href'), navVisible: !!(sb && sb.width > 0 && sb.left >= 0 && sb.right <= window.innerWidth),
               navFits: nav.scrollWidth <= nav.clientWidth + 1, foot: fst && fst.getAttribute('href'),
@@ -83,16 +84,17 @@ with sync_playwright() as p:
         L = [e for e in REAL["stories"] if e.get("status") == "published"]; top = L[0]
         check(not o["hidden"] and o["solo"] == (len(L) == 1) and o["lead"] == top["url"] and o["items"] == min(len(L) - 1, 3), f"{w}px: the newest published story leads ({len(L)} live: lead + {min(len(L) - 1, 3)} more)", str(o))
         mo = ["Jan.", "Feb.", "March", "April", "May", "June", "July", "Aug.", "Sept.", "Oct.", "Nov.", "Dec."]; y, m_, d_ = top["date"].split("-")
-        if top.get("card_style") == "graphic":
-            check(o["style"] == "graphic" and o["title"] is None and o["srTitle"] == top["title"] and o["altOk"], f"{w}px: graphic-led card shows no duplicate headline; the article title is there for screen readers and the graphic has real alt text", str(o["title"]) + " / " + str(o["srTitle"]))
-        else:
-            check(o["style"] == "image" and o["title"] == (top.get("card_title") or top["title"]), f"{w}px: image-led card shows its short title under the image", str(o["title"]))
+        shown = L[:4]
+        check(o["titles"] == [e.get("card_title") or e["title"] for e in shown] and o["altOk"], f"{w}px: every card shows its headline under the thumbnail", str(o["titles"]))
+        check(o["srcs"] == [e["url"] + "thumb.png" for e in shown], f"{w}px: every card picture is the story's simple thumbnail, not the detailed story graphic", str(o["srcs"]))
         check(f"{mo[int(m_) - 1]} {int(d_)}, {y}" in o["meta"] and o["logos"][:1] == top["team_names"][:1], f"{w}px: newest card shows its date and team logos from the story list")
         rows = {}
         for t_, w_, h_ in o["boxes"]: rows.setdefault(t_, []).append((w_, h_))
         same = all(len({x for x in r_}) == 1 for r_ in rows.values())
         check(o["artFirst"] and same, f"{w}px: every card leads with its graphic, and the graphics side by side are the same size and top-aligned", str(o["boxes"]))
-        check(all(h_ <= 64 for h_ in o["gfill"]), f"{w}px: graphic-led cards end at their slim meta row (no empty space under the graphic)", str(o["gfill"]))
+        hrows = {}
+        for t_, h_ in o["cardH"]: hrows.setdefault(t_, set()).add(h_)
+        check(all(len(v) == 1 for v in hrows.values()), f"{w}px: cards side by side are the same height", str(o["cardH"]))
         check(o["all"], f"{w}px: section links to /stories/")
         check(o["nav"] == "/stories/" and o["foot"] == "/stories/", f"{w}px: STORIES is in the header nav and footer nav, linking to /stories/")
         check(o["navVisible"] and o["navFits"], f"{w}px: every header nav item, STORIES included, is visible without scrolling the nav", f"visible {o['navVisible']} fits {o['navFits']}")

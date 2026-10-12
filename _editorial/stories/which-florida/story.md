@@ -3,7 +3,15 @@ slug: which-florida
 status: published
 title: Which Florida? From Beating No. 4 Ole Miss to Two Straight Certified SOFTs
 card_title: 'Which Florida?'
-card_style: graphic
+thumb:
+  layout: games
+  team: florida
+  label: DAWG, last 3 games
+  games:
+  - {opp: ole-miss, value: 19.6}
+  - {opp: missouri, value: -34.0}
+  - {opp: south-carolina, value: -36.2}
+  alt: 'Florida logo beside its last three DAWG results as bars: +19.6 against Ole Miss, −34.0 at Missouri and −36.2 against South Carolina.'
 headline:
   big: Which Florida?
   sub: A DAWG win over No. 4 Ole Miss, then two Certified SOFTs in a row.

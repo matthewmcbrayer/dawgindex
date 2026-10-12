@@ -8,7 +8,8 @@ Separate from the V3 grading pipeline. The build reads `_editorial/` plus `sitem
 
 1. **Draft** in `/home/claude/editorial-drafts/<slug>/`:
    - `story.md`
-   - `card.png`: 16:9, at least 1200 wide, the homepage and index art
+   - a `thumb:` block in story.md, then `python3 _editorial/thumbs.py /home/claude/editorial-drafts/<slug>` to draw `thumb.png` (1200×675), the card picture on the homepage, team pages and /stories/
+   - optional `card.png`: the detailed story graphic (16:9, at least 1200 wide), kept for sharing; never used as the card picture
    - optional `og.png`: 1200×630; generated automatically if missing
 2. **Preview privately:** `python3 _editorial/build.py preview /home/claude/editorial-drafts/<slug>`. This writes outside the repo, marks the page noindex with a "not published" banner, and makes desktop and phone screenshots for Matthew.
 3. **Only after Matthew explicitly approves:** `python3 _editorial/build.py approve /home/claude/editorial-drafts/<slug> --by "Matthew McBrayer"`. This sets the story's date to the day it goes live (Central time) and records `published_at`, which orders stories published the same day (latest first).
@@ -26,8 +27,12 @@ slug: my-story                # folder name; lowercase-and-hyphens
 status: draft                 # build only publishes 'published' + approved_by + approved_at
 title: Full headline for search and sharing
 card_title: Short title for homepage, team-page and Stories cards   # optional, 60 characters max; defaults to title
-card_style: image             # image (default): headline shown under the picture; graphic: card.png already carries the headline, so the card shows no headline text
-card_teaser: Optional one line for graphic cards that adds something the graphic doesn't (110 characters max)
+thumb:                        # the card picture; thumbs.py draws thumb.png from this (see the layouts at the top of thumbs.py)
+  layout: stat                # stat | score | games
+  teams: [oregon, ucla]
+  stat: '7'
+  label: Turnovers
+  alt: Oregon logo next to a big red 7 labeled turnovers, with the UCLA logo after it.
 headline: {big: Big line, sub: Second line}   # optional; on-page h1
 tab: Red River Rivalry · Week 6
 category: Game story
@@ -39,7 +44,7 @@ description: Search description, 200 characters max.
 social_description: Optional; defaults to description
 stamp: [Oct. 10, 2026, Cotton Bowl, Dallas, Data through Week 6, 2026, DAWG methodology v3.0]
 scoreboard: {...}             # optional; see red-river-2026
-image: card.png
+image: card.png               # optional detailed graphic (kept as card.png; not the card picture)
 image_alt: What the card image shows
 og_image: og.png              # optional
 format: markdown              # or html (body used verbatim)
@@ -70,4 +75,4 @@ A pull quote.
 
 **Season-average noise.** "Random swings alone put an n-game average anywhere within about ±X points of zero (a 95% range)", with X = 1.96 × 14.1 / √n for DAWG and 1.96 × 10.5 / √n for PLAY.
 
-**Story cards.** Homepage, team pages and /stories/ all use one card, image first, then a slim row: category, team logos, date. No dek. Two styles: `card_style: graphic` when card.png is an editorial graphic that already says the headline (the card shows no headline text; the article title stays in the card for screen readers; an optional `card_teaser` can add one new fact), or `card_style: image` (the default) for a photo or plain image, with `card_title` shown under it. Keep `card_title` short (60 characters max) and make card.png legible at 360px wide.
+**Story cards.** Homepage, team pages and /stories/ all use one card: a simple thumbnail, the headline (`card_title`, 60 characters max) printed under it, then a slim row with category, team logos and date. The thumbnail never contains the headline. It shows one thing: team logos plus one number (`stat`), a final score with an optional second row such as yards (`score`), or a team's short run of DAWG results as bars (`games`). No dense charts, tiny labels or source lines; it has to read at 360px wide. `thumbs.py` stamps thumb.png with a hash of the `thumb:` block, and the build refuses a thumb.png that's missing or out of date. `python3 _editorial/build.py preview` also writes `preview-card-desktop.png` and `preview-card-phone.png` so the card can be checked before approval. `card_style` and `card_teaser` are retired.

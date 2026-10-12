@@ -5,7 +5,12 @@ approved_by: Matthew McBrayer
 approved_at: '2026-10-11'
 title: BOOMER SOONER! What Did We Actually Learn?
 card_title: 'BOOMER SOONER! What Did We Actually Learn?'
-card_style: image
+thumb:
+  layout: score
+  teams: [oklahoma, texas]
+  score: [27, 24]
+  row: {label: Yards, values: [238, 382]}
+  alt: 'Final score: Oklahoma 27, Texas 24. Total yards: Oklahoma 238, Texas 382.'
 headline:
   big: Boomer Sooner!
   sub: What did we actually learn?

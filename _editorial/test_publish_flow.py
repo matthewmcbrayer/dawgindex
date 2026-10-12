@@ -46,6 +46,11 @@ dek: A throwaway story that proves publishing needs no hand-edited HTML.
 description: A throwaway story used only by the publishing-flow test.
 image: card.png
 image_alt: Sample card.
+thumb:
+  layout: score
+  teams: [baylor, oklahoma]
+  score: [10, 7]
+  alt: Baylor and Oklahoma logos with a 10-7 score, test only.
 ---
 Body text.
 
@@ -53,6 +58,7 @@ Body text.
 This story exists only inside the test.
 :::
 """)
+subprocess.run([sys.executable, os.path.join(site, "_editorial/thumbs.py"), d], check=True, capture_output=True)   # the card thumbnail, drawn from the thumb: block
 # and a second draft that is never approved
 d2 = os.path.join(drafts, "flow-unapproved"); shutil.copytree(d, d2)
 open(os.path.join(d2, "story.md"), "w").write(open(os.path.join(d, "story.md")).read().replace("flow-test-story", "flow-unapproved").replace("Flow Test: A New Story", "UNAPPROVED DRAFT"))

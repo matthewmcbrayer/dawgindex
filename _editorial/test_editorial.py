@@ -45,6 +45,12 @@ dek: A sample dek that only exists inside the test suite.
 description: A sample description that only exists inside the test suite.
 image: card.png
 image_alt: Sample card image.
+thumb:
+  layout: stat
+  teams: [oklahoma]
+  stat: '1'
+  label: Test
+  alt: Oklahoma logo with the number 1, test suite only.
 ---
 The opening paragraph with **bold** and a [link](/#method).
 
@@ -63,7 +69,19 @@ def make_draft(root, slug="test-sample-story", text=SAMPLE):
     d = os.path.join(root, slug); os.makedirs(d, exist_ok=True)
     open(os.path.join(d, "story.md"), "w").write(text.replace("test-sample-story", slug))
     shutil.copy(os.path.join(REPO, "_editorial", "stories", "red-river-2026", "card.png"), os.path.join(d, "card.png"))
+    shutil.copy(sample_thumb(), os.path.join(d, "thumb.png"))
     return d
+
+_THUMB = []
+def sample_thumb():
+    """Render the sample's thumbnail once (with the real thumbs.py) and reuse it."""
+    if not _THUMB:
+        t = tempfile.mkdtemp(prefix="thumb-"); d = os.path.join(t, "test-sample-story"); os.makedirs(d)
+        open(os.path.join(d, "story.md"), "w").write(SAMPLE)
+        p = subprocess.run([sys.executable, os.path.join(REPO, "_editorial", "thumbs.py"), d], capture_output=True, text=True)
+        assert p.returncode == 0, p.stdout + p.stderr
+        _THUMB.append(os.path.join(d, "thumb.png"))
+    return _THUMB[0]
 
 N_LIVE = len(json.load(open(os.path.join(REPO, "stories", "stories.json")))["stories"])   # stories live in the repo right now
 
@@ -97,10 +115,13 @@ def main():
     allm = json.load(open(os.path.join(r, "stories/stories.json")))["stories"]
     idx0 = open(os.path.join(r, "stories/index.html")).read()
     check(m1.get("card_title") == "BOOMER SOONER! What Did We Actually Learn?" and all(e.get("card_title") for e in allm), "every manifest entry carries a short card_title (Red River's is its headline)")
-    ok_cards = all((f'<h2 class="sr-only">{B.t(e["title"])}</h2>' in idx0 and f'<h2 class="st-t">{B.t(e["card_title"])}</h2>' not in idx0) if e.get("card_style") == "graphic"
-                   else f'<h2 class="st-t">{B.t(e["card_title"])}</h2>' in idx0 for e in allm)
-    check(ok_cards and idx0.count('class="st-art"') == len(allm), "/stories/ cards: graphic-led ones show no duplicate headline (title kept for screen readers); image-led ones show the card_title")
-    check(all(e.get("card_style") in ("graphic", "image") for e in allm), "every manifest entry has a card_style (graphic or image)")
+    ok_cards = all(f'<h2 class="st-t">{B.t(e["card_title"])}</h2>' in idx0 and f'<img src="{e["image"]}"' in idx0 for e in allm)
+    check(ok_cards and idx0.count('class="st-art"') == len(allm) and "sr-only" not in idx0, "/stories/ cards: every card shows its thumbnail and its headline underneath")
+    thumbs_ok = all(e["image"] == e["url"] + "thumb.png" and B.png_size(os.path.join(r, e["image"].lstrip("/"))) == (1200, 675) and len(e["image_alt"]) > 20 for e in allm)
+    check(thumbs_ok and not any("card_style" in e or "card_teaser" in e for e in allm), "every card picture is the story's own 1200x675 thumb.png (not the detailed story graphic), with alt text")
+    for e in allm:
+        fm_, _ = B.parse_story(os.path.join(r, "_editorial/stories", e["slug"], "story.md"))
+        check(B.png_text(os.path.join(r, "_editorial/stories", e["slug"], "thumb.png"), "dawg-thumb") == B.spec_hash(fm_["thumb"]), f"{e['slug']}: thumb.png was drawn from its current thumb: block")
     code2, out2 = run(r, "build")
     check(code2 == 0 and "0 file(s) written" in out2, "second build writes nothing (deterministic)", out2[-200:])
 
@@ -137,7 +158,11 @@ def main():
         "unknown team slug": approved.replace("teams: [baylor]", "teams: [baylorr]"),
         "missing dek": approved.replace("dek: A sample dek that only exists inside the test suite.\n", ""),
         "card_title over 60 characters": approved.replace("status: published", "status: published\ncard_title: '" + "X" * 61 + "'"),
-        "unknown card_style": approved.replace("status: published", "status: published\ncard_style: poster"),
+        "retired card_style: graphic": approved.replace("status: published", "status: published\ncard_style: graphic"),
+        "card_teaser (not shown on cards)": approved.replace("status: published", "status: published\ncard_teaser: One more line."),
+        "no thumb: block": approved.replace("thumb:\n  layout: stat\n  teams: [oklahoma]\n  stat: '1'\n  label: Test\n  alt: Oklahoma logo with the number 1, test suite only.\n", ""),
+        "thumb.png drawn from an older thumb: block": approved.replace("stat: '1'", "stat: '2'"),
+        "thumb label too long to read on a phone": approved.replace("label: Test", "label: A label far too long for a phone"),
         "'2.0' in the copy": approved.replace("The opening paragraph", "The DAWG 2.0 opening paragraph"),
         "future date": approved.replace("date: '2026-10-11'", "date: '2030-01-01'"),
         "slug that collides with a team page": approved,
@@ -188,8 +213,8 @@ def main():
     idx = open(os.path.join(r, "stories/index.html")).read()
     check(idx.count('class="st-card') == N_LIVE + 1, "/stories/ shows every story")
     smp = [e for e in man if e["slug"] == "test-sample-story"]
-    check(smp and smp[0]["card_style"] == "image" and f'<a class="st-card i" href="/stories/test-sample-story/">' in idx and f'<h2 class="st-t">{B.t(smp[0]["card_title"])}</h2>' in idx,
-          "a story without card_style defaults to image-led: its title shows under the image")
+    check(smp and f'<a class="st-card" href="/stories/test-sample-story/"><div class="st-art"><img src="/stories/test-sample-story/thumb.png"' in idx and f'<h2 class="st-t">{B.t(smp[0]["card_title"])}</h2>' in idx
+          and B.png_size(os.path.join(sp, "thumb.png")) == (1200, 675), "a new story's card shows its thumb.png with the headline underneath")
     sm = open(os.path.join(r, "stories/sitemap.xml")).read(); xml.dom.minidom.parseString(sm)
     check(sm.count("<loc>") == N_LIVE + 2, "sitemap is valid XML with /stories/ and every story")
     published_copy = r

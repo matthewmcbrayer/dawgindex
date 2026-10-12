@@ -7,7 +7,6 @@
    "url": "/stories/which-florida/",
    "title": "Which Florida? From Beating No. 4 Ole Miss to Two Straight Certified SOFTs",
    "card_title": "Which Florida?",
-   "card_style": "graphic",
    "headline": {
     "big": "Which Florida?",
     "sub": "A DAWG win over No. 4 Ole Miss, then two Certified SOFTs in a row."
@@ -25,8 +24,8 @@
     "Florida"
    ],
    "dek": "Florida beat No. 4 Ole Miss by 24, then lost its next two by a combined 47. No other Power 4 team since 2019 has gone DAWG, Certified SOFT, Certified SOFT.",
-   "image": "/stories/which-florida/card.png",
-   "image_alt": "Which Florida? Florida beat No. 4 Ole Miss 52–28 (DAWG +19.6), then lost 45–17 at Missouri (−34.0) and 38–19 to South Carolina (−36.2).",
+   "image": "/stories/which-florida/thumb.png",
+   "image_alt": "Florida logo beside its last three DAWG results as bars: +19.6 against Ole Miss, −34.0 at Missouri and −36.2 against South Carolina.",
    "og_image": "/stories/which-florida/og.png",
    "published_at": "2026-10-11T23:11:37Z"
   },
@@ -36,7 +35,6 @@
    "url": "/stories/oregon-ucla-seven-turnovers/",
    "title": "Seven Turnovers. Two Points. Oregon Nearly Won a Game Nobody Wins.",
    "card_title": "Seven Turnovers. Two Points.",
-   "card_style": "graphic",
    "headline": {
     "big": "Seven turnovers.",
     "sub": "Two points. Oregon nearly won a game nobody wins."
@@ -57,8 +55,8 @@
     "Oregon"
    ],
    "dek": "Seventeen teams have turned it over seven or more times since 2014. All lost. Oregon came closest, and on every other snap it played UCLA about even.",
-   "image": "/stories/oregon-ucla-seven-turnovers/card.png",
-   "image_alt": "Seven turnovers, two points: UCLA 17, Oregon 15. Every team with seven or more giveaways since 2014 lost; Oregon came closest.",
+   "image": "/stories/oregon-ucla-seven-turnovers/thumb.png",
+   "image_alt": "Oregon logo next to a big red 7 labeled turnovers, with the UCLA logo after it.",
    "og_image": "/stories/oregon-ucla-seven-turnovers/og.png",
    "published_at": "2026-10-11T23:00:44Z"
   },
@@ -68,7 +66,6 @@
    "url": "/stories/red-river-2026/",
    "title": "BOOMER SOONER! What Did We Actually Learn?",
    "card_title": "BOOMER SOONER! What Did We Actually Learn?",
-   "card_style": "image",
    "headline": {
     "big": "Boomer Sooner!",
     "sub": "What did we actually learn?"
@@ -89,8 +86,8 @@
     "Texas"
    ],
    "dek": "Oklahoma beat No. 1 Texas while getting outgained by 144 yards. Its defense and special teams scored 14 points. Its offense scored 13.",
-   "image": "/stories/red-river-2026/card.png",
-   "image_alt": "Where the points came from: Oklahoma's offense scored 13 points, its defense and special teams 14; Texas's offense scored all 24.",
+   "image": "/stories/red-river-2026/thumb.png",
+   "image_alt": "Final score: Oklahoma 27, Texas 24. Total yards: Oklahoma 238, Texas 382.",
    "og_image": "/stories/red-river-2026/og.png"
   }
  ]

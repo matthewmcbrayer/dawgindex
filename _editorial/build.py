@@ -23,7 +23,7 @@ import yaml
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 SITE = "https://dawgindex.com"
-REQUIRED = ["slug", "status", "title", "tab", "category", "date", "teams", "dek", "description", "image", "image_alt"]
+REQUIRED = ["slug", "status", "title", "tab", "category", "date", "teams", "dek", "description", "thumb"]
 PUBLISH_REQUIRED = ["approved_by", "approved_at"]
 NOT_TEAMS = {"stories", "v2", "brand", "data", "logos", "code", "_editorial"}
 DRAFTS = "/home/claude/editorial-drafts"
@@ -69,6 +69,33 @@ def png_size(p):
     if head[:8] != b"\x89PNG\r\n\x1a\n":
         return None
     return int.from_bytes(head[16:20], "big"), int.from_bytes(head[20:24], "big")
+
+
+def png_text(path, key):
+    """One tEXt chunk from a PNG (thumbs.py stamps thumb.png with a hash of the thumb: block it was drawn from)."""
+    try:
+        with open(path, "rb") as f:
+            d = f.read()
+    except OSError:
+        return None
+    if d[:8] != b"\x89PNG\r\n\x1a\n":
+        return None
+    i = 8
+    while i + 8 <= len(d):
+        n, typ = int.from_bytes(d[i:i + 4], "big"), d[i + 4:i + 8]
+        if typ == b"tEXt":
+            k, _, v = d[i + 8:i + 8 + n].partition(b"\0")
+            if k.decode("latin-1") == key:
+                return v.decode("latin-1")
+        if typ == b"IEND":
+            break
+        i += 12 + n
+    return None
+
+
+def spec_hash(spec):
+    import hashlib
+    return hashlib.sha256(json.dumps(spec, sort_keys=True, ensure_ascii=False).encode()).hexdigest()[:16]
 
 
 def nice_date(d):
@@ -172,13 +199,27 @@ def validate(fm, body, src_dir, teams, mode):
     for tm in fm.get("teams") or []:
         if tm not in teams:
             errs.append(f"unknown team slug '{tm}'")
+    # the card picture: thumb.png, drawn by thumbs.py from the thumb: block (logos plus one number, a score or a short run of
+    # results; never the headline, which the card prints underneath)
+    if fm.get("thumb"):
+        sys.path.insert(0, HERE)
+        dwb, sys.dont_write_bytecode = sys.dont_write_bytecode, True   # validating must not leave a __pycache__ behind
+        import thumbs
+        sys.dont_write_bytecode = dwb
+        errs += thumbs.check_spec(fm["thumb"])
+        tp = os.path.join(src_dir, "thumb.png")
+        if not os.path.isfile(tp) or png_size(tp) != (1200, 675):
+            errs.append("thumb.png missing or not 1200x675: run python3 _editorial/thumbs.py " + src_dir)
+        elif png_text(tp, "dawg-thumb") != spec_hash(fm["thumb"]):
+            errs.append("thumb.png doesn't match the thumb: block in story.md: run python3 _editorial/thumbs.py " + src_dir)
+    # optional: the detailed story graphic (kept as card.png for sharing; never used as the card picture)
     img = os.path.join(src_dir, str(fm.get("image", "")))
     if fm.get("image"):
         sz = png_size(img) if os.path.isfile(img) else None
         if not sz:
-            errs.append(f"card image {fm['image']} missing or not a PNG")
+            errs.append(f"story graphic {fm['image']} missing or not a PNG")
         elif sz[0] < 1200 or abs(sz[0] / sz[1] - 16 / 9) > 0.02:
-            errs.append(f"card image must be 16:9 and at least 1200 wide (is {sz[0]}x{sz[1]})")
+            errs.append(f"story graphic must be 16:9 and at least 1200 wide (is {sz[0]}x{sz[1]})")
     og = fm.get("og_image")
     if og:
         p = os.path.join(src_dir, og)
@@ -191,13 +232,13 @@ def validate(fm, body, src_dir, teams, mode):
                 errs.append(f"scoreboard needs {k}")
     if fm.get("format", "markdown") not in ("markdown", "html"):
         errs.append("format must be markdown or html")
-    copy = " ".join(str(fm.get(k, "")) for k in ("title", "dek", "description", "social_description", "card_dek", "card_title", "card_teaser", "tab")) + " " + re.sub(r"<[^>]+>", " ", body)
+    copy = " ".join(str(fm.get(k, "")) for k in ("title", "dek", "description", "social_description", "card_dek", "card_title", "tab")) + " " + str((fm.get("thumb") or {}).get("label", "")) + " " + re.sub(r"<[^>]+>", " ", body)
     if TWO_POINT_OH.search(copy):
         errs.append("'2.0' appears in the copy (internal name; never public)")
-    if fm.get("card_style", "image") not in ("graphic", "image"):
-        errs.append("card_style must be graphic (the card graphic carries the headline) or image (headline shown under the image)")
-    if fm.get("card_teaser") and len(str(fm["card_teaser"])) > 110:
-        errs.append("card_teaser over 110 characters (one short line that adds something the graphic doesn't)")
+    if fm.get("card_style", "image") != "image":
+        errs.append("card_style is retired: every card shows a simple thumbnail with the headline printed under it")
+    if fm.get("card_teaser"):
+        errs.append("card_teaser isn't shown on cards; remove it")
     if fm.get("card_title") and len(str(fm["card_title"])) > 60:
         errs.append("card_title over 60 characters (it's the short title on homepage and Stories cards)")
     if len(str(fm.get("description", ""))) > 200:
@@ -285,13 +326,10 @@ def manifest_entry(fm, ids, names):
     h = fm.get("headline") or {}
     teams = list(fm.get("teams") or [])
     e = {"slug": fm["slug"], "status": "published", "url": base, "title": fm["title"], "card_title": fm.get("card_title") or fm["title"],
-         "card_style": fm.get("card_style") or "image",
          "headline": {"big": h.get("big") or fm["title"], "sub": h.get("sub")},
          "tab": fm["tab"], "category": fm["category"], "date": fm["date"], "teams": teams,
          "team_ids": [ids[x] for x in teams if x in ids], "team_names": [names.get(x, x) for x in teams],
-         "dek": fm.get("card_dek") or fm["dek"], "image": base + "card.png", "image_alt": fm["image_alt"], "og_image": base + "og.png"}
-    if fm.get("card_teaser"):
-        e["card_teaser"] = fm["card_teaser"]
+         "dek": fm.get("card_dek") or fm["dek"], "image": base + "thumb.png", "image_alt": fm["thumb"]["alt"], "og_image": base + "og.png"}
     if fm.get("published_at"):
         e["published_at"] = str(fm["published_at"])
     if fm.get("updated"):
@@ -306,10 +344,10 @@ def legacy_entry(repo, slug):
     g = lambda pat: (html.unescape(m.group(1)) if (m := re.search(pat, s)) else "")
     title = g(r'<meta property="og:title" content="([^"]*)"')
     base = f"/stories/{slug}/"
-    return {"slug": slug, "status": "published", "url": base, "title": title, "card_title": title, "card_style": "image", "headline": {"big": title, "sub": None}, "tab": "", "category": "Story",
+    return {"slug": slug, "status": "published", "url": base, "title": title, "card_title": title, "headline": {"big": title, "sub": None}, "tab": "", "category": "Story",
             "date": g(r'<meta property="article:published_time" content="([^"]*)"') or "1970-01-01", "teams": [], "team_ids": [], "team_names": [],
             "dek": g(r'<meta name="description" content="([^"]*)"'), "og_image": base + "og.png",
-            "image": base + ("card.png" if os.path.isfile(os.path.join(repo, "stories", slug, "card.png")) else "og.png"), "image_alt": title}
+            "image": base + ("thumb.png" if os.path.isfile(os.path.join(repo, "stories", slug, "thumb.png")) else "card.png" if os.path.isfile(os.path.join(repo, "stories", slug, "card.png")) else "og.png"), "image_alt": title}
 
 
 def index_page(entries, tpl_dir, names):
@@ -320,15 +358,11 @@ def index_page(entries, tpl_dir, names):
         nm = e.get("team_names") or []
         return "".join(f'<img class="st-logo" src="/logos/{i}.png" alt="{a(nm[k]) if k < len(nm) else ""}" width="26" height="26" loading="lazy">' for k, i in enumerate(ids))
     def card(e, first):
-        # graphic: the card graphic carries the headline, so only a slim row (and an optional teaser) sits under it, with the title
-        # kept for screen readers. image (default): the short title is shown under the image.
-        g = e.get("card_style") == "graphic"
+        # every card: a simple thumbnail (never the headline), the short headline under it, then category, team logos and date
         art = f'<div class="st-art"><img src="{e["image"]}" alt="{a(e["image_alt"])}" width="1200" height="675" loading="{"eager" if first else "lazy"}"></div>'
         meta = (f'<div class="st-m"><span class="st-cat">{t(e["category"])}</span><span class="st-logos">{logos(e)}</span>'
                 f'<time datetime="{e["date"]}">{t(nice_date(e["date"]))}</time></div>')
-        head = (f'<h2 class="sr-only">{t(e["title"])}</h2>' + (f'<p class="st-teaser">{t(e["card_teaser"])}</p>' if e.get("card_teaser") else "")
-                if g else f'<h2 class="st-t">{t(e.get("card_title") or e["title"])}</h2>')
-        return f'<a class="st-card {"g" if g else "i"}" href="{e["url"]}">{art}<div class="st-body">{head}{meta}</div></a>'
+        return f'<a class="st-card" href="{e["url"]}">{art}<div class="st-body"><h2 class="st-t">{t(e.get("card_title") or e["title"])}</h2>{meta}</div></a>'
     if entries:
         cards = '<div class="st-grid">\n' + "\n".join(card(e, i < 3) for i, e in enumerate(entries)) + "\n</div>"
     else:
@@ -440,7 +474,9 @@ def build(repo, dry=False, quiet=False):
             continue
         dest = os.path.join(out, slug)
         write_if_changed(os.path.join(dest, "index.html"), story_page(fm, body, tpl), log)
-        write_if_changed(os.path.join(dest, "card.png"), read(os.path.join(d, fm["image"]), "rb"), log)
+        write_if_changed(os.path.join(dest, "thumb.png"), read(os.path.join(d, "thumb.png"), "rb"), log)
+        if fm.get("image"):
+            write_if_changed(os.path.join(dest, "card.png"), read(os.path.join(d, fm["image"]), "rb"), log)
         if fm.get("og_image"):
             write_if_changed(os.path.join(dest, "og.png"), read(os.path.join(d, fm["og_image"]), "rb"), log)
         elif not os.path.isfile(os.path.join(dest, "og.png")):
@@ -480,33 +516,41 @@ def preview(repo, draft_dir, out_root=PREVIEWS, shots=True):
     dest = os.path.join(out_root, fm["slug"])
     log = []
     write_if_changed(os.path.join(dest, "index.html"), story_page(fm, body, tpl, preview=True), log)
-    write_if_changed(os.path.join(dest, "card.png"), read(os.path.join(draft_dir, fm["image"]), "rb"), log)
+    write_if_changed(os.path.join(dest, "thumb.png"), read(os.path.join(draft_dir, "thumb.png"), "rb"), log)
+    if fm.get("image"):
+        write_if_changed(os.path.join(dest, "card.png"), read(os.path.join(draft_dir, fm["image"]), "rb"), log)
     if fm.get("og_image"):
         write_if_changed(os.path.join(dest, "og.png"), read(os.path.join(draft_dir, fm["og_image"]), "rb"), log)
     else:
         make_og(fm, os.path.join(dest, "og.png"), tpl)
+    # how the story's card will look on /stories/ (the homepage and team pages use the same card)
+    teams = team_slugs(repo)
+    e = manifest_entry(fm, team_ids(repo), team_names(repo, teams))
+    e["image"] = "/thumb.png"
+    write_if_changed(os.path.join(dest, "card-preview.html"), index_page([e], tpl, team_names(repo, teams)), log)
     if shots:
         screenshot_story(repo, os.path.join(dest, "index.html"), dest)
+        screenshot_story(repo, os.path.join(dest, "card-preview.html"), dest, "preview-card")
     print(f"preview written to {dest} (private; not in the repo, marked noindex)")
     return dest
 
 
-def screenshot_story(repo, page_path, dest):
+def screenshot_story(repo, page_path, dest, prefix="preview"):
     """Desktop and phone screenshots of a rendered page, with site assets served from the repo."""
     from playwright.sync_api import sync_playwright
     import mimetypes, requests
     S = requests.Session()
     if os.path.exists(CA):
         S.verify = CA
-    page_dir = os.path.dirname(page_path)
+    page_dir, page_name = os.path.dirname(page_path), os.path.basename(page_path)
     def route(r):
         u = r.request.url
         if u.startswith("https://preview.local/"):
             path = u.split("https://preview.local/", 1)[1].split("?")[0].split("#")[0]
-            for base in (page_dir if path in ("", "index.html", "card.png", "og.png") else None, repo):
+            for base in (page_dir if path in ("", page_name, "card.png", "og.png", "thumb.png") else None, repo):
                 if not base:
                     continue
-                f = os.path.join(base, path or "index.html")
+                f = os.path.join(base, path or page_name)
                 if os.path.isdir(f):
                     f = os.path.join(f, "index.html")
                 if os.path.isfile(f):
@@ -525,7 +569,7 @@ def screenshot_story(repo, page_path, dest):
             pg.goto("https://preview.local/")
             pg.evaluate("document.fonts.ready")
             pg.wait_for_timeout(500)
-            pg.screenshot(path=os.path.join(dest, f"preview-{name}.png"), full_page=True)
+            pg.screenshot(path=os.path.join(dest, f"{prefix}-{name}.png"), full_page=True)
             c.close()
         b.close()
 
