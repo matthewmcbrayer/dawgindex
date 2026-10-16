@@ -89,3 +89,5 @@ Stories: approval on record, private previews outside the repo, byte-identical r
   link in the same build, and not before.
 - Team copy is descriptive by default; habit words are refused unless the case carries a supported team finding.
 - Tests: `python3 _editorial/test_lab.py`.
+- Safeguards demo: `python3 _editorial/lab_safeguards.py REPORT.md` runs every publish refusal (and one valid approved case)
+  through the real build on a throwaway copy and writes a pass/fail table.

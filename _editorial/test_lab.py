@@ -125,6 +125,16 @@ def main():
     check(all(states[s] == "below" for s in ("kansas", "purdue", "georgia-tech")), "below-minimum programs are marked below the minimum")
     check(all((tm["state"] == "ok") == tm["card"] for tm in teams.values()), "share cards exist only for programs meeting the display minimum")
     check(all(tm["n_label"] and tm["hf_games"] >= 0 and "games" in tm["sentence"] for tm in teams.values() if tm["state"] != "none"), "every team sentence carries its sample size")
+    cov = f"{float(base_c['presentation']['band_coverage']):g}"
+    txts = [tm[k] for tm in teams.values() for k in ("sentence", "band_text", "answer", "pin", "short") if tm.get(k)]
+    check(not any(re.search(r"\bchance\b", x, re.I) for x in txts), "team copy says 'luck range' throughout, never a loose 'chance'")
+    check(all(f"{cov} times in 100 over {tm['hf_games']} games" in tm["band_text"] for tm in teams.values() if tm["state"] == "ok"),
+          "every luck-range sentence states the plan's coverage and the team's game count")
+    check(all("can’t be told apart from luck" in tm["band_text"] for tm in teams.values() if tm["state"] == "ok" and tm["answer"].startswith("Within"))
+          and all("not what comes next" in tm["band_text"] for tm in teams.values() if tm["state"] == "ok" and tm["answer"].startswith("Outside")),
+          "inside the range says it can't be told from luck; outside says a few land there by luck and it doesn't predict")
+    check(all(tm["research_games"] == sum(r["n"] for r in tm["season_rows"] if r.get("research")) and (tm["research_text"] != "") == tm["has_research"] for tm in teams.values()),
+          "every program's research-grade game count matches its season rows")
 
     # ---- 4. approve + build a published case in the copy
     code, out = run(r, "approve", fx, "--by")
@@ -190,7 +200,8 @@ def main():
             if f"not a verdict on {tm['name']}" not in txt: bad.append(f"{s}/{size}: no descriptive tag")
             m = L.TRAIT.search(txt)
             if m: bad.append(f"{s}/{size}: '{m.group(0)}'")
-            if tm["has_research"] and c_pub["research_datasets"][0]["label"] not in txt: bad.append(f"{s}/{size}: research label missing")
+            if tm["has_research"] and tm["research_text"] not in txt: bad.append(f"{s}/{size}: research label missing")
+            if not tm["has_research"] and "research grade" in txt: bad.append(f"{s}/{size}: research label on a program with none")
     check(not bad, "every team card says 'What happened · not a verdict', uses no habit words, and labels research grades", "; ".join(bad[:6]))
     case_inner = html.unescape(L.card_inner(c_pub, None, "card") + L.card_inner(c_pub, None, "og"))
     check(case_inner.count("not official DAWG grades") == 2, "both case images label the research-only grades")
@@ -310,15 +321,27 @@ def browser_checks(r, teams):
         # below the minimum
         pg.goto(f"{O}/lab/001-playing-down/?team=kansas"); ready(pg)
         body = pg.text_content("#lb-p-body")
-        check("Not enough games for a fair read" in body and pg.evaluate("document.getElementById('lb-p-share').hidden") and "Adjusted" in body and "not shown below the minimum" in body,
+        check("Too few games to compare with luck" in body and pg.evaluate("document.getElementById('lb-p-share').hidden") and "Adjusted" in body and "not shown below the minimum" in body,
               "below-minimum team: says not enough games, hides the adjusted value and the share card", body[:160])
 
         # research marking in the panel
         rs = next(s for s, tm in teams.items() if tm["state"] == "ok" and tm["has_research"])
         pg.goto(f"{O}/lab/001-playing-down/?team={rs}"); ready(pg)
         body = pg.text_content("#lb-p-body")
-        check("not official DAWG grades" in body and "Hollow" in body and pg.locator("#lb-p-seasons circle[fill='none'], #lb-p-seasons circle[fill='#FBF4E2']").count() > 0,
-              "panel labels research grades on the chance strip and marks research seasons hollow", body[:120])
+        check(teams[rs]["research_text"] in body and "Hollow marks" in body and pg.locator("#lb-p-seasons circle[fill='#FBF4E2']").count() > 0,
+              "panel states how many games use research grades and marks research seasons hollow", body[:120])
+        links = pg.locator("#lb-p-body .lb-research-note a[href='#lb-receipts']")
+        check(links.count() == 4, "every panel section that charts research games carries the label and a provenance link (4 of 4)", str(links.count()))
+        links.first.click(); pg.wait_for_timeout(400)
+        top = pg.evaluate("document.getElementById('lb-receipts').getBoundingClientRect().top")
+        check(pg.evaluate("document.getElementById('lb-panel').hidden") and -5 <= top < 200, "'How they were made' closes the panel and lands on the receipts with the provenance", str(top))
+        check(teams[rs]["research_text"] in pg.text_content("#lb-strip-res"), "the team strip on the case page states the research-grade games")
+        pg.evaluate("window.scrollTo(0, document.body.scrollHeight * 0.45)"); pg.wait_for_timeout(300)
+        check(teams[rs]["research_short"] in (pg.text_content("#lb-side-n") or ""), "the desktop side card carries the research marker")
+        nr = [s_ for s_, tm in teams.items() if tm["state"] == "ok" and not tm["has_research"]]
+        if nr:
+            pg.goto(f"{O}/lab/001-playing-down/?team={nr[0]}"); ready(pg)
+            check(pg.locator("#lb-p-body .lb-research-note").count() == 0, "a program with no research seasons shows no research label")
         check("not a verdict on" in body, "panel marks the team result as what happened, not a verdict")
 
         # precedence: ?team= beats the remembered team
@@ -327,6 +350,18 @@ def browser_checks(r, teams):
         check(pg.text_content("#lb-p-name") == teams["baylor"]["name"], "?team= wins over the remembered team")
         pg.goto(f"{O}/lab/001-playing-down/"); ready(pg)
         check(pg.input_value("#lb-pick") == "baylor" and pg.evaluate("document.getElementById('lb-panel').hidden"), "without ?team= the remembered team is preselected and the panel stays closed")
+
+        # homepage: the team picker is the main action
+        pg.evaluate("try{localStorage.clear()}catch(e){}")
+        pg.goto(f"{O}/lab/"); ready(pg)
+        bb = pg.locator("#lb-home-pick").bounding_box()
+        check(pg.input_value("#lb-home-pick") == "" and bb["y"] + bb["height"] < 900 and bb["height"] >= 56,
+              "Lab homepage: the team picker sits above the fold, large, with no team preselected", str(bb))
+        pg.select_option("#lb-home-pick", rs); pg.wait_for_timeout(150)
+        check(pg.text_content("#lb-home-ans") == teams[rs]["answer"] and pg.get_attribute("#lb-home-link", "href").endswith(f"?team={rs}") and pg.is_visible("#lb-home-rn"),
+              "picking a team on the homepage shows its answer, its research marker and a link to its result")
+        pg.click("#lb-home-link"); pg.wait_for_url(re.compile(r".*\?team=")); ready(pg)
+        check(pg.text_content("#lb-p-name") == teams[rs]["name"], "the homepage link opens that team's panel")
 
         # drawer on desktop
         pg.goto(f"{O}/lab/001-playing-down/?team=baylor"); ready(pg)
@@ -339,6 +374,9 @@ def browser_checks(r, teams):
         for w, h in ((390, 844), (360, 740)):
             c = ctx(w, h); pg = c.new_page(); e2 = []
             pg.on("pageerror", lambda e: e2.append(str(e))); pg.on("console", lambda m: e2.append(m.text) if m.type == "error" else None)
+            pg.goto(f"{O}/lab/"); ready(pg)
+            hb = pg.locator("#lb-home-pick").bounding_box()
+            check(hb["y"] + hb["height"] < h and abs(hb["width"] - (w - 2 * 16 - 2 * 18 - 4)) < 30, f"{w}px: the homepage team picker is above the fold and full width", str(hb))
             pg.goto(f"{O}/lab/001-playing-down/?team=baylor"); ready(pg)
             bb = pg.locator("#lb-panel").bounding_box()
             check(bb and abs(bb["width"] - w) < 1 and abs(bb["height"] - h) < 1 and pg.is_visible(".lb-back") and not pg.is_visible(".lb-close"),
@@ -347,6 +385,17 @@ def browser_checks(r, teams):
             check(pg.evaluate("document.getElementById('lb-panel').hidden"), f"{w}px: Back to the case closes it")
             pg.evaluate("window.scrollTo(0, document.body.scrollHeight * 0.5)"); pg.wait_for_timeout(300)
             check(pg.is_visible("#lb-pin") and teams["baylor"]["name"] in pg.text_content("#lb-pin"), f"{w}px: the pinned team bar appears once the team strip scrolls away")
+            if teams["baylor"]["research_short"]:
+                check(teams["baylor"]["research_short"] in pg.text_content("#lb-pin"), f"{w}px: the pinned bar carries the research marker")
+            # the 68-program chart on a phone: ticks, fits its box, tap a dot to name it
+            pg.locator("#lb-carry").scroll_into_view_if_needed(); pg.wait_for_timeout(150)
+            box = pg.locator("#lb-carry").bounding_box(); sv = pg.locator("#lb-carry svg").bounding_box()
+            nt = pg.evaluate("[...document.querySelectorAll('#lb-carry svg text')].filter(t => /^[+−]\\d+$/.test(t.textContent)).length")
+            pt = pg.evaluate("(() => { const c = [...document.querySelectorAll('#lb-carry svg circle')].find(c => c.getAttribute('fill') && c.getAttribute('fill').startsWith('rgba')); const r = c.getBoundingClientRect(); return [r.x + r.width / 2, r.y + r.height / 2]; })()")
+            pg.mouse.click(pt[0], pt[1]); pg.wait_for_timeout(200)
+            rdt = pg.text_content("#lb-carry .lb-co-read") or ""
+            check(sv["width"] <= box["width"] + 1 and nt >= 4 and "earlier" in rdt and "later" in rdt and "Tap" not in rdt,
+                  f"{w}px: the 68-program chart fits, has axis numbers, and tapping a dot names the program", f"ticks {nt}; readout '{rdt}'")
             check(not e2, f"{w}px: no script errors", "; ".join(e2[:3]))
             c.close()
 
