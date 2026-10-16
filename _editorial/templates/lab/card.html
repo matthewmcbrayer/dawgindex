@@ -1,0 +1,68 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@800;900&family=Barlow:wght@500;600;700&family=Barlow+Condensed:wght@700;800&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<style>
+*{box-sizing:border-box;margin:0}
+:root{--cond:"Barlow Condensed",sans-serif;--mono:"IBM Plex Mono",monospace;--ink-2:#3B362E}
+html,body{overflow:hidden;background:#131210}
+body{color:#F4EAD2;font-family:Barlow,sans-serif;position:relative}
+body.card{width:1080px;height:1350px}
+body.og{width:1200px;height:630px}
+.f{position:absolute;inset:0;display:flex;flex-direction:column}
+.card .f{padding:62px 68px 56px;gap:30px}
+.og .f{padding:40px 48px 0;gap:16px}
+.top{display:flex;justify-content:space-between;align-items:center}
+.tab{display:inline-flex;align-items:center;background:#EADFC4;color:#131210;font:600 26px/1 var(--mono);letter-spacing:.08em;padding:16px 42px 16px 22px;clip-path:polygon(0 0,calc(100% - 26px) 0,100% 100%,0 100%)}
+.og .tab{font-size:18px;padding:11px 30px 11px 14px}
+.lock{display:flex;align-items:center;gap:12px}
+.lock svg{width:170px;height:auto;display:block}
+.og .lock svg{width:120px}
+.lock span{border:3px solid #F4EAD2;padding:7px 10px 6px;font:600 24px/1 var(--mono);letter-spacing:.16em}
+.og .lock span{font-size:16px;padding:5px 7px 4px;border-width:2px}
+.q{font:900 100px/.9 "Big Shoulders Display",sans-serif;text-transform:uppercase}
+.og .q{font-size:58px}
+.who{display:flex;align-items:center;gap:28px}
+.who img{width:140px;height:140px;object-fit:contain;flex:0 0 auto}
+.og .who img{width:86px;height:86px}
+.ans{font:900 84px/.92 "Big Shoulders Display",sans-serif;text-transform:uppercase}
+.og .ans{font-size:46px}
+.qs{font:800 38px/1.05 var(--cond);text-transform:uppercase;color:#B8AD98}
+.og .qs{font-size:24px}
+.sent{font:500 31px/1.3 Barlow,sans-serif;color:#D9CFB6}
+.og .sent{font-size:21px}
+.stamp{display:inline-flex;padding:8px;border:5px solid currentColor;transform:rotate(-3deg);flex:0 0 auto}
+.stamp i{font-style:normal;border:2.5px solid currentColor;padding:14px 26px 10px;display:flex;flex-direction:column;align-items:center;gap:8px}
+.stamp b{font:900 58px/.9 "Big Shoulders Display",sans-serif;text-transform:uppercase}
+.stamp small{font:600 16px/1.2 var(--mono);letter-spacing:.1em;text-transform:uppercase}
+.og .stamp b{font-size:38px}.og .stamp small{font-size:12px}.og .stamp i{padding:10px 18px 8px}
+.v-holds{color:#FF8A7E}.v-not{color:#F4EAD2}.v-mixed{color:#8FB0F0}.v-inc{color:#B8AD98}
+.v-inc,.v-inc i{border-style:dashed}
+.ex{background-color:#FBF4E2;background-image:linear-gradient(rgba(19,18,16,.055) 1px,transparent 1px),linear-gradient(90deg,rgba(19,18,16,.055) 1px,transparent 1px);background-size:24px 24px;color:#131210;padding:26px 30px;display:flex;flex-direction:column;gap:16px;flex:1;justify-content:center}
+.og .ex{padding:16px 20px;gap:8px}
+.ex .h{font:600 19px/1.2 var(--mono);letter-spacing:.1em;text-transform:uppercase}
+.og .ex .h{font-size:13px}
+.ex .n{font:500 22px/1.4 Barlow,sans-serif;color:#3B362E}
+.og .ex .n{font-size:15px}
+.rn{display:flex;align-items:center;gap:12px;font:600 19px/1.3 Barlow,sans-serif;color:#3B362E}
+.rn i{width:20px;height:20px;border-radius:50%;border:3px solid #131210;flex:0 0 auto}
+.og .rn{font-size:13px}.og .rn i{width:13px;height:13px;border-width:2px}
+.desc{align-self:flex-start;font:600 20px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;border:2px solid #F4EAD2;padding:10px 12px}
+.og .desc{font-size:13px;padding:7px 9px}
+.foot{display:flex;justify-content:space-between;align-items:flex-end;gap:30px;border-top:2px solid #4A443B;padding-top:18px}
+.foot p{font:500 20px/1.35 Barlow,sans-serif;color:#D9CFB6;max-width:640px}
+.foot b{font:600 22px/1 var(--mono);white-space:nowrap}
+.og .band{height:52px;margin-top:auto;margin-left:-48px;margin-right:-48px;background:#0c0b0a;border-top:5px solid #E5463A;display:flex;justify-content:space-between;align-items:center;padding:0 48px}
+.og .band span{font:600 16px/1 Barlow,sans-serif;color:#D9CFB6}.og .band b{font:600 17px/1 var(--mono);color:#F5C030}
+.og .row{display:flex;gap:26px;flex:1;min-height:0}
+.og .row>.l{flex:1.15;display:flex;flex-direction:column;gap:14px;justify-content:center}
+.og .row>.r{flex:1;display:flex;padding-bottom:18px}
+.sample{position:absolute;top:34px;right:-74px;transform:rotate(35deg);background:#F5C030;color:#131210;font:700 20px/1 var(--mono);letter-spacing:.14em;padding:12px 90px;z-index:5}
+.og .sample{top:22px;right:-80px;font-size:15px;padding:9px 90px}
+</style></head>
+<body class="{{SIZE}}" data-mode="card">
+{{SAMPLE}}
+<div class="f">
+{{INNER}}
+</div>
+<script id="lab-data" type="application/json">{{DATA}}</script>
+<script src="/lab/lab.js"></script>
+</body></html>
