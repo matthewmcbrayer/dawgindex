@@ -73,7 +73,7 @@ done
 if [ -n "$DRY" ]; then echo; echo "DRY RUN: every check passed; would commit and push:"; changed | sed 's/^/  /' | head -30; RESULT=ok; exit 0; fi
 
 echo "== commit and push"
-git add -A -- lab stories _editorial 2>/dev/null || git add -A -- $(ls -d lab stories _editorial 2>/dev/null)
+git add -A   # safe: step 1 (re-checked after the fast-forward) found no change outside the editorial folders; checked again below
 git diff --cached --quiet || git -c user.name="Matthew McBrayer" -c user.email="mattwmcbrayer@gmail.com" commit -q -m "$MSG"
 BAD=$(git diff --name-only origin/main..HEAD | grep -vE "$ALLOW" || true)
 [ -z "$BAD" ] || die "the commits to push touch other paths: $BAD"
