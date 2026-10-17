@@ -37,15 +37,14 @@ def make_fixture(root):
     d = os.path.join(root, "001-playing-down")
     c = json.loads(rd(os.path.join(d, "case.json")))
     c["sample"] = False
-    c["verdict"].update(subtitle="Reason set in the plan", answer="Test answer: one plain sentence for the test suite.")
+    c["verdict"].update(subtitle="Reason set in the plan", answer="Test answer: one plain sentence for the test suite.", card_line="Test line for the link preview.")
+    c["verdict_record"] = "Test verdict record for the suite."
     c["second_check"] = "Rerun independently for the test suite"
     c["data_lock"]["snapshot"] = "sha256:test00000000000000000000"
     c["research_datasets"][0]["provenance"] = "Test provenance line for the suite."
     wj(os.path.join(d, "case.json"), c)
     data = json.loads(rd(os.path.join(d, "data.json")))
     data["sample"] = False
-    for cut in data["cuts"]:
-        cut["note"] = cut["note"].replace("Sample number. ", "")
     wj(os.path.join(d, "data.json"), data)
     md = rd(os.path.join(d, "case.md")).replace("Sample text.", "Test text.").replace("Sample: the limits", "Test: the limits")
     open(os.path.join(d, "case.md"), "w").write(md)
@@ -98,21 +97,53 @@ def main():
     c = copy.deepcopy(base_c); c["research_datasets"][0]["label"] = ""; neg("research dataset without its label", "research dataset needs label", c)
     c = copy.deepcopy(base_c); c["verdict"]["subtitle"] = ""; neg("verdict without its plan-written subtitle", "verdict.subtitle", c)
     c = copy.deepcopy(base_c); del c["presentation"]["team_headlines"]["outside"]; neg("team headlines not written for every state", "team_headlines", c)
-    c = copy.deepcopy(base_c); c["presentation"]["team_headlines"]["within"] = "{team} sits comfortably inside the luck range"; neg("team headline too long for a card", "share cards fit", c)
+    c = copy.deepcopy(base_c); c["presentation"]["team_headlines"]["within"] = "{team} sits comfortably inside the expected range"; neg("team headline too long for a card", "share cards fit", c)
     c = copy.deepcopy(base_c); c["presentation"]["team_headlines"]["outside"] = "{team} plays down"; neg("team headline that claims a habit", "confirmed trait", c)
     c = copy.deepcopy(base_c); c["verdict"]["kind"] = "probably"; neg("unknown verdict", "verdict.kind", c)
     c = copy.deepcopy(base_c); c["type"] = "original-investigation"; neg("Original Investigation (not in v0)", "Original Investigation", c)
     c = copy.deepcopy(base_c); del c["approved_by"]; neg("no approval on record", "approved_by", c)
     d = copy.deepcopy(base_d); d["teams"]["not-a-team"] = d["teams"]["baylor"]; neg("unknown team slug", "unknown team slug", d=d)
     d = copy.deepcopy(base_d); del d["teams"]["baylor"]["groups"][0]["n"]; neg("team row without a sample size", "sample size", d=d)
-    d = copy.deepcopy(base_d); del d["teams"]["baylor"]["season_rows"][0]["n"]; neg("season row without a sample size", "sample size", d=d)
+    d = copy.deepcopy(base_d); del d["teams"]["baylor"]["range_lo"]; neg("a program meeting the minimum without its expected range", "no range_lo", d=d)
+    d = copy.deepcopy(base_d); d["teams"]["baylor"]["outside"] = not d["teams"]["baylor"]["outside"]; neg("an outside flag that contradicts the range", "doesn't match", d=d)
+    d = copy.deepcopy(base_d); d["teams"]["kansas"]["range_lo"] = -3.0; neg("an expected range shown below the display minimum", "below the display minimum", d=d)
+    d = copy.deepcopy(base_d); d["teams"]["baylor"]["adjusted"] = 0.4; neg("a shrunken (adjusted) value", "approved descriptive outputs", d=d)
+    d = copy.deepcopy(base_d); d["teams"]["baylor"]["down"] += 0.5; neg("a gap that isn't down part minus up part", "down part minus up part", d=d)
+    d = copy.deepcopy(base_d); d["teams"]["baylor"]["groups"][1]["n"] += 1; neg("group counts that don't add up to the games", "add up to", d=d)
+    d = copy.deepcopy(base_d); d["cuts"] = [{"id": "plan", "plan": True, "U": 2.4}]; neg("the retired upper-bound layout", "retired upper-bound", d=d)
+    neg("a size published as ruled out", "ruled out", md=base_md + "\nHabits bigger than 2 points are ruled out.\n")
+    neg("an upper-bound style ±N", "ruled out", md=base_md + "\nNothing bigger than ±0.9 per game.\n")
     d = copy.deepcopy(base_d); d["teams"]["baylor"]["finding"] = {"text": "Baylor plays down."}; neg("team finding without its criteria", "team finding needs", d=d)
-    d = copy.deepcopy(base_d); [x.update(plan=True) for x in d["cuts"]]; neg("more than one plan-choice cut", "exactly one", d=d)
+    d = copy.deepcopy(base_d); [x.update(primary=True) for x in d["persistence"]]; neg("more than one main carryover estimate", "exactly one", d=d)
+    c = copy.deepcopy(base_c); del c["verdict_record"]; neg("no verdict record", "verdict_record", c)
+    # the descriptive tables (spec §2, §7, §8)
+    G = lambda: [{"label": g["label"], "avg": 0.1, "n": 10} for g in base_d["league"]["groups"]]
+    some = sorted(base_d["teams"])[:3]
+    TB = {"league": [{"label": "2014–26, all games", "groups": G()}],
+          "postseason": {"title": "Postseason", "label": "Postseason", "note": "Opt-outs make these less comparable.", "groups": G(), "programs": {s_: 1 for s_ in some}},
+          "season2026": {"title": "2026 so far", "label": "2026", "note": "Partial season; official grades.", "groups": G(), "group_keys": ["HF", "MF", "EV", "DOG"],
+                         "programs": {s_: {"HF": 1, "MF": 0, "EV": 0, "DOG": 0} for s_ in some}}}
+    neg("a [[tables]] marker without the tables", "no tables", md=base_md + "\n[[tables]]\n")
+    d = copy.deepcopy(base_d); d["tables"] = copy.deepcopy(TB); d["tables"]["postseason"]["note"] = "Bowl games."; neg("postseason table without the opt-out note", "opt-outs", d=d, md=base_md + "\n[[tables]]\n")
+    d = copy.deepcopy(base_d); d["tables"] = copy.deepcopy(TB); d["tables"]["season2026"]["note"] = "2026 games."; neg("2026 table not labeled a partial season", "partial season", d=d, md=base_md + "\n[[tables]]\n")
+    d = copy.deepcopy(base_d); d["tables"] = copy.deepcopy(TB); d["tables"]["season2026"]["programs"]["not-a-team"] = {"HF": 1}; neg("2026 table with an unknown program", "unknown program", d=d, md=base_md + "\n[[tables]]\n")
+    d = copy.deepcopy(base_d); d["tables"] = copy.deepcopy(TB); d["tables"]["league"][0]["groups"][0].pop("n"); neg("league table row without its games", "games (n)", d=d, md=base_md + "\n[[tables]]\n")
+    d = copy.deepcopy(base_d); d["tables"] = copy.deepcopy(TB)
+    e_ = L.validate(copy.deepcopy(base_c), base_md + "\n[[tables]]\n", d, base_p, fx, site_teams, "publish")
+    check(not e_, "complete tables pass", "; ".join(e_))
+    if not e_:
+        tms = L.derive_teams(base_c, d, B.team_ids(REPO), B.team_names(REPO, site_teams), site_teams)
+        hb = L.body_html(base_c, base_md + "\n[[tables]]\n", d, tms)
+        names_in = re.findall(r'<tr data-team="[^"]+"><th scope="row" class="lb-tl" data-v="([^"]+)"', hb)
+        shown = [tm["name"] for tm in sorted(tms.values(), key=lambda x: x["name"]) if tm["state"] != "none"]
+        check(names_in == [L.a(x) for x in shown] and "lb-sort" in hb and "Landing outside one is a description, not a finding." in hb
+              and "different numbers" in hb and "too few games" in hb,
+              "program table: every program with games, alphabetical, sortable, with the range wording, the gap-vs-carryover note and 'too few games' below the minimum")
     neg("unfilled [placeholder]", "placeholder", md=base_md + "\nThe gap was [X] points.\n")
     neg("'illustrative' wording", "sample/illustrative", md=base_md + "\nAn illustrative example.\n")
     neg("'2.0' in the copy", "'2.0'", md=base_md + "\nDAWG 2.0 says so.\n")
     c = copy.deepcopy(base_c); c["plan"].pop("label"); neg("plan version '2.0' with no public label", "plan.label", c)
-    ok_links = L.validate(copy.deepcopy(base_c), base_md + "\nSee [the method](/#method). [[bound]]\n", copy.deepcopy(base_d), base_p, fx, site_teams, "publish")
+    ok_links = L.validate(copy.deepcopy(base_c), base_md + "\nSee [the method](/#method). [[programs]]\n", copy.deepcopy(base_d), base_p, fx, site_teams, "publish")
     check(not ok_links, "markdown links and [[markers]] are not mistaken for placeholders", "; ".join(ok_links))
 
     # team copy stays descriptive unless a supported team finding exists
@@ -130,14 +161,19 @@ def main():
     check(all(tm["n_label"] and tm["hf_games"] >= 0 and "games" in tm["sentence"] for tm in teams.values() if tm["state"] != "none"), "every team sentence carries its sample size")
     cov = f"{float(base_c['presentation']['band_coverage']):g}"
     txts = [tm[k] for tm in teams.values() for k in ("sentence", "band_text", "answer", "pin", "short") if tm.get(k)]
-    check(not any(re.search(r"\bchance\b", x, re.I) for x in txts), "team copy says 'luck range' throughout, never a loose 'chance'")
-    check(all(f"{cov} times in 100 over {tm['hf_games']} games" in tm["band_text"] for tm in teams.values() if tm["state"] == "ok"),
-          "every luck-range sentence states the plan's coverage and the team's game count")
-    check(all("can’t be told apart from luck" in tm["band_text"] for tm in teams.values() if tm["state"] == "ok" and tm["answer"].startswith("Within"))
-          and all("not what comes next" in tm["band_text"] for tm in teams.values() if tm["state"] == "ok" and tm["answer"].startswith("Outside")),
-          "inside the range says it can't be told from luck; outside says a few land there by luck and it doesn't predict")
-    check(all(tm["research_games"] == sum(r["n"] for r in tm["season_rows"] if r.get("research")) and (tm["research_text"] != "") == tm["has_research"] for tm in teams.values()),
-          "every program's research-grade game count matches its season rows")
+    check(not any(re.search(r"\bluck\b", x, re.I) for x in txts), "team copy says 'expected range', never 'luck range'")
+    rt = lambda tm: f"{L.fmt(tm['range_lo'])} to {L.fmt(tm['range_hi'])}"
+    check(all(rt(tm) in tm["band_text"] and "no-lasting-tendency simulation" in tm["band_text"] for tm in teams.values() if tm["state"] == "ok"),
+          "every expected-range sentence gives the program's own range and says it comes from the no-lasting-tendency simulation")
+    check(all(tm["band_text"].startswith("That’s inside the range our no-lasting-tendency simulation gives for its mix of games. Expected range: ")
+              for tm in teams.values() if tm["state"] == "ok" and tm["inside"])
+          and all(tm["band_text"].startswith("That’s outside the range our no-lasting-tendency simulation gives for its mix of games. Expected range: ")
+                  and f"{cov}% range by chance alone" in tm["band_text"] and tm["band_text"].endswith("Landing outside one is a description, not a finding.")
+                  for tm in teams.values() if tm["state"] == "ok" and not tm["inside"]),
+          "team text follows the spec §5 template; outside adds the chance note and 'a description, not a finding'")
+    check(all(tm["inside"] == (not base_d["teams"][s]["outside"]) for s, tm in teams.items() if tm["state"] == "ok"), "inside/outside comes from the deliverable's flag, not recomputed")
+    check(all(tm["research_games"] == base_d["teams"][s]["research_games"] and (tm["research_text"] != "") == tm["has_research"] for s, tm in teams.items() if tm["state"] != "none"),
+          "every program's research-grade game count comes straight from the data")
 
     # ---- 4. approve + build a published case in the copy
     code, out = run(r, "approve", fx, "--by")
@@ -204,7 +240,7 @@ def main():
             m = L.TRAIT.search(txt)
             if m: bad.append(f"{s}/{size}: '{m.group(0)}'")
             if tm["has_research"] and tm["card_research"] not in txt: bad.append(f"{s}/{size}: research label missing")
-            want = c_pub["presentation"]["team_headlines"]["within" if abs(tm["raw"]) < tm["band"] else "outside"].replace("{team}", tm["name"])
+            want = c_pub["presentation"]["team_headlines"]["within" if tm["inside"] else "outside"].replace("{team}", tm["name"])
             if tm["answer"] != want or f'<div class="hl">{html.escape(want, quote=False)}</div>' not in inner: bad.append(f"{s}/{size}: headline isn't the approved one")
             if f'<b>{tm["hf_games"]}</b>' not in inner or f"across {tm['seasons']} seasons" not in txt: bad.append(f"{s}/{size}: sample size")
             if tm["band_text"] in txt or tm["sentence"] in txt: bad.append(f"{s}/{size}: long copy on the card")
@@ -230,7 +266,7 @@ def main():
     # ---- 7b. what was approved is what publishes: an edit after approval needs re-approval
     cj = os.path.join(r, "_editorial", "lab", "001-playing-down", "case.json")
     approved = rd(cj); ce = json.loads(approved)
-    ce["presentation"]["team_headlines"]["within"] = "Inside the luck range"; wj(cj, ce)
+    ce["presentation"]["team_headlines"]["within"] = "Inside its expected range"; wj(cj, ce)
     before = {k: os.path.getmtime(os.path.join(lab, k)) for k in ("index.html", "001-playing-down/index.html")}
     code, out = run(r, "build")
     check(code != 0 and "edited after approval" in out and before == {k: os.path.getmtime(os.path.join(lab, k)) for k in before},
@@ -239,9 +275,9 @@ def main():
     check(code != 0, "re-approval needs a name")
     code, out = run(r, "reapprove", "001-playing-down", "--by", "Test Approver")
     code2, out2 = run(r, "build")
-    ok_tm = next(s_ for s_, tm in teams.items() if tm["state"] == "ok" and abs(tm["raw"]) < tm["band"])
+    ok_tm = next(s_ for s_, tm in teams.items() if tm["state"] == "ok" and tm["inside"])
     stub = rd(os.path.join(lab, "001", ok_tm, "index.html"))
-    check(code == 0 and code2 == 0 and "Inside the luck range" in rd(os.path.join(case_d, "data.json")) and B.png_text(os.path.join(case_d, "og", ok_tm + ".png"), "dawg-lab-team") == ok_tm,
+    check(code == 0 and code2 == 0 and "Inside its expected range" in rd(os.path.join(case_d, "data.json")) and B.png_text(os.path.join(case_d, "og", ok_tm + ".png"), "dawg-lab-team") == ok_tm,
           "after re-approval the new headline publishes to the page data and the cards are re-rendered", out2[-200:])
     open(cj, "w").write(approved); run(r, "reapprove", "001-playing-down", "--by", "Test Approver"); run(r, "build")
 
@@ -355,15 +391,15 @@ def browser_checks(r, teams):
         # below the minimum
         pg.goto(f"{O}/lab/001-playing-down/?team=kansas"); ready(pg)
         body = pg.text_content("#lb-p-body")
-        check("Too few games to compare with luck" in body and pg.evaluate("document.getElementById('lb-p-share').hidden") and "Adjusted" in body and "not shown below the minimum" in body,
-              "below-minimum team: says not enough games, hides the adjusted value and the share card", body[:160])
+        check("Too few games for an expected range" in body and pg.evaluate("document.getElementById('lb-p-share').hidden") and "Expected range" in body and "not shown below the minimum" in body
+              and "Adjusted" not in body, "below-minimum team: says not enough games, shows no expected range and no share card", body[:160])
 
         # research marking in the panel
         rs = next(s for s, tm in teams.items() if tm["state"] == "ok" and tm["has_research"])
         pg.goto(f"{O}/lab/001-playing-down/?team={rs}"); ready(pg)
         body = pg.text_content("#lb-p-body")
-        check(teams[rs]["research_text"] in body and "Hollow marks" in body and pg.locator("#lb-p-seasons circle[fill='#FBF4E2']").count() > 0,
-              "panel states how many games use research grades and marks research seasons hollow", body[:120])
+        check(teams[rs]["research_text"] in body and "Adjusted" not in body and "Season by season" not in body,
+              "panel states how many games use research grades, with no shrunken value and no season-by-season chart", body[:120])
         links = pg.locator("#lb-p-body .lb-research-note a[href='#lb-receipts']")
         check(links.count() == 4, "every panel section that charts research games carries the label and a provenance link (4 of 4)", str(links.count()))
         links.first.click(); pg.wait_for_timeout(400)
@@ -421,15 +457,17 @@ def browser_checks(r, teams):
             check(pg.is_visible("#lb-pin") and teams["baylor"]["name"] in pg.text_content("#lb-pin"), f"{w}px: the pinned team bar appears once the team strip scrolls away")
             if teams["baylor"]["research_short"]:
                 check(teams["baylor"]["research_short"] in pg.text_content("#lb-pin"), f"{w}px: the pinned bar carries the research marker")
-            # the 68-program chart on a phone: ticks, fits its box, tap a dot to name it
-            pg.locator("#lb-carry").scroll_into_view_if_needed(); pg.wait_for_timeout(150)
-            box = pg.locator("#lb-carry").bounding_box(); sv = pg.locator("#lb-carry svg").bounding_box()
-            nt = pg.evaluate("[...document.querySelectorAll('#lb-carry svg text')].filter(t => /^[+−]\\d+$/.test(t.textContent)).length")
-            pt = pg.evaluate("(() => { const c = [...document.querySelectorAll('#lb-carry svg circle')].find(c => c.getAttribute('fill') && c.getAttribute('fill').startsWith('rgba')); const r = c.getBoundingClientRect(); return [r.x + r.width / 2, r.y + r.height / 2]; })()")
-            pg.mouse.click(pt[0], pt[1]); pg.wait_for_timeout(200)
-            rdt = pg.text_content("#lb-carry .lb-co-read") or ""
-            check(sv["width"] <= box["width"] + 1 and nt >= 4 and "earlier" in rdt and "later" in rdt and "Tap" not in rdt,
-                  f"{w}px: the 68-program chart fits, has axis numbers, and tapping a dot names the program", f"ticks {nt}; readout '{rdt}'")
+            # the carryover chart and the 68-program chart on a phone: fit their boxes, carry axis numbers; tapping a program row picks it
+            for sel in ("#lb-persist", "#lb-programs"):
+                pg.locator(sel).scroll_into_view_if_needed(); pg.wait_for_timeout(150)
+                box = pg.locator(sel).bounding_box(); sv = pg.locator(sel + " svg").bounding_box()
+                nt = pg.evaluate(f"[...document.querySelectorAll('{sel} svg text')].filter(t => /^[+−]\\d+$/.test(t.textContent)).length")
+                check(sv["width"] <= box["width"] + 1 and nt >= 3, f"{w}px: {sel} fits its box and has axis numbers", f"ticks {nt}")
+            rows_ = pg.evaluate("document.querySelectorAll('#lb-programs svg text').length")
+            sb = pg.locator("#lb-programs svg").bounding_box()
+            pg.mouse.click(sb["x"] + 20, sb["y"] + 26 + 19 * 22 + 11); pg.wait_for_timeout(200)
+            pick_ = pg.input_value("#lb-pick")
+            check(rows_ > 68 and pick_ == sorted(teams, key=lambda s_: teams[s_]["name"])[19], f"{w}px: tapping a row in the 68-program chart picks that program", pick_)
             check(not e2, f"{w}px: no script errors", "; ".join(e2[:3]))
             c.close()
 

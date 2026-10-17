@@ -89,15 +89,22 @@ def main():
     S("Research dataset without provenance", lambda c, d, m, p: c["research_datasets"][0].update(provenance=""), "provenance")
     S("Research dataset without its public label", lambda c, d, m, p: c["research_datasets"][0].update(label=""), "label")
     S("Research dataset without its span", lambda c, d, m, p: c["research_datasets"][0].pop("span"), "span")
-    S("Research-span season not marked research", lambda c, d, m, p: [r.update(research=False) for r in team(d)["season_rows"] if r["season"] <= 2018] and None, "isn't marked research")
-    S("Season marked research outside the span", lambda c, d, m, p: team(d)["season_rows"][-1].update(research=True), "outside the research dataset")
-    S("Season rows don't add up to the games", lambda c, d, m, p: team(d)["season_rows"][0].update(n=team(d)["season_rows"][0]["n"] + 1), "add up")
+    S("Group counts don't add up to the games", lambda c, d, m, p: team(d)["groups"][1].update(n=team(d)["groups"][1]["n"] + 1), "add up")
+    S("Expected range missing for a program at the minimum", lambda c, d, m, p: team(d).pop("range_lo"), "no range_lo")
+    S("Outside flag contradicts the expected range", lambda c, d, m, p: team(d).update(outside=not team(d)["outside"]), "doesn't match")
+    S("Expected range shown below the display minimum", lambda c, d, m, p: team(d, "kansas").update(range_lo=-3.0, range_hi=3.0, outside=False), "below the display minimum")
+    S("Shrunken (adjusted) value in the data", lambda c, d, m, p: team(d).update(adjusted=0.3), "approved descriptive outputs")
+    S("Gap isn't down part minus up part", lambda c, d, m, p: team(d).update(down=team(d)["down"] + 0.5), "down part minus up part")
+    S("Upper-bound layout (cuts with U) in the data", lambda c, d, m, p: d.update(cuts=[{"id": "plan", "plan": True, "U": 2.4}]), "retired upper-bound")
+    S("A size published as ruled out", lambda c, d, m, p: (c, d, m + "\nHabits bigger than 2 points are ruled out.\n", p), "ruled out")
+    S("An upper bound written as ±N", lambda c, d, m, p: (c, d, m + "\nNothing bigger than ±0.9 per game.\n", p), "ruled out")
+    S("Verdict record missing", lambda c, d, m, p: c.pop("verdict_record"), "verdict_record")
     S("Team row without a sample size", lambda c, d, m, p: team(d)["groups"][0].pop("n"), "sample size")
     S("Team finding without its criteria", lambda c, d, m, p: team(d).update(finding={"text": "Baylor plays down."}), "team finding needs")
     S("Habit language in team copy", lambda c, d, m, p: c["presentation"].update(measure_short="as a favorite, which it always is"), "confirmed trait")
-    S("Luck-range coverage missing", lambda c, d, m, p: c["presentation"].pop("band_coverage"), "band_coverage")
+    S("Expected-range coverage missing", lambda c, d, m, p: c["presentation"].pop("band_coverage"), "band_coverage")
     S("Unknown team slug", lambda c, d, m, p: d["teams"].update({"not-a-team": team(d)}), "unknown team slug")
-    S("Two cuts marked as the plan's choice", lambda c, d, m, p: [x.update(plan=True) for x in d["cuts"]] and None, "exactly one")
+    S("Two carryover estimates marked as the main test", lambda c, d, m, p: [x.update(primary=True) for x in d["persistence"]] and None, "exactly one")
     S("'2.0' in the copy", lambda c, d, m, p: (c, d, m + "\nDAWG 2.0 says so.\n", p), "'2.0'")
     S("Plan version '2.0' with no public label", lambda c, d, m, p: c["plan"].pop("label"), "plan.label")
     S("Original Investigation (not built in v0)", lambda c, d, m, p: c.update(type="original-investigation"), "original investigation")
@@ -105,8 +112,8 @@ def main():
     S("Verdict without its plan-written subtitle", lambda c, d, m, p: c["verdict"].update(subtitle=""), "verdict.subtitle")
     S("Team headlines missing for a state", lambda c, d, m, p: c["presentation"]["team_headlines"].pop("below"), "team_headlines")
     S("Team headline claims a habit", lambda c, d, m, p: c["presentation"]["team_headlines"].update(outside="{team} plays down"), "confirmed trait")
-    S("Team headline too long for a share card", lambda c, d, m, p: c["presentation"]["team_headlines"].update(within="{team} sits comfortably inside the luck range"), "share cards fit")
-    S("Headline edited after approval (otherwise valid)", lambda c, d, m, p: c["presentation"]["team_headlines"].update(within="Inside the luck range"), "edited after approval")
+    S("Team headline too long for a share card", lambda c, d, m, p: c["presentation"]["team_headlines"].update(within="{team} sits comfortably inside the expected range"), "share cards fit")
+    S("Headline edited after approval (otherwise valid)", lambda c, d, m, p: c["presentation"]["team_headlines"].update(within="Inside its expected range"), "edited after approval")
     S("Data edited after approval (otherwise valid)", lambda c, d, m, p: d["teams"]["baylor"].update(raw=d["teams"]["baylor"]["raw"] + 0.1), "edited after approval")
 
     # duplicate case number
@@ -160,8 +167,8 @@ def main():
     chk("Lab homepage, Exhibit A: research label", rdset["label"] in home)
     chk("Published data.json: label, span and provenance travel with the numbers",
         all(pub["research"].get(k) == rdset[k] for k in ("label", "span", "provenance")))
-    chk("Published data.json: every 2014–2018 season row is flagged research",
-        all(r["research"] == (2014 <= r["season"] <= 2018) for tm in pub["teams"].values() for r in tm.get("season_rows", [])))
+    chk("Published data.json: every program's research-grade game count travels with its numbers",
+        all(pub["teams"][s]["research_games"] == data["teams"][s]["research_games"] for s in data["teams"]))
     bad = []
     for s in res_teams:
         tm = teams[s]
@@ -171,8 +178,8 @@ def main():
             for size in ("card", "og"):
                 if tm["card_research"] not in html.unescape(L.card_inner(c, tm, size)): bad.append(f"{s}: {size}")
             if B.png_text(os.path.join(case_d, "cards", s + ".png"), "dawg-lab-team") != s: bad.append(f"{s}: card image")
-        if not re.match(r"^\d+ of these \d+ games are from 2014–2018 and use research grades", tm["research_text"]): bad.append(f"{s}: count")
-        if tm["research_games"] != sum(r["n"] for r in tm["season_rows"] if r["research"]): bad.append(f"{s}: research game count")
+        if not re.match(r"^Includes research grades: \d+ of its \d+ games are from 2014–2018", tm["research_text"]): bad.append(f"{s}: count")
+        if tm["research_games"] != data["teams"][s]["research_games"]: bad.append(f"{s}: research game count")
     chk(f"Team link previews, share cards and preview images for all {len(res_teams)} programs with research seasons: count + label", not bad, "; ".join(bad[:4]))
     no_res = [s for s, tm in teams.items() if not tm["has_research"] and tm["state"] != "none"]
     chk("Programs with no research seasons carry no research label", all(not teams[s]["research_text"] for s in no_res), f"{len(no_res)} programs")

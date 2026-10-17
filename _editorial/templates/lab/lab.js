@@ -7,7 +7,7 @@
   var STORE = "dawg-lab-team";
   var el = function (id) { return document.getElementById(id); };
   var esc = function (s) { return String(s == null ? "" : s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); };
-  var fmt = function (v) { return (v > 0 ? "+" : v < 0 ? "−" : "") + Math.abs(v).toFixed(1); };
+  var fmt = function (v) { var m = Math.abs(v).toFixed(1); return (m === "0.0" ? "" : v > 0 ? "+" : "−") + m; };  /* rounds like lab.py; no "−0.0" */
   var store = {
     get: function () { try { return window.localStorage.getItem(STORE); } catch (e) { return null; } },
     set: function (v) { try { window.localStorage.setItem(STORE, v); } catch (e) {} }
@@ -36,125 +36,110 @@
     w = Math.floor(w); return w > 40 ? w : fallback;
   }
 
-  /* ------------------------------------------------------------ chart 1: carryover */
-  function drawCarryover(node, co, team, opt) {
+  /* ------------------------------------------------------------ chart 1: carryover estimates (the verdict's evidence) */
+  function drawPersistence(node, rows, opt) {
     opt = opt || {};
-    var W = width(node, 700), narrow = W < 560, H = narrow ? Math.round(W * 1.02) : Math.min(460, Math.max(320, Math.round(W * 0.5)));
-    if (opt.fit) {
-      node.innerHTML = ""; var ch = node.clientHeight;
-      try { var cs = getComputedStyle(node); ch -= (parseFloat(cs.paddingTop) || 0) + (parseFloat(cs.paddingBottom) || 0); } catch (e) {}
-      if (ch > 120) H = Math.floor(ch);
+    rows = opt.compact ? rows.filter(function (r) { return r.card; }) : rows;
+    var W = width(node, 700), mid = !!opt.mid, narrow = mid || W < 560, big = !!opt.big && !mid;
+    var longest = Math.max.apply(null, rows.map(function (r) { return r.label.length; }));
+    var fs = big ? 26 : mid ? 17 : narrow ? Math.max(10, Math.min(12, Math.floor((W - 24) / (longest * 0.61)))) : 13, lw = narrow ? 0 : Math.min(big ? 460 : 350, Math.round(W * 0.44));
+    var rowH = big ? 70 : mid ? 62 : narrow ? 46 : 30, gh = opt.compact ? 0 : (big ? 52 : 30), top = big ? 56 : 40, bot = big ? 80 : 60;
+    var groups = 0; rows.forEach(function (r, i) { if (!opt.compact && r.group && (i === 0 || rows[i - 1].group !== r.group)) groups++; });
+    var H = top + bot + rowH * rows.length + gh * groups;
+    if (opt.fit) { node.innerHTML = ""; var ch = node.clientHeight; if (ch > 120) { rowH = Math.max(40, Math.floor((ch - top - bot - gh * groups) / rows.length)); H = top + bot + rowH * rows.length + gh * groups; } }
+    /* the axis stays readable: estimates beyond −12 / +8 are drawn at the edge with an arrow and their value */
+    var lo = Math.min.apply(null, rows.map(function (r) { return r.T - r.SE; }).concat([-4])), hi = Math.max.apply(null, rows.map(function (r) { return r.T + r.SE; }).concat([4]));
+    var step = 4; lo = Math.max(-12, Math.floor(lo / step) * step); hi = Math.min(8, Math.ceil(hi / step) * step);
+    var x0 = lw + (narrow ? 8 : 16), x1 = W - (big ? 24 : 12);
+    var X = function (v) { return x0 + (Math.max(lo, Math.min(hi, v)) - lo) / (hi - lo) * (x1 - x0); };
+    var s = svg(W, H, "Carryover estimates: " + rows.map(function (r) { return r.label + " " + fmt(r.T); }).join("; "));
+    add(s, "rect", { x: X(0), y: top - 6, width: x1 - X(0), height: H - top - bot + 12, fill: "#EADFC4" });
+    add(s, "text", { x: x1 - 4, y: top - 12, "text-anchor": "end", style: "font-size:" + fs + "px;fill:#6E6557" }, narrow && !big ? "a lasting pattern →" : "a lasting pattern would land here →");
+    for (var v = lo; v <= hi; v += step) {
+      add(s, "line", { x1: X(v), y1: H - bot + 4, x2: X(v), y2: H - bot + 10, stroke: "#6E6557" });
+      add(s, "text", { x: X(v), y: H - bot + (big ? 38 : 24), "text-anchor": "middle", style: "font-size:" + fs + "px;fill:#6E6557" }, (v > 0 ? "+" : v < 0 ? "−" : "") + Math.abs(v));
     }
-    var m = { l: narrow ? 30 : 40, r: narrow ? 10 : 14, t: narrow ? 70 : 58, b: 44 };
-    var vals = co.points.map(function (p) { return Math.max(Math.abs(p.x), Math.abs(p.y)); });
-    /* a tight, even domain so the dots fill the plot instead of huddling in the middle */
-    var D0 = Math.max(6, Math.ceil(Math.max.apply(null, vals.concat([co.band + 0.5])) + 0.6)); if (D0 % 2) D0++;
-    var step = D0 <= 8 ? 2 : D0 <= 16 ? 4 : 8;
-    var X = function (v) { return m.l + (v + D0) / (2 * D0) * (W - m.l - m.r); };
-    var Y = function (v) { return m.t + (D0 - v) / (2 * D0) * (H - m.t - m.b); };
-    var s = svg(W, H, "Carryover: each program's gap in " + co.x_label + " against " + co.y_label);
-    add(s, "rect", { x: m.l, y: Y(co.band), width: W - m.l - m.r, height: Y(-co.band) - Y(co.band), fill: "#EADFC4" });
-    var ifmt = function (v) { return (v > 0 ? "+" : v < 0 ? "−" : "") + Math.abs(v); };
-    for (var v = -Math.floor((D0 - 0.5) / step) * step; v < D0; v += step) {
-      if (v === 0) continue;
-      add(s, "line", { x1: X(v), y1: H - m.b, x2: X(v), y2: H - m.b + 5, stroke: "#6E6557" });
-      add(s, "text", { x: X(v), y: H - m.b + 17, "text-anchor": "middle", style: "font-size:11px;fill:#6E6557" }, ifmt(v));
-      add(s, "line", { x1: m.l - 5, y1: Y(v), x2: m.l, y2: Y(v), stroke: "#6E6557" });
-      add(s, "text", { x: m.l - 7, y: Y(v) + 4, "text-anchor": "end", style: "font-size:11px;fill:#6E6557" }, ifmt(v));
-    }
-    add(s, "line", { x1: m.l, y1: H - m.b, x2: W - m.r, y2: H - m.b, stroke: "#131210", "stroke-opacity": 0.25 });
-    add(s, "line", { x1: m.l, y1: m.t, x2: m.l, y2: H - m.b, stroke: "#131210", "stroke-opacity": 0.25 });
-    add(s, "line", { x1: X(-D0), y1: Y(-D0), x2: X(D0), y2: Y(D0), stroke: "#2F64C0", "stroke-width": 2, "stroke-dasharray": "8 6" });
-    add(s, "line", { x1: m.l, y1: Y(0), x2: W - m.r, y2: Y(0), stroke: "#131210", "stroke-width": 1.5 });
-    add(s, "line", { x1: X(0), y1: m.t, x2: X(0), y2: H - m.b, stroke: "#131210", "stroke-opacity": 0.35 });
-    /* what each corner means */
-    var qs = "font-size:" + (narrow ? 10 : 11) + "px;fill:#6E6557;letter-spacing:.04em";
-    var k = (H - m.t - m.b) / (W - m.l - m.r), off = Math.max(34, 24 / k + 4);   /* keep the corner labels clear of the dashed line */
-    add(s, "text", { x: m.l + off, y: H - m.b - 8, style: qs }, "worse, then worse");
-    add(s, "text", { x: W - m.r - off, y: m.t + 12, "text-anchor": "end", style: qs }, "better, then better");
-    var sel = node._lbSel && co.points.filter(function (p) { return p.t === node._lbSel; })[0];
-    co.points.forEach(function (p) {
-      if (team && p.t === team) return;
-      add(s, "circle", { cx: X(p.x), cy: Y(p.y), r: narrow ? 4.2 : 4.5, fill: "rgba(19,18,16,.42)" });
+    add(s, "line", { x1: X(0), y1: top - 6, x2: X(0), y2: H - bot + 6, stroke: "#131210", "stroke-width": big ? 4 : 2 });
+    add(s, "text", { x: x1, y: H - 8, "text-anchor": "end", style: "font-size:" + fs + "px" }, narrow && !big ? "← flips · carryover estimate · repeats →" : "← flips from season to season · carryover estimate · repeats →");
+    var y = top;
+    rows.forEach(function (r, i) {
+      if (!opt.compact && r.group && (i === 0 || rows[i - 1].group !== r.group)) {
+        add(s, "text", { x: 0, y: y + gh - (big ? 14 : 9), style: "font-size:" + (big ? 20 : 11) + "px;letter-spacing:.1em;fill:#6E6557;text-transform:uppercase" }, r.group.toUpperCase());
+        y += gh;
+      }
+      var yc = y + (narrow && !big ? rowH * 0.66 : rowH / 2), col = r.primary ? "#D13A2F" : "#131210", out = r.T < lo || r.T > hi;
+      /* rows that use 2014–18 research grades carry the research ring (same mark as the note under the chart) */
+      var ly = narrow && !big ? y + fs + 1 : yc + fs * 0.36, rr = big ? 9 : 5, lx = rr * 2 + (big ? 10 : 6);
+      if (r.includes_research) add(s, "circle", { cx: rr + 1, cy: ly - fs * 0.36, r: rr, fill: "#F4EAD2", stroke: "#131210", "stroke-width": big ? 3 : 2 });
+      if (narrow && !big) add(s, "text", { x: lx, y: ly, style: "font-size:" + fs + "px;font-weight:" + (r.primary ? 700 : 500) + ";fill:#131210;paint-order:stroke;stroke:#FBF4E2;stroke-width:4px;stroke-linejoin:round" }, r.label);
+      else add(s, "text", { x: lx, y: ly, style: "font-size:" + fs + "px;font-weight:" + (r.primary ? 700 : 500) + ";fill:#131210" }, r.label);
+      var a = X(r.T - r.SE), b = X(r.T + r.SE);
+      add(s, "line", { x1: a, y1: yc, x2: b, y2: yc, stroke: col, "stroke-width": big ? 5 : 2.5 });
+      if (r.T - r.SE < lo) add(s, "path", { d: "M" + (a + 8) + " " + (yc - 6) + "L" + a + " " + yc + "L" + (a + 8) + " " + (yc + 6), fill: "none", stroke: col, "stroke-width": 2.5 });
+      if (r.T + r.SE > hi) add(s, "path", { d: "M" + (b - 8) + " " + (yc - 6) + "L" + b + " " + yc + "L" + (b - 8) + " " + (yc + 6), fill: "none", stroke: col, "stroke-width": 2.5 });
+      if (out) add(s, "circle", { cx: X(r.T), cy: yc, r: big ? 14 : 5.5, fill: "#FBF4E2", stroke: col, "stroke-width": 2.5 });
+      else add(s, "circle", { cx: X(r.T), cy: yc, r: big ? 14 : r.primary ? 7 : 5.5, fill: col, stroke: "#FBF4E2", "stroke-width": 2 });
+      if (!narrow || big) add(s, "text", { x: X(r.T) + (out ? 10 : 0), y: yc - (big ? 22 : 10), "text-anchor": out ? "start" : "middle", style: "font-size:" + (big ? 24 : 11) + "px;font-weight:600;fill:" + col }, fmt(r.T) + (out ? " (off the scale)" : ""));
+      else {
+        /* phones: the value sits beside its bar (right of it when there's room, else left, else on the dot) */
+        var vt = fmt(r.T) + (out ? " (off scale)" : ""), vw = vt.length * fs * 0.62, vx, va;
+        if (b + 6 + vw <= x1 && r.T + r.SE <= hi) { vx = b + 6; va = "start"; }
+        else if (a - 6 - vw >= 0 && r.T - r.SE >= lo) { vx = a - 6; va = "end"; }
+        else { vx = X(r.T) + (out ? 10 : 9); va = "start"; }
+        add(s, "text", { x: vx, y: yc + fs * 0.36 - (vx === X(r.T) + 9 ? 9 : 0), "text-anchor": va, style: "font-size:" + fs + "px;font-weight:700;fill:" + col + ";paint-order:stroke;stroke:#FBF4E2;stroke-width:4px;stroke-linejoin:round" }, vt);
+      }
+      y += rowH;
     });
-    if (sel && sel.t !== team) add(s, "circle", { cx: X(sel.x), cy: Y(sel.y), r: 8, fill: "none", stroke: "#131210", "stroke-width": 2.5 });
-    var hp = team && co.points.filter(function (p) { return p.t === team; })[0];
-    if (hp) {
-      add(s, "circle", { cx: X(hp.x), cy: Y(hp.y), r: 8.5, fill: "#D13A2F", stroke: "#FBF4E2", "stroke-width": 3 });
-      var right = X(hp.x) < W - 120;
-      add(s, "text", { x: X(hp.x) + (right ? 13 : -13), y: Y(hp.y) + 5, "text-anchor": right ? "start" : "end", "class": "lb-t-team" }, T[team] ? T[team].name : team);
-    }
-    add(s, "text", { x: W - m.r, y: H - 6, "text-anchor": "end" }, co.x_label + " →");
-    add(s, "text", { x: m.l + 6, y: m.t - 8 }, "↑ " + co.y_label);
     node.innerHTML = ""; node.appendChild(s);
-    /* legend above the plot so it never covers a dot; the second item wraps when it won't fit */
-    var ly = 14, lx = m.l;
-    add(s, "rect", { x: lx, y: ly - 9, width: 22, height: 12, fill: "#EADFC4", stroke: "#B8AD98" });
-    var l1 = add(s, "text", { x: lx + 30, y: ly + 2 }, narrow ? "Luck range if nothing carries over" : "Shaded: the luck range if nothing carries over");
-    var w1 = 0; try { w1 = l1.getComputedTextLength(); } catch (e) {}
-    var lx2 = lx + 30 + w1 + 28, ly2 = ly;
-    if (!w1 || lx2 + 160 > W - m.r) { lx2 = lx; ly2 = ly + 20; }
-    add(s, "line", { x1: lx2, y1: ly2 - 3, x2: lx2 + 22, y2: ly2 - 3, stroke: "#2F64C0", "stroke-width": 2, "stroke-dasharray": "6 4" });
-    add(s, "text", { x: lx2 + 30, y: ly2 + 2, style: "fill:#2F64C0" }, narrow ? "If gaps lasted" : "If gaps lasted: dots along the dashed line");
-    if (!opt.readout) return;
-    /* tap or hover a dot to see which program it is */
-    var rd = document.createElement("p"); rd.className = "lb-co-read"; rd.setAttribute("aria-live", "polite");
-    var show = sel || hp;
-    rd.innerHTML = show ? "<b>" + esc(T[show.t] ? T[show.t].name : show.t) + "</b> earlier " + fmt(show.x) + " · later " + fmt(show.y) + (show === hp && !sel ? "" : ' <button type="button" data-clear>Clear</button>')
-      : (narrow ? "Tap a dot to see which program it is." : "Hover or click a dot to see which program it is.");
-    node.appendChild(rd);
-    var clr = rd.querySelector("[data-clear]"); if (clr) clr.addEventListener("click", function () { node._lbSel = null; drawCarryover(node, co, team, opt); });
-    var pick = function (ev, commit) {
-      var r = s.getBoundingClientRect(), px = ev.clientX - r.left, py = ev.clientY - r.top, best = null, bd = 22 * 22;
-      co.points.forEach(function (p) { var dx = X(p.x) - px, dy = Y(p.y) - py, d = dx * dx + dy * dy; if (d < bd) { bd = d; best = p; } });
-      if (best && (commit || best.t !== node._lbSel)) { node._lbSel = best.t; drawCarryover(node, co, team, opt); }
-    };
-    s.addEventListener("click", function (ev) { pick(ev, true); });
-    if (!narrow) s.addEventListener("mousemove", function (ev) { pick(ev, false); });
   }
 
-  /* ------------------------------------------------------------ chart 2: upper bound */
-  function drawBound(node, cut, threshold) {
-    var W = width(node, 700), narrow = W < 560, H = 116, m = { l: 16, r: 16 };
-    var max = Math.max(4, Math.ceil((cut.U || 0) + 1));
-    var X = function (v) { return m.l + v / max * (W - m.l - m.r); };
-    var y = 66;
-    var s = svg(W, H, "Lasting effects bigger than ±" + cut.U + " points are ruled out; the size that matters is " + threshold);
-    var defs = add(s, "defs", {});
-    var pat = add(defs, "pattern", { id: "lbHatch" + node.id, width: 8, height: 8, patternUnits: "userSpaceOnUse", patternTransform: "rotate(45)" });
-    add(pat, "rect", { width: 8, height: 8, fill: "#EADFC4" }); add(pat, "line", { x1: 0, y1: 0, x2: 0, y2: 8, stroke: "#6E6557", "stroke-width": 2 });
-    add(s, "rect", { x: X(cut.U), y: y - 16, width: X(max) - X(cut.U), height: 32, fill: "url(#lbHatch" + node.id + ")", stroke: "#131210", "stroke-width": 1.5 });
-    add(s, "line", { x1: X(0), y1: y, x2: X(max), y2: y, stroke: "#131210", "stroke-width": 2 });
-    for (var v = 0; v <= max; v++) { add(s, "line", { x1: X(v), y1: y + 16, x2: X(v), y2: y + 22, stroke: "#131210" }); add(s, "text", { x: X(v), y: y + 38, "text-anchor": "middle" }, String(v)); }
-    add(s, "line", { x1: X(threshold), y1: y - 30, x2: X(threshold), y2: y + 16, stroke: "#D13A2F", "stroke-width": 3 });
-    add(s, "text", { x: X(threshold), y: y - 36, "text-anchor": X(threshold) > W - 160 ? "end" : "middle", style: "fill:#C2342A;font-weight:600" }, "Size that matters: " + threshold);
+  /* ------------------------------------------------------------ chart 2: all 68 programs against their expected ranges */
+  function drawPrograms(node, teams, current, onPick) {
+    var list = Object.keys(teams).map(function (k) { return teams[k]; });
+    var W = width(node, 700), narrow = W < 560, lw = narrow ? 104 : 150, vw = narrow ? 40 : 52, rowH = narrow ? 22 : 19, top = 26, bot = 26;
+    var H = top + bot + rowH * list.length;
+    var mx = 4; list.forEach(function (t) { if (t.state === "none") return; mx = Math.max(mx, Math.abs(t.raw), t.state === "ok" ? Math.max(Math.abs(t.range_lo), Math.abs(t.range_hi)) : 0); });
+    mx = Math.ceil(mx / 2) * 2;
+    var x0 = lw, x1 = W - vw, X = function (v) { return x0 + (v + mx) / (2 * mx) * (x1 - x0); };
+    var s = svg(W, H, "All 68 programs: big-favorite gap and expected range");
+    var ticks = function (y, below) { for (var v = -mx; v <= mx; v += mx / 2) add(s, "text", { x: X(v), y: y, "text-anchor": "middle", style: "font-size:11px;fill:#6E6557" }, (v > 0 ? "+" : v < 0 ? "−" : "") + Math.abs(v)); };
+    ticks(14); ticks(H - 8);
+    add(s, "line", { x1: X(0), y1: top - 4, x2: X(0), y2: H - bot + 4, stroke: "#131210", "stroke-opacity": 0.5 });
+    list.forEach(function (t, i) {
+      var y = top + i * rowH + rowH / 2, sel = t.slug === current;
+      if (sel) add(s, "rect", { x: 0, y: y - rowH / 2, width: W, height: rowH, fill: "#F2D9C9" });
+      add(s, "text", { x: 0, y: y + 4, style: "font-size:" + (narrow ? 12 : 12.5) + "px;font-weight:" + (sel ? 700 : 500) + ";fill:#131210" }, t.name);
+      if (t.state === "ok") {
+        add(s, "rect", { x: X(t.range_lo), y: y - 4, width: X(t.range_hi) - X(t.range_lo), height: 8, fill: "#EADFC4", stroke: "#B8AD98" });
+        add(s, "circle", { cx: X(t.raw), cy: y, r: sel ? 6 : 4.5, fill: t.inside ? "#FBF4E2" : (sel ? "#D13A2F" : "#131210"), stroke: sel ? "#D13A2F" : "#131210", "stroke-width": 2 });
+      } else if (t.state === "below") {
+        add(s, "circle", { cx: X(t.raw), cy: y, r: 4, fill: "#B8AD98" });
+      }
+      add(s, "text", { x: W, y: y + 4, "text-anchor": "end", style: "font-size:12px;fill:" + (sel ? "#C2342A" : "#3B362E") + ";font-weight:" + (sel ? 700 : 500) }, t.state === "none" ? "—" : fmt(t.raw));
+    });
     node.innerHTML = ""; node.appendChild(s);
-    /* the ruled-out label goes inside the hatched block on a cream backing, shortened if the block is narrow */
-    var x0 = X(cut.U), x1 = X(max), bg = add(s, "rect", { y: y - 10, height: 20, fill: "#FBF4E2" });
-    var tx = add(s, "text", { x: (x0 + x1) / 2, y: y + 4, "text-anchor": "middle", style: "fill:#131210;font-weight:600" }, "Ruled out: bigger than ±" + cut.U);
-    var tw = 0; try { tw = tx.getComputedTextLength(); } catch (e) {}
-    if (tw && tw + 16 > x1 - x0) { tx.textContent = "±" + cut.U + "+ ruled out"; try { tw = tx.getComputedTextLength(); } catch (e) {} }
-    if (tw && tw + 12 > x1 - x0) { tx.setAttribute("text-anchor", "end"); tx.setAttribute("x", x1); tx.setAttribute("y", y - 22); bg.setAttribute("width", 0); }
-    else if (tw) { bg.setAttribute("x", (x0 + x1) / 2 - tw / 2 - 5); bg.setAttribute("width", tw + 10); }
+    if (onPick) s.addEventListener("click", function (ev) {
+      var r = s.getBoundingClientRect(), i = Math.floor((ev.clientY - r.top - top) / rowH);
+      if (i >= 0 && i < list.length) onPick(list[i].slug);
+    });
   }
 
-  /* ------------------------------------------------------------ chart 3: team vs luck */
+  /* ------------------------------------------------------------ chart 3: team vs its expected range */
   function drawStrip(node, t, opt) {
     opt = opt || {};
     var big = !!opt.big, xl = !!opt.xl, W = width(node, big ? 900 : 520), H = xl ? 220 : big ? 150 : 100, pad = big ? 10 : 6, y = xl ? 104 : big ? 76 : 44;
-    var span = Math.max(15, Math.ceil(Math.abs(t.raw) + 2));
+    var ext = Math.abs(t.raw); if (t.state === "ok") ext = Math.max(ext, Math.abs(t.range_lo), Math.abs(t.range_hi));
+    var span = Math.max(10, Math.ceil(ext + 2));
     var X = function (v) { return pad + (v + span) / (2 * span) * (W - 2 * pad); };
     var fs = xl ? 30 : big ? 22 : 12;
-    var s = svg(W, H, t.name + ": " + fmt(t.raw) + " points" + (t.state === "ok" ? ", luck range ±" + t.band.toFixed(1) : ""));
-    if (t.state === "ok") add(s, "rect", { x: X(-t.band), y: y - (big ? 26 : 14), width: X(t.band) - X(-t.band), height: big ? 52 : 28, fill: "#EADFC4", stroke: "#6E6557", "stroke-width": big ? 2.5 : 1.5, "stroke-dasharray": "5 4" });
+    var s = svg(W, H, t.name + ": " + fmt(t.raw) + " points" + (t.state === "ok" ? ", expected range " + fmt(t.range_lo) + " to " + fmt(t.range_hi) : ""));
+    if (t.state === "ok") add(s, "rect", { x: X(t.range_lo), y: y - (big ? 26 : 14), width: X(t.range_hi) - X(t.range_lo), height: big ? 52 : 28, fill: "#EADFC4", stroke: "#6E6557", "stroke-width": big ? 2.5 : 1.5, "stroke-dasharray": "5 4" });
     add(s, "line", { x1: pad, y1: y, x2: W - pad, y2: y, stroke: "#131210", "stroke-width": big ? 3 : 2 });
     add(s, "line", { x1: X(0), y1: y - (big ? 34 : 20), x2: X(0), y2: y + (big ? 34 : 20), stroke: "#131210", "stroke-width": big ? 3 : 2 });
-    if (t.state === "ok" && opt.adjusted !== false) add(s, "circle", { cx: X(t.adjusted), cy: y, r: big ? 13 : 7, fill: "none", stroke: "#131210", "stroke-width": big ? 4 : 2.5 });
     add(s, "circle", { cx: X(t.raw), cy: y, r: xl ? 24 : big ? 19 : 10, fill: "#D13A2F", stroke: "#FBF4E2", "stroke-width": big ? 5 : 3 });
     add(s, "text", { x: X(t.raw), y: y - (xl ? 40 : big ? 32 : 18), "text-anchor": "middle", style: "font-family:var(--cond),'Barlow Condensed',sans-serif;font-weight:800;font-size:" + (xl ? 56 : big ? 30 : 15) + "px;fill:#C2342A" }, fmt(t.raw));
-    if (t.state === "ok") add(s, "text", { x: X(0), "text-anchor": "middle", y: y + (xl ? 62 : big ? 50 : 33), style: "font-size:" + (xl ? 26 : big ? 18 : 11) + "px;fill:#6E6557" }, "luck range");
-    add(s, "text", { x: pad, y: H - 4, style: "font-size:" + fs + "px" }, "worse");
-    add(s, "text", { x: X(0), y: H - 4, "text-anchor": "middle", style: "font-size:" + fs + "px" }, "0");
+    if (t.state === "ok") add(s, "text", { x: (X(t.range_lo) + X(t.range_hi)) / 2, "text-anchor": "middle", y: y + (xl ? 62 : big ? 50 : 33), style: "font-size:" + (xl ? 26 : big ? 18 : 11) + "px;fill:#6E6557" }, "expected range");
+    add(s, "text", { x: pad, y: H - 4, style: "font-size:" + fs + "px" }, "worse as a big favorite");
     add(s, "text", { x: W - pad, y: H - 4, "text-anchor": "end", style: "font-size:" + fs + "px" }, "better");
     node.innerHTML = ""; node.appendChild(s);
   }
@@ -162,7 +147,7 @@
   /* ------------------------------------------------------------ chart 4: four groups */
   function drawGroups(node, t, league) {
     var W = width(node, 520), narrow = W < 460, lw = narrow ? 112 : 150, vw = 70, rowH = 46, H = rowH * t.groups.length + 30;
-    var all = t.groups.map(function (g) { return Math.abs(g.avg); }).concat(league.map(function (g) { return Math.abs(g.avg); }));
+    var all = t.groups.filter(function (g) { return g.avg != null; }).map(function (g) { return Math.abs(g.avg); }).concat(league.map(function (g) { return Math.abs(g.avg); }));
     var mx = Math.max(4, Math.ceil(Math.max.apply(null, all) + 1));
     var x0 = lw, x1 = W - vw, mid = (x0 + x1) / 2, sc = function (v) { return v / mx * (x1 - x0) / 2; };
     var s = svg(W, H, "Average DAWG grade by kind of game, " + t.name + " vs all programs");
@@ -173,42 +158,20 @@
       add(s, "text", { x: 0, y: y + 19, style: "font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:15px;fill:#131210;text-transform:uppercase" }, g.label);
       add(s, "line", { x1: mid, y1: y, x2: mid, y2: y + 30, stroke: "#131210", "stroke-width": 1.5 });
       var a = sc(lg.avg); add(s, "rect", { x: Math.min(mid, mid + a), y: y + 2, width: Math.max(1.5, Math.abs(a)), height: 8, fill: "#B8AD98" });
-      var b = sc(g.avg); add(s, "rect", { x: Math.min(mid, mid + b), y: y + 13, width: Math.max(1.5, Math.abs(b)), height: 14, fill: "#D13A2F" });
-      add(s, "text", { x: W, y: y + 18, "text-anchor": "end", style: "fill:#131210" }, fmt(g.avg) + " · " + g.n + " g");
+      if (g.avg != null) { var b = sc(g.avg); add(s, "rect", { x: Math.min(mid, mid + b), y: y + 13, width: Math.max(1.5, Math.abs(b)), height: 14, fill: "#D13A2F" }); }
+      add(s, "text", { x: W, y: y + 18, "text-anchor": "end", style: "fill:#131210" }, (g.avg == null ? "—" : fmt(g.avg)) + " · " + g.n + " g");
     });
     node.innerHTML = ""; node.appendChild(s);
   }
 
-  /* ------------------------------------------------------------ chart 5: season by season */
-  function drawSeasons(node, t) {
-    var rows = t.season_rows || [];
-    var W = width(node, 520), H = 132, pad = 14, top = 14, bot = 40;
-    var mx = Math.max(8, Math.ceil(Math.max.apply(null, rows.map(function (r) { return Math.abs(r.gap); }).concat([1])) + 1));
-    var X = function (i) { return pad + (rows.length === 1 ? 0.5 : i / (rows.length - 1)) * (W - 2 * pad); };
-    var Y = function (v) { return top + (mx - v) / (2 * mx) * (H - top - bot); };
-    var s = svg(W, H, t.name + " season by season; hollow marks are research grades");
-    add(s, "line", { x1: 0, y1: Y(0), x2: W, y2: Y(0), stroke: "#131210", "stroke-width": 1.5 });
-    var every = W < 420 ? 2 : 1;
-    rows.forEach(function (r, i) {
-      var c = { cx: X(i), cy: Y(r.gap), r: 6 };
-      if (r.research) { c.fill = "#FBF4E2"; c.stroke = "#D13A2F"; c["stroke-width"] = 2.5; } else { c.fill = "#D13A2F"; }
-      add(s, "circle", c);
-      if (i % every === 0 || i === rows.length - 1) {
-        add(s, "text", { x: X(i), y: H - 22, "text-anchor": "middle", style: "font-size:11px" }, "’" + String(r.season).slice(2));
-        add(s, "text", { x: X(i), y: H - 8, "text-anchor": "middle", style: "font-size:10px;fill:#6E6557" }, r.n + "g");
-      }
-    });
-    node.innerHTML = ""; node.appendChild(s);
-  }
-
-  var LAB = window.DAWGLab = { drawCarryover: drawCarryover, drawBound: drawBound, drawStrip: drawStrip, drawGroups: drawGroups, drawSeasons: drawSeasons, data: D };
+  var LAB = window.DAWGLab = { drawPersistence: drawPersistence, drawPrograms: drawPrograms, drawStrip: drawStrip, drawGroups: drawGroups, data: D };
 
   /* ------------------------------------------------------------ share-card mode: draw and stop */
   if (document.body.getAttribute("data-mode") === "card") {
     [].forEach.call(document.querySelectorAll("[data-chart]"), function (n) {
       var k = n.getAttribute("data-chart"), t = T[n.getAttribute("data-team")];
       if (k === "strip" && t) drawStrip(n, t, { big: true, xl: n.getAttribute("data-size") === "xl" });
-      if (k === "carryover") drawCarryover(n, D.carryover, null, { fit: true });
+      if (k === "persistence") drawPersistence(n, D.persistence, { compact: true, big: n.getAttribute("data-size") !== "m", mid: n.getAttribute("data-size") === "m" });
     });
     document.body.setAttribute("data-ready", "1");
     return;
@@ -229,7 +192,7 @@
     };
     var first = store.get(); setHome(T[first] ? first : null);
     homePick.addEventListener("change", function () { if (homePick.value) store.set(homePick.value); setHome(homePick.value); });
-    var ex = el("lb-home-ex"); if (ex && D.carryover) { var dr = function () { drawCarryover(ex, D.carryover, homePick.value, { fit: window.innerWidth >= 900 }); }; dr(); homePick.addEventListener("change", dr); window.addEventListener("resize", dr); }
+    var ex = el("lb-home-ex"); if (ex && D.persistence) { var dr = function () { drawPersistence(ex, D.persistence, { compact: true }); }; dr(); window.addEventListener("resize", dr); }
     document.body.setAttribute("data-ready", "1");
     return;
   }
@@ -280,25 +243,30 @@
       (t.state === "none" ? "" : "<span>" + esc(t.band_text) + "</span>") + '<span class="lb-desc-tag">What happened · not a verdict on ' + esc(t.name) + "</span>" +
       (t.has_research ? '<div class="lb-exhibit lb-rn-box">' + rnote(t) + "</div>" : "") + "</section>");
     if (t.state === "none") {
-      H.push('<section class="lb-sec"><div class="lb-insuff">' + esc(t.none_text) + '</div><a class="lb-btn" href="#lb-carry-sec" data-goto>See the full sample</a></section>');
+      H.push('<section class="lb-sec"><div class="lb-insuff">' + esc(t.none_text) + '</div><a class="lb-btn" href="#lb-programs-sec" data-goto>See all 68 programs</a></section>');
     } else {
-      var lo = t.state === "ok" ? "−" + t.band.toFixed(1) + " to +" + t.band.toFixed(1) : "";
-      H.push('<section class="lb-sec"><span class="lb-label">2 · ' + esc(t.name) + " vs. luck</span>" +
+      var rg = t.state === "ok" ? fmt(t.range_lo) + " to " + fmt(t.range_hi) : "";
+      H.push('<section class="lb-sec"><span class="lb-label">2 · ' + esc(t.name) + " vs. its expected range</span>" +
         '<div class="lb-exhibit"><div id="lb-p-strip" style="padding:10px 12px 4px"></div>' +
-        (t.state === "ok" ? '<div class="lb-ex-foot">Shaded = the luck range (' + lo + "): luck alone lands a program inside it " + esc(t.coverage) + " times in 100 over " + t.hf_games +
-            " games. Ring = the same gap pulled toward the league average, because small samples swing more.</div>"
-          : '<div class="lb-ex-foot">Raw gap only. Below the minimum there’s no luck range and no adjusted value.</div>') +
+        (t.state === "ok" ? '<div class="lb-ex-foot">Expected range: where this program’s gap would usually land if it had no lasting tendency, under our simulation assumptions ' +
+            "(same-season, same-spread grades from other programs; no carryover between seasons). For " + esc(t.name) + ": " + rg + ", a " + esc(t.coverage) + "% range.</div>"
+          : '<div class="lb-ex-foot">Gap only. Below the display minimum there’s no expected range.</div>') +
         rnote(t) + "</div></section>");
       H.push('<section class="lb-sec"><span class="lb-label">3 · Each kind of game</span><div class="lb-exhibit"><div id="lb-p-groups" style="padding:12px"></div>' +
+        '<div class="lb-ex-foot">Average DAWG grade in each kind of game, with the number of games. All programs average about 0 in every kind of game by construction.</div>' +
         rnote(t, "Includes " + t.research_short.replace(/^incl\. /, "") + ", not official DAWG grades.") + "</div></section>");
-      H.push('<section class="lb-sec"><span class="lb-label">4 · Season by season</span><div class="lb-exhibit"><div id="lb-p-seasons" style="padding:10px 10px 0"></div>' +
-        rnote(t, "Hollow marks = " + D.research.label_short + ".") + '</div><span class="lb-note">Each season is only a few games. Read the row, not one dot.</span></section>');
+      H.push('<section class="lb-sec"><span class="lb-label">4 · Where the gap comes from</span><div class="lb-three">' +
+        "<div><span class=\"lb-label\">Down part</span><b>" + fmt(t.down) + "</b><small>as a 14+ point favorite vs. its 3.5–13.5-point-favorite and within-3 games</small></div>" +
+        "<div><span class=\"lb-label\">Up part</span><b>" + fmt(t.up) + "</b><small>its 3.5+ underdog games vs. those same games, weighted by how often it was an underdog</small></div>" +
+        "<div><span class=\"lb-label\">Gap</span><b style=\"color:#C2342A\">" + fmt(t.raw) + "</b><small>down part minus up part</small></div></div>" +
+        (t.has_research ? '<div class="lb-exhibit lb-rn-box">' + rnote(t) + "</div>" : "") +
+        '<span class="lb-note">Official grades only (2019–26): ' + (t.official.hf_games ? fmt(t.official.raw) + " over " + t.official.hf_games + " games " + esc(D.range.measure) : "no games " + esc(D.range.measure)) + ".</span></section>");
       H.push('<section class="lb-sec"><span class="lb-label">5 · Sample and uncertainty</span><div class="lb-three">' +
-        "<div><span class=\"lb-label\">Raw gap</span><b style=\"color:#C2342A\">" + fmt(t.raw) + "</b><small>what happened</small></div>" +
-        (t.state === "ok" ? "<div><span class=\"lb-label\">Adjusted</span><b>" + fmt(t.adjusted) + "</b><small>pulled toward average for small samples</small></div>"
-          : "<div><span class=\"lb-label\">Adjusted</span><b>—</b><small>not shown below the minimum</small></div>") +
-        "<div><span class=\"lb-label\">Sample</span><b>" + t.hf_games + "</b><small>" + esc(t.n_label) + ", " + t.seasons + " seasons" +
-        (t.research_games ? "; " + t.research_games + " use research grades" : "") + "</small></div></div></section>");
+        "<div><span class=\"lb-label\">Gap</span><b style=\"color:#C2342A\">" + fmt(t.raw) + "</b><small>what happened</small></div>" +
+        (t.state === "ok" ? "<div><span class=\"lb-label\">Expected range</span><b>" + rg + "</b><small>" + (t.inside ? "inside the range" : "outside: about " + Math.round(68 * (100 - parseFloat(D.range.coverage)) / 100) + " of 68 land outside by chance alone") + "</small></div>"
+          : "<div><span class=\"lb-label\">Expected range</span><b>—</b><small>not shown below the minimum</small></div>") +
+        "<div><span class=\"lb-label\">Sample</span><b>" + t.hf_games + "</b><small>" + esc(t.n_label) + "; " + t.other_games + " other games; " + t.seasons + " seasons (" + t.eligible_seasons + " eligible)" +
+        (t.research_games ? "; " + t.research_games + " games use research grades" : "") + "</small></div></div></section>");
     }
     b.innerHTML = H.join("");
     [].forEach.call(b.querySelectorAll("[data-goto]"), function (a) {
@@ -307,14 +275,38 @@
         setTimeout(function () { var n = el(id); if (n) n.scrollIntoView({ block: "start" }); }, 80);
       });
     });
-    if (t.state !== "none") { drawStrip(el("lb-p-strip"), t, { adjusted: t.state === "ok" }); drawGroups(el("lb-p-groups"), t, D.league.groups); drawSeasons(el("lb-p-seasons"), t); }
+    if (t.state !== "none") { drawStrip(el("lb-p-strip"), t, {}); drawGroups(el("lb-p-groups"), t, D.league.groups); }
     el("lb-p-share").hidden = !t.card;
     el("lb-p-team").href = "/" + current + "/"; el("lb-p-team").textContent = t.name + " team page";
   }
 
+  /* the program table: alphabetical by default; any column sorts (a reading aid, not a ranking) */
+  function initSort(tbl) {
+    var heads = tbl.querySelectorAll("thead th");
+    Array.prototype.forEach.call(heads, function (h, i) {
+      var b = h.querySelector("button"); if (!b) return;
+      b.addEventListener("click", function () {
+        var dir = h.getAttribute("aria-sort") === "ascending" ? "descending" : "ascending";
+        Array.prototype.forEach.call(heads, function (x) { x.removeAttribute("aria-sort"); });
+        h.setAttribute("aria-sort", dir);
+        var txt = h.getAttribute("data-k") === "s", tb = tbl.tBodies[0], rows = Array.prototype.slice.call(tb.rows);
+        rows.sort(function (r1, r2) {
+          var a = r1.cells[i].getAttribute("data-v"), b2 = r2.cells[i].getAttribute("data-v"), c;
+          if (txt) c = a.localeCompare(b2);
+          else { if (a === "" && b2 === "") c = 0; else if (a === "") return 1; else if (b2 === "") return -1; else c = parseFloat(a) - parseFloat(b2); }
+          if (!c) c = r1.cells[0].getAttribute("data-v").localeCompare(r2.cells[0].getAttribute("data-v"));
+          return dir === "ascending" ? c : -c;
+        });
+        rows.forEach(function (r) { tb.appendChild(r); });
+      });
+    });
+  }
+  var progTbl = el("lb-prog-tbl"); if (progTbl) initSort(progTbl);
+
   function drawAll() {
-    var co = el("lb-carry"); if (co) drawCarryover(co, (activeCut && activeCut.carryover) || D.carryover, current, { readout: true });
-    var bd = el("lb-bound"); if (bd && activeCut) drawBound(bd, activeCut, D.threshold);
+    if (progTbl) Array.prototype.forEach.call(progTbl.tBodies[0].rows, function (r) { r.classList.toggle("lb-on", r.getAttribute("data-team") === current); });
+    var ps = el("lb-persist"); if (ps) drawPersistence(ps, D.persistence, {});
+    var pg = el("lb-programs"); if (pg) drawPrograms(pg, T, current, function (slug) { setTeam(slug); });
     var hs = el("lb-home-strip"); if (hs && T[current]) drawStrip(hs, T[current], {});
   }
 
@@ -357,17 +349,6 @@
   if ("IntersectionObserver" in window) {
     new IntersectionObserver(function (en) { stripVisible = en[0].isIntersecting; updatePin(); }, { threshold: 0 }).observe(el("lb-strip"));
   }
-
-  /* cut switcher */
-  var cuts = D.cuts || [], activeCut = cuts.filter(function (c) { return c.plan; })[0] || cuts[0];
-  [].forEach.call(document.querySelectorAll("[data-cut]"), function (bt) {
-    bt.addEventListener("click", function () {
-      activeCut = cuts.filter(function (c) { return c.id === bt.getAttribute("data-cut"); })[0] || activeCut;
-      [].forEach.call(document.querySelectorAll("[data-cut]"), function (o) { o.setAttribute("aria-pressed", o === bt ? "true" : "false"); });
-      el("lb-cut-note").textContent = activeCut.note;
-      drawAll();
-    });
-  });
 
   /* share: the system share sheet with the team's short link (its preview shows the team card); else open the card image */
   function share() {

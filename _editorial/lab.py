@@ -44,6 +44,8 @@ ICONS = {"holds": '<path d="M4 12.5l5 5L20 6.5"/>', "not": '<path d="M6 6l12 12M
 TRAIT = re.compile(r"\b(plays? down|played down|always|never|habits?|tends? to|consistently|persistent(ly)?|traits?|known for|reliably)\b", re.I)
 PLACEHOLDER = re.compile(r"(?<!\[)\[(?!\[)[^\]\n]+\](?!\()")       # [like this], but not [[markers]] or [links](...)
 SAMPLE_WORDS = re.compile(r"\b(sample|illustrative|placeholder|lorem)\b", re.I)
+# the upper bound isn't published: no "ruled out" sizes and no ±N bound wording anywhere in a case's copy
+RULED_OUT = re.compile(r"\bruled out\b|±\s*\d", re.I)
 
 
 class LabError(B.BuildError):
@@ -52,7 +54,11 @@ class LabError(B.BuildError):
 
 def t(s): return B.t(s)
 def a(s): return B.a(s)
-def fmt(v): return ("+" if v > 0 else "−" if v < 0 else "") + f"{abs(v):.1f}"
+def fmt(v):
+    """one decimal, rounded exactly like the page script (JS toFixed: the exact binary value, ties away from zero); no "−0.0" """
+    import decimal
+    m = str(decimal.Decimal(abs(v)).quantize(decimal.Decimal("0.1"), rounding=decimal.ROUND_HALF_UP))
+    return ("" if m == "0.0" else "+" if v > 0 else "−") + m
 def read(p, mode="r"): return B.read(p, mode)
 def jdump(o): return json.dumps(o, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
 
@@ -90,7 +96,7 @@ def validate(case, md, data, plan, d, site_teams, mode):
     name = os.path.basename(d.rstrip("/"))
     m = CASE_DIR.match(name)
     req = ["number", "slug", "type", "status", "title", "topic", "dek", "description", "version", "plan", "data_lock",
-           "methods", "versions", "corrections", "presentation", "research_datasets"]
+           "methods", "versions", "corrections", "presentation", "research_datasets", "verdict_record"]
     for k in req:
         if k not in case or case[k] in (None, ""):
             errs.append(f"missing {k}")
@@ -110,6 +116,8 @@ def validate(case, md, data, plan, d, site_teams, mode):
             errs.append("verdict.subtitle (written in the research plan) is required, 32 characters max")
         if not v.get("answer"):
             errs.append("verdict.answer (the 10-second answer) is required")
+        if v.get("card_line") and len(v["card_line"]) > 90:
+            errs.append("verdict.card_line (the link-preview line) is over 90 characters")
     p = case["plan"]
     for k in ("version", "locked"):
         if not p.get(k):
@@ -133,7 +141,7 @@ def validate(case, md, data, plan, d, site_teams, mode):
         if not (c.get("date") and c.get("text")):
             errs.append("every correction needs a date and text")
     pres = case["presentation"]
-    for k in ("measure_short", "short_measure", "team_question", "team_min", "team_min_text", "x_label", "y_label"):
+    for k in ("measure_short", "short_measure", "team_question", "team_min", "team_min_text"):
         if not pres.get(k):
             errs.append(f"presentation.{k} is required")
     hd = pres.get("team_headlines")
@@ -154,34 +162,46 @@ def validate(case, md, data, plan, d, site_teams, mode):
         if not 50 <= cv < 100:
             raise ValueError
     except (TypeError, ValueError):
-        errs.append("presentation.band_coverage (how often luck alone lands inside the luck range, from the research plan) must be a number from 50 to 99.9")
+        errs.append("presentation.band_coverage (how often chance alone lands a program inside its expected range, from the research plan) must be a number from 50 to 99.9")
     if len(case["description"]) > 200:
         errs.append("description over 200 characters")
-    # data
+    # data: team-level summaries exactly as the research deliverable gives them (nothing derived here but arithmetic)
     teams = data.get("teams") or {}
     for slug, tm in teams.items():
         if slug not in site_teams:
             errs.append(f"data.json: unknown team slug '{slug}'")
-        for k in ("hf_games", "seasons", "raw", "groups", "season_rows"):
+        for k in ("hf_games", "other_games", "seasons", "eligible_seasons", "raw", "down", "up", "groups", "official", "research_games", "research_hf_games"):
             if k not in tm:
                 errs.append(f"data.json {slug}: missing {k}")
         for g in tm.get("groups", []):
             if "n" not in g:
                 errs.append(f"data.json {slug}: every group row needs its sample size (n)")
-        for r in tm.get("season_rows", []):
-            if "n" not in r:
-                errs.append(f"data.json {slug}: every season row needs its sample size (n)")
-        if tm.get("season_rows") and all("n" in r for r in tm["season_rows"]) and sum(int(r["n"]) for r in tm["season_rows"]) != tm.get("hf_games"):
-            errs.append(f"data.json {slug}: season rows add up to {sum(int(r['n']) for r in tm['season_rows'])} games, not hf_games {tm.get('hf_games')}")
-        if len({r.get("season") for r in tm.get("season_rows", [])}) != tm.get("seasons", -1) and tm.get("season_rows"):
-            errs.append(f"data.json {slug}: {len(tm['season_rows'])} season rows but seasons is {tm.get('seasons')}")
+        if tm.get("groups") and all("n" in g for g in tm["groups"]) and sum(int(g["n"]) for g in tm["groups"]) != tm.get("hf_games", 0) + tm.get("other_games", 0):
+            errs.append(f"data.json {slug}: the four groups add up to {sum(int(g['n']) for g in tm['groups'])} games, not hf_games + other_games")
+        if "raw" in tm and "down" in tm and "up" in tm and abs(tm["raw"] - (tm["down"] - tm["up"])) > 1e-9:
+            errs.append(f"data.json {slug}: raw gap must equal down part minus up part")
+        mn_ = pres.get("team_min") or {}
+        meets = tm.get("hf_games", 0) >= mn_.get("hf_games", 1e9) and tm.get("eligible_seasons", 0) >= mn_.get("seasons", 1e9)
+        if meets:
+            for k in ("range_lo", "range_hi", "outside"):
+                if k not in tm:
+                    errs.append(f"data.json {slug}: meets the display minimum but has no {k} (the expected range comes from the research deliverable)")
+            if "range_lo" in tm and "range_hi" in tm and "outside" in tm:
+                if not tm["range_lo"] < tm["range_hi"]:
+                    errs.append(f"data.json {slug}: range_lo must be below range_hi")
+                if bool(tm["outside"]) != (tm["raw"] < tm["range_lo"] or tm["raw"] > tm["range_hi"]):
+                    errs.append(f"data.json {slug}: 'outside' doesn't match the raw gap and the expected range")
+        elif any(k in tm for k in ("range_lo", "range_hi", "outside")):
+            errs.append(f"data.json {slug}: below the display minimum, so no expected range may be shown")
         f = tm.get("finding")
         if f:
             for k in ("text", "confirmation", "correction", "plan_ref"):
                 if not f.get(k):
                     errs.append(f"data.json {slug}: a team finding needs {k} (otherwise team results stay descriptive)")
-    research_seasons = {r["season"] for tm in teams.values() for r in tm.get("season_rows", []) if r.get("research")}
-    if (research_seasons or (data.get("carryover") or {}).get("includes_research")) and not case["research_datasets"]:
+        for k in ("adjusted", "shrunk", "band", "season_rows"):
+            if k in tm:
+                errs.append(f"data.json {slug}: '{k}' isn't part of the approved descriptive outputs")
+    if any(tm.get("research_games") for tm in teams.values()) and not case["research_datasets"]:
         errs.append("research-only seasons appear in the data, but case.json lists no research dataset with its provenance")
     for rd in case["research_datasets"]:
         for k in ("name", "span", "provenance", "label", "label_short"):
@@ -190,20 +210,52 @@ def validate(case, md, data, plan, d, site_teams, mode):
     for rd_ in case["research_datasets"]:
         if rd_.get("span") and not re.match(r"^\d{4}\s*[–-]\s*\d{4}$", rd_["span"]):
             errs.append("research dataset span must look like 2014–2018")
-    if research_seasons and case["research_datasets"]:
-        m_ = re.match(r"^(\d{4})\s*[–-]\s*(\d{4})$", case["research_datasets"][0].get("span") or "")
-        if m_ and not all(int(m_.group(1)) <= y <= int(m_.group(2)) for y in research_seasons):
-            errs.append("a season marked research falls outside the research dataset's span")
-        if m_:
-            lo, hi = int(m_.group(1)), int(m_.group(2))
-            for slug_, tm_ in teams.items():
-                for r_ in tm_.get("season_rows", []):
-                    if lo <= int(r_.get("season", 0)) <= hi and not r_.get("research"):
-                        errs.append(f"data.json {slug_}: season {r_['season']} is inside the research span but isn't marked research")
-    if not data.get("cuts") or sum(1 for c in data["cuts"] if c.get("plan")) != 1:
-        errs.append("data.json: cuts must include exactly one marked as the plan's choice")
-    if "carryover" not in data or "threshold" not in data or "league" not in data:
-        errs.append("data.json needs carryover, threshold and league")
+    ps = data.get("persistence") or []
+    if not ps or sum(1 for r in ps if r.get("primary")) != 1:
+        errs.append("data.json: persistence must list the carryover estimates with exactly one marked as the plan's main test")
+    for r in ps:
+        for k in ("id", "label", "T", "SE", "pairs", "programs"):
+            if k not in r:
+                errs.append(f"data.json persistence row {r.get('id', '?')}: missing {k}")
+        if r.get("includes_research") and not case["research_datasets"]:
+            errs.append("a carryover estimate uses research grades, but case.json lists no research dataset")
+    if "league" not in data:
+        errs.append("data.json needs league")
+    for k in ("cuts", "threshold", "carryover", "bound"):
+        if k in data:
+            errs.append(f"data.json: '{k}' belongs to the retired upper-bound layout; LAB pages don't show a ruled-out size")
+    # the descriptive tables (spec §2, §7, §8), shown only as the deliverable gives them
+    tb = data.get("tables")
+    if "[[tables]]" in md and not tb:
+        errs.append("case.md shows [[tables]] but data.json has no tables")
+    if tb:
+        def _scope(sc, where):
+            if not sc.get("label") or not isinstance(sc.get("groups"), list) or not sc["groups"]:
+                errs.append(f"data.json tables.{where}: needs a label and its groups")
+                return
+            for g in sc["groups"]:
+                if not g.get("label") or not isinstance(g.get("n"), int) or not (g.get("avg") is None or isinstance(g["avg"], (int, float))):
+                    errs.append(f"data.json tables.{where}: every group needs a label, its games (n) and an average")
+        for i, sc in enumerate(tb.get("league") or []):
+            _scope(sc, f"league[{i}]")
+        if not tb.get("league"):
+            errs.append("data.json tables.league: missing")
+        for k in ("postseason", "season2026"):
+            sc = tb.get(k)
+            if not sc:
+                errs.append(f"data.json tables.{k}: missing")
+                continue
+            _scope(sc, k)
+            for f_ in ("title", "note", "programs"):
+                if not sc.get(f_):
+                    errs.append(f"data.json tables.{k}: missing {f_}")
+            for slug in (sc.get("programs") or {}):
+                if slug not in teams:
+                    errs.append(f"data.json tables.{k}: unknown program '{slug}'")
+        if tb.get("postseason") and "opt-out" not in tb["postseason"].get("note", "").lower():
+            errs.append("data.json tables.postseason: the note must say opt-outs make postseason games less comparable")
+        if tb.get("season2026") and "partial season" not in tb["season2026"].get("note", "").lower():
+            errs.append("data.json tables.season2026: the note must label it a partial season")
     shown = copy.deepcopy(case)
     shown["plan"].pop("version", None)
     if TWO_POINT_OH.search(" ".join(strings(shown)) + md + plan):
@@ -223,6 +275,10 @@ def validate(case, md, data, plan, d, site_teams, mode):
             errs.append("unfilled [placeholder] in the copy: " + PLACEHOLDER.search(copytext).group(0))
         if SAMPLE_WORDS.search(copytext):
             errs.append("sample/illustrative wording in published copy: " + SAMPLE_WORDS.search(copytext).group(0))
+    copy_all = " ".join(strings(case)) + " " + md + " " + " ".join(strings({k: v for k, v in data.items() if k != "teams"}))
+    m_ = RULED_OUT.search(copy_all)
+    if m_:
+        errs.append(f"the copy says '{m_.group(0)}': no size is published as ruled out (the upper bound isn't used)")
     return errs
 
 
@@ -244,10 +300,14 @@ def headline(heads, state, name):
     return heads[state].replace("{team}", name)
 
 
+def rng_text(lo, hi):
+    return f"{fmt(lo)} to {fmt(hi)}"
+
+
 def derive_teams(case, data, ids, names, site_teams):
     """Team copy for the strip, side card, pin, panel, cards and link previews. Descriptive only: it says what happened
-    and how it compares with luck, never that a program has a lasting habit. The luck range's coverage comes from the
-    research plan (presentation.band_coverage); the copy only restates it."""
+    and where that sits against the program's expected range, never that a program has a lasting habit. The expected
+    range and its coverage come from the research deliverable (presentation.band_coverage); the copy only restates them."""
     pres = case["presentation"]
     mn = pres["team_min"]
     num = case["number"]
@@ -263,44 +323,47 @@ def derive_teams(case, data, ids, names, site_teams):
         row = {"name": name, "id": ids.get(slug), "slug": slug, "share": f"{SITE}/lab/{num}/{slug}/", "short_url": f"dawgindex.com/lab/{num}/{slug}",
                "card_png": f"/lab/{num}-{case['slug']}/cards/{slug}.png", "n_label": f"games {pres['measure_short']}",
                "research_games": 0, "research_text": "", "research_short": "", "card_research": ""}
-        if not src or not src.get("hf_games") or not src.get("seasons"):
-            row.update(state="none", hf_games=0, seasons=0, raw=0, groups=[], season_rows=[], has_research=False, card=False,
+        if not src or not src.get("hf_games"):
+            row.update(state="none", hf_games=0, seasons=0, raw=0, groups=[], has_research=False, card=False,
                        sentence=f"{name} has no games that qualify for this investigation.",
                        band_text="", answer=headline(heads, "none", name), pin=headline(heads, "none", name),
                        short=f"{name}: {headline(heads, 'none', name)}",
                        none_text=((src or {}).get("none_reason") or f"{name} has no qualifying games in the seasons this investigation covers, so there’s nothing to read for it here.") + " The full sample is on the case page.")
             out[slug] = row
             continue
-        hf, ns, raw = int(src["hf_games"]), int(src["seasons"]), float(src["raw"])
-        ok = hf >= mn["hf_games"] and ns >= mn["seasons"]
-        rg = sum(int(r["n"]) for r in src["season_rows"] if r.get("research"))
-        row.update(hf_games=hf, seasons=ns, raw=raw, groups=src["groups"], season_rows=src["season_rows"], has_research=rg > 0, research_games=rg)
+        hf, ns, es, raw = int(src["hf_games"]), int(src["seasons"]), int(src["eligible_seasons"]), float(src["raw"])
+        ok = hf >= mn["hf_games"] and es >= mn["seasons"]
+        rg, rgh = int(src.get("research_games") or 0), int(src.get("research_hf_games") or 0)
+        tot = hf + int(src["other_games"])
+        row.update(hf_games=hf, other_games=int(src["other_games"]), seasons=ns, eligible_seasons=es, raw=raw, down=float(src["down"]), up=float(src["up"]),
+                   groups=src["groups"], official=src["official"], has_research=rg > 0, research_games=rg, research_hf_games=rgh)
         if rg and rd:
-            row["research_text"] = (f"{rg} of these {hf} games are from {rd['span']} and use research grades: computed with the DAWG formula, "
-                                    "not official DAWG grades.")
+            row["research_text"] = (f"Includes research grades: {rg} of its {tot} games are from {rd['span']} ({rgh} of the {hf} {pres['measure_short']}), "
+                                    "computed with the DAWG formula, not official DAWG grades.")
             row["research_short"] = f"incl. {short_span(rd['span'])} research grades"
-            row["card_research"] = f"{rg} of {hf} games use {short_span(rd['span'])} research grades, not official DAWG grades."
+            row["card_research"] = f"Includes {short_span(rd['span'])} research grades, not official DAWG grades."
         if src.get("finding"):
             f = src["finding"]
             row["finding"] = {"text": f["text"], "receipts": f"{f['confirmation']} · {f['correction']} · {f['plan_ref']}"}
-        diff = "the same" if raw == 0 else f"{abs(raw):.1f} points {'worse' if raw < 0 else 'better'}"
-        row["sentence"] = f"{name} graded {diff} {pres['measure_short']} than in its other games, over {hf} games in {ns} seasons."
+        diff = "the same as" if fmt(raw) == "0.0" else f"{fmt(raw)[1:]} points {'below' if raw < 0 else 'above'}"
+        row["sentence"] = f"Over {ns} seasons, {name}’s {hf} games {pres['measure_short']} graded {diff} its other games."
         if ok:
-            band, adj = float(src["band"]), float(src["adjusted"])
-            inside = abs(raw) < band
+            lo, hi = float(src["range_lo"]), float(src["range_hi"])
+            inside = not bool(src["outside"])
             if inside:
-                bt = (f"That’s within the luck range: luck alone lands a program inside it {cov_s} times in 100 over {hf} games. "
-                      f"A gap this size can’t be told apart from luck.")
+                bt = (f"That’s inside the range our no-lasting-tendency simulation gives for its mix of games. "
+                      f"Expected range: {rng_text(lo, hi)}.")
             else:
-                bt = (f"That’s outside the luck range: luck alone lands a program inside it {cov_s} times in 100 over {hf} games. "
-                      f"Luck alone would still put about {expect} of 68 programs out here, so this describes these games, not what comes next.")
-            row.update(state="ok", band=band, adjusted=adj, card=True, band_text=bt, coverage=cov_s,
+                bt = (f"That’s outside the range our no-lasting-tendency simulation gives for its mix of games. "
+                      f"Expected range: {rng_text(lo, hi)}. With 68 programs, about {expect} land outside a {cov_s}% range by chance alone. "
+                      "Landing outside one is a description, not a finding.")
+            row.update(state="ok", range_lo=lo, range_hi=hi, inside=inside, card=True, band_text=bt, coverage=cov_s,
                        answer=headline(heads, "within" if inside else "outside", name),
                        pin=f"{headline(heads, 'within' if inside else 'outside', name)} · {hf} games",
                        short=f"{name}: {headline(heads, 'within' if inside else 'outside', name)} · {hf} games")
         else:
             row.update(state="below", card=False, coverage=cov_s,
-                       band_text=f"Too few games to compare with luck: {hf} games in {ns} seasons. A comparison needs {pres['team_min_text']}.",
+                       band_text=f"Too few games for an expected range: {hf} games {pres['measure_short']} and {es} eligible seasons. A range needs {pres['team_min_text']}.",
                        answer=headline(heads, "below", name), pin=f"{headline(heads, 'below', name)} · {hf} games",
                        short=f"{name}: {headline(heads, 'below', name)} · {hf} games")
             row["below_text"] = row["band_text"]
@@ -367,38 +430,118 @@ def research_note(label):
     return f'<div class="lb-research-note"><i aria-hidden="true"></i>{t(label)}</div>'
 
 
-def exhibit_html(kind, case, data, letter):
+def all_below(ps):
+    """a sentence only when the data says it"""
+    return ("Every estimate came out below 0, so every row reads: no lasting spread detected (estimate at or below zero). "
+            "Rows marked with a ring use 2014–18 research grades.") if ps and all(r["T"] < 0 for r in ps) else ""
+
+
+def exhibit_html(kind, case, data, letter, teams=None):
     rd = case["research_datasets"][0] if case["research_datasets"] else None
-    if kind == "carryover":
-        co = data["carryover"]
+    tag = '<span class="lb-tagS">Sample data</span>' if case.get("sample") else ""
+    if kind == "persistence":
+        ps = data["persistence"]
         h = (f'<div class="lb-exhibit" role="group" aria-label="Exhibit {letter}: does it carry over?" id="lb-carry-sec">'
-             f'<div class="lb-ex-head"><span>Exhibit {letter} · Does it carry over?</span>' + ('<span class="lb-tagS">Sample data</span>' if case.get("sample") else "") + "</div>"
-             '<div id="lb-carry" style="padding:6px 8px 0"></div>'
-             f'<div class="lb-ex-foot">Each dot is one program: its gap in {t(co["x_label_long"])} across, against {t(co["y_label_long"])} up. Your team is red.</div>')
-        if co.get("includes_research") and rd:
+             f'<div class="lb-ex-head"><span>Exhibit {letter} · Does it carry over?</span>{tag}</div>'
+             '<div id="lb-persist" style="padding:6px 8px 0"></div>'
+             '<div class="lb-ex-foot">Each row is one way of asking the question. Dot = the carryover estimate; bar = one standard error each way. '
+             'Above 0 would mean a program’s big-favorite gap repeats from season to season; below 0 means it flips. '
+             + all_below(ps) + '</div>')
+        if any(r.get("includes_research") for r in ps) and rd:
             h += research_note(rd["label"])
         return h + "</div>"
-    if kind == "bound":
-        return (f'<div class="lb-exhibit" role="group" aria-label="Exhibit {letter}: what the data rules out">'
-                f'<div class="lb-ex-head"><span>Exhibit {letter} · What the data rules out</span>' + ('<span class="lb-tagS">Sample data</span>' if case.get("sample") else "") + "</div>"
-                '<div id="lb-bound" style="padding:4px 8px 0"></div>'
-                f'<div class="lb-ex-foot">The hatched part is ruled out. The red line is the size that matters, set in the research plan before the analysis.</div></div>')
-    if kind == "cuts":
-        btn = "".join(f'<button type="button" data-cut="{a(c["id"])}" aria-pressed="{"true" if c.get("plan") else "false"}">{t(c["label"])}</button>' for c in data["cuts"])
-        plan_cut = [c for c in data["cuts"] if c.get("plan")][0]
-        return (f'<div class="lb-cuts" role="group" aria-label="Other ways to cut it">{btn}</div>'
-                f'<p class="lb-cut-note" id="lb-cut-note">{t(plan_cut["note"])}</p>')
+    if kind == "programs":
+        cov = f'{float(case["presentation"]["band_coverage"]):g}'
+        h = (f'<div class="lb-exhibit" role="group" aria-label="Exhibit {letter}: every program" id="lb-programs-sec">'
+             f'<div class="lb-ex-head"><span>Exhibit {letter} · All 68 programs</span>{tag}</div>'
+             '<div id="lb-programs" style="padding:6px 8px 0"></div>'
+             f'<div class="lb-ex-foot">Dot = the program’s big-favorite gap: its average DAWG grade {t(case["presentation"]["measure_short"])} minus its average in other games. '
+             f'Bar = its {cov}% expected range. Expected range: where this program’s gap would usually land if it had no lasting tendency, under our simulation assumptions '
+             '(same-season, same-spread grades from other programs; no carryover between seasons). Filled dots are outside their range. Alphabetical.</div>')
+        if rd:
+            h += research_note(rd["label"])
+        return h + "</div>"
+    if kind == "tables":
+        return tables_html(case, data, letter, teams or {})
     raise LabError(f"unknown exhibit [[{kind}]]")
 
 
-def body_html(case, md, data):
+def _num(v, signed=True):
+    return "—" if v is None else (fmt(v) if signed else f"{v:,}")
+
+
+def tables_html(case, data, letter, teams):
+    """The descriptive tables exactly as the research deliverable gives them (spec §2, §3, §7, §8): all 68 programs, sortable,
+    alphabetical by default and never ranked; the league reference; postseason and 2026 kept separate."""
+    tb = data.get("tables")
+    if not tb:
+        raise LabError("[[tables]] needs data.json tables (from the research deliverable)")
+    pres = case["presentation"]
+    cov = f'{float(pres["band_coverage"]):g}'
+    rd = case["research_datasets"][0] if case["research_datasets"] else None
+    tag = '<span class="lb-tagS">Sample data</span>' if case.get("sample") else ""
+    glab = [g["label"] for g in (data.get("league") or {}).get("groups", [])]
+    th = lambda label, kind="n", cls="": f'<th scope="col" class="{cls}" data-k="{kind}"><button type="button">{t(label)}</button></th>'
+    head = ("<tr>" + th("Program", "s", "lb-tl") + th("Seasons") + th("Eligible seasons") + th("14+ fav. games") + th("Other games")
+            + th("Gap") + th("Down part") + th("Up part") + th("Expected range") + th("Outside?", "s")
+            + "".join(th(f"{g}: avg (games)") for g in glab) + th("2019+ official: gap (games)") + "</tr>")
+    rows = []
+    for slug, tm in sorted(teams.items(), key=lambda kv: kv[1]["name"]):
+        if tm["state"] == "none":
+            continue
+        ok = tm["state"] == "ok"
+        rng = rng_text(tm["range_lo"], tm["range_hi"]) if ok else "too few games"
+        outside = ("yes" if not tm["inside"] else "no") if ok else "too few games"
+        grp = "".join(f'<td data-v="{"" if g["avg"] is None else round(g["avg"], 6)}">{_num(g["avg"])} ({g["n"]})</td>' for g in tm["groups"])
+        o = tm["official"]
+        rows.append(f'<tr data-team="{slug}"><th scope="row" class="lb-tl" data-v="{a(tm["name"])}">{t(tm["name"])}</th>'
+                    f'<td data-v="{tm["seasons"]}">{tm["seasons"]}</td><td data-v="{tm["eligible_seasons"]}">{tm["eligible_seasons"]}</td>'
+                    f'<td data-v="{tm["hf_games"]}">{tm["hf_games"]}</td><td data-v="{tm["other_games"]}">{tm["other_games"]}</td>'
+                    f'<td data-v="{round(tm["raw"], 6)}"><b>{fmt(tm["raw"])}</b></td><td data-v="{round(tm["down"], 6)}">{fmt(tm["down"])}</td><td data-v="{round(tm["up"], 6)}">{fmt(tm["up"])}</td>'
+                    f'<td data-v="{round(tm["range_lo"], 6) if ok else ""}">{rng}</td><td data-v="{outside}">{outside}</td>{grp}'
+                    f'<td data-v="{round(o["raw"], 6)}">{fmt(o["raw"])} ({o["hf_games"]} / {o["other_games"]})</td></tr>')
+    rlab = (f'<p class="lb-tnote lb-tnr"><i class="lb-rring" aria-hidden="true"></i>{t(rd["label"])}</p>') if rd else ""
+    h = (f'<div class="lb-exhibit" role="group" aria-label="Exhibit {letter}: the tables" id="lb-tables">'
+         f'<div class="lb-ex-head"><span>Exhibit {letter} · The tables</span>{tag}</div>'
+         '<div class="lb-tblock"><h3>Every program, 2014 to Oct. 10, 2026</h3>'
+         '<p class="lb-tnote">Alphabetical. Tap a column to sort it; this isn’t a ranking. Points are DAWG grades; the gap is the average grade as a 14+ favorite minus the average in other games. '
+         'Gap = down part − up part. The gap is a per-game average; the carryover estimate in Exhibit A uses season-by-season gaps, so the two are different numbers.</p>'
+         f'<p class="lb-thint" aria-hidden="true">Scroll sideways for every column →</p><div class="lb-tscroll lb-tall" tabindex="0" role="region" aria-label="Every program, scrolls sideways"><table class="lb-tbl lb-sort" id="lb-prog-tbl"><thead>{head}</thead><tbody>{"".join(rows)}</tbody></table></div>'
+         f'<p class="lb-tnote"><b>Expected range:</b> where this program’s gap would usually land if it had no lasting tendency, under our simulation assumptions '
+         f'(same-season, same-spread grades from other programs; no carryover between seasons). {cov}% range; a range needs {t(pres["team_min_text"])}. '
+         f'<b>Outside?</b> With 68 programs, about {round(68 * (100 - float(cov)) / 100)} land outside a {cov}% range by chance alone. Landing outside one is a description, not a finding.</p>'
+         f'{rlab}</div>')
+    lg = tb["league"]
+    def grid(scopes, col_label):
+        hd = "<tr><th scope=\"col\" class=\"lb-tl\">Group</th>" + "".join(f'<th scope="col">{t(sc["label"])}: avg (games)</th>' for sc in scopes) + "</tr>"
+        labels = [g["label"] for g in scopes[0]["groups"]]
+        body = "".join(f'<tr><th scope="row" class="lb-tl">{t(lb)}</th>' + "".join(f'<td>{_num(sc["groups"][i]["avg"])} ({sc["groups"][i]["n"]:,})</td>' for sc in scopes) + "</tr>"
+                       for i, lb in enumerate(labels))
+        hint = '<p class="lb-thint" aria-hidden="true">Scroll sideways for every column →</p>' if len(scopes) > 1 else ""
+        return hint + f'<div class="lb-tscroll" tabindex="0" role="region" aria-label="{a(col_label)}"><table class="lb-tbl"><thead>{hd}</thead><tbody>{body}</tbody></table></div>'
+    h += ('<div class="lb-tblock"><h3>The league, by kind of game</h3>'
+          '<p class="lb-tnote">League-wide, DAWG averages about zero in every kind of game, by construction. The 2014–18 and 2019–26 columns split the full window by grade type.</p>'
+          + grid(lg, "League by kind of game") + rlab + '</div>')
+    ps = tb["postseason"]
+    pcount = "".join(f'<li><span>{t(teams[s_]["name"])}</span><b>{n}</b></li>' for s_, n in sorted(ps["programs"].items(), key=lambda kv: teams[kv[0]]["name"]))
+    h += (f'<div class="lb-tblock"><h3>{t(ps["title"])}</h3><p class="lb-tnote">{t(ps["note"])}</p>' + grid([ps], "Postseason")
+          + f'<details class="lb-tdet"><summary>Postseason games as a 14+ favorite, by program</summary><ul class="lb-tlist">{pcount}</ul></details>' + rlab + '</div>')
+    sn = tb["season2026"]
+    keys = sn["group_keys"]
+    srows = "".join(f'<tr><th scope="row" class="lb-tl">{t(teams[s_]["name"])}</th>' + "".join(f'<td>{c[k]}</td>' for k in keys) + "</tr>"
+                    for s_, c in sorted(sn["programs"].items(), key=lambda kv: teams[kv[0]]["name"]))
+    shd = '<tr><th scope="col" class="lb-tl">Program</th>' + "".join(f'<th scope="col">{t(g["label"])}</th>' for g in sn["groups"]) + "</tr>"
+    h += (f'<div class="lb-tblock"><h3>{t(sn["title"])}</h3><p class="lb-tnote">{t(sn["note"])}</p>' + grid([sn], "2026 to date")
+          + f'<details class="lb-tdet"><summary>2026 games so far, by program</summary><div class="lb-tscroll"><table class="lb-tbl"><thead>{shd}</thead><tbody>{srows}</tbody></table></div></details></div>')
+    return h + "</div>"
+
+
+def body_html(case, md, data, teams=None):
     letters = iter("BCDEFGH")
-    def part(m):
-        return f'<p class="lb-part">{t(m.group(1).strip())}</p>'
-    src = re.sub(r"^::: *part\n(.*?)\n:::$", lambda m: "LBPART" + B.t(m.group(1).strip()).replace(" ", " ") + "LBEND", md, flags=re.S | re.M)
+    src = re.sub(r"^::: *part\n(.*?)\n:::$", lambda m: "LBPART" + B.t(m.group(1).strip()).replace(" ", " ") + "LBEND", md, flags=re.S | re.M)
     out = B.render_body({"format": "markdown"}, src)
     out = re.sub(r"<p>LBPART(.*?)LBEND</p>", lambda m: f'<p class="lb-part">{m.group(1).replace(chr(160), " ")}</p>', out)
-    out = re.sub(r"<p>\[\[([a-z-]+)\]\]</p>", lambda m: exhibit_html(m.group(1), case, data, next(letters) if m.group(1) in ("carryover", "bound") else ""), out)
+    out = re.sub(r"<p>\[\[([a-z-]+)\]\]</p>", lambda m: exhibit_html(m.group(1), case, data, next(letters), teams), out)
     if "[[" in out:
         raise LabError("unknown [[marker]] in case.md")
     return out
@@ -407,7 +550,8 @@ def body_html(case, md, data):
 def receipts_html(case):
     p, dl, me = case["plan"], case["data_lock"], case["methods"]
     plan_url = f"/lab/{case['number']}-{case['slug']}/plan/"
-    rows = [("Plan locked", f'{t(B.nice_date(p["locked"]))} · plan {t(plan_label(case))} · <a href="{plan_url}">read the plan, including what was explored first</a>'),
+    rows = [("Verdict record", t(case["verdict_record"]))] if case.get("verdict_record") else []
+    rows += [("Plan locked", f'{t(B.nice_date(p["locked"]))} · plan {t(plan_label(case))} · <a href="{plan_url}">read the plan, including what was explored first</a>'),
             ("Data", f'{t(dl["label"])} · snapshot <span class="lb-mono" style="font-size:13px">{t(dl["snapshot"][:19])}</span>'),
             ("Method", f'DAWG {t(me["dawg"])} · case method v{t(me["case"])}'),
             ("Second check", t(case.get("second_check") or "Reproduced independently before publishing"))]
@@ -422,18 +566,11 @@ def receipts_html(case):
 
 
 def js_data(case, data, teams):
-    pres = case["presentation"]
     rd = case["research_datasets"][0] if case["research_datasets"] else {"label": "", "label_short": ""}
-    co = dict(data["carryover"])
-    co["x_label"], co["y_label"] = pres["x_label"], pres["y_label"]
-    cuts = []
-    for c in data["cuts"]:
-        c2 = dict(c)
-        if c2.get("carryover"):
-            c2["carryover"] = dict(c2["carryover"], x_label=pres["x_label"], y_label=pres["y_label"])
-        cuts.append(c2)
-    return {"case": {"number": case["number"], "url": f"/lab/{case['number']}-{case['slug']}/"}, "threshold": data["threshold"],
-            "carryover": co, "cuts": cuts, "league": data["league"], "research": {"label": rd["label"], "label_short": rd["label_short"], "name": rd.get("name", ""), "span": rd.get("span", ""),
+    return {"case": {"number": case["number"], "url": f"/lab/{case['number']}-{case['slug']}/"},
+            "persistence": data["persistence"], "league": data["league"],
+            "range": {"coverage": f'{float(case["presentation"]["band_coverage"]):g}', "measure": case["presentation"]["measure_short"]},
+            "research": {"label": rd["label"], "label_short": rd["label_short"], "name": rd.get("name", ""), "span": rd.get("span", ""),
                          "provenance": rd.get("provenance", ""), "receipts": "#lb-receipts"},
             "teams": teams}
 
@@ -462,8 +599,8 @@ def case_page(case, md, data, teams, tpl, asset_v, preview=False):
              '<div class="lb-res" id="lb-strip-res" aria-live="polite"><b>Pick a team to see what happened for it.</b><span>Every chart on the page will highlight it.</span></div>'
              '<div style="display:flex;gap:10px;flex-wrap:wrap"><button id="lb-open-panel" class="lb-btn lb-solid" type="button" hidden>Full breakdown →</button>'
              '<button id="lb-share" class="lb-btn" type="button" hidden>Share card</button></div></section>')
-    lead = exhibit_html("carryover", case, data, "A").replace('id="lb-carry-sec"', 'id="lb-carry-sec" style="margin:0"')
-    body = body_html(case, md, data)
+    lead = exhibit_html("persistence", case, data, "A").replace('id="lb-carry-sec"', 'id="lb-carry-sec" style="margin:0"')
+    body = body_html(case, md, data, teams)
     side = ('<div id="lb-side" class="lb-sidecard" hidden><div class="lb-sidecard-h"><span class="lb-mono">YOUR TEAM · LAB ' + num + '</span><b id="lb-side-name"></b></div>'
             '<div class="lb-sidecard-b"><span class="lb-big" id="lb-side-val"></span><span id="lb-side-txt"></span><span id="lb-side-n" class="lb-note" style="margin:0"></span>'
             '<button id="lb-side-open" class="lb-btn lb-solid" type="button">Full breakdown →</button></div></div>'
@@ -512,13 +649,13 @@ def landing_page(cases, docket, tpl, asset_v, preview=False):
     case, data, teams = cases[0]
     num, url = case["number"], f"/lab/{case['number']}-{case['slug']}/"
     v = case["verdict"]
-    rnote = research_note(case["research_datasets"][0]["label"]) if (data["carryover"].get("includes_research") and case["research_datasets"]) else ""
+    rnote = research_note(case["research_datasets"][0]["label"]) if (any(r.get("includes_research") for r in data["persistence"]) and case["research_datasets"]) else ""
     # the team picker is the page's main action: inside the case cover, between the answer and the chart on phones
     team = ('<div class="lb-home-team" role="group" aria-labelledby="lb-home-h">'
             '<div class="lb-ht-q"><span class="lb-label">Start with your team</span><label id="lb-home-h" for="lb-home-pick">What about my team?</label></div>'
             f'<select id="lb-home-pick" class="lb-select lb-select-xl">{team_options(teams, "Pick your team")}</select>'
             '<div class="lb-ht-res" aria-live="polite"><b id="lb-home-ans">All 68 programs are in the case file.</b>'
-            '<span id="lb-home-line">Pick one to see what happened for it and how that compares with luck.</span>'
+            '<span id="lb-home-line">Pick one to see what happened for it and where that sits against its expected range.</span>'
             '<span id="lb-home-rn" class="lb-ht-rn" hidden><i aria-hidden="true"></i><span></span></span></div>'
             f'<a id="lb-home-link" class="lb-btn lb-hot" href="{url}">Open the case file →</a></div>')
     feat = (f'<section aria-label="Latest case file" class="lb-feat"><span class="lb-tab" style="align-self:flex-start">LAB {num} · LATEST CASE</span>'
@@ -528,7 +665,8 @@ def landing_page(cases, docket, tpl, asset_v, preview=False):
             f'<a class="lb-open" href="{url}">Read the case file →</a>'
             f'<span class="lb-mono" style="font-size:12px;color:var(--lb-muted-d)">v{t(case["version"])} · {t(case["data_lock"]["label"])}</span></div>'
             + team +
-            '<div class="lb-cc-ex"><div class="lb-exhibit"><div class="lb-ex-head"><span>Exhibit A · 68 programs</span>' + ('<span class="lb-tagS">Sample data</span>' if case.get("sample") else "") + '</div><div id="lb-home-ex" style="padding:6px 8px 4px"></div>' + rnote + '</div></div></div></section>')
+            '<div class="lb-cc-ex"><div class="lb-exhibit"><div class="lb-ex-head"><span>Exhibit A · Does it carry over?</span>' + ('<span class="lb-tagS">Sample data</span>' if case.get("sample") else "") + '</div><div id="lb-home-ex" style="padding:6px 8px 4px"></div>'
+            '<div class="lb-ex-foot">Above 0 would mean big-favorite gaps repeat from season to season. ' + all_below(data["persistence"]) + '</div>' + rnote + '</div></div></div></section>')
     dk = ""
     if docket:
         items = "".join(f'<div><span class="lb-status">{t(i["status"])}</span><b>{t(i["question"])}</b></div>' for i in docket)
@@ -624,14 +762,14 @@ def card_inner(case, tm, size, look="sample"):
         st = f'<div class="stamp v-{cls}"><i><b>{t(word)}</b><small>{t(v["subtitle"])}</small></i></div>'
         rn = f'<div class="rn"><i></i>{t(rd["label"])}</div>' if rd else ""
         if size == "card":
-            return (f'<div class="top"><span class="tab">LAB {num}</span>{LOCK}</div><div class="q">{t(case["title"])}</div>'
-                    f'<div style="display:flex;align-items:center;gap:36px">{st}<div class="sent">{t(v["answer"])}</div></div>'
-                    f'<div class="ex"><div class="h">Exhibit A · each dot is one of 68 programs</div><div data-chart="carryover" style="flex:1;min-height:0"></div>{rn}</div>'
+            return (f'<div class="top"><span class="tab">LAB {num}</span>{LOCK}</div><div class="q" style="font-size:84px">{t(case["title"])}</div>'
+                    f'<div style="display:flex;align-items:center;gap:36px">{st}<div class="sent" style="font-size:27px">{t(v["answer"])}</div></div>'
+                    f'<div class="ex" style="min-height:0"><div class="h">Exhibit A · does it carry over?</div><div data-chart="persistence" style="flex:1;min-height:0"></div>{rn}</div>'
                     f'<div class="foot"><p>{DEF}</p><b>dawgindex.com/lab/{num}</b></div>')
         return (f'<div class="top"><span class="tab">LAB {num}</span>{LOCK}</div><div class="row"><div class="l"><div class="q">{t(case["title"])}</div>'
                 f'<div style="display:flex;align-items:center;gap:22px">{st}</div></div>'
-                f'<div class="r"><div class="ex"><div class="h">Exhibit A · 68 programs</div><div data-chart="carryover" style="flex:1;min-height:0"></div>{rn}</div></div></div>'
-                f'<div class="band"><span>{t(v["answer"])[:110]}</span><b>dawgindex.com/lab/{num}</b></div>')
+                f'<div class="r"><div class="ex"><div class="h">Exhibit A · does it carry over?</div><div data-chart="persistence" data-size="m" style="flex:1;min-height:0"></div>{rn}</div></div></div>'
+                f'<div class="band"><span>{t(case["verdict"].get("card_line") or v["answer"])}</span><b>dawgindex.com/lab/{num}</b></div>')
     # team cards: built to read at timeline size on X. Headline, sample size and chart; nothing else competes with them.
     q = case["presentation"]["team_question"].replace("{team}", tm["name"])
     logo = f'<img src="/logos/{tm["id"]}-dark.png" onerror="this.onerror=null;this.src=\'/logos/{tm["id"]}.png\'" alt="">' if tm.get("id") else ""
@@ -643,12 +781,12 @@ def card_inner(case, tm, size, look="sample"):
         return (f'<div class="top"><span class="tab">LAB {num} · YOUR TEAM</span>{LOCK}</div>'
                 f'<div class="who">{logo}<div><div class="tn">{t(tm["name"])}</div><div class="qs">{t(q)}</div></div></div>'
                 f'<div class="hl">{t(tm["answer"])}</div>{ss}'
-                f'<div class="ex"><div class="h"><span>{t(tm["name"])} vs. luck</span>{tag}</div><div data-chart="strip" data-team="{tm["slug"]}" data-size="xl"></div>{rn}</div>'
+                f'<div class="ex"><div class="h"><span>{t(tm["name"])} vs. its expected range</span>{tag}</div><div data-chart="strip" data-team="{tm["slug"]}" data-size="xl"></div>{rn}</div>'
                 f'<div class="foot"><span class="desc">What happened · not a verdict</span><b>{t(tm["short_url"])}</b></div>')
     return (f'<div class="top"><span class="tab">LAB {num} · YOUR TEAM</span>{LOCK}</div>'
             f'<div class="row"><div class="l"><div class="who">{logo}<div><div class="tn">{t(tm["name"])}</div><div class="qs">{t(q)}</div></div></div>'
             f'<div class="hl">{t(tm["answer"])}</div>{ss}</div>'
-            f'<div class="r"><div class="ex"><div class="h"><span>{t(tm["name"])} vs. luck</span>{tag}</div><div data-chart="strip" data-team="{tm["slug"]}" data-size="xl"></div>{rn}</div></div></div>'
+            f'<div class="r"><div class="ex"><div class="h"><span>{t(tm["name"])} vs. its expected range</span>{tag}</div><div data-chart="strip" data-team="{tm["slug"]}" data-size="xl"></div>{rn}</div></div></div>'
             f'<div class="band"><span>What happened · not a verdict on {t(tm["name"])}</span><b>{t(tm["short_url"])}</b></div>')
 
 
@@ -792,7 +930,7 @@ def prepare(repo, dirs, mode):
             teams = derive_teams(case, data, ids, names, site_teams)
             errs += team_copy_errors(teams)
             try:
-                body_html(case, md, data)
+                body_html(case, md, data, teams)
             except LabError as e:
                 errs.append(str(e))
         if mode == "publish" and case.get("approved_hash") != fingerprint(case, md, data, plan):
@@ -928,42 +1066,44 @@ def sample(repo, out_root):
     d = os.path.join(out_root, "001-playing-down")
     os.makedirs(d, exist_ok=True)
     below = {"kansas": (6, 3), "purdue": (7, 3), "georgia-tech": (5, 2)}
-    teams, points = {}, []
+    labels = ["14+ favorite", "3.5–13.5 favorite", "Within 3", "3.5+ underdog"]
+    teams = {}
     for s in site:
         if s in below:
-            hf, ns = below[s]
-            ns_n = [hf // ns + (1 if i < hf % ns else 0) for i in range(ns)]
+            hf, es = below[s]
         else:
-            ns = rnd.randint(3, 13)
-            ns_n = [rnd.randint(2, 6) for _ in range(ns)]
-            hf = sum(ns_n)
-        se = 12.0 / math.sqrt(hf)
-        raw = round(rnd.gauss(0, se), 1)
-        band = round(1.96 * 12.5 / math.sqrt(hf), 1)
-        adj = round(raw * (1.0 / (1.0 + se * se)), 1)
-        yrs = sorted(rnd.sample(range(2014, 2027), ns))
-        srows = [{"season": y, "gap": round(rnd.gauss(0, 7), 1), "n": n, "research": y <= 2018} for y, n in zip(yrs, ns_n)]
-        labels = ["14+ favorite", "3.5–13.5 favorite", "Within 3", "3.5+ underdog"]
-        groups = [{"label": labels[0], "avg": round(raw / 2 + rnd.gauss(0, 1), 1), "n": hf}] + \
-                 [{"label": l, "avg": round(rnd.gauss(0, 1.5), 1), "n": rnd.randint(4, 40)} for l in labels[1:]]
-        teams[s] = {"hf_games": hf, "seasons": ns, "raw": raw, "band": band, "adjusted": adj, "groups": groups, "season_rows": srows}
-        points.append({"t": s, "x": round(rnd.gauss(0, 3.2), 1), "y": round(rnd.gauss(0, 3.2), 1)})
-    data = {"sample": True, "threshold": 2,
+            hf, es = rnd.randint(9, 40), rnd.randint(3, 11)
+        n_mf, n_ev, n_dog = rnd.randint(20, 50), rnd.randint(12, 35), rnd.randint(20, 70)
+        down, dog_avg = round(rnd.gauss(0, 3), 6), round(rnd.gauss(0, 1.5), 6)
+        share = n_dog / (n_mf + n_ev + n_dog)
+        up = share * dog_avg
+        raw = down - up
+        rg = rnd.randint(30, 60)
+        tm = {"hf_games": hf, "other_games": n_mf + n_ev + n_dog, "seasons": 13, "eligible_seasons": es, "raw": raw, "down": down, "up": up,
+              "groups": [{"label": labels[0], "avg": round(rnd.gauss(0, 2), 3), "n": hf}, {"label": labels[1], "avg": round(rnd.gauss(0, 1.5), 3), "n": n_mf},
+                         {"label": labels[2], "avg": round(rnd.gauss(0, 1.5), 3), "n": n_ev}, {"label": labels[3], "avg": round(rnd.gauss(0, 1.5), 3), "n": n_dog}],
+              "official": {"hf_games": max(0, hf - 4), "other_games": n_mf + n_ev + n_dog - 25, "raw": round(raw + rnd.gauss(0, 1), 3)},
+              "research_games": rg, "research_hf_games": min(hf, 4)}
+        if hf >= 8 and es >= 3:
+            half = 1.96 * 12.5 / math.sqrt(hf)
+            tm.update(range_lo=round(-half + rnd.gauss(0, 0.2), 3), range_hi=round(half + rnd.gauss(0, 0.2), 3))
+            tm["outside"] = tm["raw"] < tm["range_lo"] or tm["raw"] > tm["range_hi"]
+        teams[s] = tm
+    rows = [("c", "All seasons, 2014–26 (the plan’s main test)", True, True), ("a", "2019–26 (explored first)", False, False),
+            ("b", "2014–18 (held out, research grades)", False, True), ("p4", "Vs. Power 4 only", False, True), ("no1416", "Without 2014–16", False, False)]
+    persistence = [{"id": i, "label": l, "primary": pr, "includes_research": res, "T": round(rnd.gauss(-1, 2), 3), "SE": round(rnd.uniform(1, 3.5), 3),
+                    "pairs": rnd.randint(300, 2800), "programs": rnd.randint(40, 68), "card": i in ("c", "a", "b")} for i, l, pr, res in rows]
+    data = {"sample": True,
             "league": {"groups": [{"label": "14+ favorite", "avg": -0.1, "n": 2700}, {"label": "3.5–13.5 favorite", "avg": 0.1, "n": 2500},
                                   {"label": "Within 3", "avg": 0.1, "n": 1700}, {"label": "3.5+ underdog", "avg": 0.0, "n": 3300}]},
-            "carryover": {"band": 3.2, "includes_research": True, "points": points,
-                          "x_label_long": "its earlier seasons (2014–2019)", "y_label_long": "its later seasons (2020–2026)"},
-            "cuts": [{"id": "plan", "label": "All games (the plan’s choice)", "plan": True, "U": 2.4, "note": "Sample number. The plan’s choice: habits bigger than ±2.4 per big-favorite game are ruled out."},
-                     {"id": "p4", "label": "Vs. Power 4 only", "U": 3.1, "note": "Sample number. This cut rules out habits bigger than ±3.1. The verdict always uses the plan’s choice."},
-                     {"id": "month", "label": "Aug–Sep vs. non-Power 4", "U": 3.4, "note": "Sample number. This cut rules out habits bigger than ±3.4. The verdict always uses the plan’s choice."},
-                     {"id": "no1416", "label": "Without 2014–16", "U": 2.7, "note": "Sample number. Without the earliest research-grade seasons: habits bigger than ±2.7 are ruled out."},
-                     {"id": "ats", "label": "Final score vs. spread", "U": 2.9, "note": "Sample number. The same test on final scores (a football stat, not a DAWG grade): ±2.9."}],
-            "teams": teams}
+            "persistence": persistence, "teams": teams}
     case = {"number": "001", "slug": "playing-down", "type": "hypothesis-test", "status": "draft", "sample": True,
             "title": "Does your team play down to its competition?", "topic": "Favorites & underdogs",
-            "dek": "Every fan base swears its team sleepwalks against weak opponents. We checked whether the habit is real, program by program.",
+            "dek": "Every fan base swears its team sleepwalks against weak opponents. We checked whether it carries over, program by program.",
             "description": "Every fan base swears its team plays down to weak opponents. The DAWG Lab checked all 68 programs, season after season.",
-            "verdict": {"kind": "inconclusive", "subtitle": "Sample · reason from the plan", "answer": "Sample answer. The published case states the verdict in one plain sentence here."},
+            "verdict": {"kind": "inconclusive", "subtitle": "Sample · reason from the plan", "answer": "Sample answer. The published case states the verdict in one plain sentence here.",
+                        "card_line": "Sample line for the link preview"},
+            "verdict_record": "Sample: the pre-registered rule's verdict and any later editorial decision are recorded here.",
             "version": "1.0", "plan": {"version": "2.0", "label": "v2", "locked": "2026-10-20"},
             "data_lock": {"snapshot": "sha256:sample000000000000000000", "cutoff": "2026-10-18", "label": "Data through Week 8, 2026"},
             "methods": {"dawg": "V3.0", "case": "1.0"},
@@ -975,8 +1115,9 @@ def sample(repo, out_root):
             "corrections": [],
             "presentation": {"measure_short": "as a 14+ point favorite", "short_measure": "as a big favorite",
                              "team_question": "Does {team} play down to its competition?",
-                             "team_min": {"hf_games": 8, "seasons": 3}, "band_coverage": 95, "team_headlines": {"within": "Within the luck range", "outside": "Outside the luck range", "below": "Too few games to judge", "none": "No qualifying games"}, "team_min_text": "8 games as a 14+ point favorite across 3 eligible seasons",
-                             "x_label": "Earlier seasons", "y_label": "Later seasons"}}
+                             "team_min": {"hf_games": 8, "seasons": 3}, "band_coverage": 95,
+                             "team_headlines": {"within": "Inside the expected range", "outside": "Outside the expected range", "below": "Too few games to compare", "none": "No qualifying games"},
+                             "team_min_text": "8 games as a 14+ point favorite and 3 eligible seasons"}}
     md = """::: part
 Part 1 · description only
 :::
@@ -995,15 +1136,11 @@ Part 2 · the verdict covers only this part
 
 A bad September doesn't make a habit. The question is whether a program that plays down one season does it again in another. If it does, the dots in Exhibit A line up along the diagonal. If not, they scatter around the flat line.
 
-[[bound]]
+Sample text. The published case says what the carryover estimates show and what they can't tell apart.
 
-Sample text. The published case says what the data rules out, what it doesn't, and what would settle it.
+## Every program
 
-## Other ways to cut it
-
-The research plan named these cuts in advance. The verdict always uses the plan's choice, and another cut can only weaken a verdict, never strengthen it.
-
-[[cuts]]
+[[programs]]
 
 ::: doesnt
 - Why a team played the way it did. Effort, focus and coaching aren't measured.
