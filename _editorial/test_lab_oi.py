@@ -154,6 +154,7 @@ with sync_playwright() as p:
         ts = pg.evaluate("[...document.querySelectorAll('#lb-seasons text')].map(t=>t.textContent)")
         want = [f1(v) if not mob else f1(v).replace("+", "") for _, v in sorted(il["by_season"].items())]
         check(all(x in ts for x in want), f"Exhibit 1 season bars at {w}px match the data", f"{want} vs {ts}")
+        check("Research grades" in ts, f"Exhibit 1 at {w}px: the 2014–18 bars are bracketed as research grades")
         t2 = pg.evaluate("[...document.querySelectorAll('#lb-reveal text')].map(t=>t.textContent)")
         rv = data0["reveal"]
         check(f1(rv["spread"]["gap"]) in t2 and f1(rv["opponent"]["gap"]) in t2 and (mob or any(f1(rv["opponent"]["tougher"]) in x for x in t2)), f"Exhibit 2 at {w}px shows the data's numbers", str(t2))
@@ -174,11 +175,30 @@ with sync_playwright() as p:
         check("team=vanderbilt" in pg.url and "season=2024" in pg.url, f"explorer at {w}px: the link keeps team and season")
         pg.select_option("#lb-xp-season", "2016"); pg.wait_for_timeout(60)
         check("research grades" in pg.inner_text("#lb-xp-lead"), f"explorer at {w}px: a 2014–18 season says research grades")
+        opts = pg.evaluate("[...document.querySelectorAll('#lb-xp-season option')].map(o=>[o.value,o.textContent])")
+        check(opts and all(("research grades" in t) == (int(v) <= 2018) for v, t in opts), f"explorer at {w}px: the season menu marks 2014–18 as research grades, and only those", str(opts))
         pg.select_option("#lb-xp-team", "baylor"); pg.select_option("#lb-xp-season", "2026"); pg.wait_for_timeout(60)
         check("needs at least 8 games" in pg.inner_text("#lb-xp-lead") and pg.evaluate("document.querySelectorAll('#lb-xp-chart circle[role=button]').length") == EX["teams"]["baylor"]["seasons"]["2026"]["n"],
               f"explorer at {w}px: a short season shows its games without halves")
         sw = pg.evaluate("document.documentElement.scrollWidth")
         check(sw <= w and not errs, f"after exploring at {w}px: no sideways scroll, no script errors", f"{sw}px; {errs[:2]}")
+        XPF = "(()=>{const s=document.querySelector('#lb-xp-chart svg'),b=s.getBoundingClientRect(),k=b.width/s.viewBox.baseVal.width;return Math.min(...[...s.querySelectorAll('text')].map(t=>parseFloat(getComputedStyle(t).fontSize)*k))})()"
+        check(pg.evaluate(XPF) >= 11, f"explorer chart at {w}px: labels at least 11px on screen", str(pg.evaluate(XPF)))
+        # a team link opens straight to the chart: it must be drawn at the real column width, not shrunk
+        pg.goto(URL + "?team=vanderbilt&season=2016", wait_until="load"); pg.wait_for_function("document.body.getAttribute('data-ready')==='1'", timeout=20000)
+        fs = pg.evaluate(XPF); sw = pg.evaluate("document.documentElement.scrollWidth")
+        check(fs >= 11 and sw <= w and not errs and pg.input_value("#lb-xp-season") == "2016", f"team link at {w}px: the explorer opens to the season with full-size chart labels", f"{fs}px, {sw}px wide, {errs[:2]}")
+        if w in (360, 1440):
+            # every team-season's chart: no two labels overlap, none cut off at the edges
+            clash = pg.evaluate("""(EX) => { const out = [];
+              for (const s in EX.teams) for (const y in EX.teams[s].seasons) { window.DAWGLabOI.show(s, y);
+                const svg = document.querySelector('#lb-xp-chart svg'), W = svg.viewBox.baseVal.width;
+                const bx = [...svg.querySelectorAll('text')].map(t => [t.textContent, t.getBBox()]);
+                for (const [n, b] of bx) if (b.x < -0.5 || b.x + b.width > W + 0.5) out.push(s + ' ' + y + ' cut: ' + n);
+                for (let i = 0; i < bx.length; i++) for (let j = i + 1; j < bx.length; j++) { const a = bx[i][1], c = bx[j][1];
+                  if (a.x < c.x + c.width - 0.5 && c.x < a.x + a.width - 0.5 && a.y < c.y + c.height - 0.5 && c.y < a.y + a.height - 0.5) out.push(s + ' ' + y + ': ' + bx[i][0] + ' / ' + bx[j][0]); } }
+              return out; }""", EX)
+            check(not clash, f"explorer at {w}px: no overlapping or cut-off chart labels in any team-season", f"{len(clash)}: {clash[:6]}")
         if w == 1440:
             # every team-season, through the page's own renderer
             bad = pg.evaluate("""(EX) => { const out = []; const f = v => { const m = Math.abs(v).toFixed(1); return (m === '0.0' ? '' : v > 0 ? '+' : '−') + m; };
@@ -186,7 +206,8 @@ with sync_playwright() as p:
                 const lead = document.getElementById('lb-xp-lead').innerText, dots = document.querySelectorAll('#lb-xp-chart circle[role=button]').length;
                 if (dots !== ts.n) out.push(s + ' ' + y + ' dots');
                 if (ts.T && (!lead.includes(f(ts.T[2])) || !lead.includes(f(ts.E[2])))) out.push(s + ' ' + y + ' lead');
-                if (!ts.T && !lead.includes('at least 8')) out.push(s + ' ' + y + ' short'); }
+                if (!ts.T && !lead.includes('at least 8')) out.push(s + ' ' + y + ' short');
+                if (lead.includes('research grades') !== (+y <= 2018)) out.push(s + ' ' + y + ' research label'); }
               return out; }""", EX)
             nts = sum(len(t["seasons"]) for t in EX["teams"].values())
             check(not bad and not errs, f"all {nts} team-seasons render with the right rows and one dot per game", str(bad[:5]))

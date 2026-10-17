@@ -63,7 +63,8 @@
   }
   function drawSeasons(node, il) {
     var W = width(node, 640), yrs = Object.keys(il.by_season).sort(), n = yrs.length;
-    var top = 22, bot = 24, H = 150, cw = W / n, mx = Math.max(4.5, Math.ceil(Math.max.apply(null, yrs.map(function (y) { return il.by_season[y]; })) + 0.5));
+    var ry = yrs.filter(function (y) { return isResearch(y); }), rx = ry.length ? 20 : 0;
+    var top = 22, bot = 24 + rx, H = 150 + rx, cw = W / n, mx = Math.max(4.5, Math.ceil(Math.max.apply(null, yrs.map(function (y) { return il.by_season[y]; })) + 0.5));
     var Y = function (v) { return top + (1 - v / mx) * (H - top - bot); };
     var s = svg(W, H, "Gap by season: " + yrs.map(function (y) { return y + " " + fmt(il.by_season[y]); }).join(", "));
     add(s, "line", { x1: 0, y1: Y(0), x2: W, y2: Y(0), stroke: INK, "stroke-width": 1.5 });
@@ -71,8 +72,13 @@
       var v = il.by_season[y], cx = cw * i + cw / 2, bw = Math.min(30, cw * 0.62);
       add(s, "rect", { x: cx - bw / 2, y: Y(Math.max(0, v)), width: bw, height: Math.abs(Y(v) - Y(0)), fill: INK2 });
       add(s, "text", { x: cx, y: Y(Math.max(0, v)) - 5, "text-anchor": "middle", style: "font-size:" + (cw < 34 ? 11 : 12) + "px;font-weight:600;fill:" + INK }, cw < 34 ? fmt(v).replace("+", "") : fmt(v));
-      add(s, "text", { x: cx, y: H - 6, "text-anchor": "middle", style: "font-size:12px;fill:" + MUTED }, "’" + y.slice(2));
+      add(s, "text", { x: cx, y: H - 6 - rx, "text-anchor": "middle", style: "font-size:12px;fill:" + MUTED }, "’" + y.slice(2));
     });
+    if (ry.length) {   // bracket under the research seasons: those bars use research grades, not official DAWG grades
+      var i0 = yrs.indexOf(ry[0]), i1 = yrs.indexOf(ry[ry.length - 1]), bx0 = cw * i0 + 3, bx1 = cw * (i1 + 1) - 3, byy = H - 19;
+      add(s, "path", { d: "M" + bx0 + " " + (byy - 4) + "V" + byy + "H" + bx1 + "V" + (byy - 4), fill: "none", stroke: MUTED, "stroke-width": 1.2 });
+      add(s, "text", { x: (bx0 + bx1) / 2, y: H - 3, "text-anchor": "middle", style: "font-size:12px;fill:" + MUTED }, "Research grades");
+    }
     node.innerHTML = ""; node.appendChild(s);
   }
 
@@ -166,7 +172,7 @@
   }
   function fillSeasons(slug) {
     pickS.innerHTML = "";
-    seasonsOf(slug).forEach(function (y) { var o = document.createElement("option"); o.value = y; o.textContent = seasonLabel(slug, y); pickS.appendChild(o); });
+    seasonsOf(slug).forEach(function (y) { var o = document.createElement("option"); o.value = y; o.textContent = seasonLabel(slug, y) + (isResearch(y) ? " · research grades" : ""); pickS.appendChild(o); });
     pickS.disabled = false;
   }
   function defaultSeason(slug) {
@@ -209,12 +215,14 @@
   }
 
   function renderChart(slug, season) {
+    chart.hidden = false;   // measure the real column: a hidden chart has no width (a team link opens straight to this)
     var ts = X.data.teams[slug].seasons[season], G = ts.g, W = width(chart, 640), narrow = W < 520, f = narrow ? 13 : 12;
     var es = G.map(function (r) { return r[2]; }), ys = G.map(function (r) { return r[3]; });
     var xlo = Math.min(-7, Math.floor((Math.min.apply(null, es) - 3) / 7) * 7), xhi = Math.max(7, Math.ceil((Math.max.apply(null, es) + 3) / 7) * 7), ymax = Math.max(20, Math.ceil((Math.max.apply(null, ys.map(Math.abs)) + 4) / 10) * 10);
-    var l = narrow ? 34 : 40, r = 12, top = 28, bot = 46, H = narrow ? 330 : 340;
+    var l = narrow ? 34 : 40, r = 12, top = 28, bot = 50, H = narrow ? 334 : 344;
     var Xs = function (e) { return l + (e - xlo) / (xhi - xlo) * (W - l - r); }, Ys = function (y) { return top + (ymax - y) / (2 * ymax) * (H - top - bot); };
     var s = svg(W, H, X.data.teams[slug].name + " " + season + ": " + G.length + " games, DAWG grade by spread");
+    var avgs = [];
     if (ts.T) {
       var tMax = -1e9, eMin = 1e9;
       G.forEach(function (g) { if (g[5] === "t") tMax = Math.max(tMax, g[2]); if (g[5] === "e") eMin = Math.min(eMin, g[2]); });
@@ -226,27 +234,33 @@
       [["t", ts.T, l, bx], ["e", ts.E, bx, W - r]].forEach(function (h) {
         var y = Ys(h[1][2]), c = gradeColor(h[1][2]);
         add(s, "line", { x1: h[2] + 8, y1: y, x2: h[3] - 8, y2: y, stroke: c, "stroke-width": 3, "stroke-dasharray": "2 0" });
-        add(s, "text", { x: h[0] === "t" ? h[2] + 10 : h[3] - 10, y: y - 7, "text-anchor": h[0] === "t" ? "start" : "end", style: "font-size:" + f + "px;font-weight:600;fill:" + c }, "avg " + fmt(h[1][2]));
+        avgs.push([h[0] === "t" ? h[2] + 10 : h[3] - 10, y - 7, h[0] === "t" ? "start" : "end", c, "avg " + fmt(h[1][2])]);
       });
     }
     for (var v = -ymax; v <= ymax; v += 10) {
       add(s, "line", { x1: l, y1: Ys(v), x2: W - r, y2: Ys(v), stroke: v === 0 ? INK : "rgba(19,18,16,.12)", "stroke-width": v === 0 ? 1.5 : 1 });
       add(s, "text", { x: l - 6, y: Ys(v) + 4, "text-anchor": "end", style: "font-size:" + f + "px;fill:" + MUTED }, v === 0 ? "0" : fmt(v).replace(".0", ""));
     }
-    var step = (xhi - xlo) > (narrow ? 42 : 70) ? 14 : 7, lastX = -1e9;
+    var cw = 0.62 * f, ppp = (W - l - r) / (xhi - xlo), lw = 6 * cw + 12, step = 7;   // "Dog 14" is the widest usual label
+    while (step * ppp < lw) step += 7;
+    var lastR = -1e9;
     for (var e = Math.ceil(xlo / step) * step; e <= xhi; e += step) {
-      var tx = Xs(e), anc = tx - l < 24 ? "start" : W - r - tx < 24 ? "end" : "middle", half = (narrow ? 26 : 30);
-      if (tx - lastX < half * 2) continue;
-      add(s, "text", { x: tx, y: H - bot + 18, "text-anchor": anc, style: "font-size:" + f + "px;fill:" + MUTED }, spreadShort(e)); lastX = tx;
+      var tx = Xs(e), txt = spreadShort(e), tw = txt.length * cw, x0 = tx - tw / 2, anc = "middle";
+      if (x0 < 0) { anc = "start"; x0 = tx; } else if (x0 + tw > W) { anc = "end"; x0 = tx - tw; }
+      if (x0 < lastR + 10) continue;
+      add(s, "text", { x: tx, y: H - bot + 22, "text-anchor": anc, style: "font-size:" + f + "px;fill:" + MUTED }, txt); lastR = x0 + tw;
     }
-    add(s, "text", { x: l, y: H - 6, style: "font-size:" + f + "px;fill:" + INK2 }, "← bigger underdog");
-    add(s, "text", { x: W - r, y: H - 6, "text-anchor": "end", style: "font-size:" + f + "px;fill:" + INK2 }, "bigger favorite →");
+    var capL = "← bigger underdog", capR = "bigger favorite →";
+    if ((capL.length + capR.length) * cw + 16 > W) { capL = "← underdog"; capR = "favorite →"; }
+    add(s, "text", { x: 0, y: H - 6, style: "font-size:" + f + "px;fill:" + INK2 }, capL);
+    add(s, "text", { x: W, y: H - 6, "text-anchor": "end", style: "font-size:" + f + "px;fill:" + INK2 }, capR);
     var dots = [], pts = [];
     G.forEach(function (g, i) {
       var cx = Xs(g[2]), cy = Ys(g[3]), c = gradeColor(g[3]), hollow = g[5] === "x";
       var d = add(s, "circle", { cx: cx, cy: cy, r: 7, fill: hollow ? PAPER : c, stroke: hollow ? INK : PAPER, "stroke-width": hollow ? 2.5 : 2 });
       dots.push(d); pts.push([cx, cy]);
     });
+    avgs.forEach(function (a) { add(s, "text", { x: a[0], y: a[1], "text-anchor": a[2], style: "font-size:" + f + "px;font-weight:600;fill:" + a[3] + ";paint-order:stroke;stroke:" + PAPER + ";stroke-width:4px;stroke-linejoin:round" }, a[4]); });
     /* one tap layer over the plot: a tap picks the nearest game (repeat taps cycle through games stacked on one spot);
        keyboard users get one focusable stop per game */
     var layer = add(s, "rect", { x: 0, y: 0, width: W, height: H, fill: "transparent", "data-tap": "1" });
