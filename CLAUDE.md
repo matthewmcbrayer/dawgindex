@@ -2,12 +2,13 @@
 
 ## Brand (required)
 
-Every new feature, page, graphic, share image, video and story must comply with `BRAND.md` in this repo.
+Read `BRAND.md` in this repo before any visual or editorial work. That covers new features, pages, page sections, graphics, share images, video, stories, Lab investigations and X copy. Every piece of that work must comply with it.
 
-- Start from `BRAND.md`, not from the nearest existing component. Code on the site can be reused for function, but its styling isn't approved unless `BRAND.md` says so. Some pre-rebrand styling still ships (BRAND.md §8).
-- Never use, recreate or adapt the retired pre-rebrand elements in BRAND.md §7. The `v2-final` branch and `/v2/` are archive reference, not a design source.
-- Don't redesign an approved component (BRAND.md §4) unless you can name the specific inconsistency you're fixing.
-- If BRAND.md doesn't cover something, flag the gap to Matthew. Don't default to older styling. Open gaps are listed in BRAND.md §9.
+- Start from `BRAND.md`, not from the nearest existing component. Code on the site can be reused for function, but its styling isn't approved unless `BRAND.md` says so.
+- Never copy or adapt the legacy production code in BRAND.md §8, even though it ships. The most common leak is the team share-card style block in `index.html`.
+- Never use, recreate or adapt the retired elements in BRAND.md §7. The `v2-final` branch and `/v2/` are archive reference, not a design source.
+- Don't redesign an approved component (BRAND.md §4 and Lab's dossier design in §4a) unless you can name the specific inconsistency you're fixing.
+- If BRAND.md doesn't cover something, or it's on the deferred list in §10, flag it to Matthew and propose a rule. Don't default to older styling.
 - Changes to BRAND.md itself need Matthew's approval and go through a branch, never straight to `main`.
 
 ## Unchanged by the brand rules
