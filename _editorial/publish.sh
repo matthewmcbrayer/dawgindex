@@ -52,11 +52,13 @@ if [ "$BEHIND" -gt 0 ]; then
 fi
 
 echo "== the published pages are what the approved sources build"
-SNAPSHOT=$(git status --porcelain=v1 -uall | sha256sum)
+state(){ git status --porcelain=v1 -uall | cut -c4- | sed 's/.* -> //' | sort -u | while read -r f; do echo "$f $([ -f "$f" ] && sha256sum < "$f" | cut -c1-16 || echo deleted)"; done; }
+BEFORE=$(state)
 python3 _editorial/build.py build > /tmp/editorial-build.out 2>&1 || { tail -5 /tmp/editorial-build.out; die "build.py build failed"; }
 [ -f _editorial/lab.py ] && { python3 _editorial/lab.py build > /tmp/lab-build.out 2>&1 || { tail -5 /tmp/lab-build.out; die "lab.py build failed"; }; }
-[ "$(git status --porcelain=v1 -uall | sha256sum)" = "$SNAPSHOT" ] || die "rebuilding from the approved sources changed more files: the pages on disk are not what the sources build. Run the builds, review, then publish:
-$(git status --porcelain=v1 -uall | head -10)"
+AFTER=$(state)
+[ "$AFTER" = "$BEFORE" ] || die "the pages on disk were not what the approved sources build; rebuilding rewrote these (review with git diff, then rerun):
+$( { echo "$BEFORE"; echo "$AFTER"; } | sort | uniq -u | cut -d' ' -f1 | sort -u | sed 's/^/  /' | head -10)"
 [ -z "$(outside)" ] || die "a build wrote outside the editorial folders"
 
 echo "== checks and tests"
