@@ -97,6 +97,9 @@ def main():
     c = copy.deepcopy(base_c); c["research_datasets"] = []; neg("research seasons without a research dataset", "research-only seasons", c)
     c = copy.deepcopy(base_c); c["research_datasets"][0]["label"] = ""; neg("research dataset without its label", "research dataset needs label", c)
     c = copy.deepcopy(base_c); c["verdict"]["subtitle"] = ""; neg("verdict without its plan-written subtitle", "verdict.subtitle", c)
+    c = copy.deepcopy(base_c); del c["presentation"]["team_headlines"]["outside"]; neg("team headlines not written for every state", "team_headlines", c)
+    c = copy.deepcopy(base_c); c["presentation"]["team_headlines"]["within"] = "{team} sits comfortably inside the luck range"; neg("team headline too long for a card", "share cards fit", c)
+    c = copy.deepcopy(base_c); c["presentation"]["team_headlines"]["outside"] = "{team} plays down"; neg("team headline that claims a habit", "confirmed trait", c)
     c = copy.deepcopy(base_c); c["verdict"]["kind"] = "probably"; neg("unknown verdict", "verdict.kind", c)
     c = copy.deepcopy(base_c); c["type"] = "original-investigation"; neg("Original Investigation (not in v0)", "Original Investigation", c)
     c = copy.deepcopy(base_c); del c["approved_by"]; neg("no approval on record", "approved_by", c)
@@ -197,10 +200,14 @@ def main():
         for size in ("card", "og"):
             inner = L.card_inner(c_pub, tm, size)
             txt = html.unescape(re.sub(r"<[^>]+>", " ", re.sub(r'<div class="qs">.*?</div>', "", inner)))
-            if f"not a verdict on {tm['name']}" not in txt: bad.append(f"{s}/{size}: no descriptive tag")
+            if "What happened · not a verdict" not in txt: bad.append(f"{s}/{size}: no descriptive tag")
             m = L.TRAIT.search(txt)
             if m: bad.append(f"{s}/{size}: '{m.group(0)}'")
-            if tm["has_research"] and tm["research_text"] not in txt: bad.append(f"{s}/{size}: research label missing")
+            if tm["has_research"] and tm["card_research"] not in txt: bad.append(f"{s}/{size}: research label missing")
+            want = c_pub["presentation"]["team_headlines"]["within" if abs(tm["raw"]) < tm["band"] else "outside"].replace("{team}", tm["name"])
+            if tm["answer"] != want or f'<div class="hl">{html.escape(want, quote=False)}</div>' not in inner: bad.append(f"{s}/{size}: headline isn't the approved one")
+            if f'<b>{tm["hf_games"]}</b>' not in inner or f"across {tm['seasons']} seasons" not in txt: bad.append(f"{s}/{size}: sample size")
+            if tm["band_text"] in txt or tm["sentence"] in txt: bad.append(f"{s}/{size}: long copy on the card")
             if not tm["has_research"] and "research grade" in txt: bad.append(f"{s}/{size}: research label on a program with none")
     check(not bad, "every team card says 'What happened · not a verdict', uses no habit words, and labels research grades", "; ".join(bad[:6]))
     case_inner = html.unescape(L.card_inner(c_pub, None, "card") + L.card_inner(c_pub, None, "og"))
@@ -219,6 +226,24 @@ def main():
         check(now.replace('<a href="/lab/">Lab</a>', "") == live and now.count('href="/lab/"') == 2, f"{p}: only change is the Lab link in header and footer")
     code, out = run(r, "build")
     check(code == 0 and "0 file(s) written" in out, "rebuilding changes nothing (byte-identical)", out[-300:])
+
+    # ---- 7b. what was approved is what publishes: an edit after approval needs re-approval
+    cj = os.path.join(r, "_editorial", "lab", "001-playing-down", "case.json")
+    approved = rd(cj); ce = json.loads(approved)
+    ce["presentation"]["team_headlines"]["within"] = "Inside the luck range"; wj(cj, ce)
+    before = {k: os.path.getmtime(os.path.join(lab, k)) for k in ("index.html", "001-playing-down/index.html")}
+    code, out = run(r, "build")
+    check(code != 0 and "edited after approval" in out and before == {k: os.path.getmtime(os.path.join(lab, k)) for k in before},
+          "a headline edited after approval stops the build; nothing is rewritten", out[-200:])
+    code, out = run(r, "reapprove", "001-playing-down")
+    check(code != 0, "re-approval needs a name")
+    code, out = run(r, "reapprove", "001-playing-down", "--by", "Test Approver")
+    code2, out2 = run(r, "build")
+    ok_tm = next(s_ for s_, tm in teams.items() if tm["state"] == "ok" and abs(tm["raw"]) < tm["band"])
+    stub = rd(os.path.join(lab, "001", ok_tm, "index.html"))
+    check(code == 0 and code2 == 0 and "Inside the luck range" in rd(os.path.join(case_d, "data.json")) and B.png_text(os.path.join(case_d, "og", ok_tm + ".png"), "dawg-lab-team") == ok_tm,
+          "after re-approval the new headline publishes to the page data and the cards are re-rendered", out2[-200:])
+    open(cj, "w").write(approved); run(r, "reapprove", "001-playing-down", "--by", "Test Approver"); run(r, "build")
 
     # ---- 8. canonical URLs never change; live cases stay live
     r2 = r + "-slug"; shutil.copytree(r, r2)
@@ -248,6 +273,15 @@ def main():
     code, out = run(r, "preview", sd, "--out", pv, "--no-cards")
     pvp = rd(os.path.join(pv, "lab", "001-playing-down", "index.html"))
     check(code == 0 and "noindex, nofollow" in pvp and "Sample data" in pvp and "Preview" in pvp, "sample preview is noindex and visibly marked Preview and Sample data")
+    pv2 = tempfile.mkdtemp(prefix="labpv2-")
+    code, out = run(r, "preview", sd, "--out", pv2, "--look", "production", "--no-cards")
+    pp = rd(os.path.join(pv2, "lab", "001-playing-down", "index.html"))
+    check(code == 0 and "lb-preview" not in pp and 'class="lb-sample"' not in pp and "noindex, nofollow" in pp and "lb-tagS" in pp,
+          "production-look preview drops the banners but stays noindex, private, and keeps the small Sample data tags on charts")
+    sc_ = json.loads(rd(os.path.join(sd, "case.json"))); sdat_ = json.loads(rd(os.path.join(sd, "data.json")))
+    tms = L.derive_teams(sc_, sdat_, ids, names, site_teams); tm0 = next(tm for tm in tms.values() if tm["card"])
+    cp = L.card_page(sc_, sdat_, tms, tm0, "card", os.path.join(r, "_editorial", "templates"), "production")
+    check('class="sample"' not in cp and "Sample data" in cp, "production-look cards drop the corner ribbon and keep a Sample data tag on the chart")
 
     # ---- 11. in the browser
     browser_checks(r, teams)

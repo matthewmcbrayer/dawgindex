@@ -103,6 +103,11 @@ def main():
     S("Original Investigation (not built in v0)", lambda c, d, m, p: c.update(type="original-investigation"), "original investigation")
     S("Unknown [[marker]] in the article", lambda c, d, m, p: (c, d, m + "\n[[funnel]]\n", p), "[[funnel]]")
     S("Verdict without its plan-written subtitle", lambda c, d, m, p: c["verdict"].update(subtitle=""), "verdict.subtitle")
+    S("Team headlines missing for a state", lambda c, d, m, p: c["presentation"]["team_headlines"].pop("below"), "team_headlines")
+    S("Team headline claims a habit", lambda c, d, m, p: c["presentation"]["team_headlines"].update(outside="{team} plays down"), "confirmed trait")
+    S("Team headline too long for a share card", lambda c, d, m, p: c["presentation"]["team_headlines"].update(within="{team} sits comfortably inside the luck range"), "share cards fit")
+    S("Headline edited after approval (otherwise valid)", lambda c, d, m, p: c["presentation"]["team_headlines"].update(within="Inside the luck range"), "edited after approval")
+    S("Data edited after approval (otherwise valid)", lambda c, d, m, p: d["teams"]["baylor"].update(raw=d["teams"]["baylor"]["raw"] + 0.1), "edited after approval")
 
     # duplicate case number
     shutil.rmtree(src); os.makedirs(src)
@@ -164,7 +169,7 @@ def main():
         if html.escape(tm["research_text"], quote=False).replace('"', "&quot;") not in stub: bad.append(f"{s}: link preview")
         if tm["card"]:
             for size in ("card", "og"):
-                if tm["research_text"] not in html.unescape(L.card_inner(c, tm, size)): bad.append(f"{s}: {size}")
+                if tm["card_research"] not in html.unescape(L.card_inner(c, tm, size)): bad.append(f"{s}: {size}")
             if B.png_text(os.path.join(case_d, "cards", s + ".png"), "dawg-lab-team") != s: bad.append(f"{s}: card image")
         if not re.match(r"^\d+ of these \d+ games are from 2014–2018 and use research grades", tm["research_text"]): bad.append(f"{s}: count")
         if tm["research_games"] != sum(r["n"] for r in tm["season_rows"] if r["research"]): bad.append(f"{s}: research game count")

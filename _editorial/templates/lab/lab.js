@@ -141,18 +141,18 @@
   /* ------------------------------------------------------------ chart 3: team vs luck */
   function drawStrip(node, t, opt) {
     opt = opt || {};
-    var big = !!opt.big, W = width(node, big ? 900 : 520), H = big ? 150 : 100, pad = big ? 10 : 6, y = big ? 76 : 44;
+    var big = !!opt.big, xl = !!opt.xl, W = width(node, big ? 900 : 520), H = xl ? 220 : big ? 150 : 100, pad = big ? 10 : 6, y = xl ? 104 : big ? 76 : 44;
     var span = Math.max(15, Math.ceil(Math.abs(t.raw) + 2));
     var X = function (v) { return pad + (v + span) / (2 * span) * (W - 2 * pad); };
-    var fs = big ? 22 : 12;
+    var fs = xl ? 30 : big ? 22 : 12;
     var s = svg(W, H, t.name + ": " + fmt(t.raw) + " points" + (t.state === "ok" ? ", luck range ±" + t.band.toFixed(1) : ""));
     if (t.state === "ok") add(s, "rect", { x: X(-t.band), y: y - (big ? 26 : 14), width: X(t.band) - X(-t.band), height: big ? 52 : 28, fill: "#EADFC4", stroke: "#6E6557", "stroke-width": big ? 2.5 : 1.5, "stroke-dasharray": "5 4" });
     add(s, "line", { x1: pad, y1: y, x2: W - pad, y2: y, stroke: "#131210", "stroke-width": big ? 3 : 2 });
     add(s, "line", { x1: X(0), y1: y - (big ? 34 : 20), x2: X(0), y2: y + (big ? 34 : 20), stroke: "#131210", "stroke-width": big ? 3 : 2 });
     if (t.state === "ok" && opt.adjusted !== false) add(s, "circle", { cx: X(t.adjusted), cy: y, r: big ? 13 : 7, fill: "none", stroke: "#131210", "stroke-width": big ? 4 : 2.5 });
-    add(s, "circle", { cx: X(t.raw), cy: y, r: big ? 19 : 10, fill: "#D13A2F", stroke: "#FBF4E2", "stroke-width": big ? 5 : 3 });
-    add(s, "text", { x: X(t.raw), y: y - (big ? 32 : 18), "text-anchor": "middle", style: "font-family:var(--cond),'Barlow Condensed',sans-serif;font-weight:800;font-size:" + (big ? 30 : 15) + "px;fill:#C2342A" }, fmt(t.raw));
-    if (t.state === "ok") add(s, "text", { x: X(-t.band) + 4, y: y + (big ? 50 : 33), style: "font-size:" + (big ? 18 : 11) + "px;fill:#6E6557" }, "luck range");
+    add(s, "circle", { cx: X(t.raw), cy: y, r: xl ? 24 : big ? 19 : 10, fill: "#D13A2F", stroke: "#FBF4E2", "stroke-width": big ? 5 : 3 });
+    add(s, "text", { x: X(t.raw), y: y - (xl ? 40 : big ? 32 : 18), "text-anchor": "middle", style: "font-family:var(--cond),'Barlow Condensed',sans-serif;font-weight:800;font-size:" + (xl ? 56 : big ? 30 : 15) + "px;fill:#C2342A" }, fmt(t.raw));
+    if (t.state === "ok") add(s, "text", { x: X(0), "text-anchor": "middle", y: y + (xl ? 62 : big ? 50 : 33), style: "font-size:" + (xl ? 26 : big ? 18 : 11) + "px;fill:#6E6557" }, "luck range");
     add(s, "text", { x: pad, y: H - 4, style: "font-size:" + fs + "px" }, "worse");
     add(s, "text", { x: X(0), y: H - 4, "text-anchor": "middle", style: "font-size:" + fs + "px" }, "0");
     add(s, "text", { x: W - pad, y: H - 4, "text-anchor": "end", style: "font-size:" + fs + "px" }, "better");
@@ -207,7 +207,7 @@
   if (document.body.getAttribute("data-mode") === "card") {
     [].forEach.call(document.querySelectorAll("[data-chart]"), function (n) {
       var k = n.getAttribute("data-chart"), t = T[n.getAttribute("data-team")];
-      if (k === "strip" && t) drawStrip(n, t, { big: true });
+      if (k === "strip" && t) drawStrip(n, t, { big: true, xl: n.getAttribute("data-size") === "xl" });
       if (k === "carryover") drawCarryover(n, D.carryover, null, { fit: true });
     });
     document.body.setAttribute("data-ready", "1");

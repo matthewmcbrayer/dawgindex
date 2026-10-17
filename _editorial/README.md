@@ -91,3 +91,8 @@ Stories: approval on record, private previews outside the repo, byte-identical r
 - Tests: `python3 _editorial/test_lab.py`.
 - Safeguards demo: `python3 _editorial/lab_safeguards.py REPORT.md` runs every publish refusal (and one valid approved case)
   through the real build on a throwaway copy and writes a pass/fail table.
+- Team headlines are written per investigation in case.json (`presentation.team_headlines`: within, outside, below, none)
+  and approved with the research. The approval stores a fingerprint of the case, its data and its plan; any later edit
+  stops the build until `lab.py reapprove NNN-slug --by "Matthew McBrayer"`.
+- `lab.py preview DRAFT --look production --out DIR` renders a private preview without the banners (still noindex,
+  still sample data, small Sample data tags kept on charts) to judge the live look.

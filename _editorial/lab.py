@@ -9,6 +9,8 @@ team pages), and writes only under lab/. It never deletes anything.
   python3 _editorial/lab.py preview DRAFT_DIR     render one draft privately (outside the repo), marked noindex, with screenshots
   python3 _editorial/lab.py approve DRAFT_DIR --by "Matthew McBrayer"
                                                   move a draft into _editorial/lab/ as published (only after Matthew's explicit OK)
+  python3 _editorial/lab.py reapprove NNN-slug --by "Matthew McBrayer"
+                                                  re-approve an approved case after an edit (build refuses edited cases until then)
   python3 _editorial/lab.py sample OUT_DIR        write a clearly marked SAMPLE case draft for building and previewing the pages
 
 A case folder is named NNN-slug and holds case.json (metadata, verdict, plan and data references, versions, corrections),
@@ -134,6 +136,19 @@ def validate(case, md, data, plan, d, site_teams, mode):
     for k in ("measure_short", "short_measure", "team_question", "team_min", "team_min_text", "x_label", "y_label"):
         if not pres.get(k):
             errs.append(f"presentation.{k} is required")
+    hd = pres.get("team_headlines")
+    if not isinstance(hd, dict) or any(not (hd.get(k) or "").strip() for k in HEADLINE_STATES):
+        errs.append("presentation.team_headlines needs a headline for each team state (" + ", ".join(HEADLINE_STATES) +
+                    "), written for this investigation and approved with the research")
+    else:
+        longest = max(site_teams, key=len).replace("-", " ").title()   # the longest program name the headline must fit
+        for k in HEADLINE_STATES:
+            n = len(hd[k].replace("{team}", longest))
+            if n > HEADLINE_MAX:
+                errs.append(f"team headline '{k}' runs {n} characters with the longest team name; share cards fit {HEADLINE_MAX}")
+            m = TRAIT.search(hd[k])
+            if m:
+                errs.append(f"team headline '{k}' says '{m.group(0)}', which reads as a confirmed trait")
     try:
         cv = float(pres.get("band_coverage"))
         if not 50 <= cv < 100:
@@ -221,6 +236,14 @@ def short_span(span):
     return f"{m.group(1)}–{m.group(2)[2:]}" if m and m.group(1)[:2] == m.group(2)[:2] else (span or "")
 
 
+HEADLINE_STATES = ("within", "outside", "below", "none")
+HEADLINE_MAX = 40
+
+
+def headline(heads, state, name):
+    return heads[state].replace("{team}", name)
+
+
 def derive_teams(case, data, ids, names, site_teams):
     """Team copy for the strip, side card, pin, panel, cards and link previews. Descriptive only: it says what happened
     and how it compares with luck, never that a program has a lasting habit. The luck range's coverage comes from the
@@ -232,18 +255,19 @@ def derive_teams(case, data, ids, names, site_teams):
     cov_s = f"{cov:g}"
     expect = round(68 * (100 - cov) / 100)
     rd = case["research_datasets"][0] if case["research_datasets"] else None
+    heads = pres["team_headlines"]   # written for this investigation and approved with the research
     out = {}
     for slug in sorted(site_teams, key=lambda s: names.get(s, s)):
         src = (data.get("teams") or {}).get(slug)
         name = names.get(slug, slug)
         row = {"name": name, "id": ids.get(slug), "slug": slug, "share": f"{SITE}/lab/{num}/{slug}/", "short_url": f"dawgindex.com/lab/{num}/{slug}",
                "card_png": f"/lab/{num}-{case['slug']}/cards/{slug}.png", "n_label": f"games {pres['measure_short']}",
-               "research_games": 0, "research_text": "", "research_short": ""}
+               "research_games": 0, "research_text": "", "research_short": "", "card_research": ""}
         if not src or not src.get("hf_games") or not src.get("seasons"):
             row.update(state="none", hf_games=0, seasons=0, raw=0, groups=[], season_rows=[], has_research=False, card=False,
                        sentence=f"{name} has no games that qualify for this investigation.",
-                       band_text="", answer="No qualifying games", pin="no qualifying games",
-                       short=f"{name}: no qualifying games in this investigation",
+                       band_text="", answer=headline(heads, "none", name), pin=headline(heads, "none", name),
+                       short=f"{name}: {headline(heads, 'none', name)}",
                        none_text=((src or {}).get("none_reason") or f"{name} has no qualifying games in the seasons this investigation covers, so there’s nothing to read for it here.") + " The full sample is on the case page.")
             out[slug] = row
             continue
@@ -255,6 +279,7 @@ def derive_teams(case, data, ids, names, site_teams):
             row["research_text"] = (f"{rg} of these {hf} games are from {rd['span']} and use research grades: computed with the DAWG formula, "
                                     "not official DAWG grades.")
             row["research_short"] = f"incl. {short_span(rd['span'])} research grades"
+            row["card_research"] = f"{rg} of {hf} games use {short_span(rd['span'])} research grades, not official DAWG grades."
         if src.get("finding"):
             f = src["finding"]
             row["finding"] = {"text": f["text"], "receipts": f"{f['confirmation']} · {f['correction']} · {f['plan_ref']}"}
@@ -270,14 +295,14 @@ def derive_teams(case, data, ids, names, site_teams):
                 bt = (f"That’s outside the luck range: luck alone lands a program inside it {cov_s} times in 100 over {hf} games. "
                       f"Luck alone would still put about {expect} of 68 programs out here, so this describes these games, not what comes next.")
             row.update(state="ok", band=band, adjusted=adj, card=True, band_text=bt, coverage=cov_s,
-                       answer="Within the luck range" if inside else "Outside the luck range",
-                       pin=("within" if inside else "outside") + f" luck range · {hf} games",
-                       short=f"{name}: {'within' if inside else 'outside'} the luck range {pres['short_measure']} · {hf} games")
+                       answer=headline(heads, "within" if inside else "outside", name),
+                       pin=f"{headline(heads, 'within' if inside else 'outside', name)} · {hf} games",
+                       short=f"{name}: {headline(heads, 'within' if inside else 'outside', name)} · {hf} games")
         else:
             row.update(state="below", card=False, coverage=cov_s,
                        band_text=f"Too few games to compare with luck: {hf} games in {ns} seasons. A comparison needs {pres['team_min_text']}.",
-                       answer="Too few games to compare with luck", pin="too few games to compare",
-                       short=f"{name}: too few games to compare with luck · {hf} games")
+                       answer=headline(heads, "below", name), pin=f"{headline(heads, 'below', name)} · {hf} games",
+                       short=f"{name}: {headline(heads, 'below', name)} · {hf} games")
             row["below_text"] = row["band_text"]
         out[slug] = row
     return out
@@ -288,7 +313,7 @@ def team_copy_errors(teams):
     for slug, tm in teams.items():
         if tm.get("finding"):
             continue
-        for k in ("sentence", "band_text", "answer", "pin", "short", "none_text", "below_text", "research_text", "research_short"):
+        for k in ("sentence", "band_text", "answer", "pin", "short", "none_text", "below_text", "research_text", "research_short", "card_research"):
             m = TRAIT.search(tm.get(k) or "")
             if m:
                 errs.append(f"{slug}: team text '{k}' says '{m.group(0)}', which reads as a confirmed trait; team results are descriptive unless the research supports a team finding")
@@ -315,6 +340,8 @@ def head_rep(tpl, title, desc, canonical, og_url, og_title, og_desc, og_image, o
 
 
 def banners(case, preview):
+    if preview == "production":   # private preview made to look like the live site: no banners, still noindex
+        return ""
     b = []
     if preview:
         b.append('<div class="lb-preview">Preview · not published · only Matthew can approve</div>')
@@ -588,7 +615,7 @@ LOCK = ('<div class="lock"><svg viewBox="0 -0.8 334.3 126.0" aria-hidden="true">
 DEF = "DAWG = points better or worse than Vegas expected, garbage time removed."
 
 
-def card_inner(case, tm, size):
+def card_inner(case, tm, size, look="sample"):
     num = case["number"]
     rd = case["research_datasets"][0] if case["research_datasets"] else None
     if tm is None:
@@ -605,29 +632,31 @@ def card_inner(case, tm, size):
                 f'<div style="display:flex;align-items:center;gap:22px">{st}</div></div>'
                 f'<div class="r"><div class="ex"><div class="h">Exhibit A · 68 programs</div><div data-chart="carryover" style="flex:1;min-height:0"></div>{rn}</div></div></div>'
                 f'<div class="band"><span>{t(v["answer"])[:110]}</span><b>dawgindex.com/lab/{num}</b></div>')
+    # team cards: built to read at timeline size on X. Headline, sample size and chart; nothing else competes with them.
     q = case["presentation"]["team_question"].replace("{team}", tm["name"])
     logo = f'<img src="/logos/{tm["id"]}-dark.png" onerror="this.onerror=null;this.src=\'/logos/{tm["id"]}.png\'" alt="">' if tm.get("id") else ""
-    rn = f'<div class="rn"><i></i>{t(tm["research_text"])}</div>' if (rd and tm["has_research"]) else ""
-    band = f'Shaded = the luck range: luck alone lands a program inside it {tm["coverage"]} times in 100 over {tm["hf_games"]} games. Ring = the gap adjusted for small samples.'
+    rn = f'<div class="rn"><i></i>{t(tm["card_research"])}</div>' if (rd and tm["has_research"]) else ""
+    tag = '<span class="stag">Sample data</span>' if (case.get("sample") and look == "production") else ""
+    ss = (f'<div class="ss"><b>{tm["hf_games"]}</b><span>games {t(case["presentation"]["measure_short"])}<br>'
+          f'across {tm["seasons"]} seasons</span></div>')
     if size == "card":
         return (f'<div class="top"><span class="tab">LAB {num} · YOUR TEAM</span>{LOCK}</div>'
-                f'<div class="who">{logo}<div><div class="qs">{t(q)}</div><div class="ans">{t(tm["answer"])}</div></div></div>'
-                f'<div class="sent">{t(tm["sentence"])} {t(tm["band_text"])}</div>'
-                f'<div class="ex"><div class="h">{t(tm["name"])} vs. luck</div><div data-chart="strip" data-team="{tm["slug"]}"></div><div class="n">{band}</div>{rn}</div>'
-                f'<span class="desc">What happened · not a verdict on {t(tm["name"])}</span>'
-                f'<div class="foot"><p>{DEF}</p><b>{t(tm["short_url"])}</b></div>')
-    return (f'<div class="top"><span class="tab">LAB {num} · {t(tm["name"]).upper()}</span>{LOCK}</div>'
-            f'<div class="row"><div class="l"><div class="who">{logo}<div><div class="qs">{t(q)}</div><div class="ans">{t(tm["answer"])}</div></div></div>'
-            f'<span class="desc">What happened · not a verdict on {t(tm["name"])}</span></div>'
-            f'<div class="r"><div class="ex"><div class="h">{t(tm["name"])} vs. luck</div><div data-chart="strip" data-team="{tm["slug"]}"></div>{rn}</div></div></div>'
-            f'<div class="band"><span>{t(tm["sentence"])[:120]}</span><b>{t(tm["short_url"])}</b></div>')
+                f'<div class="who">{logo}<div><div class="tn">{t(tm["name"])}</div><div class="qs">{t(q)}</div></div></div>'
+                f'<div class="hl">{t(tm["answer"])}</div>{ss}'
+                f'<div class="ex"><div class="h"><span>{t(tm["name"])} vs. luck</span>{tag}</div><div data-chart="strip" data-team="{tm["slug"]}" data-size="xl"></div>{rn}</div>'
+                f'<div class="foot"><span class="desc">What happened · not a verdict</span><b>{t(tm["short_url"])}</b></div>')
+    return (f'<div class="top"><span class="tab">LAB {num} · YOUR TEAM</span>{LOCK}</div>'
+            f'<div class="row"><div class="l"><div class="who">{logo}<div><div class="tn">{t(tm["name"])}</div><div class="qs">{t(q)}</div></div></div>'
+            f'<div class="hl">{t(tm["answer"])}</div>{ss}</div>'
+            f'<div class="r"><div class="ex"><div class="h"><span>{t(tm["name"])} vs. luck</span>{tag}</div><div data-chart="strip" data-team="{tm["slug"]}" data-size="xl"></div>{rn}</div></div></div>'
+            f'<div class="band"><span>What happened · not a verdict on {t(tm["name"])}</span><b>{t(tm["short_url"])}</b></div>')
 
 
-def card_page(case, data, teams, tm, size, tpl):
+def card_page(case, data, teams, tm, size, tpl, look="sample"):
     pg = read(os.path.join(tpl, "lab", "card.html"))
     d = js_data(case, data, {tm["slug"]: tm} if tm else {})
-    sample = '<span class="sample">SAMPLE</span>' if case.get("sample") else ""
-    for k, v in {"{{SIZE}}": size, "{{SAMPLE}}": sample, "{{INNER}}": card_inner(case, tm, size), "{{DATA}}": jdump(d)}.items():
+    sample = '<span class="sample">SAMPLE</span>' if (case.get("sample") and look != "production") else ""
+    for k, v in {"{{SIZE}}": size, "{{SAMPLE}}": sample, "{{INNER}}": card_inner(case, tm, size, look), "{{DATA}}": jdump(d)}.items():
         pg = pg.replace(k, v)
     return pg
 
@@ -720,12 +749,13 @@ def render_tree(repo, out_root, cases, docket, log, preview=False, cards=True):
         for slug, tm in teams.items():
             B.write_if_changed(os.path.join(lab, num, slug, "index.html"), team_stub(case, tm, preview), log)
         if cards:
-            jobs.append((card_page(case, data, teams, None, "card", tpl), os.path.join(d, "card.png"), "card", "case"))
-            jobs.append((card_page(case, data, teams, None, "og", tpl), os.path.join(d, "og.png"), "og", "case"))
+            look = "production" if preview == "production" else "sample"
+            jobs.append((card_page(case, data, teams, None, "card", tpl, look), os.path.join(d, "card.png"), "card", "case"))
+            jobs.append((card_page(case, data, teams, None, "og", tpl, look), os.path.join(d, "og.png"), "og", "case"))
             for slug, tm in teams.items():
                 if tm["card"]:
-                    jobs.append((card_page(case, data, teams, tm, "card", tpl), os.path.join(d, "cards", slug + ".png"), "card", slug))
-                    jobs.append((card_page(case, data, teams, tm, "og", tpl), os.path.join(d, "og", slug + ".png"), "og", slug))
+                    jobs.append((card_page(case, data, teams, tm, "card", tpl, look), os.path.join(d, "cards", slug + ".png"), "card", slug))
+                    jobs.append((card_page(case, data, teams, tm, "og", tpl, look), os.path.join(d, "og", slug + ".png"), "og", slug))
     simple = [(c, d_, tm) for c, _, d_, _, tm in cases]
     B.write_if_changed(os.path.join(lab, "index.html"), landing_page(simple, docket, tpl, av, preview), log)
     B.write_if_changed(os.path.join(lab, "corrections", "index.html"), corrections_page(simple, tpl, av, preview), log)
@@ -733,6 +763,17 @@ def render_tree(repo, out_root, cases, docket, log, preview=False, cards=True):
     B.write_if_changed(os.path.join(lab, "sitemap.xml"), sitemap(simple), log)
     if jobs:
         render_cards(jobs, repo, {"lab/lab.js": js, "lab/lab.css": css}, log)
+
+
+APPROVAL_KEYS = ("approved_by", "approved_at", "published", "approved_hash")
+
+
+def fingerprint(case, md, data, plan):
+    """What Matthew approved: the whole case (copy, team headlines, verdict, references), its data and its plan. Any edit
+    after approval changes this, and build refuses until the case is re-approved."""
+    c = {k: v for k, v in case.items() if k not in APPROVAL_KEYS}
+    blob = json.dumps(c, sort_keys=True, ensure_ascii=False) + "\0" + json.dumps(data, sort_keys=True, ensure_ascii=False) + "\0" + md + "\0" + plan
+    return "sha256:" + hashlib.sha256(blob.encode()).hexdigest()
 
 
 def prepare(repo, dirs, mode):
@@ -754,6 +795,9 @@ def prepare(repo, dirs, mode):
                 body_html(case, md, data)
             except LabError as e:
                 errs.append(str(e))
+        if mode == "publish" and case.get("approved_hash") != fingerprint(case, md, data, plan):
+            errs.append("edited after approval (copy, headlines, data or plan no longer match what was approved); "
+                        "re-approve with: lab.py reapprove " + name + " --by NAME")
         problems += [f"{name}: {e}" for e in errs]
         if not errs:
             cases.append((case, md, data, plan, teams))
@@ -771,11 +815,20 @@ def build(repo, dry=False, quiet=False):
     # rule 2: a published case number keeps its slug forever; a live case whose source is gone stays live
     mp = os.path.join(repo, "lab", "lab.json")
     old = {c["number"]: c for c in json.loads(read(mp)).get("cases", [])} if os.path.isfile(mp) else {}
-    for case, *_ in cases:
-        o = old.get(case["number"])
-        if o and o["slug"] != case["slug"]:
-            problems.append(f"LAB {case['number']}: slug changed from '{o['slug']}' to '{case['slug']}'; published URLs never change")
-    missing = sorted(set(old) - {c[0]["number"] for c in cases})
+    present = set()
+    for d in dirs:   # read every source, valid or not, so a renamed case is caught whatever else is wrong with it
+        m = CASE_DIR.match(os.path.basename(d))
+        if not m:
+            continue
+        present.add(m.group(1))
+        o = old.get(m.group(1))
+        if o and o["slug"] != m.group(2):
+            problems.insert(0, f"LAB {m.group(1)}: slug changed from '{o['slug']}' to '{m.group(2)}'; published URLs never change")
+    nums = [CASE_DIR.match(os.path.basename(d)).group(1) for d in dirs if CASE_DIR.match(os.path.basename(d))]
+    for n in sorted({x for x in nums if nums.count(x) > 1}):
+        if f"duplicate case number {n}" not in problems:
+            problems.insert(0, f"duplicate case number {n}: two folders in _editorial/lab/ claim LAB {n}")
+    missing = sorted(set(old) - present)
     if missing and not problems:
         problems.append("published case(s) " + ", ".join(missing) + " have no source in _editorial/lab/; restore the source (live cases are never removed or rebuilt without it)")
     if problems:
@@ -802,7 +855,7 @@ def build(repo, dry=False, quiet=False):
     return cases, log
 
 
-def preview(repo, draft_dir, out_root=PREVIEWS, shots=True, cards=True):
+def preview(repo, draft_dir, out_root=PREVIEWS, shots=True, cards=True, look="sample"):
     draft_dir, out_root = os.path.abspath(draft_dir), os.path.abspath(out_root)
     if out_root == os.path.abspath(repo) or out_root.startswith(os.path.abspath(repo) + os.sep):
         raise LabError("previews must be written outside the site repo (it is public)")
@@ -812,7 +865,7 @@ def preview(repo, draft_dir, out_root=PREVIEWS, shots=True, cards=True):
     dk = os.path.join(os.path.dirname(draft_dir), "docket.json")
     docket = json.loads(read(dk)) if os.path.isfile(dk) else []
     log = []
-    render_tree(repo, out_root, cases, docket, log, preview=True, cards=cards)
+    render_tree(repo, out_root, cases, docket, log, preview="production" if look == "production" else True, cards=cards)
     print(f"preview written to {out_root}/lab (private; not in the repo; every page marked noindex)")
     return out_root
 
@@ -830,13 +883,40 @@ def approve(repo, draft_dir, by):
     case.update(status="published", approved_by=by.strip(), approved_at=now.date().isoformat(), published=now.date().isoformat())
     case["versions"][-1]["date"] = now.date().isoformat()
     tmp = copy.deepcopy(case)
-    errs = validate(tmp, md, data, plan, draft_dir, B.team_slugs(repo), "publish")
+    site = B.team_slugs(repo)
+    errs = validate(tmp, md, data, plan, draft_dir, site, "publish")
+    if not errs:
+        errs = team_copy_errors(derive_teams(tmp, data, B.team_ids(repo), B.team_names(repo, site), site))
     if errs:
         raise LabError("not approved:\n  - " + "\n  - ".join(errs))
+    case["approved_hash"] = fingerprint(case, md, data, plan)
     shutil.copytree(draft_dir, dest, ignore=shutil.ignore_patterns("*.png", ".*"))
     with open(os.path.join(dest, "case.json"), "w") as f:
         f.write(json.dumps(case, ensure_ascii=False, indent=1) + "\n")
     print(f"approved: LAB {case['number']} moved to {os.path.relpath(dest, repo)}; run build, then commit _editorial/ and lab/ only")
+
+
+def reapprove(repo, case_dir, by):
+    """After an approved case is edited (a correction, a new version, revised headlines), Matthew re-approves it."""
+    if not by or not by.strip():
+        raise LabError("reapprove needs --by (the person who approved the change)")
+    d = case_dir if os.path.isdir(case_dir) else os.path.join(repo, "_editorial", "lab", case_dir)
+    case, md, data, plan = load_case(d)
+    if not os.path.abspath(d).startswith(os.path.join(os.path.abspath(repo), "_editorial", "lab") + os.sep):
+        raise LabError("reapprove is for cases already in _editorial/lab/; new drafts use approve")
+    if case.get("sample"):
+        raise LabError("this case is marked sample: sample data never publishes")
+    case.update(approved_by=by.strip(), approved_at=B.local_now().date().isoformat())
+    site = B.team_slugs(repo)
+    errs = validate(copy.deepcopy(case), md, data, plan, d, site, "publish")
+    if not errs:
+        errs = team_copy_errors(derive_teams(case, data, B.team_ids(repo), B.team_names(repo, site), site))
+    if errs:
+        raise LabError("not re-approved:\n  - " + "\n  - ".join(errs))
+    case["approved_hash"] = fingerprint(case, md, data, plan)
+    with open(os.path.join(d, "case.json"), "w") as f:
+        f.write(json.dumps(case, ensure_ascii=False, indent=1) + "\n")
+    print(f"re-approved: LAB {case['number']} by {by.strip()}; run build")
 
 
 # ---------------------------------------------------------------- a clearly marked SAMPLE case for building the pages
@@ -895,7 +975,7 @@ def sample(repo, out_root):
             "corrections": [],
             "presentation": {"measure_short": "as a 14+ point favorite", "short_measure": "as a big favorite",
                              "team_question": "Does {team} play down to its competition?",
-                             "team_min": {"hf_games": 8, "seasons": 3}, "band_coverage": 95, "team_min_text": "8 games as a 14+ point favorite across 3 eligible seasons",
+                             "team_min": {"hf_games": 8, "seasons": 3}, "band_coverage": 95, "team_headlines": {"within": "Within the luck range", "outside": "Outside the luck range", "below": "Too few games to judge", "none": "No qualifying games"}, "team_min_text": "8 games as a 14+ point favorite across 3 eligible seasons",
                              "x_label": "Earlier seasons", "y_label": "Later seasons"}}
     md = """::: part
 Part 1 · description only
@@ -951,13 +1031,15 @@ The research plan named these cuts in advance. The verdict always uses the plan'
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("cmd", choices=["build", "check", "preview", "approve", "sample"])
+    ap.add_argument("cmd", choices=["build", "check", "preview", "approve", "reapprove", "sample"])
     ap.add_argument("path", nargs="?")
     ap.add_argument("--repo", default=os.path.dirname(HERE))
     ap.add_argument("--by")
     ap.add_argument("--out", default=PREVIEWS)
     ap.add_argument("--no-shots", action="store_true")
     ap.add_argument("--no-cards", action="store_true")
+    ap.add_argument("--look", choices=["sample", "production"], default="sample",
+                    help="production: a private preview without the Preview/Sample banners or card ribbon, to judge the live look (still noindex, still sample data)")
     o = ap.parse_args()
     try:
         if o.cmd == "build":
@@ -967,11 +1049,15 @@ def main():
         elif o.cmd == "preview":
             if not o.path:
                 ap.error("preview needs the draft folder")
-            preview(o.repo, o.path, o.out, shots=not o.no_shots, cards=not o.no_cards)
+            preview(o.repo, o.path, o.out, shots=not o.no_shots, cards=not o.no_cards, look=o.look)
         elif o.cmd == "approve":
             if not o.path:
                 ap.error("approve needs the draft folder")
             approve(o.repo, o.path, o.by)
+        elif o.cmd == "reapprove":
+            if not o.path:
+                ap.error("reapprove needs the case folder")
+            reapprove(o.repo, o.path, o.by)
         elif o.cmd == "sample":
             sample(o.repo, o.path or DRAFTS)
     except B.BuildError as e:
