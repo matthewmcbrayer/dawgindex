@@ -68,16 +68,25 @@ def load_case(d):
     m = CASE_DIR.match(os.path.basename(d.rstrip("/")))
     if not m:
         raise LabError(f"{d}: folder must be named NNN-slug (e.g. 001-playing-down)")
-    need = ["case.json", "case.md", "data.json", "plan.md"]
+    try:
+        oi = os.path.isfile(os.path.join(d, "case.json")) and json.loads(read(os.path.join(d, "case.json"))).get("type") == OI_TYPE
+    except json.JSONDecodeError as e:
+        raise LabError(f"{os.path.basename(d)}: invalid JSON: {e}")
+    need = ["case.json", "case.md", "data.json"] + (["explorer.json"] if oi else ["plan.md"])
     miss = [f for f in need if not os.path.isfile(os.path.join(d, f))]
     if miss:
         raise LabError(f"{os.path.basename(d)}: missing " + ", ".join(miss))
     try:
         case = json.loads(read(os.path.join(d, "case.json")))
         data = json.loads(read(os.path.join(d, "data.json")))
+        if oi:
+            raw = read(os.path.join(d, "explorer.json"))
+            data["_explorer"] = json.loads(raw)
+            data["_explorer_raw"] = raw
+            data["_explorer_sha256"] = "sha256:" + hashlib.sha256(raw.encode()).hexdigest()
     except json.JSONDecodeError as e:
         raise LabError(f"{os.path.basename(d)}: invalid JSON: {e}")
-    return case, read(os.path.join(d, "case.md")), data, read(os.path.join(d, "plan.md"))
+    return case, read(os.path.join(d, "case.md")), data, ("" if oi else read(os.path.join(d, "plan.md")))
 
 
 def strings(o):
@@ -92,6 +101,8 @@ def strings(o):
 
 
 def validate(case, md, data, plan, d, site_teams, mode):
+    if case.get("type") == OI_TYPE:
+        return validate_oi(case, md, data, d, site_teams, mode)
     errs = []
     name = os.path.basename(d.rstrip("/"))
     m = CASE_DIR.match(name)
@@ -104,10 +115,8 @@ def validate(case, md, data, plan, d, site_teams, mode):
         return errs
     if m and (case["number"], case["slug"]) != (m.group(1), m.group(2)):
         errs.append(f"folder name must be {case['number']}-{case['slug']}")
-    if case["type"] == "original-investigation":
-        errs.append("Original Investigation pages aren't built in v0 (the fallback template comes only if LAB 001 is delayed)")
-    elif case["type"] != "hypothesis-test":
-        errs.append("type must be hypothesis-test")
+    if case["type"] != "hypothesis-test":
+        errs.append("type must be hypothesis-test or original-investigation")
     v = case.get("verdict") or {}
     if case["type"] == "hypothesis-test":
         if v.get("kind") not in VERDICTS:
@@ -647,6 +656,8 @@ def plan_page(case, plan, tpl, asset_v, preview=False):
 def landing_page(cases, docket, tpl, asset_v, preview=False):
     """cases: [(case, data, teams)] newest first. Never rendered with zero cases (no empty Lab)."""
     case, data, teams = cases[0]
+    if case.get("type") == OI_TYPE:
+        return oi_landing_page(case, data, teams, docket, tpl, asset_v, preview)
     num, url = case["number"], f"/lab/{case['number']}-{case['slug']}/"
     v = case["verdict"]
     rnote = research_note(case["research_datasets"][0]["label"]) if (any(r.get("includes_research") for r in data["persistence"]) and case["research_datasets"]) else ""
@@ -733,7 +744,9 @@ def sitemap(cases):
     rows = [f"<url><loc>{SITE}/lab/</loc></url>", f"<url><loc>{SITE}/lab/corrections/</loc></url>"]
     for case, _, _ in cases:
         lm = case.get("updated") or case["versions"][-1]["date"]
-        rows += [f"<url><loc>{case_url(case)}</loc><lastmod>{lm}</lastmod></url>", f"<url><loc>{case_url(case)}plan/</loc><lastmod>{lm}</lastmod></url>"]
+        rows.append(f"<url><loc>{case_url(case)}</loc><lastmod>{lm}</lastmod></url>")
+        if case.get("type") != OI_TYPE:
+            rows.append(f"<url><loc>{case_url(case)}plan/</loc><lastmod>{lm}</lastmod></url>")
     return '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + "\n".join(rows) + "\n</urlset>\n"
 
 
@@ -743,7 +756,7 @@ def manifest(cases):
         out.append({"number": case["number"], "slug": case["slug"], "url": f"/lab/{case['number']}-{case['slug']}/", "title": case["title"],
                     "type": case["type"], "verdict": (case.get("verdict") or {}).get("kind"), "version": case["version"],
                     "published": case.get("published"), "updated": case.get("updated"), "data_cutoff": case["data_lock"]["cutoff"],
-                    "plan": plan_label(case)})
+                    "plan": plan_label(case) if case.get("type") != OI_TYPE else None})
     return json.dumps({"version": 1, "cases": out}, ensure_ascii=False, indent=1) + "\n"
 
 
@@ -803,7 +816,8 @@ def render_cards(jobs, repo, extra_files, log):
     """jobs: [(html, out_png, size, team_slug_or_case)]. Re-renders only when the input changed (hash stamped into the PNG).
     Each PNG also carries which team it shows (tEXt dawg-lab-team), so tests can prove every preview image is the right team's."""
     import thumbs
-    tpl_hash = hashlib.sha256(read(os.path.join(HERE, "templates", "lab", "card.html"), "rb") + read(os.path.join(HERE, "templates", "lab", "lab.js"), "rb")).hexdigest()[:12]
+    tpl_hash = hashlib.sha256(read(os.path.join(HERE, "templates", "lab", "card.html"), "rb") + read(os.path.join(HERE, "templates", "lab", "lab.js"), "rb")
+                              + read(os.path.join(HERE, "templates", "lab", "lab-oi.js"), "rb")).hexdigest()[:12]
     todo = []
     for h, out, size, who in jobs:
         key = hashlib.sha256((tpl_hash + h).encode()).hexdigest()[:16]
@@ -864,7 +878,8 @@ def render_cards(jobs, repo, extra_files, log):
 # ---------------------------------------------------------------- the whole tree for a set of cases
 def assets(tpl):
     css, js = read(os.path.join(tpl, "lab", "lab.css"), "rb"), read(os.path.join(tpl, "lab", "lab.js"), "rb")
-    return css, js, hashlib.sha256(css + js).hexdigest()[:10]
+    oi = read(os.path.join(tpl, "lab", "lab-oi.js"), "rb")
+    return css, js, hashlib.sha256(css + js + oi).hexdigest()[:10]
 
 
 def render_tree(repo, out_root, cases, docket, log, preview=False, cards=True):
@@ -874,9 +889,24 @@ def render_tree(repo, out_root, cases, docket, log, preview=False, cards=True):
     lab = os.path.join(out_root, "lab")
     B.write_if_changed(os.path.join(lab, "lab.css"), css, log)
     B.write_if_changed(os.path.join(lab, "lab.js"), js, log)
+    oi_js = read(os.path.join(tpl, "lab", "lab-oi.js"), "rb")
+    B.write_if_changed(os.path.join(lab, "lab-oi.js"), oi_js, log)
     jobs = []
     for case, md, data, plan, teams in cases:
         d = os.path.join(lab, f"{case['number']}-{case['slug']}")
+        if case.get("type") == OI_TYPE:
+            num = case["number"]
+            B.write_if_changed(os.path.join(d, "index.html"), oi_case_page(case, md, data, teams, tpl, av, preview), log)
+            B.write_if_changed(os.path.join(d, "data.json"), json.dumps(oi_js_data(case, data, teams), ensure_ascii=False, indent=1) + "\n", log)
+            B.write_if_changed(os.path.join(d, "explorer.json"), data["_explorer_raw"], log)
+            B.write_if_changed(os.path.join(lab, num, "index.html"),
+                               redirect_page(case, f"LAB {num}: {case['title']}", case["description"], case_url(case) + "og.png", f"DAWG Lab case {num}",
+                                             f"/lab/{num}-{case['slug']}/", case_url(case), f"{SITE}/lab/{num}/", preview), log)
+            if cards:
+                look = "production" if preview == "production" else "sample"
+                jobs.append((oi_card_page(case, data, teams, "card", tpl, look), os.path.join(d, "card.png"), "card", "case"))
+                jobs.append((oi_card_page(case, data, teams, "og", tpl, look), os.path.join(d, "og.png"), "og", "case"))
+            continue
         B.write_if_changed(os.path.join(d, "index.html"), case_page(case, md, data, teams, tpl, av, preview), log)
         B.write_if_changed(os.path.join(d, "plan", "index.html"), plan_page(case, plan, tpl, av, preview), log)
         B.write_if_changed(os.path.join(d, "data.json"), json.dumps(js_data(case, data, teams), ensure_ascii=False, indent=1) + "\n", log)
@@ -900,7 +930,7 @@ def render_tree(repo, out_root, cases, docket, log, preview=False, cards=True):
     B.write_if_changed(os.path.join(lab, "lab.json"), manifest(simple), log)
     B.write_if_changed(os.path.join(lab, "sitemap.xml"), sitemap(simple), log)
     if jobs:
-        render_cards(jobs, repo, {"lab/lab.js": js, "lab/lab.css": css}, log)
+        render_cards(jobs, repo, {"lab/lab.js": js, "lab/lab-oi.js": oi_js, "lab/lab.css": css}, log)
 
 
 APPROVAL_KEYS = ("approved_by", "approved_at", "published", "approved_hash")
@@ -910,7 +940,8 @@ def fingerprint(case, md, data, plan):
     """What Matthew approved: the whole case (copy, team headlines, verdict, references), its data and its plan. Any edit
     after approval changes this, and build refuses until the case is re-approved."""
     c = {k: v for k, v in case.items() if k not in APPROVAL_KEYS}
-    blob = json.dumps(c, sort_keys=True, ensure_ascii=False) + "\0" + json.dumps(data, sort_keys=True, ensure_ascii=False) + "\0" + md + "\0" + plan
+    dd = {k: v for k, v in data.items() if k not in ("_explorer", "_explorer_raw")}
+    blob = json.dumps(c, sort_keys=True, ensure_ascii=False) + "\0" + json.dumps(dd, sort_keys=True, ensure_ascii=False) + "\0" + md + "\0" + plan
     return "sha256:" + hashlib.sha256(blob.encode()).hexdigest()
 
 
@@ -927,10 +958,14 @@ def prepare(repo, dirs, mode):
             continue
         errs = validate(case, md, data, plan, d, site_teams, mode)
         if not errs:
-            teams = derive_teams(case, data, ids, names, site_teams)
-            errs += team_copy_errors(teams)
             try:
-                body_html(case, md, data, teams)
+                if case.get("type") == OI_TYPE:
+                    teams = oi_teams(names, ids, site_teams)
+                    oi_body_html(case, md, data)
+                else:
+                    teams = derive_teams(case, data, ids, names, site_teams)
+                    errs += team_copy_errors(teams)
+                    body_html(case, md, data, teams)
             except LabError as e:
                 errs.append(str(e))
         if mode == "publish" and case.get("approved_hash") != fingerprint(case, md, data, plan):
@@ -1023,7 +1058,7 @@ def approve(repo, draft_dir, by):
     tmp = copy.deepcopy(case)
     site = B.team_slugs(repo)
     errs = validate(tmp, md, data, plan, draft_dir, site, "publish")
-    if not errs:
+    if not errs and tmp.get("type") != OI_TYPE:
         errs = team_copy_errors(derive_teams(tmp, data, B.team_ids(repo), B.team_names(repo, site), site))
     if errs:
         raise LabError("not approved:\n  - " + "\n  - ".join(errs))
@@ -1047,7 +1082,7 @@ def reapprove(repo, case_dir, by):
     case.update(approved_by=by.strip(), approved_at=B.local_now().date().isoformat())
     site = B.team_slugs(repo)
     errs = validate(copy.deepcopy(case), md, data, plan, d, site, "publish")
-    if not errs:
+    if not errs and case.get("type") != OI_TYPE:
         errs = team_copy_errors(derive_teams(case, data, B.team_ids(repo), B.team_names(repo, site), site))
     if errs:
         raise LabError("not re-approved:\n  - " + "\n  - ".join(errs))
@@ -1056,6 +1091,358 @@ def reapprove(repo, case_dir, by):
         f.write(json.dumps(case, ensure_ascii=False, indent=1) + "\n")
     print(f"re-approved: LAB {case['number']} by {by.strip()}; run build")
 
+
+
+# ================================================================ Original Investigations
+# An Original Investigation answers a question by exploring the data, without a pre-registered plan, so it carries no
+# verdict stamp and no plan page. It must say how it was checked and how its scope came about. LAB 001's version
+# ("halves") splits each team-season's schedule into a tougher and an easier half; its explorer data ships beside the page.
+OI_TYPE = "original-investigation"
+OI_LABEL = "DAWG Lab / Original Investigation / {num}"
+OI_MARKERS = ("illusion", "reveal", "explorer")
+# verdict language belongs to hypothesis tests; an investigation without a plan can't carry it
+OI_FORBIDDEN = re.compile(r"doesn.t hold up|\binconclusive\b|myth busted|proven false|\bholds up\b|mixed evidence|\bverdict\b", re.I)
+
+
+def oi_halves(es):
+    """es: spreads in schedule order. Returns 't' / 'e' / 'x' per game: tougher half (smallest expected margin), easier
+    half, or neither (the odd middle game, and every game tied at a halfway boundary). Mirrors the research script."""
+    n = len(es); h = n // 2
+    order = sorted(range(n), key=lambda i: es[i])          # stable: ties keep schedule order (they're excluded anyway)
+    v = [es[i] for i in order]
+    flag = ["x"] * n
+    for k, i in enumerate(order):
+        if k < h:
+            flag[i] = "t"
+        elif k >= n - h:
+            flag[i] = "e"
+    bad = set()
+    if 0 < h < n and v[h - 1] == v[h]:
+        bad.add(v[h - 1])
+    if 0 <= n - h - 1 and n - h < n and v[n - h - 1] == v[n - h]:
+        bad.add(v[n - h])
+    return ["x" if es[i] in bad else flag[i] for i in range(n)]
+
+
+def validate_oi(case, md, data, d, site_teams, mode):
+    errs = []
+    name = os.path.basename(d.rstrip("/"))
+    m = CASE_DIR.match(name)
+    req = ["number", "slug", "type", "status", "title", "topic", "dek", "description", "short_answer", "card_line", "version",
+           "data_lock", "methods", "checks", "scope_change", "versions", "corrections", "research_datasets"]
+    for k in req:
+        if k not in case or case[k] in (None, ""):
+            errs.append(f"missing {k}")
+    if errs:
+        return errs
+    if m and (case["number"], case["slug"]) != (m.group(1), m.group(2)):
+        errs.append(f"folder name must be {case['number']}-{case['slug']}")
+    for k in ("verdict", "verdict_record", "plan"):
+        if k in case:
+            errs.append(f"an Original Investigation has no {k} (it wasn't planned in advance, so it carries no verdict stamp)")
+    if len(case["description"]) > 200:
+        errs.append("description over 200 characters")
+    if len(case["card_line"]) > 90:
+        errs.append("card_line (the link-preview line) is over 90 characters")
+    for k in ("snapshot", "cutoff", "label"):
+        if not case["data_lock"].get(k):
+            errs.append(f"data_lock.{k} is required")
+    for k in ("dawg", "case"):
+        if not case["methods"].get(k):
+            errs.append(f"methods.{k} is required")
+    if "exploratory" not in case["checks"].lower() or "independent" not in case["checks"].lower():
+        errs.append("checks must say the work was exploratory and how it was independently reproduced")
+    if not case["versions"] or case["versions"][-1].get("version") != case["version"]:
+        errs.append("versions must end with an entry for the current version")
+    for vv in case["versions"]:
+        for k in ("version", "date", "change"):
+            if not vv.get(k):
+                errs.append(f"every version entry needs {k}")
+    for c in case["corrections"]:
+        if not (c.get("date") and c.get("text")):
+            errs.append("every correction needs a date and text")
+    for kind in OI_MARKERS:
+        if md.count(f"[[{kind}]]") != 1:
+            errs.append(f"case.md must place [[{kind}]] exactly once")
+    other = set(re.findall(r"\[\[([a-z-]+)\]\]", md)) - set(OI_MARKERS)
+    if other:
+        errs.append("case.md has unknown exhibit markers: " + ", ".join(sorted(other)))
+    copy_all = " ".join(strings(case)) + " " + md
+    mf = OI_FORBIDDEN.search(copy_all)
+    if mf:
+        errs.append(f"the copy says '{mf.group(0)}': an Original Investigation carries no verdict language")
+    mr = RULED_OUT.search(copy_all)
+    if mr:
+        errs.append(f"the copy says '{mr.group(0)}': no size is published as ruled out")
+    if TWO_POINT_OH.search(copy_all):
+        errs.append("'2.0' appears in the copy (internal name; never public)")
+    rds = case["research_datasets"]
+    for rd in rds:
+        for k in ("name", "span", "provenance", "label", "label_short"):
+            if not rd.get(k):
+                errs.append(f"research dataset needs {k}")
+    if mode == "publish":
+        if case.get("sample"):
+            errs.append("this case is marked sample: sample data never publishes")
+        if case["status"] != "published":
+            errs.append("status is not 'published'")
+        for k in ("approved_by", "approved_at", "published"):
+            if not case.get(k):
+                errs.append(f"missing {k}: a case is published only with Matthew's explicit approval on record")
+        if PLACEHOLDER.search(copy_all):
+            errs.append("unfilled [placeholder] in the copy: " + PLACEHOLDER.search(copy_all).group(0))
+        if SAMPLE_WORDS.search(copy_all):
+            errs.append("sample/illustrative wording in published copy: " + SAMPLE_WORDS.search(copy_all).group(0))
+    errs += oi_data_errors(case, data, site_teams)
+    return errs
+
+
+def oi_data_errors(case, data, site_teams):
+    """The exhibits and the explorer must agree with each other: every number is checked against the game rows."""
+    errs = []
+    if data.get("kind") != "halves":
+        return ["data.json: kind must be 'halves'"]
+    il, rv = data.get("illusion") or {}, data.get("reveal") or {}
+    for k in ("team_seasons", "tougher", "easier", "gap", "ci", "spread_apart", "by_season"):
+        if k not in il:
+            errs.append(f"data.json illusion: missing {k}")
+    for k in ("team_seasons", "spread", "spread_home_removed", "opponent"):
+        if k not in rv:
+            errs.append(f"data.json reveal: missing {k}")
+    if errs:
+        return errs
+    for nm, blk in (("illusion", il), ("reveal.spread", rv["spread"]), ("reveal.spread_home_removed", rv["spread_home_removed"]), ("reveal.opponent", rv["opponent"])):
+        if not all(k in blk for k in ("tougher", "easier", "gap", "ci")):
+            errs.append(f"data.json {nm}: needs tougher, easier, gap and ci")
+            continue
+        if abs((blk["tougher"] - blk["easier"]) - blk["gap"]) > 0.011:
+            errs.append(f"data.json {nm}: gap must equal tougher minus easier")
+        if not (blk["ci"][0] <= blk["gap"] <= blk["ci"][1]):
+            errs.append(f"data.json {nm}: the interval must contain the estimate")
+    ex = data.get("_explorer")
+    if not ex:
+        return errs + ["explorer.json is missing"]
+    if data.get("explorer_sha256") != data.get("_explorer_sha256"):
+        errs.append("explorer.json changed after data.json was written (hash mismatch)")
+    teams = ex.get("teams") or {}
+    if set(teams) != set(site_teams):
+        errs.append(f"explorer.json must cover all {len(site_teams)} programs (missing: {sorted(set(site_teams) - set(teams))[:5]}, unknown: {sorted(set(teams) - set(site_teams))[:5]})")
+    opps = ex.get("opps") or []
+    mn, mh, rthru = ex.get("min_games", 8), ex.get("min_half", 3), ex.get("research_through")
+    if rthru and not case["research_datasets"]:
+        errs.append("explorer.json has research seasons, so the case needs its research dataset label")
+    full = []
+    for slug, tm in teams.items():
+        for season, ts in (tm.get("seasons") or {}).items():
+            g = ts.get("g") or []
+            if ts.get("n") != len(g):
+                errs.append(f"explorer {slug} {season}: n doesn't match its games")
+                continue
+            if any(len(r) != 6 or not (0 <= r[1] < len(opps)) or r[4] not in (-1, 0, 1) for r in g):
+                errs.append(f"explorer {slug} {season}: malformed game row")
+                continue
+            es, ys, hs = [r[2] for r in g], [r[3] for r in g], [r[5] for r in g]
+            if len(g) >= mn:
+                want = oi_halves(es)
+                tt = [y for y, f in zip(ys, want) if f == "t"]; ee = [y for y, f in zip(ys, want) if f == "e"]
+                ok = len(tt) >= mh and len(ee) >= mh
+            else:
+                want, ok = [""] * len(g), False
+            if not ok:
+                if "T" in ts or "gap" in ts or any(h for h in hs):
+                    errs.append(f"explorer {slug} {season}: below the minimum, so no halves may be shown")
+                continue
+            if hs != want:
+                errs.append(f"explorer {slug} {season}: halves don't follow the tie rule")
+                continue
+            ty = sum(tt) / len(tt); ey = sum(ee) / len(ee)
+            te = sum(e for e, f in zip(es, want) if f == "t") / len(tt); ee_ = sum(e for e, f in zip(es, want) if f == "e") / len(ee)
+            exp = {"T": [len(tt), round(te, 2), round(ty, 2)], "E": [len(ee), round(ee_, 2), round(ey, 2)], "gap": round(ty - ey, 2)}
+            got = {"T": ts.get("T"), "E": ts.get("E"), "gap": ts.get("gap")}
+            if any(abs(a_ - b_) > 0.011 for k in ("T", "E") for a_, b_ in zip(exp[k], got[k] or [9e9] * 3)) or got["gap"] is None or abs(exp["gap"] - got["gap"]) > 0.011:
+                errs.append(f"explorer {slug} {season}: half summaries don't match its games")
+                continue
+            full.append((int(season), ty, ey, ty - ey))
+    # Exhibit 1 is the average over exactly these team-seasons
+    full_hist = [f for f in full if f[0] <= max(int(s) for s in il["by_season"])]
+    if len(full_hist) != il["team_seasons"]:
+        errs.append(f"Exhibit 1 counts {il['team_seasons']} team-seasons but the explorer has {len(full_hist)} with halves")
+    elif full_hist:
+        n = len(full_hist)
+        for k, i in (("tougher", 1), ("easier", 2), ("gap", 3)):
+            if abs(sum(f[i] for f in full_hist) / n - il[k]) > 0.006:
+                errs.append(f"Exhibit 1 {k} {il[k]} doesn't match the explorer's team-seasons ({sum(f[i] for f in full_hist) / n:.3f})")
+        for season, v in il["by_season"].items():
+            ss = [f[3] for f in full_hist if f[0] == int(season)]
+            if not ss or abs(sum(ss) / len(ss) - v) > 0.006:
+                errs.append(f"Exhibit 1 season {season} doesn't match the explorer")
+    return errs
+
+
+def oi_teams(names, ids, site_teams):
+    return {s: {"name": names.get(s, s), "id": ids.get(s), "slug": s} for s in sorted(site_teams, key=lambda x: names.get(x, x))}
+
+
+def oi_explorer_url(case, data):
+    return f"/lab/{case['number']}-{case['slug']}/explorer.json?v={data['_explorer_sha256'][7:17]}"
+
+
+def oi_exhibit_html(kind, case, data, num):
+    rd = case["research_datasets"][0] if case["research_datasets"] else None
+    rnote = research_note(rd["label"]) if rd else ""
+    tag = '<span class="lb-tagS">Sample data</span>' if case.get("sample") else ""
+    if kind == "illusion":
+        il = data["illusion"]
+        yrs = sorted(int(y) for y in il["by_season"])
+        return (f'<figure class="lb-exhibit lb-oi-ex" id="lb-ex-illusion" aria-label="Exhibit {num}"><div class="lb-ex-head"><span>Exhibit {num} · Sorted by the spread</span>{tag}</div>'
+                '<p class="lb-ex-title">Teams look better against the tougher half of their schedule</p>'
+                '<div id="lb-illusion" class="lb-oi-chart"></div>'
+                f'<p class="lb-ex-sub">The gap, season by season ({yrs[0]}–{yrs[-1]})</p><div id="lb-seasons" class="lb-oi-chart"></div>'
+                f'<figcaption class="lb-ex-foot">{il["team_seasons"]} team-seasons with 8 or more games, {yrs[0]}–{yrs[-1]}. Each schedule is split in half by that game’s point spread; '
+                f'the halves average {il["spread_apart"]:.0f} points of spread apart. Bars show the average DAWG grade in each half. {DEF}</figcaption>{rnote}</figure>')
+    if kind == "reveal":
+        rv = data["reveal"]
+        return (f'<figure class="lb-exhibit lb-oi-ex lb-oi-reveal" id="lb-ex-reveal" aria-label="Exhibit {num}"><div class="lb-ex-head"><span>Exhibit {num} · Same games, two ways to rank opponents</span>{tag}</div>'
+                '<p class="lb-ex-title">Sort by the opponent instead of the spread, and the gap disappears</p>'
+                '<dl class="lb-oi-key"><div><dt>That game’s spread</dt><dd>Vegas’s prediction for this one game</dd></div>'
+                '<div><dt>Opponent’s strength before kickoff</dt><dd>How good the opponent had looked in its earlier games, home field taken out</dd></div></dl>'
+                '<div id="lb-reveal" class="lb-oi-chart"></div>'
+                f'<figcaption class="lb-ex-foot">The same {rv["team_seasons"]} team-seasons and the same games in both rows: games against Power 4 opponents once both teams had played two games. '
+                f'Each line shows the range the average would likely fall in (95%). With home field taken out of the spread, the top row is still {fmt(rv["spread_home_removed"]["gap"])}. '
+                'What we see: the gap follows the spread, not the opponent. Why: not established.</figcaption>' + rnote + '</figure>')
+    if kind == "explorer":
+        return (f'<section class="lb-exhibit lb-oi-ex lb-oi-explorer" id="your-team" aria-label="Exhibit {num}: your team"><div class="lb-ex-head"><span>Exhibit {num} · Your team, season by season</span>{tag}</div>'
+                '<div class="lb-xp-pick"><label><span class="lb-label">Team</span><select id="lb-xp-team" class="lb-select"><option value="">Pick a team</option></select></label>'
+                '<label><span class="lb-label">Season</span><select id="lb-xp-season" class="lb-select" disabled></select></label></div>'
+                '<div id="lb-xp-lead" class="lb-xp-lead" aria-live="polite"><p class="lb-xp-empty">Pick a team to see its tougher and easier halves, season by season.</p></div>'
+                '<div id="lb-xp-chart" class="lb-oi-chart" hidden></div><p id="lb-xp-tap" class="lb-xp-tap" aria-live="polite" hidden></p>'
+                '<details id="lb-xp-list" class="lb-xp-list" hidden><summary>Show every game this season ▾</summary><div class="lb-tscroll"><table class="lb-tbl"><thead><tr><th scope="col" class="lb-tl">Game</th><th scope="col">Spread</th><th scope="col">DAWG</th><th scope="col">Half</th></tr></thead><tbody id="lb-xp-rows"></tbody></table></div></details>'
+                f'<p class="lb-ex-foot">Spreads are from the team’s side. Research seasons (2014–18) use research grades, not official DAWG grades. {DEF}</p></section>')
+    raise LabError(f"unknown exhibit [[{kind}]]")
+
+
+def oi_body_html(case, md, data):
+    nums = iter(range(1, 10))
+    out = B.render_body({"format": "markdown"}, md)
+    out = re.sub(r"<p>\[\[([a-z-]+)\]\]</p>", lambda m: oi_exhibit_html(m.group(1), case, data, next(nums)), out)
+    if "[[" in out:
+        raise LabError("unknown [[marker]] in case.md")
+    return out
+
+
+def oi_receipts_html(case):
+    dl, me = case["data_lock"], case["methods"]
+    rows = [("How it was checked", t(case["checks"])),
+            ("How this case changed", t(case["scope_change"])),
+            ("Data", f'{t(dl["label"])} · snapshot <span class="lb-mono" style="font-size:13px">{t(dl["snapshot"][:19])}</span>'),
+            ("Method", f'DAWG {t(me["dawg"])} · case method v{t(me["case"])}')]
+    for rd in case["research_datasets"]:
+        rows.append(("Research-only data", f'<b>{t(rd["name"])}</b>: {t(rd["provenance"])} <span class="lb-note" style="display:block;margin:2px 0 0">{t(rd["label"])}</span>'))
+    dl_html = "".join(f"<dt>{t(k)}</dt><dd>{v}</dd>" for k, v in rows)
+    vers = "".join(f'<li>v{t(v["version"])} · {t(B.nice_date(v["date"]))} · {t(v["change"])}</li>' for v in reversed(case["versions"]))
+    corr = "".join(f'<div class="lb-corr"><b>Correction, {t(B.nice_date(c["date"]))}:</b> {t(c["text"])}</div>' for c in case["corrections"])
+    return ('<h2 id="lb-receipts">Receipts</h2>' + (corr or "") + f'<dl class="lb-receipts">{dl_html}</dl>'
+            '<h2 style="font-size:28px">Version history</h2>' + f'<ul class="lb-versions">{vers}</ul>'
+            + ('<p class="lb-note">No corrections. Any correction is dated here and on <a href="/lab/corrections/">the corrections page</a>.</p>' if not corr else ""))
+
+
+def oi_js_data(case, data, teams):
+    rd = case["research_datasets"][0] if case["research_datasets"] else {"label": "", "label_short": ""}
+    return {"case": {"number": case["number"], "url": f"/lab/{case['number']}-{case['slug']}/", "type": OI_TYPE},
+            "illusion": data["illusion"], "reveal": data["reveal"], "variation": data.get("variation"),
+            "explorer": oi_explorer_url(case, data), "research": {"label": rd["label"], "label_short": rd.get("label_short", ""), "through": 2018 if case["research_datasets"] else None},
+            "teams": {s: tm["name"] for s, tm in teams.items()}}
+
+
+def oi_cover(case, h1=True):
+    num = case["number"]
+    return (f'<section class="lb-cover" aria-label="Case cover"><div class="lb-cover-in">'
+            f'<nav class="lb-crumb" aria-label="Breadcrumb"><a href="/lab/">DAWG Lab</a> / Original Investigation / {num}</nav>'
+            f'<div class="lb-meta"><span class="lb-tab">LAB {num}</span><span class="lb-mono">Original Investigation · v{t(case["version"])} · {t(case["data_lock"]["label"])}</span></div>'
+            f'<h1>{t(case["title"])}</h1><p class="lb-dek">{t(case["dek"])}</p>'
+            f'<div class="lb-oi-answer"><span class="lb-label">The short version</span><p>{t(case["short_answer"])}</p>'
+            '<a class="lb-open" href="#your-team">Find your team ↓</a></div>'
+            "</div></section>")
+
+
+def oi_case_page(case, md, data, teams, tpl, asset_v, preview=False):
+    url = case_url(case)
+    num = case["number"]
+    body = oi_body_html(case, md, data)
+    rail = ('<div class="lb-sec" style="font-size:15px"><span class="lb-label">In this case</span><a href="#lb-ex-illusion">Exhibit 1 · Sorted by the spread</a>'
+            '<a href="#lb-ex-reveal">Exhibit 2 · Two ways to rank opponents</a><a href="#your-team">Exhibit 3 · Your team</a><a href="#lb-receipts">Receipts</a></div>'
+            '<div class="lb-sec" style="font-size:15px"><span class="lb-label">Related</span><a href="/lab/">All Lab case files</a><a href="/lab/corrections/">Corrections</a></div>')
+    content = (oi_cover(case) + '<main class="lb-main lb-oi">'
+               '<div class="lb-cols"><article class="lb-article"><div class="body">' + body + oi_receipts_html(case) + "</div></article>"
+               f'<aside class="lb-rail" aria-label="In this case">{rail}</aside></div></main>')
+    data_js = oi_js_data(case, data, teams)
+    ld = {"@context": "https://schema.org", "@type": "Article", "headline": case["title"], "datePublished": case.get("published") or case["versions"][0]["date"],
+          "dateModified": case.get("updated") or case["versions"][-1]["date"], "author": {"@type": "Organization", "name": "DAWG Index"},
+          "publisher": {"@type": "Organization", "name": "DAWG Index", "url": SITE}, "image": url + "og.png", "mainEntityOfPage": url}
+    rep = head_rep(tpl, f"LAB {num}: {case['title']} · DAWG Lab", case["description"], url, url, f"LAB {num}: {case['title']}",
+                   case.get("social_description") or case["description"], url + "og.png", f"DAWG Lab case {num}: {case['title']}", preview=preview, jsonld=ld)
+    rep.update({"ASSET_V": asset_v, "LAB_CURRENT": ' aria-current="page"', "BODY_ATTR": "", "BANNERS": banners(case, preview), "CONTENT": content,
+                "SCRIPTS": f'<script id="lab-data" type="application/json">{jdump(data_js)}</script>\n<script src="/lab/lab-oi.js?v={asset_v}"></script>'})
+    return page(tpl, rep)
+
+
+def oi_feat(case, data, teams):
+    num, url = case["number"], f"/lab/{case['number']}-{case['slug']}/"
+    team = ('<div class="lb-home-team" role="group" aria-labelledby="lb-home-h">'
+            '<div class="lb-ht-q"><span class="lb-label">Start with your team</span><label id="lb-home-h" for="lb-home-pick">What about my team?</label></div>'
+            f'<select id="lb-home-pick" class="lb-select lb-select-xl">{team_options(teams, "Pick your team")}</select>'
+            '<div class="lb-ht-res" aria-live="polite"><b id="lb-home-ans">Every Power 4 team-season since 2014 is in the case file.</b>'
+            '<span id="lb-home-line">Pick your team to see its tougher and easier halves, season by season.</span></div>'
+            f'<a id="lb-home-link" class="lb-btn lb-hot" href="{url}#your-team">Open the case file →</a></div>')
+    return (f'<section aria-label="Latest case file" class="lb-feat"><span class="lb-tab" style="align-self:flex-start">LAB {num} · LATEST CASE</span>'
+            '<div class="lb-card-cover"><div class="lb-cc-text">'
+            f'<span class="lb-label">Original Investigation · {t(case["topic"])}</span><h2>{t(case["title"])}</h2>'
+            f'<p class="lb-cc-ans">{t(case["dek"])}</p><p class="lb-cc-ans" style="color:var(--lb-cream)">{t(case["short_answer"])}</p>'
+            f'<a class="lb-open" href="{url}">Read the investigation →</a>'
+            f'<span class="lb-mono" style="font-size:12px;color:var(--lb-muted-d)">v{t(case["version"])} · {t(case["data_lock"]["label"])}</span></div>'
+            + team +
+            '<div class="lb-cc-ex"><div class="lb-exhibit"><div class="lb-ex-head"><span>Exhibit 2 · Two ways to rank opponents</span></div>'
+            '<div id="lb-home-ex" class="lb-oi-chart" style="padding:6px 8px 4px"></div>'
+            '<div class="lb-ex-foot">Tougher half minus easier half of each schedule, in DAWG points. Same games in both rows.</div></div></div></div></section>')
+
+
+def oi_card_inner(case, size):
+    num = case["number"]
+    rd = case["research_datasets"][0] if case["research_datasets"] else None
+    rn = f'<div class="rn"><i></i>{t(rd["label"])}</div>' if rd else ""
+    if size == "card":
+        return (f'<div class="top"><span class="tab">LAB {num} · ORIGINAL INVESTIGATION</span>{LOCK}</div><div class="q" style="font-size:88px">{t(case["title"])}</div>'
+                f'<div class="sent" style="font-size:29px">{t(case["dek"])}</div>'
+                '<div class="ex" style="min-height:0"><div class="h">Exhibit 2 · Same games, two ways to rank opponents</div><div data-chart="reveal" style="flex:1;min-height:0"></div>' + rn + '</div>'
+                f'<div class="foot"><p>{DEF}</p><b>dawgindex.com/lab/{num}</b></div>')
+    return (f'<div class="top"><span class="tab">LAB {num} · ORIGINAL INVESTIGATION</span>{LOCK}</div><div class="row"><div class="l"><div class="q">{t(case["title"])}</div>'
+            f'<div class="sent">{t(case["dek"])}</div></div>'
+            '<div class="r"><div class="ex"><div class="h">Same games, two ways to rank opponents</div><div data-chart="reveal" data-size="m" style="flex:1;min-height:0"></div></div></div></div>'
+            f'<div class="band"><span>{t(case["card_line"])}</span><b>dawgindex.com/lab/{num}</b></div>')
+
+
+def oi_card_page(case, data, teams, size, tpl, look="sample"):
+    pg = read(os.path.join(tpl, "lab", "card.html")).replace('<script src="/lab/lab.js"></script>', '<script src="/lab/lab-oi.js"></script>')
+    sample = '<span class="sample">SAMPLE</span>' if (case.get("sample") and look != "production") else ""
+    for k, v in {"{{SIZE}}": size, "{{SAMPLE}}": sample, "{{INNER}}": oi_card_inner(case, size), "{{DATA}}": jdump(oi_js_data(case, data, teams))}.items():
+        pg = pg.replace(k, v)
+    return pg
+
+
+def oi_landing_page(case, data, teams, docket, tpl, asset_v, preview=False):
+    url = f"/lab/{case['number']}-{case['slug']}/"
+    feat = oi_feat(case, data, teams)
+    links = ('<section class="lb-links"><a href="/#method">How DAWG works</a><a href="/lab/corrections/">Corrections</a>'
+             '<span>Got a theory about your team? Reply to @dawgindex with <b>#AskTheLab</b>.</span></section>')
+    head = ('<section class="lb-home-head"><div class="lb-lockup"><span class="lb-labtag">LAB</span><h1>Every fan base has a theory. We test them.</h1></div>'
+            '<p>College football arguments, checked against the data.</p></section>')
+    content = f'<main class="lb-main lb-home" style="padding-top:0">{head}{feat}{links}<p class="lb-note" style="margin-top:20px">{DEF}</p></main>'
+    rep = head_rep(tpl, "The DAWG Lab · DAWG Index", "College football arguments, checked against the data.", SITE + "/lab/", SITE + "/lab/",
+                   "The DAWG Lab: every fan base has a theory. We test them.", "College football arguments, checked against the data.",
+                   SITE + url + "og.png", "The DAWG Lab", og_type="website", preview=preview)
+    rep.update({"ASSET_V": asset_v, "LAB_CURRENT": ' aria-current="page"', "BODY_ATTR": "", "BANNERS": banners(case, preview), "CONTENT": content,
+                "SCRIPTS": f'<script id="lab-data" type="application/json">{jdump(oi_js_data(case, data, teams))}</script>\n<script src="/lab/lab-oi.js?v={asset_v}"></script>'})
+    return page(tpl, rep)
 
 # ---------------------------------------------------------------- a clearly marked SAMPLE case for building the pages
 def sample(repo, out_root):

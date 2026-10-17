@@ -100,7 +100,7 @@ def main():
     c = copy.deepcopy(base_c); c["presentation"]["team_headlines"]["within"] = "{team} sits comfortably inside the expected range"; neg("team headline too long for a card", "share cards fit", c)
     c = copy.deepcopy(base_c); c["presentation"]["team_headlines"]["outside"] = "{team} plays down"; neg("team headline that claims a habit", "confirmed trait", c)
     c = copy.deepcopy(base_c); c["verdict"]["kind"] = "probably"; neg("unknown verdict", "verdict.kind", c)
-    c = copy.deepcopy(base_c); c["type"] = "original-investigation"; neg("Original Investigation (not in v0)", "Original Investigation", c)
+    c = copy.deepcopy(base_c); c["type"] = "original-investigation"; neg("a case relabeled Original Investigation without its disclosures", "missing short_answer", c)
     c = copy.deepcopy(base_c); del c["approved_by"]; neg("no approval on record", "approved_by", c)
     d = copy.deepcopy(base_d); d["teams"]["not-a-team"] = d["teams"]["baylor"]; neg("unknown team slug", "unknown team slug", d=d)
     d = copy.deepcopy(base_d); del d["teams"]["baylor"]["groups"][0]["n"]; neg("team row without a sample size", "sample size", d=d)

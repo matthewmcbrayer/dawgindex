@@ -107,7 +107,7 @@ def main():
     S("Two carryover estimates marked as the main test", lambda c, d, m, p: [x.update(primary=True) for x in d["persistence"]] and None, "exactly one")
     S("'2.0' in the copy", lambda c, d, m, p: (c, d, m + "\nDAWG 2.0 says so.\n", p), "'2.0'")
     S("Plan version '2.0' with no public label", lambda c, d, m, p: c["plan"].pop("label"), "plan.label")
-    S("Original Investigation (not built in v0)", lambda c, d, m, p: c.update(type="original-investigation"), "original investigation")
+    S("Original Investigation without its explorer data and disclosures", lambda c, d, m, p: c.update(type="original-investigation"), "missing explorer.json")
     S("Unknown [[marker]] in the article", lambda c, d, m, p: (c, d, m + "\n[[funnel]]\n", p), "[[funnel]]")
     S("Verdict without its plan-written subtitle", lambda c, d, m, p: c["verdict"].update(subtitle=""), "verdict.subtitle")
     S("Team headlines missing for a state", lambda c, d, m, p: c["presentation"]["team_headlines"].pop("below"), "team_headlines")
