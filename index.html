@@ -1104,6 +1104,7 @@ h2{font-family:var(--display);font-weight:900;font-size:clamp(34px,4vw,52px);lin
 .col .link{font-size:12.5px}
 .col .score{font-family:var(--display);font-weight:900;font-size:60px;line-height:.85;margin:2px 0 10px}
 .col .score span{color:var(--muted);font-weight:700;font-size:.5em;margin:0 6px}
+.col .score span.pre{margin:0 8px 0 0}
 
 /* ---------- beyond the score (editorial; published stories only, from /stories/stories.json) ---------- */
 /* one card size everywhere: the story thumbnail first, the headline second, then category and date */
@@ -5782,7 +5783,7 @@ var FACTS = {
       '<a class="link" href="/#rankings" data-p="home" data-jumpin="rankings-sec">See the rankings <span aria-hidden="true">→</span></a></div>';
     // Biggest collapse
     var c = D.collapse, c3 = '';
-    if (c) c3 = '<div class="col tcol" ' + band(c.tid).replace('style="', 'style="--c:var(--orange);') + '><div class="k">The collapse</div><div class="score">' + c.at[0] + '<span>led</span>' + c.at[1] + '</div>' +
+    if (c) c3 = '<div class="col tcol" ' + band(c.tid).replace('style="', 'style="--c:var(--orange);') + '><div class="k">The collapse</div><div class="score"><span class="pre">Up</span>' + c.at[0] + '–' + c.at[1] + '</div>' +
       '<h3>' + esc(c.team) + ' led by ' + c.lead + ' ' + (c.site === "away" ? "at" : "vs.") + ' ' + esc(c.opp) + '. Lost ' + c.pf + '–' + c.pa + '.</h3>' +
       '<p>The biggest lead any Power 4 team gave away in ' + D.week + '. The grade covers the whole game, so the collapse is in it; the open lead is not extra credit.</p>' +
       tlink(c.tid, c.team, "link") + esc(c.team) + ' page <span aria-hidden="true">→</span></a></div>';
