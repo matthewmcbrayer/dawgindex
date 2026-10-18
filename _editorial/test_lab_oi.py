@@ -21,6 +21,28 @@ def check(ok, name, detail=""):
 site = B.team_slugs(REPO)
 case0, md0, data0, plan0 = L.load_case(DRAFT)
 
+# ---------------------------------------------------------------- the sample-wording guard: demo text refused, statistical "sample" allowed
+for t in ("Across the full sample, extreme gaps weren't more common than chance would predict.", "a sample size of 8 games"):
+    check(L.sample_words(t) is None, f"sample guard allows statistical wording: {t[:40]}")
+for t in ("Sample text.", "Sample answer.", "- Sample: the limits go here.", "Sample data · not research results", "the sample data here", "An illustrative example."):
+    check(L.sample_words(t) is not None, f"sample guard refuses demo wording: {t[:40]}")
+# the real approve step accepts the approved draft (run on throwaway copies; the draft and the repo are untouched)
+import shutil as _sh
+with tempfile.TemporaryDirectory() as _t:
+    _repo, _d = os.path.join(_t, "repo"), os.path.join(_t, "drafts", os.path.basename(DRAFT))
+    os.makedirs(_repo); _sh.copy(os.path.join(REPO, "sitemap.xml"), _repo); _sh.copytree(os.path.join(REPO, "_editorial"), os.path.join(_repo, "_editorial"), ignore=_sh.ignore_patterns("lab", "__pycache__"))
+    _sh.copytree(DRAFT, _d)
+    try:
+        L.approve(_repo, _d, "Test Approver"); _ok, _msg = True, ""
+    except Exception as e:
+        _ok, _msg = False, str(e)
+    _dest = os.path.join(_repo, "_editorial", "lab", os.path.basename(DRAFT))
+    check(_ok and os.path.isfile(os.path.join(_dest, "case.json")) and json.load(open(os.path.join(_dest, "case.json")))["status"] == "published",
+          "approve accepts the approved draft as written", _msg[:300])
+    if _ok:
+        check(all(open(os.path.join(_dest, f), "rb").read() == open(os.path.join(DRAFT, f), "rb").read() for f in ("case.md", "data.json", "explorer.json")),
+              "approve copies the article, data and explorer byte for byte")
+
 # ---------------------------------------------------------------- the tie rule
 H = L.oi_halves
 check(H([1, 2, 3, 4]) == ["t", "t", "e", "e"], "halves: even schedule splits in two")

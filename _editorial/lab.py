@@ -23,7 +23,7 @@ Rules this script enforces, on top of the Stories rules:
      with its receipts (confirmation data, correction for everything tried, the plan reference).
   4. Research-only values are labeled: research seasons need a research dataset entry; pages and cards print the label.
   5. Sample data never publishes: approve and build refuse a case marked sample, and published copy can't hold
-     [placeholders] or "sample"/"illustrative" text.
+     [placeholders] or "sample"/"illustrative" text (statistical "sample", as in "the full sample", is allowed).
 """
 import argparse, copy, datetime as dt, glob, hashlib, html, json, math, os, random, re, shutil, sys
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -44,6 +44,16 @@ ICONS = {"holds": '<path d="M4 12.5l5 5L20 6.5"/>', "not": '<path d="M6 6l12 12M
 TRAIT = re.compile(r"\b(plays? down|played down|always|never|habits?|tends? to|consistently|persistent(ly)?|traits?|known for|reliably)\b", re.I)
 PLACEHOLDER = re.compile(r"(?<!\[)\[(?!\[)[^\]\n]+\](?!\()")       # [like this], but not [[markers]] or [links](...)
 SAMPLE_WORDS = re.compile(r"\b(sample|illustrative|placeholder|lorem)\b", re.I)
+# "sample" in its statistical sense ("across the full sample", "sample size") is real copy, not demo text; it is set aside
+# before SAMPLE_WORDS looks, unless it runs straight into a demo word ("the sample data", "this sample text").
+STAT_SAMPLE = re.compile(r"\b(?:the|full|whole|entire|same|this|our|small|smaller|large|larger|research)\s+samples?\b"
+                         r"(?!\s+(?:data|text|case|copy|answer|values?|numbers?|results?|figures?)\b)|\bsamples?\s+sizes?\b", re.I)
+
+
+def sample_words(text):
+    """The first demo-style sample/illustrative/placeholder/lorem word in the copy, or None."""
+    m = SAMPLE_WORDS.search(STAT_SAMPLE.sub(" ", text))
+    return m.group(0) if m else None
 # the upper bound isn't published: no "ruled out" sizes and no ±N bound wording anywhere in a case's copy
 RULED_OUT = re.compile(r"\bruled out\b|±\s*\d", re.I)
 
@@ -282,8 +292,8 @@ def validate(case, md, data, plan, d, site_teams, mode):
         copytext = " ".join(strings(case)) + " " + md + " " + " ".join(strings({k: v for k, v in data.items() if k != "teams"}))
         if PLACEHOLDER.search(copytext):
             errs.append("unfilled [placeholder] in the copy: " + PLACEHOLDER.search(copytext).group(0))
-        if SAMPLE_WORDS.search(copytext):
-            errs.append("sample/illustrative wording in published copy: " + SAMPLE_WORDS.search(copytext).group(0))
+        if sample_words(copytext):
+            errs.append("sample/illustrative wording in published copy: " + sample_words(copytext))
     copy_all = " ".join(strings(case)) + " " + md + " " + " ".join(strings({k: v for k, v in data.items() if k != "teams"}))
     m_ = RULED_OUT.search(copy_all)
     if m_:
@@ -1191,8 +1201,8 @@ def validate_oi(case, md, data, d, site_teams, mode):
                 errs.append(f"missing {k}: a case is published only with Matthew's explicit approval on record")
         if PLACEHOLDER.search(copy_all):
             errs.append("unfilled [placeholder] in the copy: " + PLACEHOLDER.search(copy_all).group(0))
-        if SAMPLE_WORDS.search(copy_all):
-            errs.append("sample/illustrative wording in published copy: " + SAMPLE_WORDS.search(copy_all).group(0))
+        if sample_words(copy_all):
+            errs.append("sample/illustrative wording in published copy: " + sample_words(copy_all))
     errs += oi_data_errors(case, data, site_teams)
     return errs
 
