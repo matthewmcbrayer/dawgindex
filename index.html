@@ -2512,6 +2512,305 @@ h2{font-family:var(--display);font-weight:900;font-size:clamp(34px,4vw,52px);lin
 @media (min-width:821px){ .ticket .stub .bcw .gid{font-size:8px;letter-spacing:0} .t-next .ticket .stub .bcw .gid{letter-spacing:-.04em} }
 /* 320–340px phones: the games-graded note under each record made the board 16px too wide; a smaller note, logo and cell padding keep it inside the screen */
 @media (max-width:340px){.board td.wl small.gg{font-size:9.5px;letter-spacing:0}.board td.tm img{width:22px;height:22px}.board td.tm a{gap:6px}.board td{padding:0 3px}}
+
+/* ================= Team page, Oct 18 2026 simplification =================
+   Four ruled sections: Overview (team-colour band), Game results, Season trends, By the numbers + More stats.
+   Rules and type carry the hierarchy; no card boxes. Everything here is scoped to .teampage. */
+.teampage{--play:#8FA8D6;padding-top:0;overflow-x:clip}
+.teampage [hidden]{display:none!important}
+.teampage .t-hero{display:block}
+.teampage .tv-ctx.t-conf{display:block;background:none;color:inherit;padding:0;margin:0;font-family:var(--mono);font-weight:400;font-size:12.5px;letter-spacing:.06em}
+.teampage .tv-ctl #tseason{min-width:0;border:1.5px solid currentColor;background-color:transparent;color:inherit;font-family:var(--cond);font-weight:700;font-size:13px;letter-spacing:.08em;padding:6px 30px 6px 14px;border-radius:999px}
+.teampage .tv-crest{display:grid;place-items:center}
+.teampage .tv-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.teampage .kicker.pos{color:var(--pos)}.teampage .kicker.neg{color:var(--neg)}
+/* section bar */
+.tv-jump{position:sticky;top:env(safe-area-inset-top,0px);z-index:7;background:var(--paper);box-shadow:0 0 0 100vmax var(--paper);clip-path:inset(0 -100vmax);border-bottom:1px solid var(--rule)}
+.tv-jump-in{display:flex;align-items:center;gap:4px;height:50px;overflow-x:auto;scrollbar-width:none}
+.tv-jump-in::-webkit-scrollbar{display:none}
+.tv-jump a{font-family:var(--cond);font-weight:700;font-size:14px;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;color:var(--muted);padding:6px 11px;border-radius:999px;white-space:nowrap;transition:background .2s,color .2s}
+.tv-jump a:hover{color:var(--ink)}
+.tv-jump a.on{background:var(--ink);color:var(--paper)}
+.tv-me{display:flex;align-items:center;gap:8px;margin-right:12px;white-space:nowrap;font-family:var(--display);font-weight:800;font-size:20px;text-transform:uppercase;line-height:1;max-width:0;opacity:0;overflow:hidden;transition:max-width .35s ease,opacity .25s}
+.tv-jump.stuck .tv-me{max-width:360px;opacity:1}
+.tv-me img{width:24px;height:24px;object-fit:contain}
+.tv-me b{font-family:var(--mono);font-weight:500;font-size:12px;color:var(--muted)}
+.teampage .tv-sec,.teampage #t-overview{scroll-margin-top:calc(58px + env(safe-area-inset-top,0px))}
+/* 1. overview band */
+.tv-band{position:relative;background:var(--tc);color:var(--paper-2);box-shadow:0 0 0 100vmax var(--tc);clip-path:inset(0 -100vmax)}
+.tv-band.dark-text{color:var(--ink)}
+.tv-band::after{content:"";position:absolute;left:-100vmax;right:-100vmax;bottom:0;height:6px;background:linear-gradient(90deg,var(--blue) 0 33.33%,var(--yellow) 33.33% 66.66%,var(--red) 66.66%)}
+.tv-band-in{padding:24px 0 38px}
+.tv-ctl{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:22px}
+.tv-ctx{font-family:var(--mono);font-size:12.5px;letter-spacing:.06em;text-transform:uppercase;opacity:.88}
+.tv-ctl-r{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.tv-ctl select,.tv-pill,.tv-ctl .qsearch{appearance:none;-webkit-appearance:none;background:transparent;border:1.5px solid currentColor;color:inherit;border-radius:999px;padding:6px 14px;font-family:var(--cond);font-weight:700;font-size:13px;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;opacity:.95}
+.tv-ctl select{padding-right:30px;background-image:linear-gradient(45deg,transparent 50%,currentColor 50%),linear-gradient(-45deg,transparent 50%,currentColor 50%);background-position:calc(100% - 15px) 52%,calc(100% - 10px) 52%;background-size:5px 5px;background-repeat:no-repeat}
+.tv-ctl select option{color:var(--ink);background:var(--paper-2)}
+.tv-ctl .qsearch{cursor:text;text-transform:none;letter-spacing:0;font-family:var(--body);font-weight:600;font-size:14px;width:170px;max-width:100%;padding:6px 14px}
+.tv-ctl .qsearch::placeholder{color:inherit;opacity:.75}
+.tv-ctl .t-find{min-width:0}
+.tv-ctl .t-findres{left:auto;width:300px;max-width:calc(100vw - 32px)}
+.tv-pill:hover,.tv-ctl select:hover{background:rgba(251,244,226,.14)}
+.teampage .t-card.tv-card{background:transparent;border:0;box-shadow:none;padding:0;min-height:0;overflow:visible;color:inherit;display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:22px 48px;align-items:end}
+.tv-id{display:flex;gap:24px;align-items:center;min-width:0}
+.teampage .tv-crest{flex:0 0 auto;width:128px;height:128px;border-radius:50%;background:var(--paper-2);box-shadow:0 0 0 5px rgba(251,244,226,.2);border:0;overflow:hidden}
+.teampage .tv-name{margin:0;font-family:var(--display);font-weight:900;font-size:clamp(64px,9vw,140px);line-height:.84;letter-spacing:-.01em;text-transform:uppercase;min-width:0;overflow-wrap:normal;color:inherit}
+.teampage .tv-name small{display:block;font-family:var(--cond);font-weight:700;font-size:28px;letter-spacing:.08em;line-height:1;margin-top:12px;opacity:.9;text-transform:uppercase}
+.tv-verdict{display:grid;grid-template-columns:auto auto;justify-content:end;align-items:end}
+.tv-v{padding:0 28px 4px;border-left:1.5px solid currentColor;border-left-color:rgba(251,244,226,.35)}
+.tv-band.dark-text .tv-v{border-left-color:rgba(19,18,16,.3)}
+.tv-v:first-child{border-left:0;padding-left:0}
+.tv-v:last-child{padding-right:0}
+.tv-v .v{font-family:var(--display);font-weight:900;font-size:clamp(84px,9.6vw,146px);line-height:.8;letter-spacing:-.02em;font-variant-numeric:tabular-nums;white-space:nowrap}
+.tv-v .v sup{font-size:.36em;vertical-align:top;position:relative;top:.08em;margin-left:.03em;letter-spacing:0}
+.tv-v .l{font-family:var(--cond);font-weight:700;font-size:15px;letter-spacing:.06em;text-transform:uppercase;margin-top:12px;line-height:1.15}
+.tv-v .l small{display:block;font-family:var(--body);font-weight:500;letter-spacing:0;text-transform:none;font-size:13.5px;opacity:.82;margin-top:3px}
+.tv-none{font-size:18px;margin:0;align-self:center}
+.teampage .t-card-foot.tv-foot{grid-column:1/-1;display:flex;justify-content:space-between;align-items:center;gap:10px 28px;flex-wrap:wrap;border-top:1px solid rgba(251,244,226,.3);padding-top:14px;margin-top:4px;font-size:14px;font-weight:500;opacity:1}
+.tv-band.dark-text .tv-foot{border-top-color:rgba(19,18,16,.25)}
+.teampage .tv-rec{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.teampage .tv-rec b{font-family:var(--display);font-weight:800;font-size:32px;line-height:1}
+.teampage .tv-rec small{font-family:var(--mono);font-size:12.5px;opacity:.85}
+.tv-move{display:inline-flex;align-items:center;background:var(--paper-2);color:var(--ink);font-family:var(--cond);font-weight:800;font-size:13.5px;letter-spacing:.06em;text-transform:uppercase;border-radius:999px;padding:4px 11px;white-space:nowrap}
+.tv-move.up{color:var(--pos)}.tv-move.dn{color:var(--neg)}
+.tv-coach{font-family:var(--mono);font-size:12.5px;opacity:.88}
+.tv-strip{display:flex;justify-content:space-between;align-items:center;gap:12px 28px;padding:14px 0;border-bottom:1px solid var(--rule);flex-wrap:wrap}
+.tv-def{margin:0;font-size:14.5px;color:var(--ink-2);max-width:66ch}
+.tv-def b{color:var(--ink)}
+.tv-def .link,.teampage .t-next .link{font-family:var(--cond);font-weight:700;letter-spacing:.06em;text-transform:uppercase;font-size:13px;white-space:nowrap}
+.teampage .t-next{display:flex;align-items:center;gap:8px 14px;flex-wrap:wrap;font-size:15px}
+.teampage .t-next .kicker{margin:0}
+.tv-ng{display:inline-flex;align-items:center;gap:8px}
+.tv-ng img{width:26px;height:26px;object-fit:contain}
+.tv-ng b a{text-decoration:none}.tv-ng b a:hover{text-decoration:underline}
+.tv-ng small,.t-next .t-after small{font-family:var(--mono);font-size:12px;color:var(--muted)}
+.tv-nt{font-family:var(--mono);font-size:12.5px;color:var(--muted)}
+.teampage .t-next .t-after{display:inline-flex;align-items:center;gap:8px;margin:0;border-top:0;padding:0 0 0 14px;border-left:1px solid var(--rule)}
+.teampage .t-next .t-after .kicker{margin:0}
+.teampage .t-next .t-after b a{text-decoration:none}
+.tv-facts{display:flex;gap:6px 18px;flex-wrap:wrap;align-items:baseline;padding:12px 0;border-bottom:1px solid var(--rule);font-size:14.5px;color:var(--ink-2)}
+.tv-facts .kicker{margin:0}
+/* section frame */
+.teampage .tv-sec{margin-top:56px}
+.tv-sh{display:flex;justify-content:space-between;align-items:flex-end;gap:14px;flex-wrap:wrap;border-bottom:2px solid var(--ink);padding-bottom:12px}
+.tv-h2{margin:4px 0 0;font-family:var(--display);font-weight:900;font-size:clamp(40px,4.8vw,60px);line-height:.9;text-transform:uppercase;letter-spacing:-.005em}
+.tv-h3{margin:0;font-family:var(--cond);font-weight:800;font-size:15px;letter-spacing:.1em;text-transform:uppercase}
+.tv-sub{margin:2px 0 8px;font-size:13.5px;color:var(--muted)}
+.tv-aside{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.tv-lg{display:flex;gap:14px;font-size:13px;color:var(--muted)}
+.tv-lg i{display:inline-block;width:14px;height:10px;margin-right:6px;vertical-align:-1px}
+.tv-lg i.p{height:4px;background:var(--play);vertical-align:2px}
+.tv-btn{background:transparent;border:1.5px solid var(--ink);border-radius:999px;padding:6px 14px;font-family:var(--cond);font-weight:700;font-size:13px;letter-spacing:.08em;text-transform:uppercase;cursor:pointer}
+.tv-btn[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.tv-note{font-size:13px;color:var(--muted);margin:12px 0 0;max-width:90ch}
+/* 2. game results */
+.teampage .t-logwrap{overflow-x:auto}
+.tv-log{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}
+.tv-log th{font-family:var(--mono);font-weight:500;font-size:11px;color:var(--muted);text-align:right;padding:12px 8px 6px;white-space:nowrap;vertical-align:bottom}
+.tv-log th.wk,.tv-log th.tm,.tv-log th.wl,.tv-log th.tg{text-align:left}
+.tv-log th.dg,.tv-log th.pl{font-family:var(--cond);font-weight:800;font-size:12px;letter-spacing:.1em;color:var(--ink)}
+.tv-log td{padding:14px 8px;border-top:1px solid var(--rule);vertical-align:middle}
+.tv-log tr.gc{cursor:pointer;transition:background .18s}
+.tv-log tr.gc:hover,.tv-log tr.gc:focus-visible{background:var(--paper-2);outline:0}
+.tv-log tr.gc:focus-visible td:first-child{box-shadow:inset 3px 0 0 var(--blue)}
+.tv-log td.wk{width:44px;font-family:var(--display);font-weight:800;font-size:28px;color:var(--muted);text-align:center;line-height:1}
+.tv-log td.wk .bowl{font-size:14px}
+.tv-log .tm-in{display:flex;align-items:center;gap:12px;min-width:0}
+.tv-log .tm-in img,.tv-log .nologo{width:36px;height:36px;flex:0 0 auto;object-fit:contain}
+.tv-o{min-width:0}
+.tv-o b{display:block;font-weight:700;font-size:17px;line-height:1.15}
+.tv-o b .rk{font-weight:600;color:var(--muted)}
+.tv-o b .bowl{font-family:var(--cond);font-size:12px;letter-spacing:.06em;color:var(--muted);text-transform:uppercase}
+.tv-o small{display:block;font-family:var(--mono);font-size:12px;color:var(--muted);margin-top:2px}
+.tv-o small .sc,.tv-o small .set{display:none}
+.tv-log td.wl{font-family:var(--mono);font-weight:600;font-size:14px;white-space:nowrap;width:96px}
+.tv-log th.trk{width:34%;position:relative}
+.tv-axis{position:relative;display:block;height:14px}
+.tv-axis span{position:absolute;bottom:0;transform:translateX(-50%);white-space:nowrap}
+.tv-axis span.th{color:var(--ink-2)}
+.tv-trk{position:relative;display:block;height:34px}
+.tv-trk .z{position:absolute;left:50%;top:-4px;bottom:-4px;width:1.5px;background:var(--ink)}
+.tv-trk .th{position:absolute;top:0;bottom:0;border-left:1px dashed var(--rule-2)}
+.tv-trk i{position:absolute;transform-origin:var(--o) 50%;transition:transform .7s cubic-bezier(.2,.8,.2,1) var(--dl,0ms)}
+.tv-trk .bd{top:5px;height:18px}
+.tv-trk .bp{top:26px;height:5px;background:var(--play)}
+.tv-log.tv-pre .tv-trk i{transform:scaleX(0)}
+.tv-log td.dg{font-family:var(--display);font-weight:800;font-size:34px;line-height:1;text-align:right;white-space:nowrap;width:96px}
+.tv-log td.pl{text-align:right;white-space:nowrap;font-family:var(--mono);font-size:12px;color:var(--muted);width:92px}
+.tv-log td.pl .v{color:var(--ink-2);font-weight:500}
+@media (min-width:821px){.tv-log td.pl .k{display:none}.tv-log td.pl{font-size:13px}}
+.tv-log td.tg{width:132px}
+.tv-log td.tg>*{display:block;width:max-content}
+.tv-log td.tg>*+*{margin-top:5px}
+.tv-chip{font-family:var(--stamp);font-size:10.5px;letter-spacing:.04em;text-transform:uppercase;padding:3px 7px 2px;border:2px solid currentColor;border-radius:3px;line-height:1.1;white-space:nowrap}
+.tv-chip.d,.tv-chip.cd{color:var(--pos)}.tv-chip.cd{background:var(--pos);border-color:var(--pos);color:var(--paper-2)}
+.tv-chip.s,.tv-chip.cs{color:var(--neg)}.tv-chip.cs{background:var(--neg);border-color:var(--neg);color:var(--paper-2)}
+.tv-hl{font-family:var(--cond);font-weight:800;font-size:12px;letter-spacing:.1em;text-transform:uppercase;white-space:nowrap;color:var(--muted)}
+.tv-hl.hi{color:var(--pos)}.tv-hl.lo{color:var(--neg)}
+.tv-log th.x,.tv-log td.x{display:none}
+.tv-log td.x{font-family:var(--mono);font-size:13.5px;text-align:right;white-space:nowrap}
+.tv-log td.x.qb{text-align:left;font-family:var(--body);font-weight:600;font-size:14px}
+.tv-log.expanded th.x,.tv-log.expanded td.x{display:table-cell}
+.tv-log.expanded th.trk,.tv-log.expanded td.trk,.tv-log.expanded th.tg,.tv-log.expanded td.tg{display:none}
+.tv-log.expanded td.dg{font-size:26px}
+.tv-log.expanded .tv-o small .set{display:inline}
+/* 3. season trends */
+.tv-trends{display:grid;grid-template-columns:1fr 1fr}
+.tv-tp{padding:22px 32px 6px 0;min-width:0}
+.tv-tp+.tv-tp{padding:22px 0 6px 32px;border-left:1px solid var(--rule)}
+.tv-trends.past{grid-template-columns:1fr}
+.tv-trends.past .tv-wk{display:none}
+.tv-trends.past .tv-yrs{padding-left:0;border-left:0;max-width:820px}
+.tv-seg{display:none}
+.teampage .t-trend svg,.teampage .t-years svg{width:100%;height:auto;display:block;overflow:visible}
+.teampage .t-trend .grid,.teampage .t-years .grid{stroke:var(--rule);stroke-width:1}
+.teampage .t-trend .tick,.teampage .t-trend .wk,.teampage .t-years .tick,.teampage .t-years .rec{font-family:var(--mono);font-size:11px;fill:var(--muted)}
+.teampage .t-trend .ln{fill:none;stroke-width:3;stroke-linejoin:round;stroke-linecap:round;transition:stroke-dashoffset 1.1s cubic-bezier(.4,0,.2,1)}
+.teampage .t-trend.tv-pre .ln{stroke-dasharray:var(--len);stroke-dashoffset:var(--len)}
+.teampage .t-trend circle{stroke-width:2.5}
+.teampage .t-trend .rk{font-family:var(--display);font-weight:800;font-size:15px;fill:var(--ink)}
+.teampage .t-trend .rk.big{font-size:26px}
+.teampage .t-trend .call{font-family:var(--cond);font-weight:800;font-size:13px;letter-spacing:.06em;text-transform:uppercase}
+.teampage .t-trend .call.up{fill:var(--pos)}.teampage .t-trend .call.dn{fill:var(--neg)}
+.teampage .t-years .col{fill:transparent}
+.teampage .t-years g.yr{cursor:pointer;outline:0}
+.teampage .t-years g.yr:hover .col,.teampage .t-years g.yr:focus-visible .col{fill:rgba(19,18,16,.05)}
+.teampage .t-years g.yr:focus-visible .yl{text-decoration:underline}
+.teampage .t-years g.yr.none{cursor:default}
+.teampage .t-years .bar{transform-box:fill-box;transition:transform .6s cubic-bezier(.2,.8,.2,1)}
+.teampage .t-years .bar.up{transform-origin:50% 100%}.teampage .t-years .bar.dn{transform-origin:50% 0}
+.teampage .t-years.tv-pre .bar{transform:scaleY(0)}
+.teampage .t-years .bar.play{fill:var(--blue);fill-opacity:.55}
+.teampage .t-years .val{font-family:var(--display);font-weight:800;font-size:15px;fill:var(--ink)}
+.teampage .t-years .yl{font-family:var(--display);font-weight:800;font-size:15px;fill:var(--ink)}
+.teampage .t-years .yl.on{fill:var(--red)}
+.teampage .t-years .zero{stroke:var(--ink);stroke-width:1.5}
+.teampage .t-legend{display:flex;gap:6px 16px;flex-wrap:wrap;font-size:12.5px;color:var(--muted);padding-top:8px}
+.teampage .t-legend i{display:inline-block;width:12px;height:12px;margin-right:6px;vertical-align:-1px}
+.teampage .t-legend i.era{opacity:.18}
+/* 4. by the numbers */
+.tv-nums{display:grid;grid-template-columns:repeat(4,minmax(0,1fr))}
+.tv-nums.n3{grid-template-columns:repeat(3,minmax(0,1fr))}.tv-nums.n2{grid-template-columns:repeat(2,minmax(0,1fr))}.tv-nums.n1{grid-template-columns:1fr}
+.tv-n{padding:22px 24px 24px;border-left:1px solid var(--rule);min-width:0}
+.tv-n:first-child{border-left:0;padding-left:0}
+.tv-n .k{display:block;font-family:var(--cond);font-weight:800;font-size:14px;letter-spacing:.1em;text-transform:uppercase}
+.tv-n .v{display:block;font-family:var(--display);font-weight:900;font-size:clamp(56px,6.2vw,84px);line-height:.9;margin:10px 0;font-variant-numeric:tabular-nums;white-space:nowrap}
+.tv-n .v em{font-style:normal;font-size:.48em;color:var(--muted);font-weight:800;margin:0 .1em}
+.tv-n p{margin:0;font-size:14.5px;color:var(--ink-2);line-height:1.38}
+.tv-n p b{color:var(--ink)}
+/* more stats */
+.tv-more{margin-top:34px;border-top:2px solid var(--ink)}
+.tv-more>.tv-h3{padding:16px 0 4px}
+.tv-acc{border-bottom:1px solid var(--rule)}
+.tv-acc-b{width:100%;display:grid;grid-template-columns:1fr auto 26px;align-items:center;gap:16px;background:none;border:0;padding:16px 0;text-align:left;cursor:pointer;color:inherit}
+.tv-acc-b:hover .t{text-decoration:underline;text-underline-offset:4px}
+.tv-acc-b .t{font-family:var(--display);font-weight:800;font-size:26px;text-transform:uppercase;line-height:1}
+.tv-acc-b .c{font-family:var(--mono);font-size:12.5px;color:var(--muted)}
+.tv-acc-b .pl{position:relative;width:18px;height:18px;justify-self:end}
+.tv-acc-b .pl::before,.tv-acc-b .pl::after{content:"";position:absolute;left:0;right:0;top:8px;height:2px;background:var(--ink);transition:transform .25s}
+.tv-acc-b .pl::after{transform:rotate(90deg)}
+.tv-acc.open .tv-acc-b .pl::after{transform:rotate(0)}
+.tv-acc-p{display:grid;grid-template-rows:0fr;transition:grid-template-rows .32s ease;visibility:hidden}
+.tv-acc.open .tv-acc-p{grid-template-rows:1fr;visibility:visible}
+.tv-acc-p>div{overflow:hidden;min-height:0}
+.tv-acc-p>div>*:last-child{margin-bottom:18px}
+.teampage .tv-more .t-habs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 40px}
+.teampage .tv-more .t-leads{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 40px}
+.teampage .tv-more .t-leads .tv-note{grid-column:1/-1}
+.teampage .tv-more .hb{background:none;border:0;box-shadow:none;padding:11px 0;border-top:1px solid var(--rule);display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 16px;align-items:baseline}
+.teampage .tv-more .hb .hl{font-family:var(--body);font-weight:700;font-size:16px;letter-spacing:0;text-transform:none;color:var(--ink)}
+.teampage .tv-more .hb .hv{font-family:var(--display);font-weight:800;font-size:26px;line-height:1;text-align:right;white-space:nowrap}
+.teampage .tv-more .hb .hv .pp i{font-style:normal;margin:0 .2em;color:var(--muted)}
+.teampage .tv-more .hb .hr{grid-column:1/-1;font-size:13px;color:var(--muted);font-weight:500}
+.teampage .tv-more .hb .hb-tog{grid-column:1/-1;justify-self:start;background:none;border:0;padding:2px 0;font-family:var(--cond);font-weight:700;font-size:12.5px;letter-spacing:.08em;text-transform:uppercase;text-decoration:underline;text-underline-offset:3px;cursor:pointer;color:var(--ink-2)}
+.teampage .tv-more .hb .hb-more{grid-column:1/-1;display:none;font-size:13.5px;color:var(--ink-2)}
+.teampage .tv-more .hb.open .hb-more{display:block}
+.teampage .tv-more .hb .hb-more p{margin:2px 0}
+.teampage .tv-more .t-tb{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 40px}
+.teampage .tv-more .t-tb .kicker{display:block;margin:4px 0 2px}
+/* laptop */
+@media (max-width:1100px){
+  .teampage .t-card.tv-card{grid-template-columns:1fr;gap:22px}
+  .tv-verdict{justify-content:start}
+  .tv-log th.trk{width:28%}
+}
+/* phones */
+@media (max-width:820px){
+  .tv-jump-in{height:46px;gap:2px}
+  .tv-jump .tv-long,.tv-me{display:none}
+  .tv-jump a{font-size:13.5px;padding:6px 10px}
+  .tv-band-in{padding:16px 0 28px}
+  .tv-ctl{margin-bottom:16px}
+  .tv-ctl select,.tv-pill{font-size:12px;padding:5px 11px}.tv-ctl select{padding-right:26px}
+  .tv-ctl .qsearch{width:132px;font-size:13px;padding:5px 12px}
+  .tv-id{gap:14px}
+  .teampage .tv-crest{width:72px;height:72px}
+  .teampage .tv-ctl #tseason{font-size:12px;padding:5px 26px 5px 11px}
+  .teampage .tv-name{font-size:clamp(46px,14vw,64px)}
+  .teampage .tv-name small{font-size:15px;margin-top:6px}
+  .tv-verdict{grid-template-columns:1fr 1fr;justify-content:stretch}
+  .tv-v{padding:0 0 2px 18px}
+  .tv-v .v{font-size:clamp(64px,21vw,92px)}
+  .tv-v .l{font-size:13.5px;margin-top:9px}.tv-v .l small{font-size:12.5px}
+  .teampage .t-card-foot.tv-foot{font-size:13px}
+  .tv-coach{width:100%}
+  .tv-strip{flex-direction:column;align-items:flex-start}
+  .teampage .t-next .t-after{padding-left:0;border-left:0}
+  .teampage .tv-sec{margin-top:42px}
+  .tv-h2{font-size:40px}
+  .tv-lg{display:none}
+  .tv-log thead{display:none}
+  .tv-log,.tv-log tbody{display:block}
+  .tv-log tr.gc{display:grid;grid-template-columns:28px minmax(0,1fr) auto;grid-template-areas:"wk tm dg" "wk trk pl" "wk trk tg";gap:2px 12px;padding:12px 0;border-top:1px solid var(--rule)}
+  .tv-log tr.gc td{display:block;padding:0;border:0;width:auto}
+  .tv-log td.wk{grid-area:wk;font-size:22px;padding-top:4px}
+  .tv-log td.tm{grid-area:tm}
+  .tv-log .tm-in{gap:10px;align-items:flex-start}
+  .tv-log .tm-in img{width:28px;height:28px}
+  .tv-o b{font-size:15.5px}
+  .tv-o small .sc{display:inline}
+  .tv-log td.wl{display:none!important}
+  .tv-log:not(.expanded) td.x{display:none!important}
+  .tv-ctl .t-find{display:none}
+  .tv-coach{font-family:var(--body);font-size:13px}
+  .tv-log td.trk{grid-area:trk;align-self:center;padding-top:6px}
+  .tv-trk{height:26px}.tv-trk .bd{top:3px;height:14px}.tv-trk .bp{top:19px;height:4px}
+  .tv-log td.dg{grid-area:dg;font-size:30px}
+  .tv-log td.pl{grid-area:pl}
+  .tv-log td.tg{grid-area:tg;text-align:right}
+  .tv-log td.tg>*{margin-left:auto}
+  .tv-chip{font-size:9.5px;padding:2px 5px 1px}.tv-hl{font-size:10.5px}
+  .tv-log td.tg:empty{display:none}
+  /* All stats on a phone: the extra numbers sit in a strip under each game */
+  .tv-log.expanded td.trk,.tv-log.expanded td.tg{display:none}
+  .tv-log.expanded td.x{display:inline-block;font-size:12px;text-align:left}
+  .tv-log.expanded td.x.qb{font-family:var(--mono);font-weight:500;font-size:12px}
+  .tv-log.expanded tr.gc{display:flex;flex-wrap:wrap;column-gap:14px;row-gap:3px;padding-left:40px;position:relative}
+  .tv-log.expanded td.wk{position:absolute;left:0;top:14px}
+  .tv-log.expanded td.tm{flex:1 1 60%}
+  .tv-log.expanded td.dg{flex:0 0 auto;margin-left:auto}
+  .tv-log.expanded td.pl{flex:0 0 100%;text-align:left}
+  .tv-log.expanded td.x::before{content:attr(data-k) " ";color:var(--muted)}
+  .tv-seg{display:inline-flex;border:1.5px solid var(--ink);border-radius:999px;padding:2px}
+  .tv-seg[hidden]{display:none}
+  .tv-seg button{border:0;background:none;border-radius:999px;padding:5px 12px;font-family:var(--cond);font-weight:700;font-size:13px;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;color:inherit}
+  .tv-seg button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+  .tv-trends{grid-template-columns:1fr}
+  .tv-tp,.tv-tp+.tv-tp{padding:18px 0 4px;border-left:0}
+  .tv-trends[data-v="season"] .tv-yrs,.tv-trends[data-v="years"] .tv-wk{display:none}
+  .tv-nums,.tv-nums.n3{grid-template-columns:1fr 1fr}
+  .tv-n{padding:18px 0 20px 16px}
+  .tv-n:nth-child(odd){border-left:0;padding-left:0}
+  .tv-n:nth-child(n+3){border-top:1px solid var(--rule)}
+  .tv-n .v{font-size:clamp(44px,13vw,60px)}
+  .tv-n p{font-size:13.5px}
+  .tv-acc-b{grid-template-columns:1fr 22px}.tv-acc-b .c{display:none}
+  .tv-acc-b .t{font-size:22px}
+  .teampage .tv-more .t-habs,.teampage .tv-more .t-leads,.teampage .tv-more .t-tb{grid-template-columns:1fr}
+}
+@media (max-width:370px){ .tv-v .v{font-size:60px} .tv-n .v{font-size:40px} .tv-ctl .qsearch{width:116px} }
+@media (prefers-reduced-motion:reduce){ .teampage .tv-trk i,.teampage .t-trend .ln,.teampage .t-years .bar,.tv-acc-p,.tv-me{transition:none} }
 </style>
 <div class="home" id="home">
 <header class="mast">
@@ -2756,87 +3055,81 @@ h2{font-family:var(--display);font-weight:900;font-size:clamp(34px,4vw,52px);lin
 <section class="v2page teampage" aria-labelledby="t-name">
   <div class="wrap">
 
-    <!-- identity -->
-    <div class="t-top">
-      <div class="t-ctl">
-        <label class="t-lbl" for="tseason">Season</label><select id="tseason" aria-label="Season"></select>
-        <button type="button" class="linkbtn t-share" data-share="team">Share team card</button>
-        <div class="t-find"><label class="t-lbl" for="tfindq">Switch team</label><input id="tfindq" class="qsearch" type="search" placeholder="Any Power 4 team" autocomplete="off" aria-label="Switch team"><div class="findres t-findres" id="tfindres" hidden></div></div>
-      </div>
-      <div class="t-hero" id="t-hero"></div>
-    </div>
+    <!-- Oct 18 2026 simplification: four sections (Overview, Game results, Season trends, By the numbers) plus a collapsed More stats.
+         Same data and links as before; The Read and the story paragraphs are gone, nothing is repeated. -->
+    <nav class="tv-jump" id="tv-jump" aria-label="On this page"><div class="tv-jump-in">
+      <span class="tv-me" id="tv-me" aria-hidden="true"></span>
+      <a href="#t-overview" data-tv="t-overview">Overview</a><a href="#t-results" data-tv="t-results"><span class="tv-long">Game </span>results</a><a href="#t-trends" data-tv="t-trends"><span class="tv-long">Season </span>trends</a><a href="#t-numbers" data-tv="t-numbers"><span class="tv-long">By the </span>numbers</a>
+    </div></nav>
 
-    <!-- the story -->
-    <section class="t-sec t-story" aria-labelledby="t-story-h">
-      <div class="t-story-grid">
-        <div class="t-story-copy">
-          <span class="kicker" id="t-story-k">The story so far</span>
-          <h2 id="t-story-h" class="t-h2"></h2>
-          <div id="t-story"></div>
+    <!-- 1. overview: who, where they rank, the season DAWG grade, up next -->
+    <section class="tv-over" id="t-overview" aria-labelledby="t-name">
+      <div class="tv-band" id="t-band"><div class="tv-band-in">
+        <div class="tv-ctl t-ctl">
+          <span class="tv-ctx" id="t-ctx"></span>
+          <div class="tv-ctl-r">
+            <label class="tv-sr" for="tseason">Season</label><select id="tseason" aria-label="Season"></select>
+            <button type="button" class="tv-pill t-share" data-share="team">Share team card</button>
+            <div class="t-find"><label class="tv-sr" for="tfindq">Switch team</label><input id="tfindq" class="qsearch" type="search" placeholder="Switch team" autocomplete="off" aria-label="Switch team"><div class="findres t-findres" id="tfindres" hidden></div></div>
+          </div>
         </div>
-        <div class="t-story-art" id="t-story-art"></div>
-      </div>
-    </section>
-
-    <!-- beyond the score: published stories tagged with this team (filled by home.js; hidden when there are none) -->
-    <section class="t-sec t-stories" id="t-stories" aria-labelledby="t-stories-h" hidden>
-      <div class="sechead compact"><div><span class="kicker">DAWG editorial</span><h2 id="t-stories-h" class="t-h2">Beyond the score</h2></div></div>
-      <div class="t-stories-grid" id="t-stories-list"></div>
-      <p class="t-stories-all"><a class="link" href="/stories/">All stories <span aria-hidden="true">→</span></a></p>
-    </section>
-
-    <!-- season performance -->
-    <section class="t-sec" aria-labelledby="t-season-h">
-      <div class="sechead compact"><div><span class="kicker" id="t-season-k">Season performance</span><h2 id="t-season-h" class="t-h2">This season by the numbers</h2></div></div>
-      <div class="t-season-grid">
-        <div class="t-trend" id="t-trend"></div>
-        <div class="t-receipt" id="t-receipt"></div>
+        <div class="t-hero" id="t-hero"></div>
+      </div></div>
+      <div class="tv-strip">
+        <p class="tv-def"><b>DAWG = points better or worse than Vegas expected, garbage time removed.</b> <a class="link" href="/#method" data-p="method">How it works <span aria-hidden="true">→</span></a></p>
         <div class="t-next" id="t-next"></div>
       </div>
-      <div class="t-games" id="t-games"></div>
+      <div class="tv-facts" id="t-facts" hidden></div>
     </section>
 
-    <!-- game log -->
-    <section class="t-sec" aria-labelledby="t-log-h">
-      <div class="idx-ctl"><div><span class="kicker">Game log</span><h2 id="t-log-h" class="t-h2"></h2></div>
-        <button type="button" class="linkbtn" id="t-log-all" aria-pressed="false">Show all stats <span aria-hidden="true">→</span></button></div>
+    <!-- 2. game results: every game, its DAWG grade on one zero line; All stats turns it into the full table -->
+    <section class="t-sec tv-sec" id="t-results" aria-labelledby="t-log-h">
+      <div class="tv-sh"><div><span class="kicker" id="t-log-k"></span><h2 id="t-log-h" class="tv-h2">Game results</h2></div>
+        <div class="tv-aside"><span class="tv-lg" id="t-log-lg"></span><button type="button" class="tv-btn" id="t-log-all" aria-pressed="false">All stats</button></div></div>
       <div class="t-logwrap" id="t-logwrap">
-        <table class="board tlog" id="t-log">
+        <table class="tv-log" id="t-log">
           <thead><tr>
-            <th class="l wk">Wk</th><th class="l">Opponent</th><th class="l hide-sm">Date · Site</th><th class="hide-sm">Result</th><th class="mh">DAWG<span class="mh-i" data-mi-slot="dawg"></span><span class="mh-s">scoreboard</span></th><th class="mh">PLAY<span class="mh-i" data-mi-slot="play"></span><span class="mh-s">off + def</span></th>
-            <th class="x" title="Closing line, from this team's side">Line</th><th class="x" title="Margin the line expected">Expected</th><th class="x" title="Final margin with garbage time out">Margin<small>excl. garbage</small></th><th class="x" title="Points on drives right after a defensive stop">Cash-in</th><th class="x" title="Scoring drives answered">Answers</th><th class="x" title="Points added after going up 9+ in the second half">Knife twist</th><th class="x l">Starting QB</th>
+            <th class="wk" scope="col"><span class="tv-sr">Week</span></th><th class="tm" scope="col"><span class="tv-sr">Opponent</span></th><th class="wl" scope="col"><span class="tv-sr">Result</span></th><th class="trk" scope="col" aria-hidden="true"><span class="tv-axis" id="t-axis"></span></th><th class="dg" scope="col">DAWG</th><th class="pl" scope="col">PLAY</th><th class="tg" scope="col"><span class="tv-sr">Label</span></th>
+            <th class="x" scope="col" title="Closing line, from this team's side">Line</th><th class="x" scope="col" title="Average margin at that line, garbage time removed">Expected</th><th class="x" scope="col" title="Final margin with garbage time removed">Margin</th><th class="x" scope="col" title="Points on drives right after a defensive stop">Cash-in</th><th class="x" scope="col" title="Scoring drives answered">Answers</th><th class="x" scope="col" title="Points added after going up 9+ in the second half">Knife twist</th><th class="x" scope="col">Starting QB</th>
           </tr></thead>
           <tbody></tbody>
         </table>
       </div>
-      <p class="note t-lognote">Tap a game for the full card: what Vegas expected, what happened with garbage time removed (DAWG), and how the offense and defense graded (PLAY).</p>
+      <p class="tv-note t-lognote"></p>
     </section>
 
-    <!-- habits -->
-    <section class="t-sec" aria-labelledby="t-hab-h">
-      <div class="sechead"><div><span class="kicker" id="t-hab-k">Team habits</span><h2 id="t-hab-h" class="t-h2">What this team tends to do</h2></div>
-        <p class="sechead-note">Season DAWG barely carries over from one year to the next. These habits carry over more, penalties most of all; “sits on a lead” only weakly. Each one blends this season with last, leaning on last year early in the season.</p></div>
-      <div class="t-habs" id="t-habs"></div>
-      <div class="t-leads" id="t-leads"></div>
+    <!-- beyond the score: published stories tagged with this team (filled by home.js; hidden when there are none) -->
+    <section class="t-sec t-stories" id="t-stories" aria-labelledby="t-stories-h" hidden>
+      <div class="tv-sh"><div><span class="kicker">DAWG editorial</span><h2 id="t-stories-h" class="tv-h2">Beyond the score</h2></div></div>
+      <div class="t-stories-grid" id="t-stories-list"></div>
+      <p class="t-stories-all"><a class="link" href="/stories/">All stories <span aria-hidden="true">→</span></a></p>
     </section>
 
-    <!-- the read: what, why, what's changing -->
-    <section class="t-sec t-read-sec" aria-labelledby="t-read-h">
-      <div class="sechead"><div><span class="kicker" id="t-read-k">The read</span><h2 id="t-read-h" class="t-h2">What they are, what stands out, and what happened lately</h2></div>
-        <p class="sechead-note">Three questions, answered only from numbers already on this page: the grades, the turnovers and success rates beside them, and how the last few games compare with the rest. Numbers that move together don’t show what caused what.</p></div>
-      <div class="t-read" id="t-read"></div>
+    <!-- 3. season trends: rank by week this season, season DAWG grade since 2019 (tap a year to switch) -->
+    <section class="t-sec tv-sec" id="t-trends" aria-labelledby="t-hist-h">
+      <div class="tv-sh"><div><span class="kicker" id="t-hist-k">Rank by week · season by season</span><h2 id="t-hist-h" class="tv-h2">Season trends</h2></div>
+        <div class="tv-seg" id="tv-seg" role="group" aria-label="Trend view"><button type="button" data-v="season" aria-pressed="true">This season</button><button type="button" data-v="years" aria-pressed="false">Since 2019</button></div></div>
+      <div class="tv-trends" id="tv-trends" data-v="season">
+        <div class="tv-tp tv-wk"><h3 class="tv-h3">Rank by week</h3><div class="t-trend" id="t-trend"></div></div>
+        <div class="tv-tp tv-yrs"><h3 class="tv-h3">Season DAWG grade since 2019</h3><p class="tv-sub">Tap a year to open that season.</p><div class="t-years" id="t-years"></div></div>
+      </div>
     </section>
 
-    <!-- history -->
-    <section class="t-sec" aria-labelledby="t-hist-h">
-      <div class="sechead"><div><span class="kicker">Since 2019</span><h2 id="t-hist-h" class="t-h2">Year by year</h2></div>
-        <p class="sechead-note">Average DAWG and PLAY each season, including bowls and the playoff. Tap a year to switch the page to that season.</p></div>
-      <div class="t-hist-grid">
-        <div class="t-years" id="t-years"></div>
-        <div class="t-tb">
-          <div><span class="kicker">Best performances since 2019</span><ol class="gl" id="t-tb-top"></ol></div>
-          <div><span class="kicker">Worst performances since 2019</span><ol class="gl" id="t-tb-bot"></ol></div>
-        </div>
+    <!-- 4. by the numbers: four stats, then everything else behind More stats -->
+    <section class="t-sec tv-sec" id="t-numbers" aria-labelledby="t-num-h">
+      <div class="tv-sh"><div><span class="kicker" id="t-num-k"></span><h2 id="t-num-h" class="tv-h2">By the numbers</h2></div></div>
+      <div class="tv-nums" id="t-nums"></div>
+      <div class="tv-more" id="t-more">
+        <h3 class="tv-h3">More stats</h3>
+        <div class="tv-acc" id="tv-acc-hab"><button type="button" class="tv-acc-b" aria-expanded="false" aria-controls="tv-b-hab"><span class="t" id="t-hab-k">Team habits</span><span class="c">How it tends to play · this season + last</span><span class="pl" aria-hidden="true"></span></button>
+          <div class="tv-acc-p" id="tv-b-hab"><div><div class="t-habs" id="t-habs"></div><p class="tv-note">Season DAWG barely carries over from one year to the next. These habits carry over more, penalties most of all; “sits on a lead” only weakly. Each one blends this season with last, leaning on last year early in the season.</p></div></div></div>
+        <div class="tv-acc" id="tv-acc-grd"><button type="button" class="tv-acc-b" aria-expanded="false" aria-controls="tv-b-grd"><span class="t">Behind the grades</span><span class="c">Turnovers · success rate · cash-in · answers</span><span class="pl" aria-hidden="true"></span></button>
+          <div class="tv-acc-p" id="tv-b-grd"><div><div class="t-leads" id="t-leads"></div></div></div></div>
+        <div class="tv-acc" id="tv-acc-tb"><button type="button" class="tv-acc-b" aria-expanded="false" aria-controls="tv-b-tb"><span class="t">Best and worst since 2019</span><span class="c">Five of each</span><span class="pl" aria-hidden="true"></span></button>
+          <div class="tv-acc-p" id="tv-b-tb"><div><div class="t-tb">
+            <div><span class="kicker pos">Best performances since 2019</span><ol class="gl" id="t-tb-top"></ol></div>
+            <div><span class="kicker neg">Worst performances since 2019</span><ol class="gl" id="t-tb-bot"></ol></div>
+          </div></div></div></div>
       </div>
     </section>
 
@@ -3277,6 +3570,7 @@ h2{font-family:var(--display);font-weight:900;font-size:clamp(34px,4vw,52px);lin
   <section class="sec page" data-page="method" id="changes-sec" aria-labelledby="chg-h">
     <h2 id="chg-h">Changes</h2>
     <ul class="chg">
+      <li><b>Oct. 18, 2026</b> Simpler team pages: four sections (overview, game results, season trends, by the numbers), with everything else under More stats. The written summaries are gone and nothing is repeated. Same data and links; no grade, rank or number changed.</li>
       <li><b>Oct. 12, 2026</b> The game card now fits any screen: it scrolls inside itself with the close button always in view, and the page behind it stays put. Remaining labels that called PLAY "the snaps" now say offense + defense. No grade, rank or label changed.</li>
       <li><b>Oct. 13, 2026</b> Clearer words, same numbers. DAWG is now defined the same way across the site, on team pages and on share cards: points better or worse than Vegas's pregame expectation, garbage time removed, and labeled "pts vs. Vegas". The homepage receipt reads in plain words ("won by 25", "expected to lose by 11.2") instead of signed arithmetic. Team pages show games graded next to the rank, mark bye weeks, and no longer call a three-game stretch a trend. Wording that described PLAY as leaving out all returns now names what it leaves out: kickoffs, punts, field goals, and kick and punt returns. No grade, rank, label, threshold or data changed.</li>
       <li><b>Oct. 11, 2026</b> DAWG and PLAY are now explained where they first appear: DAWG is the scoreboard vs. expectations, PLAY is the offense and defense vs. expectations. A game's PLAY is now shown to one decimal, like DAWG, from the same unrounded value the grade has always stored (the open-data CSV keeps whole numbers). No grade, rank or label changed.</li>
@@ -6685,7 +6979,8 @@ var FACTS = {
   function teamLoading(id){   // while the file loads: the team's name card from what the page already has, the rest held back
     var D = window.HOME, m = D.meta[id] || {}, col = teamColor(D, id);
     root.querySelector(".teampage").classList.add("loading"); root.querySelector(".teampage").setAttribute("aria-busy", "true");
-    $("t-hero").innerHTML = '<div class="t-card ' + textCls(col) + '" style="--tc:' + col + '"><div class="t-card-top"><div class="t-logo">' + blogo(id) + '</div><div class="t-names"><span class="t-conf">' + esc(m.conf || "") + '</span><h1 id="t-name" class="t-name">' + esc(m.name || "") + '</h1></div></div><div class="t-card-foot"><span>Loading…</span></div></div>';
+    var band = $("t-band"); band.style.setProperty("--tc", col); band.className = "tv-band " + textCls(col); $("t-ctx").textContent = m.conf || "";
+    $("t-hero").innerHTML = '<div class="t-card tv-card ' + textCls(col) + '" style="--tc:' + col + '"><div class="tv-id"><div class="t-logo tv-crest">' + blogo(id) + '</div><h1 id="t-name" class="t-name tv-name">' + esc(m.name || "") + '</h1></div><div class="t-card-foot tv-foot"><span>Loading…</span></div></div>';
     fitName();
   }
   // long school names (Northwestern, Mississippi State on a phone): shrink this team's headline only as far as its longest word needs;
@@ -6719,6 +7014,14 @@ var FACTS = {
       '<span class="who"><b>' + at(g.site) + (g.oppRank ? 'No. ' + g.oppRank + ' ' : '') + esc(g.oppName) + '</b><small>' + wl(g.pf, g.pa) + ' · ' + fmtD(g.date) + ', ' + g.date.slice(0, 4) + (g.set ? ' · ' + esc(g.set) : '') + '</small></span>' +
       '<span class="num"><b class="' + (g.dawg >= 0 ? 'pos' : 'neg') + '">' + signed(g.dawg) + '</b><small>' + ({CD:"Certified DAWG", D:"DAWG", S:"SOFT", CS:"Certified SOFT"}[g.lab] || "As expected") + (g.play == null ? '' : ' · PLAY ' + signed(gp(g))) + '</small></span></div></li>';
   }
+  // Oct 18 2026: the simplified team page. Four sections (Overview, Game results, Season trends, By the numbers) and a collapsed
+  // More stats. Every number comes from the same team file as before; nothing new is computed except the season sums that The Read
+  // used to add up (turnovers, success rate, answers, knife twist), now shown under "Behind the grades".
+  var LBL = {CD:"Certified DAWG", D:"DAWG", S:"SOFT", CS:"Certified SOFT"};
+  var tvReduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  function tvOrd(n){ var o = ord(n); return n + '<sup>' + o.slice(String(n).length) + '</sup>'; }
+  function tvChip(code){ return LBL[code] ? '<span class="tv-chip ' + code.toLowerCase() + '">' + LBL[code] + '</span>' : ''; }
+  function tvItem(k, v, cls, p, extra){ return '<div class="tv-n' + (extra || '') + '"><span class="k">' + k + '</span><span class="v ' + (cls || '') + '">' + v + '</span><p>' + p + '</p></div>'; }
   function drawTeamPage(){
     var D = window.HOME; if (!tp.id || !(D.team && D.team[tp.id])) return;
     var T = TD[tp.id];
@@ -6728,257 +7031,200 @@ var FACTS = {
     var y = String(tp.season), cur = y === String(D.season), S = T.seasons[y], col = teamColor(D, T.id), R = S ? seasonRank(D, y, T.id) : null;
     var sel = $("tseason"); if (!sel.__wired){ sel.__wired = true; sel.innerHTML = D.seasonList.slice().sort(function(a, b){ return b - a; }).map(function(s){ return '<option value="' + s + '">' + s + (String(s) === String(D.season) ? ' (' + D.week + ')' : '') + '</option>'; }).join(""); }
     sel.value = y;
-    // ---- identity: the team's credential, the season's record and where it stands ----
-    var nm = T.full.replace(T.name, "").trim();
-    var wkN = parseInt(String(D.week).replace(/\D/g, ""), 10), playedWk = {};
+    var nm = T.full.replace(T.name, "").trim(), playedWk = {};
     if (S) S.games.forEach(function(g){ playedWk[g.wk] = 1; });
     var brow = (D.rankings || []).filter(function(r){ return r.id === T.id; })[0], idle = !!(cur && brow && brow.idle);   // a bye (or no game yet) in the latest week: the rank can still move as other teams play
-    $("t-hero").innerHTML = '<div class="t-card ' + textCls(col) + '" style="--tc:' + col + '"><div class="t-card-top"><div class="t-logo">' + blogo(T.id) + '</div><div class="t-names"><span class="t-conf">' + esc(T.conf === "Independent" ? "Independent" : T.conf) + ' · ' + y + '</span><h1 id="t-name" class="t-name">' + esc(T.name) + '<small>' + esc(nm) + '</small></h1></div></div>' +
-      '<div class="t-card-foot"><span>' + esc(T.coach) + ', head coach since ' + T.since + (T.since >= D.season ? ' (first season)' : ' · ' + T.tenure + ' seasons') + '</span><span>Career since 2019' + (T.career.schools.length > 1 ? ' (' + T.career.schools.join(", ") + ')' : '') + ': ' + T.career.w + '–' + T.career.l + '</span></div></div>' +
-      (S ? '<div class="t-stand"><div class="t-rec"><b>' + S.w + '–' + S.l + '</b><small>' + (cur ? (idle ? 'Idle in ' + D.week : D.week) : y + ' final') + '</small></div>' +
-        '<div class="t-stk"><div class="sticker ' + (S.dawg >= 0 ? '' : 'bad') + '"><div class="v">' + ord(R.rk) + '</div><div class="t">of ' + R.n + '<small>' + S.nG + ' graded game' + (S.nG === 1 ? '' : 's') + '</small></div></div>' +
-        '<div class="sticker info"><div class="v">' + signed(S.dawg) + '</div><div class="t">DAWG<small>pts vs. expectation · scoreboard</small></div></div>' +
-        '<div class="sticker paper"><div class="v">' + (S.play == null ? '–' : signed(S.play)) + '</div><div class="t">PLAY<small>' + (R.pk ? ord(R.pk) + ' of ' + R.pn + ' · offense + defense' : 'offense + defense') + '</small></div></div></div>' + metricKey(true) + '</div>'
-       : '<div class="t-stand"><p class="note">No games for ' + esc(T.name) + ' in ' + y + '.</p></div>');
-    fitName();
-    // ---- the story: the season's numbers in plain words, plus the games that made it ----
+    var tr = cur ? T.trend : null, mv = tr && tr.pts.length >= 2 ? tr.pts[tr.pts.length - 2].r - tr.pts[tr.pts.length - 1].r : null;
     var nd = S ? S.nD + S.nCD : 0, ns = S ? S.nS + S.nCS : 0;
-    $("t-story-k").textContent = cur ? "The story so far · " + D.week : "The story of " + y;
-    if (!S){ $("t-story-h").textContent = "Nothing to tell yet."; $("t-story").innerHTML = ""; $("t-story-art").innerHTML = ""; }
-    else {
-      var vw = S.dawg >= 0.5 ? "above" : S.dawg <= -0.5 ? "below" : "right around";
-      var head = cur ? (vw === "above" ? (R.rk <= 10 ? esc(T.name) + ' has been one of the Power 4’s best at living up to expectations.' : esc(T.name) + ' has played above what Vegas expected.') : vw === "below" ? (R.rk > R.n - 10 ? esc(T.name) + ' has fallen as far short of Vegas’s expectations as any team in the Power 4.' : esc(T.name) + ' has played below what Vegas expected.') : esc(T.name) + ' has played about as Vegas expected.')
-        : (vw === "above" ? (R.rk <= 10 ? esc(T.name) + ' was one of the Power 4’s best at living up to expectations in ' + y + '.' : esc(T.name) + ' played above what Vegas expected in ' + y + '.') : vw === "below" ? (R.rk > R.n - 10 ? esc(T.name) + ' fell as far short of Vegas’s expectations as any Power 4 team in ' + y + '.' : esc(T.name) + ' played below what Vegas expected in ' + y + '.') : esc(T.name) + ' played about as Vegas expected in ' + y + '.');
-      $("t-story-h").innerHTML = head;
-      var gap = S.play == null ? null : S.dawg - S.play, gapTxt = gap == null ? '' : Math.abs(gap) >= 3 ? (gap > 0 ? ' The scoreboard is running ahead of the play; special teams and the timing of big plays count in DAWG, not PLAY.' : ' Its offense and defense have been better than its results: ' + esc(T.name) + ' has outplayed its scores.') : ' The two checks agree.';
-      var p1 = '<p>' + (cur ? esc(T.name) + ' is <b>' + S.w + '–' + S.l + '</b> and sits <b>' + ord(R.rk) + ' of ' + R.n + '</b> Power 4 teams at living up to expectations' : 'In ' + y + ', ' + esc(T.name) + ' went <b>' + S.w + '–' + S.l + '</b> and finished <b>' + ord(R.rk) + ' of ' + R.n + '</b> Power 4 teams at living up to expectations') +
-        ': <b>' + signed(S.dawg) + '</b> points a game ' + (S.dawg >= 0 ? 'better' : 'worse') + ' than Vegas expected, with garbage time removed, over ' + S.nG + ' graded game' + (S.nG === 1 ? '' : 's') + '. On offense and defense (PLAY) the number is <b>' + (S.play == null ? '–' : signed(S.play)) + '</b>.' + gapTxt + '</p>';
-      var p2 = '<p>' + (nd === 1 ? 'One DAWG game' : nd + ' DAWG games') + ' (' + signed(D.thresholds.dawg) + ' or better) and ' + (ns === 1 ? 'one SOFT game' : ns + ' SOFT games') + ' (' + plain(D.thresholds.soft) + ' or worse) out of ' + S.nG + ' graded' + ((S.nCD || S.nCS) ? ', including ' + (S.nCD ? S.nCD + ' Certified DAWG' : '') + (S.nCD && S.nCS ? ' and ' : '') + (S.nCS ? S.nCS + ' Certified SOFT' : '') : '') + '.' + (S.n > S.nG ? ' ' + (S.n - S.nG) + ' game' + (S.n - S.nG === 1 ? '' : 's') + ' not graded (no closing line, or the scoring record didn’t match the final).' : '') + '</p>';
-      // best and worst seasons since 2019, for context
-      var yrs = Object.keys(T.seasons).filter(function(k){ return T.seasons[k].dawg != null; }), others = yrs.filter(function(k){ return k !== y; });
-      var hi = others.slice().sort(function(a, b){ return T.seasons[b].dawg - T.seasons[a].dawg; })[0], lo = others.slice().sort(function(a, b){ return T.seasons[a].dawg - T.seasons[b].dawg; })[0];
-      var p3 = '';
-      if (hi && lo){ var best = T.seasons[hi], worst = T.seasons[lo];
-        var so = cur ? 'through ' + S.nG + ' graded game' + (S.nG === 1 ? '' : 's') + ', ' + signed(S.dawg) + ' is ' : signed(S.dawg) + ' is ';
-        p3 = '<p>' + (cur ? 'For context, ' : '') + (S.dawg > best.dawg ? (cur ? so + 'above ' + esc(T.name) + '’s best full season since 2019' : so + esc(T.name) + '’s best season since 2019') + '; ' + (cur ? 'that was ' : 'the previous high was ') + '<b>' + signed(best.dawg) + ' in ' + hi + '</b> (' + best.w + '–' + best.l + ').' :
-          S.dawg < worst.dawg ? (cur ? so + 'below ' + esc(T.name) + '’s worst full season since 2019' : so + esc(T.name) + '’s worst season since 2019') + '; ' + (cur ? 'that was ' : 'the previous low was ') + '<b>' + signed(worst.dawg) + ' in ' + lo + '</b> (' + worst.w + '–' + worst.l + ').' :
-          esc(T.name) + '’s best season since 2019 was <b>' + signed(best.dawg) + ' in ' + hi + '</b> (' + best.w + '–' + best.l + '), its worst <b>' + signed(worst.dawg) + ' in ' + lo + '</b> (' + worst.w + '–' + worst.l + ').') + '</p>'; }
-      var facts = cur ? T.facts : [];
-      $("t-story").innerHTML = p1 + p2 + p3 + (facts.length ? '<div class="t-facts"><span class="tab">Did you know?</span><ul>' + facts.map(function(f){ return '<li>' + esc(f) + '</li>'; }).join("") + '</ul></div>' : '');
-      // the season's high and low, as tickets
-      var G = S.games.filter(function(g){ return g.dawg != null; }), bestG = G.filter(function(g){ return g.id === S.best; })[0], worstG = G.filter(function(g){ return g.id === S.worst; })[0];
-      function tix(g, k){ if (!g) return ''; var me = {id: T.id, name: T.name, score: g.pf}, op = {id: g.oid, name: g.oppName, score: g.pa, rank: g.oppRank};
-        return '<div class="t-tix ' + k + '"><span class="kicker">' + (k === "hi" ? "Highest grade" : "Lowest grade") + ' · ' + (g.stype === 3 ? 'Bowl/CFP' : 'Week ' + g.wk) + '</span>' +
-          ticket(D, {away: g.site === "home" ? op : me, home: g.site === "home" ? me : op, neutral: g.site === "neutral", week: g.stype === 3 ? "Bowl" : "Week " + g.wk, dateLine: fmtDate(g.date), venue: g.set || "", city: "", gid: g.id,
-            card: {gid: g.id, t: T.id, y: y}, bc: T.id, stamp: {cls: (g.lab || "e").toLowerCase(), text: ({CD:"Certified<br>DAWG", D:"DAWG", S:"SOFT", CS:"Certified<br>SOFT"}[g.lab] || "As expected"), small: T.name + " " + signed(g.dawg)}}) +
-          '<button type="button" class="linkbtn t-tix-share" data-share="game" data-gid="' + g.id + '" data-t="' + T.id + '" data-y="' + y + '" data-tab="' + (k === "hi" ? "Highest grade" : "Lowest grade") + '" data-kick="' + esc(T.name) + '’s ' + (k === "hi" ? "highest" : "lowest") + ' grade of ' + y + '">Share this game</button></div>'; }
-      $("t-story-art").innerHTML = tix(bestG, "hi") + (worstG && worstG !== bestG ? tix(worstG, "lo") : ''); fitNext();
-    }
+
+    // ---- 1. overview ----
+    var band = $("t-band"); band.style.setProperty("--tc", col); band.className = "tv-band " + textCls(col);
+    $("t-ctx").className = "tv-ctx t-conf"; $("t-ctx").textContent = (T.conf === "Independent" ? "Independent" : T.conf) + " · " + (cur ? y + " · " + D.week : y + " season");
+    var coach = esc(T.coach) + ', head coach since ' + T.since + (T.since >= D.season ? ' (first season)' : ' · ' + T.tenure + ' seasons') + ' · Career since 2019' + (T.career.schools.length > 1 ? ' (' + T.career.schools.join(", ") + ')' : '') + ': ' + T.career.w + '–' + T.career.l;
+    var moveTxt = mv == null ? '' : (mv > 0 ? '▲ Up ' + mv : mv < 0 ? '▼ Down ' + (-mv) : 'Same spot') + ' this week' + (idle ? ', without playing' : '');
+    $("t-hero").innerHTML = '<div class="t-card tv-card ' + textCls(col) + '" style="--tc:' + col + '">' +
+      '<div class="tv-id"><div class="t-logo tv-crest">' + blogo(T.id) + '</div><h1 id="t-name" class="t-name tv-name">' + esc(T.name) + '<small>' + esc(nm) + '</small></h1></div>' +
+      (S ? '<div class="tv-verdict"><div class="tv-v" data-k="rank"><div class="v" data-count="' + R.rk + '" data-fmt="ord">' + tvOrd(R.rk) + '</div><div class="l">of ' + R.n + ' Power 4 teams<small>at living up to expectations</small></div></div>' +
+        '<div class="tv-v" data-k="dawg"><div class="v" data-count="' + S.dawg + '" data-fmt="signed">' + signed(S.dawg) + '</div><div class="l">Season DAWG grade<small>pts vs. Vegas a game</small></div></div></div>'
+        : '<p class="tv-none">No games for ' + esc(T.name) + ' in ' + y + '.</p>') +
+      '<div class="t-card-foot tv-foot"><div class="tv-rec t-rec">' + (S ? '<b>' + S.w + '–' + S.l + '</b>' : '') + (moveTxt ? '<span class="tv-move ' + (mv > 0 ? 'up' : mv < 0 ? 'dn' : '') + '">' + moveTxt + '</span>' : (S && !cur ? '<small>' + y + ' final</small>' : idle ? '<small>Idle in ' + esc(D.week) + '</small>' : '')) + '</div>' +
+      '<span class="tv-coach">' + coach + '</span></div></div>';
+    fitName();
+    var meH = S ? ord(R.rk) + ' · ' + signed(S.dawg) : y;
+    $("tv-me").innerHTML = logo(T.id) + '<span>' + esc(T.name) + '</span><b>' + meH + '</b>';
+    // up next: this week's game or a bye, then the next one on the schedule (current season only)
+    var U = cur ? T.upnext : null, nx = '';
+    if (U && U.game){ var g = U.game, home = g.home.id === T.id, op = home ? g.away : g.home, oppId = op.id;
+      nx = '<span class="kicker">Up next · Week ' + U.week + '</span><span class="tv-ng">' + logo(oppId) + '<b>' + (g.neutral ? 'vs. ' : home ? 'vs ' : 'at ') + (op.ap ? 'No. ' + op.ap + ' ' : '') + (D.meta[oppId] ? tlink(oppId, op.name) + esc(op.name) + '</a>' : esc(op.name)) + '</b>' + (op.rank ? '<small>' + ord(op.rank) + ' of ' + D.n + '</small>' : '') + '</span>' +
+        '<span class="tv-nt">' + esc(g.when.day + ' ' + g.when.date + ' · ' + g.when.time) + (g.when.net ? ' · ' + esc(g.when.net) : '') + '</span>' +
+        (D.meta[oppId] ? '<a class="link t-cmplink" href="/#week" data-cmp="' + T.id + ',' + oppId + '">Compare <span aria-hidden="true">→</span></a>' : '<a class="link" href="/#week" data-p="week">This week <span aria-hidden="true">→</span></a>'); }
+    else if (U && !U.unlisted){ nx = '<span class="kicker">Up next · Week ' + U.week + '</span><span class="tv-ng"><b>Bye</b><small>' + esc(T.name) + ' is off this week</small></span>'; }
+    var dupe = U && U.game && T.after && (U.game.away.id === T.after.id || U.game.home.id === T.after.id);   // next_games.json can hold this week's game itself
+    if (cur && T.after && D.meta[T.after.id] && !dupe){ var a = T.after, d = new Date(a.dt); nx += '<span class="t-after"><span class="kicker">' + (U && U.unlisted ? 'Up next · Week ' + U.week : U && !U.game ? 'After the bye' : 'Then') + '</span><b>' + (a.at === "at" ? "at " : "vs ") + (a.rk ? 'No. ' + a.rk + ' ' : '') + tlink(a.id, a.name) + esc(a.name) + '</a></b><small>' + DAYS[d.getUTCDay()] + ', ' + MON[d.getUTCMonth()] + ' ' + d.getUTCDate() + '</small></span>'; }
+    $("t-next").innerHTML = nx; $("t-next").hidden = !nx;
+    var facts = cur ? (T.facts || []) : [];
+    $("t-facts").innerHTML = facts.length ? '<span class="kicker">Did you know?</span>' + facts.map(function(f){ return '<span>' + esc(f) + '</span>'; }).join("") : ''; $("t-facts").hidden = !facts.length;
+
+    // ---- 2. game results ----
+    var GS = S ? S.games : [], mx = 0;
+    GS.forEach(function(g){ if (g.dawg != null) mx = Math.max(mx, Math.abs(g.dawg)); if (g.play != null) mx = Math.max(mx, Math.abs(gp(g))); });
+    var TH = D.thresholds.dawg, TS = D.thresholds.soft, EXT = Math.max(Math.ceil((Math.max(TH, -TS) + 3) / 5) * 5, Math.ceil((mx + 1) / 5) * 5);
+    var pct = function(v){ return 50 + v / EXT * 50; };
+    $("t-log-k").textContent = y + ' · ' + (S ? (S.n === S.nG ? S.n + ' game' + (S.n === 1 ? '' : 's') + ' graded' : S.n + ' games · ' + S.nG + ' graded') : 'no games');
+    $("t-log-lg").innerHTML = '<span><i style="background:' + col + '"></i>DAWG grade</span><span><i class="p"></i>PLAY</span>';
+    $("t-axis").innerHTML = [[-EXT, signed(-EXT, 0)], [TS, 'SOFT ' + signed(TS)], [0, '0'], [TH, 'DAWG ' + signed(TH)], [EXT, signed(EXT, 0)]].map(function(x){ return '<span class="' + (x[0] === TH || x[0] === TS ? 'th' : '') + '" style="left:' + pct(x[0]) + '%">' + x[1] + '</span>'; }).join("");
+    var tbl = $("t-log"), tb = tbl.tBodies[0];
+    tbl.classList.toggle("expanded", tp.all); $("t-log-all").setAttribute("aria-pressed", String(tp.all)); $("t-log-all").textContent = tp.all ? "Fewer stats" : "All stats";
+    root.querySelector(".t-lognote").textContent = tp.all ? 'Line is the closing spread from this team’s side; Expected is the average margin at that line, garbage time removed; Margin is the final with garbage time removed; Cash-in is points on drives right after a defensive stop; Answers is scoring drives answered; Knife twist is points added after going up 9+ in the second half. Tap a game for its full card.'
+      : 'Tap a game for its full card. Dashed lines mark a DAWG game (' + signed(TH) + ' or better) and a SOFT game (' + plain(TS) + ' or worse).';
+    var PST = {no_line:"no closing line", no_pbp:"no play-by-play", unreconciled:"play-by-play doesn't match the final", few_plays:"too few plays", pbp_conflict:"play-by-play scoring order doesn't match ESPN's scoring summary", no_fit:"not graded"};
+    function bar(v, cls, i){ if (v == null) return ''; var w = Math.min(50, Math.abs(v) / EXT * 50); return '<i class="' + cls + '" style="left:' + (v >= 0 ? 50 : 50 - w) + '%;width:' + Math.max(w, .6) + '%;--o:' + (v >= 0 ? '0%' : '100%') + ';--dl:' + (i * 60) + 'ms' + (cls === 'bd' ? ';background:' + col : '') + '"></i>'; }
+    tb.innerHTML = GS.length ? GS.map(function(g, i){
+      var mg = g.pf - g.pa, site = {home:"Home", away:"Road", neutral:"Neutral"}[g.site], wlc = mg > 0 ? 'pos' : mg < 0 ? 'neg' : '';
+      var opp = at(g.site) + (g.oppRank ? '<span class="rk">No. ' + g.oppRank + '</span> ' : '') + esc(g.oppName);
+      var tag = tvChip(g.lab) + (g.id === S.best && g.dawg != null ? '<span class="tv-hl hi">Season high</span>' : g.id === S.worst && g.dawg != null && S.worst !== S.best ? '<span class="tv-hl lo">Season low</span>' : '') + (g.dawg == null ? '<span class="tv-hl">Not graded</span>' : '');
+      var dgT = g.dawg == null ? '<span class="dim" title="' + esc(g.dst === "no_line" ? "No closing line" : g.dst === "unverified_scoring" ? "Scoring order couldn't be verified" : "Scoring record doesn't match the final") + '">–</span>' : signed(g.dawg);
+      var plT = g.play != null ? signed(gp(g)) : '<span class="dim" title="' + esc(PST[g.pst] || "") + '">' + (g.pst === "few_plays" ? "few plays" : "–") + '</span>';
+      var lab = (g.stype === 3 ? 'Bowl' : 'Week ' + g.wk) + ', ' + (g.site === "away" ? "at " : "vs ") + (g.oppRank ? 'No. ' + g.oppRank + ' ' : '') + g.oppName + ', ' + wl(g.pf, g.pa) + ', DAWG ' + (g.dawg == null ? 'not graded' : signed(g.dawg)) + ', PLAY ' + (g.play == null ? 'not graded' : signed(gp(g))) + '. Open the game card';
+      return '<tr class="gc" role="link" tabindex="0" data-gid="' + esc(g.id) + '" data-t="' + T.id + '" data-y="' + y + '" aria-label="' + esc(lab) + '">' +
+        '<td class="wk">' + (g.stype === 3 ? '<span class="bowl">Bowl</span>' : g.wk) + '</td>' +
+        '<td class="tm"><span class="tm-in">' + (g.oid ? logo(g.oid) : '<span class="nologo"></span>') + '<span class="tv-o"><b>' + opp + (g.stype === 3 ? ' <span class="bowl">Bowl/CFP</span>' : '') + '</b><small><span class="sc ' + wlc + '">' + wl(g.pf, g.pa) + ' · </span>' + fmtD(g.date) + ' · ' + site + (g.set ? '<span class="set"> · ' + esc(g.set.replace(/^(Home|Road|Neutral)( · )?/, "")) + '</span>' : '') + '</small></span></span></td>' +
+        '<td class="wl ' + wlc + '">' + wl(g.pf, g.pa) + '</td>' +
+        '<td class="trk" aria-hidden="true"><span class="tv-trk"><span class="th" style="left:' + pct(TS) + '%"></span><span class="th" style="left:' + pct(TH) + '%"></span><span class="z"></span>' + bar(g.dawg, 'bd', i) + bar(gp(g), 'bp', i) + '</span></td>' +
+        '<td class="dg ' + (g.dawg == null ? 'dim' : g.dawg >= 0 ? 'pos' : 'neg') + '">' + dgT + '</td>' +
+        '<td class="pl"><span class="k">PLAY </span><span class="v">' + plT + '</span></td>' +
+        '<td class="tg">' + tag + '</td>' +
+        '<td class="x mono" data-k="Line">' + (g.line == null ? "–" : g.line === 0 ? "PK" : signed(g.line)) + '</td><td class="x mono" data-k="Expected">' + (g.expM == null ? "–" : signed(g.expM)) + '</td><td class="x mono ' + (g.comp == null ? '' : g.comp > 0 ? 'pos' : g.comp < 0 ? 'neg' : '') + '" data-k="Margin">' + (g.comp == null ? "–" : signed(g.comp, 0)) + '</td>' +
+        '<td class="x mono" data-k="Cash-in">' + (g.cashN ? g.cashPts + ' <span class="dim">on ' + g.cashN + '</span>' : "–") + '</td><td class="x mono" data-k="Answers">' + (g.ansN ? g.ans + "/" + g.ansN : "–") + '</td><td class="x mono" data-k="Knife twist">' + (g.knife == null ? '<span class="dim">–</span>' : signed(g.knife, 0)) + '</td><td class="x qb" data-k="QB">' + esc(g.qb || "–") + '</td></tr>';
+    }).join("") : '<tr><td class="tm" colspan="14"><span class="dim">No games in ' + y + '.</span></td></tr>';
     drawTeamStories(T.id);
-    // ---- season performance: rank by week, the receipt, up next ----
-    $("t-season-k").textContent = cur ? "Season performance · " + D.week : "Season performance · " + y;
-    $("t-season-h").textContent = cur ? "This season by the numbers" : y + " by the numbers";
-    var tr = cur ? T.trend : null; root.querySelector(".t-season-grid").classList.toggle("past", !cur);
+
+    // ---- 3. season trends ----
+    var tw = $("tv-trends"); tw.classList.toggle("past", !cur); $("tv-seg").hidden = !cur; $("t-hist-k").textContent = cur ? "Rank by week · season by season" : "Season by season since 2019";
+    if (!cur) tw.setAttribute("data-v", "years"); else tw.setAttribute("data-v", tp.tv || "season");
+    Array.prototype.forEach.call($("tv-seg").querySelectorAll("button"), function(b){ b.setAttribute("aria-pressed", String(b.getAttribute("data-v") === tw.getAttribute("data-v"))); });
     if (tr && tr.pts.length >= 2){
-      var cm = window.matchMedia("(max-width: 820px)").matches, W = cm ? 380 : 560, H = cm ? 200 : 220, pl2 = cm ? 30 : 34, pr = cm ? 18 : 22, pt2 = 30, pb = 34, n = tr.pts.length, N = tr.n;
-      var X = function(i){ return pl2 + (W - pl2 - pr) * (n === 1 ? .5 : i / (n - 1)); }, Y = function(r){ return pt2 + (H - pt2 - pb) * (r - 1) / Math.max(1, N - 1); };
-      var mv = tr.pts[n - 2].r - tr.pts[n - 1].r, now = tr.pts[n - 1].r, bye = function(p){ return !playedWk[p.w]; };
+      var n = tr.pts.length, top = Math.max.apply(null, tr.pts.map(function(p){ return p.r; })), N = top <= Math.round(tr.n / 2) ? Math.round(tr.n / 2) : tr.n;
+      var cmp = window.matchMedia("(max-width: 820px)").matches, W = cmp ? 400 : 560, H = cmp ? 220 : 236, l = 30, r2 = 22, t = 34, b = 30, now = tr.pts[n - 1].r, anyBye = false;
+      var X = function(i){ return l + (W - l - r2) * i / (n - 1); }, Y = function(k){ return t + (H - t - b) * (k - 1) / Math.max(1, N - 1); };
       var path = tr.pts.map(function(p, i){ return (i ? "L" : "M") + X(i).toFixed(1) + " " + Y(p.r).toFixed(1); }).join(" ");
       var svg = '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="Rank by week: ' + tr.pts.map(function(p){ return "Week " + p.w + " " + p.r; }).join(", ") + '">' +
-        [1, Math.round(N / 2), N].map(function(r){ return '<line class="grid" x1="' + pl2 + '" x2="' + (W - pr) + '" y1="' + Y(r).toFixed(1) + '" y2="' + Y(r).toFixed(1) + '"/><text class="tick" x="' + (pl2 - 8) + '" y="' + (Y(r) + 4).toFixed(1) + '" text-anchor="end">' + r + '</text>'; }).join("") +
+        [1, Math.round(N / 2), N].map(function(k){ return '<line class="grid" x1="' + l + '" x2="' + (W - r2) + '" y1="' + Y(k).toFixed(1) + '" y2="' + Y(k).toFixed(1) + '"/><text class="tick" x="' + (l - 8) + '" y="' + (Y(k) + 4).toFixed(1) + '" text-anchor="end">' + k + '</text>'; }).join("") +
         '<path d="' + path + '" class="ln" style="stroke:' + col + '"/>' +
-        tr.pts.map(function(p, i){ var last = i === n - 1, b = bye(p); return '<circle cx="' + X(i).toFixed(1) + '" cy="' + Y(p.r).toFixed(1) + '" r="' + (last ? 7 : 4.5) + '" class="' + (last ? "now" : "pt") + (b ? " bye" : "") + '" style="' + (b ? 'fill:var(--paper);stroke:' + col + ';stroke-width:2' : last ? 'fill:' + col : '') + '"/>' +
-          '<text class="rk' + (last ? ' big' : '') + '" x="' + X(i).toFixed(1) + '" y="' + (Y(p.r) - (last ? 14 : 10)).toFixed(1) + '" text-anchor="middle">' + ord(p.r) + '</text>' +
-          '<text class="wk" x="' + X(i).toFixed(1) + '" y="' + (H - 8) + '" text-anchor="middle">Wk ' + p.w + '</text>'; }).join("") + '</svg>';
-      $("t-trend").innerHTML = '<div class="t-trend-h"><span class="kicker">Rank by week</span><b class="' + (mv > 0 ? "pos" : mv < 0 ? "neg" : "") + '">' + (mv > 0 ? "▲ Up " + mv + " spot" + (mv === 1 ? "" : "s") : mv < 0 ? "▼ Down " + (-mv) + " spot" + (mv === -1 ? "" : "s") : "Same spot") + ' this week' + (idle ? ', without playing' : '') + '</b></div>' + svg +
-        '<p class="dim">Rank among ' + N + ' Power 4 teams by average DAWG after each week, ' + ord(now) + ' now, after ' + S.nG + ' graded game' + (S.nG === 1 ? '' : 's') + '. Hollow dots: no game that week; the rank still moves as others play. Early ranks swing a lot.</p>';
-    } else if (cur) $("t-trend").innerHTML = '<div class="t-trend-h"><span class="kicker">Rank by week</span></div><p class="dim">Available once two weeks are in the books.</p>';
-    else $("t-trend").innerHTML = '<div class="howread t-key"><h3>How to read ' + y + '</h3><p>The season number is the average of ' + esc(T.name) + '’s game DAWG: points better or worse than Vegas’s pregame expectation, with garbage time removed. <b>0</b> means it played exactly as expected. Each game is graded on its own: <b class="pos">' + signed(D.thresholds.dawg) + '</b> or better is a DAWG game, <b class="neg">' + plain(D.thresholds.soft) + '</b> or worse is SOFT. PLAY makes the same check on offense and defense, valuing every snap with expected points (EPA), and is kept separate.</p><p class="howread-foot">Full season including bowls and the playoff. Rank by week is tracked for the current season only.</p></div>';
-    if (S){
-      var rows = [['Record', S.w + '–' + S.l], ['Games graded', S.nG + (S.n > S.nG ? ' <small>of ' + S.n + '</small>' : '')], ['Average DAWG <small>pts a game vs. expectation · scoreboard, garbage time removed</small>', signed(S.dawg)], ['Rank <small>at living up to expectations</small>', ord(R.rk) + ' <small>of ' + R.n + '</small>'],
-        ['Average PLAY <small>pts a game vs. expectation · offense + defense (EPA), ' + S.nP + ' game' + (S.nP === 1 ? '' : 's') + '</small>', S.play == null ? '–' : signed(S.play)], ['PLAY rank', R.pk ? ord(R.pk) + ' <small>of ' + R.pn + '</small>' : '–'],
-        ['DAWG games <small>' + signed(D.thresholds.dawg) + ' or better' + (S.nCD ? ' · ' + S.nCD + ' Certified' : '') + '</small>', nd], ['As expected', S.nE], ['SOFT games <small>' + plain(D.thresholds.soft) + ' or worse' + (S.nCS ? ' · ' + S.nCS + ' Certified' : '') + '</small>', ns]];
-      $("t-receipt").innerHTML = '<div class="ledger t-ledger"><h3><span>' + y + ' season</span><span>' + esc(T.abbr) + '</span></h3><table>' + rows.map(function(r, i){ return '<tr' + (i === 2 ? ' class="total"' : '') + '><td class="k">' + r[0] + '</td><td class="v">' + r[1] + '</td></tr>'; }).join("") + '</table></div>';
-    } else $("t-receipt").innerHTML = '';
-    // up next: this week's game or a bye, then the next one on the schedule
-    var U = cur ? T.upnext : null, nx = '';
-    if (U && U.game){ var g = U.game, oppId = g.away.id === T.id ? g.home.id : g.away.id;
-      nx = '<span class="kicker">Up next · Week ' + U.week + '</span>' + ticket(D, {away: {id: g.away.id, name: g.away.name, rank: g.away.ap, foot: ord(g.away.rank) + " of " + D.n}, home: {id: g.home.id, name: g.home.name, rank: g.home.ap, foot: ord(g.home.rank) + " of " + D.n},
-        neutral: g.neutral, week: "Week " + U.week, dateLine: (g.when.day + " · " + g.when.date + " · " + g.when.time).toUpperCase() + (g.when.net ? " · " + g.when.net.toUpperCase() : ""), venue: "", city: "", gid: g.gid || (T.id + "-" + oppId), href: "/#week", bc: T.id}) +
-        '<p class="t-watch">' + esc(g.watch) + '</p>' + (D.meta[oppId] ? '<a class="link t-cmplink" href="/#week" data-cmp="' + T.id + ',' + oppId + '">Compare ' + esc(T.name) + ' and ' + esc(D.meta[oppId].name) + ' side by side <span aria-hidden="true">→</span></a> ' : '') + '<a class="link" href="/#week" data-p="week">This week’s slate <span aria-hidden="true">→</span></a>'; }
-    else if (U && !U.unlisted){ nx = '<span class="kicker">Up next · Week ' + U.week + '</span><div class="t-bye"><div class="stampmark e">Bye<small>Week ' + U.week + '</small></div><p>' + esc(T.name) + ' is off this week.</p></div>'; }
-    var dupe = U && U.game && T.after && (U.game.away.id === T.after.id || U.game.home.id === T.after.id);   // next_games.json can hold this week's game itself
-    if (cur && T.after && D.meta[T.after.id] && !dupe){ var a = T.after, d = new Date(a.dt); nx += '<div class="t-after"><span class="kicker">' + (U && U.unlisted ? 'Up next · Week ' + U.week : U && !U.game ? 'After the bye' : 'Then') + '</span><div class="t-after-g">' + logo(a.id) + '<div><b>' + (a.at === "at" ? "at " : "vs ") + (a.rk ? 'No. ' + a.rk + ' ' : '') + tlink(a.id, a.name) + esc(a.name) + '</a></b><small>' + DAYS[d.getUTCDay()] + ', ' + MON[d.getUTCMonth()] + ' ' + d.getUTCDate() + '</small></div></div></div>'; }
-    $("t-next").innerHTML = nx || (cur ? '' : '<span class="kicker">Up next</span><p class="dim">Pick ' + D.season + ' to see the next game.</p>');
-    $("t-next").hidden = !cur; fitNext();
-    // ---- game by game: DAWG and PLAY for every graded game of the season, on one honest zero line ----
+        tr.pts.map(function(p, i){ var last = i === n - 1, by = !playedWk[p.w]; if (by) anyBye = true;
+          return '<circle cx="' + X(i).toFixed(1) + '" cy="' + Y(p.r).toFixed(1) + '" r="' + (last ? 7 : 4.5) + '" class="' + (last ? 'now' : 'pt') + (by ? ' bye' : '') + '" style="stroke:' + col + ';fill:' + (by ? 'var(--paper)' : col) + '"/>' +
+            '<text class="rk' + (last ? ' big' : '') + '" x="' + X(i).toFixed(1) + '" y="' + (Y(p.r) - (last ? 15 : 11)).toFixed(1) + '" text-anchor="middle"' + (last ? ' style="fill:' + col + '"' : '') + '>' + ord(p.r) + '</text>' +
+            '<text class="wk" x="' + X(i).toFixed(1) + '" y="' + (H - 6) + '" text-anchor="middle">Wk ' + p.w + '</text>'; }).join("") +
+        (mv ? '<text class="call ' + (mv > 0 ? 'up' : 'dn') + '" x="' + (X(n - 1) - 12) + '" y="' + (Y(now) + 30 <= H - b - 6 ? Y(now) + 30 : Y(now) - 40).toFixed(1) + '" text-anchor="end">' + (mv > 0 ? '▲ ' + mv : '▼ ' + (-mv)) + ' this week</text>' : '') + '</svg>';
+      $("t-trend").innerHTML = '<p class="tv-sub">Among ' + tr.n + ' Power 4 teams by season DAWG grade' + (N < tr.n ? '; top half shown' : '') + '. ' + (anyBye ? 'Hollow dot: no game that week. ' : '') + 'Early weeks swing, then it steadies.</p>' + svg;
+    } else $("t-trend").innerHTML = '<p class="tv-sub">' + (cur ? 'Fills in once two weeks are in the books.' : 'Rank by week is tracked for the current season only.') + '</p>';
     (function(){
-      var G = S ? S.games.filter(function(g){ return g.dawg != null || g.play != null; }) : [];
-      if (!G.length){ $("t-games").innerHTML = ''; return; }
-      var mx = 0; G.forEach(function(g){ if (g.dawg != null) mx = Math.max(mx, Math.abs(g.dawg)); if (g.play != null) mx = Math.max(mx, Math.abs(gp(g))); });
-      var ext = Math.max(5, Math.ceil((mx + 2) / 5) * 5), cmp = window.matchMedia("(max-width: 820px)").matches;
-      var opp = function(g){ return (g.site === "away" ? "at " : "vs ") + (g.oppRank ? "No. " + g.oppRank + " " : "") + g.oppName; };
-      var wkl = function(g){ return g.stype === 3 ? "Bowl" : "Wk " + g.wk; };
-      var short = function(g){ var m = D.meta[g.oid]; if (m) return m.abbr; var w = g.oppName.split(" "); return g.oppName.length <= 9 ? g.oppName : (w[0].length <= 9 ? w[0] : w[0].slice(0, 8) + "\u2026"); };
-      var lab = function(g){ return wkl(g) + ", " + opp(g) + ", " + wl(g.pf, g.pa) + ": DAWG " + (g.dawg == null ? "not graded" : signed(g.dawg)) + ", PLAY " + (g.play == null ? "not graded" : signed(gp(g))); };
-      var head = '<div class="t-trend-h"><span class="kicker">Game by game</span><b>DAWG and PLAY, every graded game</b></div>';
-      var h;
-      if (cmp){   // phones: one row per game, both bars on the same centered zero line (the year-by-year rows, same scale)
-        var hb = function(v, cls){ if (v == null) return ''; var w = Math.min(50, Math.abs(v) / ext * 50); return '<i class="yb ' + cls + '" style="left:' + (v >= 0 ? 50 : 50 - w) + '%;width:' + Math.max(w, .8) + '%' + (cls === 'd' ? ';background:' + col : '') + '"></i>'; };
-        h = '<div class="yrs-m gms-m"><div class="yrs-axis" aria-hidden="true"><span></span><span class="ax"><b>' + signed(-ext, 0) + '</b><b>0</b><b>' + signed(ext, 0) + '</b></span><span class="ax-k">DAWG<small>PLAY</small></span></div>' +
-          G.map(function(g){ return '<div class="yrow grow" role="link" tabindex="0" data-gid="' + esc(g.id) + '" data-t="' + T.id + '" data-y="' + y + '" aria-label="' + esc(lab(g)) + '. Open the game card" style="--tc:' + col + '">' +
-            '<span class="yy"><b>' + esc(wkl(g)) + '</b><small>' + (g.site === "away" ? "at " : "vs ") + esc(g.oppName.length > 11 ? short(g) : g.oppName) + '</small></span><span class="ytrack">' + hb(g.dawg, 'd') + hb(gp(g), 'p') + '</span>' +
-            '<span class="yv"><b class="' + (g.dawg == null ? 'dim' : g.dawg >= 0 ? 'pos' : 'neg') + '">' + (g.dawg == null ? '–' : signed(g.dawg)) + '</b><small>' + (g.play == null ? '–' : signed(gp(g))) + '</small></span></div>'; }).join("") + '</div>';
-      } else {
-        var CW = 1000, CH = 320, cl = 40, cr = 12, ct = 24, cb = 60, n = G.length, colW = (CW - cl - cr) / n, bw = Math.min(26, colW * .38);
-        var cy = function(v){ return ct + (CH - ct - cb) * (ext - v) / (2 * ext); }, y0 = cy(0);
-        h = '<svg viewBox="0 0 ' + CW + ' ' + CH + '" role="img" aria-label="Game by game: DAWG and PLAY for every graded game of ' + y + '">';
-        [ext, ext / 2, 0, -ext / 2, -ext].forEach(function(v){ h += '<line class="grid" x1="' + cl + '" x2="' + (CW - cr) + '" y1="' + cy(v) + '" y2="' + cy(v) + '"/><text class="tick" x="' + (cl - 6) + '" y="' + (cy(v) + 4) + '" text-anchor="end">' + signed(v, 0) + '</text>'; });
-        G.forEach(function(g, i){ var x0 = cl + i * colW, xm = x0 + colW / 2;
-          h += '<g class="gm" tabindex="0" role="link" data-gid="' + esc(g.id) + '" data-t="' + T.id + '" data-y="' + y + '" aria-label="' + esc(lab(g)) + '. Open the game card"><title>' + esc(lab(g)) + '</title>' +
-            '<rect class="col" x="' + x0 + '" y="' + ct + '" width="' + colW + '" height="' + (CH - ct - cb) + '"/>';
-          if (g.dawg != null){ var y1 = cy(g.dawg); h += '<rect class="bar" x="' + (xm - bw - 1.5) + '" y="' + Math.min(y0, y1) + '" width="' + bw + '" height="' + Math.max(1.5, Math.abs(y1 - y0)) + '" style="fill:' + col + '"/>' +
-            (n <= 16 ? '<text class="val" x="' + (xm - bw / 2 - 1.5) + '" y="' + (g.dawg >= 0 ? y1 - 5 : y1 + 13) + '" text-anchor="middle">' + signed(g.dawg) + '</text>' : ''); }
-          if (g.play != null){ var y2 = cy(gp(g)); h += '<rect class="bar play" x="' + (xm + 1.5) + '" y="' + Math.min(y0, y2) + '" width="' + bw + '" height="' + Math.max(1.5, Math.abs(y2 - y0)) + '"/>' +
-            (n <= 16 ? '<text class="val play" x="' + (xm + bw / 2 + 1.5) + '" y="' + (gp(g) >= 0 ? y2 - 5 : y2 + 13) + '" text-anchor="middle">' + signed(gp(g)) + '</text>' : ''); }
-          h += '<text class="yl" x="' + xm + '" y="' + (CH - 34) + '" text-anchor="middle">' + esc(wkl(g)) + '</text><text class="rec" x="' + xm + '" y="' + (CH - 18) + '" text-anchor="middle">' + esc((g.site === "away" ? "at " : "vs ") + (n > 8 || g.oppName.length > 14 ? short(g) : g.oppName)) + '</text>' +
-            '<text class="rec" x="' + xm + '" y="' + (CH - 4) + '" text-anchor="middle">' + wl(g.pf, g.pa) + '</text></g>'; });
-        h += '<line class="zero" x1="' + cl + '" x2="' + (CW - cr) + '" y1="' + y0 + '" y2="' + y0 + '"/></svg>';
-      }
-      $("t-games").innerHTML = head + h + '<div class="g-legend"><span><i style="background:' + col + '"></i>DAWG, scoreboard vs. Vegas</span><span><i class="play"></i>PLAY, offense + defense vs. Vegas</span><span class="dim">Same scale, zero = exactly what Vegas expected. Tap a game for its card.</span></div>';
+      var ys = D.seasonList.slice().sort(), vals = [];
+      ys.forEach(function(s){ var q = T.seasons[String(s)]; if (q){ if (q.dawg != null) vals.push(Math.abs(q.dawg)); if (q.play != null) vals.push(Math.abs(q.play)); } });
+      var cmp = window.matchMedia("(max-width: 820px)").matches, ext = Math.max(4, Math.ceil(Math.max.apply(null, vals.concat([0])) + 1.5)), W = cmp ? 400 : 560, H = cmp ? 240 : 250, l = 26, r2 = 4, t = 26, b = 44, cw = (W - l - r2) / ys.length;
+      var cy = function(v){ return t + (H - t - b) * (ext - v) / (2 * ext); }, y0 = cy(0);
+      var s = '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="Season DAWG grade and PLAY by year. Tap a year to open that season.">';
+      ys.forEach(function(yr, i){ var q = T.seasons[String(yr)], x0 = l + i * cw, on = String(yr) === y;
+        s += '<g class="yr' + (on ? ' on' : '') + (q ? '' : ' none') + '" data-y="' + yr + '" tabindex="' + (q ? 0 : -1) + '" role="button" aria-pressed="' + on + '" aria-label="' + yr + (q ? ', season DAWG grade ' + (q.dawg == null ? 'not graded' : signed(q.dawg)) + (q.play == null ? '' : ', PLAY ' + signed(q.play)) + ', ' + q.w + '–' + q.l : ', no games') + '"><title>' + yr + (q ? ': DAWG ' + signed(q.dawg) + (q.play == null ? '' : ' · PLAY ' + signed(q.play)) + ' · ' + q.w + '–' + q.l : '') + '</title>';
+        s += '<rect class="col" x="' + x0 + '" y="' + t + '" width="' + cw + '" height="' + (H - t - b) + '"' + (yr >= T.since ? ' style="fill:' + col + ';fill-opacity:.09"' : '') + '/>';
+        if (q && q.dawg != null){ var bw = cw * .4, bx = x0 + cw / 2 - bw / 2 - 3, y1 = cy(q.dawg);
+          s += '<rect class="bar ' + (q.dawg >= 0 ? 'up' : 'dn') + '" x="' + bx + '" y="' + Math.min(y0, y1) + '" width="' + bw + '" height="' + Math.max(1.5, Math.abs(y1 - y0)) + '" style="fill:' + col + (on ? '' : ';fill-opacity:.5') + '"/>';
+          if (q.play != null){ var py = cy(q.play); s += '<rect class="bar play ' + (q.play >= 0 ? 'up' : 'dn') + '" x="' + (bx + bw + 2) + '" y="' + Math.min(y0, py) + '" width="5" height="' + Math.max(1.5, Math.abs(py - y0)) + '"/>'; }
+          s += '<text class="val" x="' + (bx + bw / 2) + '" y="' + (q.dawg >= 0 ? y1 - 6 : y1 + 16) + '" text-anchor="middle">' + signed(q.dawg) + '</text>'; }
+        s += '<text class="yl' + (on ? ' on' : '') + '" x="' + (x0 + cw / 2) + '" y="' + (H - 24) + '" text-anchor="middle">' + (cmp ? '\u2019' + String(yr).slice(2) : yr) + (yr === 2020 ? '*' : '') + '</text>' + (q ? '<text class="rec" x="' + (x0 + cw / 2) + '" y="' + (H - 8) + '" text-anchor="middle">' + q.w + '–' + q.l + '</text>' : '') + '</g>'; });
+      s += '<line class="zero" x1="' + l + '" x2="' + (W - r2) + '" y1="' + y0 + '" y2="' + y0 + '"/>';
+      [ext, 0, -ext].forEach(function(v){ s += '<text class="tick" x="' + (l - 6) + '" y="' + (cy(v) + 4) + '" text-anchor="end">' + signed(v, 0) + '</text>'; });
+      $("t-years").innerHTML = s + '</svg><div class="t-legend"><span><i style="background:' + col + '"></i>Season DAWG grade</span><span><i class="play"></i>PLAY</span><span><i class="era" style="background:' + col + '"></i>' + esc(T.coach) + '’s tenure</span><span class="dim">* 2020 in empty or limited stadiums</span></div>';
     })();
-    // ---- game log: every game, the primary columns always, every stat on request ----
-    $("t-log-h").textContent = y + " game log" + (S ? " · " + S.n + " games" : "");
-    var tb = $("t-log").tBodies[0], tbl = $("t-log");
-    tbl.classList.toggle("expanded", tp.all); $("t-log-all").setAttribute("aria-pressed", String(tp.all)); $("t-log-all").innerHTML = tp.all ? 'Show fewer stats <span aria-hidden="true">←</span>' : 'Show all stats <span aria-hidden="true">→</span>';
-    root.querySelector(".t-lognote").textContent = tp.all ? 'Line is the closing spread from this team’s side; Expected is the average margin at that line, garbage time removed; Margin is the final with garbage time removed; Cash-in is points on drives right after a defensive stop; Answers is scoring drives answered; Knife twist is points added after going up 9+ in the second half. The table scrolls sideways on a phone. Tap a game for the full card.' : 'Tap a game for the full card: what Vegas expected, the margin with garbage time removed (DAWG), and how the offense and defense graded (PLAY).';
-    var PST = {no_line:"no closing line", no_pbp:"no play-by-play", unreconciled:"play-by-play doesn't match the final", few_plays:"too few plays", pbp_conflict:"play-by-play scoring order doesn't match ESPN's scoring summary", no_fit:"not graded"};
-    tb.innerHTML = S && S.games.length ? S.games.map(function(g){
-      var mg = g.pf - g.pa, site = {home:"Home", away:"Road", neutral:"Neutral"}[g.site];
-      var playTd = g.play != null ? signed(gp(g)) : '<span class="dim" title="' + esc(PST[g.pst] || "") + '">' + (g.pst === "few_plays" ? "few plays" : "–") + '</span>';
-      return '<tr class="gc" role="link" tabindex="0" data-gid="' + esc(g.id) + '" data-t="' + T.id + '" data-y="' + y + '" aria-label="Open the game card">' +
-        '<td class="l wk">' + (g.stype === 3 ? '<span class="bowl">Bowl</span>' : g.wk) + '</td>' +
-        '<td class="l tm"><span class="tm-in">' + (g.oid ? logo(g.oid) : '') + '<span>' + at(g.site) + (g.oppRank ? '<span class="dim">No. ' + g.oppRank + '</span> ' : '') + esc(g.oppName) + (g.stype === 3 ? ' <span class="bowl">Bowl/CFP</span>' : '') + '<span class="sub"><b class="' + (mg > 0 ? 'pos' : mg < 0 ? 'neg' : '') + '">' + wl(g.pf, g.pa) + '</b> · ' + fmtD(g.date) + ' · ' + site + '</span></span></span></td>' +
-        '<td class="l hide-sm ds">' + fmtD(g.date) + ' · ' + site + (g.set ? ' <span class="dim">· ' + esc(g.set.replace(/^(Home|Road|Neutral)( · )?/, "")) + '</span>' : '') + '</td>' +
-        '<td class="wl hide-sm ' + (mg > 0 ? 'pos' : mg < 0 ? 'neg' : '') + '">' + wl(g.pf, g.pa) + '</td>' +
-        '<td class="dg ' + (g.dawg == null ? 'dim' : g.dawg >= 0 ? 'pos' : 'neg') + '">' + (g.dawg == null ? '<span class="dim" title="' + esc(g.dst === "no_line" ? "No closing line" : g.dst === "unverified_scoring" ? "Scoring order couldn't be verified" : "Scoring record doesn't match the final") + '">–</span>' : signed(g.dawg) + lchip(g.lab)) + '</td>' +
-        '<td class="pl">' + playTd + '</td>' +
-        '<td class="x mono">' + (g.line == null ? "–" : g.line === 0 ? "PK" : signed(g.line)) + '</td><td class="x mono">' + (g.expM == null ? "–" : signed(g.expM)) + '</td><td class="x mono ' + (g.comp == null ? '' : g.comp > 0 ? 'pos' : g.comp < 0 ? 'neg' : '') + '">' + (g.comp == null ? "–" : signed(g.comp, 0)) + '</td>' +
-        '<td class="x mono">' + (g.cashN ? g.cashPts + ' <span class="dim">on ' + g.cashN + '</span>' : "–") + '</td><td class="x mono">' + (g.ansN ? g.ans + "/" + g.ansN : "–") + '</td><td class="x mono">' + (g.knife == null ? '<span class="dim">–</span>' : signed(g.knife, 0)) + '</td><td class="x l qb">' + esc(g.qb || "–") + '</td></tr>';
-    }).join("") : '<tr><td class="l" colspan="13"><span class="dim">No games in ' + y + '.</span></td></tr>';
-    // ---- habits (current season, as the current page shows them) ----
-    var Hb = T.habits, L = T.leads, h = '';
+
+    // ---- 4. by the numbers ----
+    var Hb = T.habits, L = T.leads, hn = '', habY = cur ? '' : ' · ' + D.season;
+    $("t-num-k").textContent = cur ? y + ' so far' : y + ' season';
+    if (S){
+      hn += tvItem('PLAY', S.play == null ? '–' : signed(S.play), S.play == null ? '' : S.play >= 0 ? 'pos' : 'neg', 'Offense + defense vs. Vegas' + (R.pk ? '. <b>' + ord(R.pk) + ' of ' + R.pn + '.</b>' : '.') + (S.nP < S.nG ? ' ' + S.nP + ' game' + (S.nP === 1 ? '' : 's') + ' graded.' : ''), ' play');
+      hn += tvItem('DAWG / SOFT games', nd + '<em>/</em>' + ns, '', 'Out of ' + S.nG + ' graded; ' + S.nE + ' as expected.' + ((S.nCD || S.nCS) ? ' <b>' + (S.nCD ? S.nCD + ' Certified DAWG' : '') + (S.nCD && S.nCS ? ', ' : '') + (S.nCS ? S.nCS + ' Certified SOFT' : '') + '.</b>' : ''));
+    }
+    if (L){ var blownAll = L.ledAll ? L.lostAll / L.ledAll : null;
+      hn += tvItem('Blown leads' + habY, L.led ? L.lost + '<em>of</em>' + L.led : '–', L.lost >= 2 ? 'neg' : L.led && !L.lost ? 'pos' : '', (L.led ? 'Games lost after leading by 7+.' : 'No 7+ leads yet.') + (L.ledAll ? ' Since 2019: <b>' + L.lostAll + ' of ' + L.ledAll + '</b> (' + Math.round(blownAll * 100) + '%). Power 4: ' + Math.round(L.baseBlown * 100) + '%.' : ''), ' blown'); }
+    if (Hb){ var r = Hb.row, K = Hb.rank, nT = Hb.n, tone = function(k){ return K[k] <= nT / 3 ? "pos" : K[k] > nT * 2 / 3 ? "neg" : ""; };
+      hn += tvItem('Penalties a game' + habY, r.pen.toFixed(1), tone("pen"), '<b>' + ord(K.pen) + ' fewest of ' + nT + '.</b> The stickiest habit we track. This season ' + (r.pen_now == null ? '–' : r.pen_now.toFixed(1)) + ', last ' + (r.pen_last == null ? '–' : r.pen_last.toFixed(1)) + '.', ' pen'); }
+    $("t-nums").innerHTML = hn || '<p class="dim">No games for ' + esc(T.name) + ' in ' + y + '.</p>';
+    $("t-nums").className = "tv-nums n" + ($("t-nums").children.length || 1);
+    // more stats: team habits (the other four), with "What it means" on each
+    var h = '';
     $("t-hab-k").textContent = "Team habits · " + D.season;
-    if (Hb){ var r = Hb.row, A = Hb.avg, K = Hb.rank, nT = Hb.n;
-      var tone = function(k){ return K[k] <= nT / 3 ? "pos" : K[k] > nT * 2 / 3 ? "neg" : ""; };
-      var f = {pen: function(v){ return v.toFixed(1); }, leadEpa: function(v){ return signed(v - A.leadEpa, 2); }, go4: function(v){ return Math.round(v * 100) + "%"; }, leadPassAdj: function(v){ return signed(v * 100, 0) + " pts"; }, neuPass: function(v){ return Math.round(v * 100) + "%"; }};
-      function card(k, name, val, cls, rank, what){ var now = r[k + "_now"], last = r[k + "_last"];
+    if (Hb){ var A = Hb.avg, f = {leadEpa: function(v){ return signed(v - A.leadEpa, 2); }, go4: function(v){ return Math.round(v * 100) + "%"; }, leadPassAdj: function(v){ return signed(v * 100, 0) + " pts"; }, neuPass: function(v){ return Math.round(v * 100) + "%"; }};
+      var row = function(k, name, val, cls, rank, what){ var now = r[k + "_now"], last = r[k + "_last"];
         return '<div class="hb"><span class="hl">' + name + '</span><span class="hv ' + cls + '">' + val + '</span><span class="hr">' + rank + '</span>' +
-          '<button type="button" class="hb-tog" aria-expanded="false" aria-controls="hbm-' + k + '">What it means</button><div class="hb-more" id="hbm-' + k + '"><p>' + what + '</p><small class="hs">This season ' + (now == null ? 'not enough plays' : f[k](now)) + ' · last season ' + (last == null ? 'n/a' : f[k](last)) + ' · ' + ord(r[k + "_pct"]) + ' percentile</small></div></div>'; }
+          '<button type="button" class="hb-tog" aria-expanded="false" aria-controls="hbm-' + k + '">What it means</button><div class="hb-more" id="hbm-' + k + '"><p>' + what + '</p><small class="hs">This season ' + (now == null ? 'not enough plays' : f[k](now)) + ' · last season ' + (last == null ? 'n/a' : f[k](last)) + ' · ' + ord(r[k + "_pct"]) + ' percentile</small></div></div>'; };
       var sl = r.leadPassAdj - A.leadPassAdj;
-      h = card("pen", "Penalties per game", r.pen.toFixed(1), tone("pen"), ord(K.pen) + " fewest of " + nT, "The stickiest habit we track. Fewer is better.") +
-        card("leadEpa", "Foot on the gas", signed(r.leadEpa - A.leadEpa, 2), tone("leadEpa"), ord(K.leadEpa) + " of " + nT, "How well it keeps playing once it’s up 9+ in the second half. Above zero keeps attacking.") +
-        card("go4", "Goes for it", Math.round(r.go4 * 100) + "%", "", ord(K.go4) + " most aggressive of " + nT, "How often it goes for it on 4th and 1–3 between the 30s.") +
-        card("leadPassAdj", "Sits on a lead", '<span class="pp">' + Math.round(r.neuPass * 100) + '%<i>→</i>' + Math.round((r.neuPass + r.leadPassAdj) * 100) + '%</span>', "", (sl <= -0.03 ? "Runs more than most" : sl >= 0.03 ? "Throws more than most" : "About average") + ' <span class="dim">(avg. ' + Math.round(A.neuPass * 100) + '% → ' + Math.round((A.neuPass + A.leadPassAdj) * 100) + '%)</span>', "Early-down pass rate when close, then when up 9+. Teams tend to sit back and run with a lead; this is how much.") +
-        card("neuPass", "Pass-first", Math.round(r.neuPass * 100) + "%", "", ord(K.neuPass) + " most pass-heavy of " + nT, "Early-down pass rate in close games. Style, not grit.");
+      h = row("leadEpa", "Foot on the gas", signed(r.leadEpa - A.leadEpa, 2), tone("leadEpa"), ord(K.leadEpa) + " of " + nT, "How well it keeps playing once it’s up 9+ in the second half. Above zero keeps attacking.") +
+        row("go4", "Goes for it", Math.round(r.go4 * 100) + "%", "", ord(K.go4) + " most aggressive of " + nT, "How often it goes for it on 4th and 1–3 between the 30s.") +
+        row("leadPassAdj", "Sits on a lead", '<span class="pp">' + Math.round(r.neuPass * 100) + '%<i>→</i>' + Math.round((r.neuPass + r.leadPassAdj) * 100) + '%</span>', "", (sl <= -0.03 ? "Runs more than most" : sl >= 0.03 ? "Throws more than most" : "About average") + ' <span class="dim">(avg. ' + Math.round(A.neuPass * 100) + '% → ' + Math.round((A.neuPass + A.leadPassAdj) * 100) + '%)</span>', "Early-down pass rate when close, then when up 9+. Teams tend to sit back and run with a lead; this is how much.") +
+        row("neuPass", "Pass-first", Math.round(r.neuPass * 100) + "%", "", ord(K.neuPass) + " most pass-heavy of " + nT, "Early-down pass rate in close games. Style, not grit.");
     }
     $("t-habs").innerHTML = h || '<p class="dim">No habit data for ' + esc(T.name) + ' yet.</p>';
-    if (L){ var blownAll = L.ledAll ? L.lostAll / L.ledAll : null, cash = L.cashN ? L.cashScores / L.cashN : null;
-      $("t-leads").innerHTML = '<span class="kicker">Leads and stops · ' + L.season + '</span><div class="t-habs two">' +
-        '<div class="hb"><span class="hl">Blown leads</span><span class="hv ' + (L.lost >= 2 ? "neg" : L.led && !L.lost ? "pos" : "") + '">' + L.lost + ' of ' + L.led + '</span><span class="hr">games lost after leading by 7+</span><p>' + (L.ledAll ? 'Since 2019: lost ' + L.lostAll + ' of ' + L.ledAll + ' (' + Math.round(blownAll * 100) + '%). The Power 4 average is ' + Math.round(L.baseBlown * 100) + '%.' : '') + '</p></div>' +
-        '<div class="hb"><span class="hl">Cash-in after stops</span><span class="hv ' + (cash == null ? "" : cash >= L.baseCash + 0.1 ? "pos" : cash <= L.baseCash - 0.1 ? "neg" : "") + '">' + (cash == null ? '–' : Math.round(cash * 100) + '%') + '</span><span class="hr">' + (L.cashN ? L.cashScores + ' scores on ' + L.cashN + ' drives right after a defensive stop' : 'no chances yet') + '</span><p>The Power 4 average this season is ' + Math.round(L.baseCash * 100) + '%.</p></div></div>';
-    } else $("t-leads").innerHTML = '';
-    // ---- the read: what are they, why, what's changing (sums and averages of the per-game fields already shown; nothing new is computed) ----
+    // behind the grades: cash-in from the leads file; turnovers, success rate, answers and the knife twist added up from this season's games
     (function(){
-      var box = $("t-read"); if (!box) return;
-      if (!S || !S.games.length){ box.innerHTML = '<p class="dim">Nothing to read yet.</p>'; return; }
-      var G = S.games.filter(function(g){ return g.dawg != null; }), nG = G.length;
-      var sum = function(a){ return a.reduce(function(x, v){ return x + v; }, 0); }, avg = function(a){ return a.length ? sum(a) / a.length : null; };
-      var tile = function(k, v, cls, sub){ return '<div class="rt"><span class="k">' + k + '</span><span class="v ' + (cls || '') + '">' + v + '</span>' + (sub ? '<span class="s">' + sub + '</span>' : '') + '</div>'; };
-      var gap = S.play == null ? null : S.dawg - S.play;
-      var beat = G.filter(function(g){ return g.dawg > 0; }).length;
-      // what
-      var what = '<p>' + esc(T.name) + ' is <b>' + ord(R.rk) + ' of ' + R.n + '</b> at living up to expectations' + (R.pk ? ' and <b>' + ord(R.pk) + '</b> by PLAY' : '') + ': the scoreboard has beaten Vegas’s expectation in <b>' + beat + ' of ' + nG + '</b> graded games, by <b>' + signed(S.dawg) + '</b> a game on average' +
-        (gap == null ? '.' : Math.abs(gap) < 3 ? ', and PLAY agrees (' + signed(S.play) + ' on offense and defense).' : gap > 0 ? ', while PLAY says <b>' + signed(S.play) + '</b> on offense and defense: the results have run ahead of the play by ' + plain(gap) + ' a game.' : ', while PLAY says <b>' + signed(S.play) + '</b> on offense and defense: the play has been better than the results by ' + plain(-gap) + ' a game.') + '</p>' +
-        '<div class="rts">' + tile('DAWG', signed(S.dawg), S.dawg >= 0 ? 'pos' : 'neg', ord(R.rk) + ' of ' + R.n) + tile('PLAY', S.play == null ? '–' : signed(S.play), S.play == null ? '' : S.play >= 0 ? 'pos' : 'neg', R.pk ? ord(R.pk) + ' of ' + R.pn : '') + tile('Better than expected', beat + ' of ' + nG, '', 'graded games') + tile('DAWG / SOFT games', (S.nD + S.nCD) + ' / ' + (S.nS + S.nCS), '', signed(D.thresholds.dawg) + ' or better / ' + plain(D.thresholds.soft) + ' or worse') + '</div>';
-      // why: turnovers, success rate, cash-in, answers, knife twist, penalties (all per-game fields or the habits block)
-      var tk = sum(G.map(function(g){ return g.tk || 0; })), gv = sum(G.map(function(g){ return g.gv || 0; })), tm = tk - gv;
-      var SR = S.sr || {}, srOf = function(g){ return SR[g.id] || null; };
-      var srs = G.filter(srOf), sr1 = avg(srs.map(function(g){ return srOf(g)[0]; })), sr2 = avg(srs.map(function(g){ return srOf(g)[1]; })), srA = sr1 == null ? null : (sr1 + sr2) / 2;
-      var cN = sum(G.map(function(g){ return g.cashN || 0; })), cP = sum(G.map(function(g){ return g.cashPts || 0; }));
-      var aN = sum(G.map(function(g){ return g.ansN || 0; })), aY = sum(G.map(function(g){ return g.ans || 0; }));
-      var kn = G.filter(function(g){ return g.knife != null; }), kS = sum(kn.map(function(g){ return g.knife; }));
-      var L2 = T.leads, cash = L2 && L2.cashN ? L2.cashScores / L2.cashN : null;
-      var Hb2 = T.habits, pen = Hb2 ? Hb2.row.pen : null, penRk = Hb2 ? Hb2.rank.pen : null, gas = Hb2 ? Hb2.row.leadEpa - Hb2.avg.leadEpa : null;
-      var whyBits = [];
-      whyBits.push('turnovers <b>' + (tm > 0 ? '+' : '') + tm + '</b> (' + tk + ' taken, ' + gv + ' given away)');
-      if (srA != null) whyBits.push('<b>' + Math.round(srA) + '%</b> of its plays successful (' + Math.round(sr1) + '% first halves, ' + Math.round(sr2) + '% second)');
-      if (cash != null && L2) whyBits.push('scored on <b>' + Math.round(cash * 100) + '%</b> of drives right after a stop (Power 4 average ' + Math.round(L2.baseCash * 100) + '%)');
-      if (aN) whyBits.push('answered <b>' + aY + ' of ' + aN + '</b> opponent scoring drives');
-      if (kn.length) whyBits.push('added <b>' + signed(kS, 0) + '</b> after going up 9+ in the second half across ' + kn.length + ' game' + (kn.length === 1 ? '' : 's'));
-      var why = '<p>Alongside the grades: ' + whyBits.join('; ') + '.' + (pen != null ? ' Penalties run <b>' + pen.toFixed(1) + '</b> a game, ' + ord(penRk) + ' fewest in the Power 4' + (gas != null ? '; with a 9+ lead it ' + (gas > 0.02 ? 'keeps attacking' : gas < -0.02 ? 'eases off' : 'plays about average') + '.' : '.') : '') + '</p>' +
-        '<div class="rts">' + tile('Turnover margin', (tm > 0 ? '+' : '') + tm, tm > 0 ? 'pos' : tm < 0 ? 'neg' : '', tk + ' taken · ' + gv + ' given') + (srA != null ? tile('Plays successful', Math.round(srA) + '%', '', Math.round(sr1) + '% 1st half · ' + Math.round(sr2) + '% 2nd') : '') +
-        (cash != null ? tile('Cash-in after stops', Math.round(cash * 100) + '%', cash >= L2.baseCash + 0.1 ? 'pos' : cash <= L2.baseCash - 0.1 ? 'neg' : '', 'P4 average ' + Math.round(L2.baseCash * 100) + '%') : tile('Points after stops', cP, '', 'on ' + cN + ' drives')) +
-        (aN ? tile('Answers', aY + ' of ' + aN, '', 'scoring drives answered') : '') + (kn.length ? tile('Knife twist', signed(kS, 0), kS > 0 ? 'pos' : kS < 0 ? 'neg' : '', 'points added up 9+, ' + kn.length + ' game' + (kn.length === 1 ? '' : 's')) : '') + '</div>';
-      // what's changing: the last three graded games against the ones before them, and the rank line
-      var chg = '';
-      if (nG >= 4){
-        var last = G.slice(-3), prev = G.slice(0, -3), dL = avg(last.map(function(g){ return g.dawg; })), dP = avg(prev.map(function(g){ return g.dawg; }));
-        var pl = last.filter(function(g){ return g.play != null; }), pp = prev.filter(function(g){ return g.play != null; }), pL = avg(pl.map(function(g){ return gp(g); })), pP = avg(pp.map(function(g){ return gp(g); }));
-        var sl = last.filter(srOf), sp = prev.filter(srOf), sL = avg(sl.map(function(g){ var r = srOf(g); return (r[0] + r[1]) / 2; })), sP = avg(sp.map(function(g){ var r = srOf(g); return (r[0] + r[1]) / 2; }));
-        // no verdict word: a 3-game average against the games before it carries a standard error near 12 points, so only call a direction
-        // when the gap clears that and DAWG and PLAY agree
-        var dd = dL - dP, agree = pL != null && pP != null && (dd > 0) === (pL - pP > 0), clear = Math.abs(dd) >= 12 && agree;
-        chg = '<p>Last 3 games vs. ' + (prev.length === 1 ? 'the game' : 'the ' + prev.length + ' games') + ' before: DAWG <b>' + signed(dL) + '</b> vs. <b>' + signed(dP) + '</b> a game' +
-          (pL != null && pP != null ? ', PLAY <b>' + signed(pL) + '</b> vs. <b>' + signed(pP) + '</b>' : '') + (sL != null && sP != null ? ', successful plays ' + Math.round(sL) + '% vs. ' + Math.round(sP) + '%' : '') + '. ' +
-          (clear ? 'Both grades moved the same way, by more than chance usually moves a three-game stretch.' : 'Swings this size over a few games are common by chance, so read this as what happened, not a trend.') +
-          (cur && T.trend && T.trend.pts.length >= 2 ? ' On the rank-by-week chart: ' + ord(T.trend.pts[0].r) + ' after Week ' + T.trend.pts[0].w + ', <b>' + ord(T.trend.pts[T.trend.pts.length - 1].r) + '</b> after Week ' + T.trend.pts[T.trend.pts.length - 1].w + '.' : '') + '</p>' +
-          '<div class="rts">' + tile('DAWG, last 3', signed(dL), dL >= 0 ? 'pos' : 'neg', 'before: ' + signed(dP)) + (pL != null ? tile('PLAY, last 3', signed(pL), pL >= 0 ? 'pos' : 'neg', 'before: ' + (pP == null ? '–' : signed(pP))) : '') + (sL != null ? tile('Successful plays, last 3', Math.round(sL) + '%', '', 'before: ' + Math.round(sP) + '%') : '') + '</div>';
-      } else chg = '<p>Too few games to compare the recent ones with the rest; this fills in after four graded games.</p>';
-      box.innerHTML = '<div class="rcol"><span class="rq">What are they?</span>' + what + '</div><div class="rcol"><span class="rq">What stands out in the numbers?</span>' + why + '</div><div class="rcol"><span class="rq">What happened lately?</span>' + chg + '</div>' +
-        '<p class="rfoot">Turnovers, success rates, cash-ins, answers and the knife twist are the per-game numbers from the game cards, added up; three games is a small sample. A play counts as successful when it gains half the yards needed on 1st down, 70% on 2nd, or all of them on 3rd or 4th (touchdowns count; turnovers don’t). These numbers sit beside the grades; they don’t show what caused them. Not on the site yet: explosive plays, third-down rates, or separate grades for offense and defense.</p>';
+      var G = GS.filter(function(g){ return g.dawg != null; }), sum = function(a){ return a.reduce(function(x, v){ return x + v; }, 0); }, avg = function(a){ return a.length ? sum(a) / a.length : null; };
+      var it = function(name, val, cls, sub){ return '<div class="hb"><span class="hl">' + name + '</span><span class="hv ' + (cls || '') + '">' + val + '</span><span class="hr">' + sub + '</span></div>'; };
+      var out = '';
+      if (L){ var cash = L.cashN ? L.cashScores / L.cashN : null;
+        out += it('Cash-in after stops' + habY, cash == null ? '–' : Math.round(cash * 100) + '%', cash == null ? '' : cash >= L.baseCash + 0.1 ? 'pos' : cash <= L.baseCash - 0.1 ? 'neg' : '', (L.cashN ? L.cashScores + ' scores on ' + L.cashN + ' drives right after a defensive stop' : 'no chances yet') + ' · Power 4: ' + Math.round(L.baseCash * 100) + '%'); }
+      if (G.length){
+        var tk = sum(G.map(function(g){ return g.tk || 0; })), gv = sum(G.map(function(g){ return g.gv || 0; })), tm = tk - gv;
+        var SR = S.sr || {}, srs = G.filter(function(g){ return SR[g.id]; }), sr1 = avg(srs.map(function(g){ return SR[g.id][0]; })), sr2 = avg(srs.map(function(g){ return SR[g.id][1]; }));
+        var aN = sum(G.map(function(g){ return g.ansN || 0; })), aY = sum(G.map(function(g){ return g.ans || 0; })), kn = G.filter(function(g){ return g.knife != null; }), kS = sum(kn.map(function(g){ return g.knife; }));
+        out += it('Turnover margin', (tm > 0 ? '+' : tm < 0 ? MINUS : '') + Math.abs(tm), tm > 0 ? 'pos' : tm < 0 ? 'neg' : '', tk + ' taken · ' + gv + ' given · ' + y);
+        if (sr1 != null) out += it('Plays successful', Math.round((sr1 + sr2) / 2) + '%', '', Math.round(sr1) + '% first halves · ' + Math.round(sr2) + '% second halves');
+        if (aN) out += it('Answers', aY + ' of ' + aN, '', 'opponent scoring drives answered with a score');
+        if (kn.length) out += it('Knife twist', signed(kS, 0), kS > 0 ? 'pos' : kS < 0 ? 'neg' : '', 'points added after going up 9+ in the second half, ' + kn.length + ' game' + (kn.length === 1 ? '' : 's'));
+      }
+      $("t-leads").innerHTML = out ? out + '<p class="tv-note">Season totals of the per-game numbers on the game cards. They sit beside the grades; they don’t show what caused them. A play is successful when it gains half the yards needed on 1st down, 70% on 2nd, or all of them on 3rd or 4th.</p>' : '<p class="dim">Nothing to add up yet.</p>';
     })();
-    // ---- history: every season since 2019 as a chart (tap a year to switch), best and worst games ----
-    var ys = D.seasonList.slice().sort(), vals = []; ys.forEach(function(s){ var q = T.seasons[String(s)]; if (q){ if (q.dawg != null) vals.push(Math.abs(q.dawg)); if (q.play != null) vals.push(Math.abs(q.play)); } });
-    var cmp = window.matchMedia("(max-width: 820px)").matches, ext = Math.max(2, Math.ceil(Math.max.apply(null, vals.concat([0])) + 1.5)), CW = cmp ? 400 : 640, CH = cmp ? 320 : 300, cl = cmp ? 30 : 34, cr2 = 10, ct = 26, cb = 44, colW = (CW - cl - cr2) / ys.length;
-    var cy = function(v){ return ct + (CH - ct - cb) * (ext - v) / (2 * ext); };
-    var ch = '';
-    if (cmp){
-      var hb2 = function(v, cls){ if (v == null) return ''; var w = Math.min(50, Math.abs(v) / ext * 50); return '<i class="yb ' + cls + '" style="left:' + (v >= 0 ? 50 : 50 - w) + '%;width:' + Math.max(w, .8) + '%' + (cls === 'd' ? ';background:' + col : '') + '"></i>'; };
-      ch = '<div class="yrs-m"><div class="yrs-axis" aria-hidden="true"><span></span><span class="ax"><b>' + signed(-ext, 0) + '</b><b>0</b><b>' + signed(ext, 0) + '</b></span><span class="ax-k">DAWG<small>PLAY</small></span></div>' +
-        ys.map(function(s){ var q = T.seasons[String(s)], on = String(s) === y;
-          return '<button type="button" class="yrow' + (on ? ' on' : '') + (s >= T.since ? ' era' : '') + '" data-y="' + s + '" style="--tc:' + col + '"' + (q ? '' : ' disabled') + ' aria-pressed="' + on + '" aria-label="' + s + (q ? ', DAWG ' + (q.dawg == null ? 'not graded' : signed(q.dawg)) + (q.play == null ? '' : ', PLAY ' + signed(q.play)) + ', ' + q.w + '–' + q.l : ', no games') + '">' +
-            '<span class="yy"><b>' + s + (s === 2020 ? '*' : '') + '</b><small>' + (q ? q.w + '–' + q.l : 'no games') + '</small></span>' +
-            '<span class="ytrack">' + (q ? hb2(q.dawg, 'd') + hb2(q.play, 'p') : '') + '</span>' +
-            '<span class="yv"><b class="' + (q && q.dawg != null ? (q.dawg >= 0 ? 'pos' : 'neg') : 'dim') + '">' + (q && q.dawg != null ? signed(q.dawg) : '–') + '</b><small>' + (q && q.play != null ? signed(q.play) : '–') + '</small></span></button>'; }).join("") + '</div>';
-    } else {
-    ch = '<svg viewBox="0 0 ' + CW + ' ' + CH + '" role="img" aria-label="Season DAWG and PLAY by year">';
-    ys.forEach(function(s, i){ var q = T.seasons[String(s)], x0 = cl + i * colW, on = String(s) === y;
-      ch += '<g class="yr' + (on ? ' on' : '') + (q ? '' : ' none') + '" data-y="' + s + '" tabindex="' + (q ? 0 : -1) + '" role="button" aria-label="' + s + (q ? ', DAWG ' + signed(q.dawg) + (q.play == null ? '' : ', PLAY ' + signed(q.play)) + ', ' + q.w + '–' + q.l : ', no games') + '">';
-      ch += '<rect class="col" x="' + x0 + '" y="' + ct + '" width="' + colW + '" height="' + (CH - ct - cb) + '"' + (s >= T.since ? ' style="fill:' + col + ';fill-opacity:.09"' : '') + '/>';
-      if (q && q.dawg != null){ var bw = colW * .42, bx = x0 + colW / 2 - bw - 2, y0 = cy(0), y1 = cy(q.dawg);
-        ch += '<rect class="bar" x="' + bx + '" y="' + Math.min(y0, y1) + '" width="' + bw + '" height="' + Math.max(1, Math.abs(y1 - y0)) + '" style="fill:' + col + '"/>';
-        ch += '<text class="val" x="' + (bx + bw / 2) + '" y="' + (q.dawg >= 0 ? y1 - 6 : y1 + 14) + '" text-anchor="middle">' + signed(q.dawg) + '</text>';
-        if (q.play != null){ var px = x0 + colW / 2 + 2, py = cy(q.play); ch += '<rect class="bar play" x="' + px + '" y="' + Math.min(y0, py) + '" width="' + bw + '" height="' + Math.max(1, Math.abs(py - y0)) + '"/>' + (cmp ? '' : '<text class="val play" x="' + (px + bw / 2) + '" y="' + (q.play >= 0 ? py - 6 : py + 14) + '" text-anchor="middle">' + signed(q.play) + '</text>'); } }
-      ch += '<text class="yl" x="' + (x0 + colW / 2) + '" y="' + (CH - 24) + '" text-anchor="middle">' + (cmp ? "\u2019" + String(s).slice(2) : s) + (s === 2020 ? '*' : '') + '</text>' + (q ? '<text class="rec" x="' + (x0 + colW / 2) + '" y="' + (CH - 8) + '" text-anchor="middle">' + q.w + '–' + q.l + '</text>' : '') + '</g>'; });
-    ch += '<line class="zero" x1="' + cl + '" x2="' + (CW - cr2) + '" y1="' + cy(0) + '" y2="' + cy(0) + '"/>';
-    [ext, 0, -ext].forEach(function(v){ ch += '<text class="tick" x="' + (cl - 6) + '" y="' + (cy(v) + 4) + '" text-anchor="end">' + signed(v, 0) + '</text>'; });
-    ch += '</svg>';
-    }
-    $("t-years").innerHTML = ch + '<div class="t-legend"><span><i style="background:' + col + '"></i>Season DAWG</span><span><i class="play"></i>Season PLAY</span><span><i class="era" style="background:' + col + '"></i>' + esc(T.coach) + '’s tenure</span><span class="dim">* 2020 played in empty or limited stadiums</span></div>';
     var tbT = T.tb.top, tbB = T.tb.bot, none = '<li class="dim">Not enough graded games yet.</li>';
     function tbRow(g){ return '<li><div class="gl-row" role="link" tabindex="0" data-gid="' + esc(g.id) + '" data-t="' + T.id + '" data-y="' + g.y + '"><span class="r">' + g.y + '</span>' +
       '<span class="who"><b>' + (g.site === "away" ? "at " : "vs ") + (g.rk ? 'No. ' + g.rk + ' ' : '') + esc(g.opp) + '</b><small>' + wl(g.pf, g.pa) + ' · ' + fmtD(g.d) + (g.set ? ' · ' + esc(g.set) : '') + '</small></span>' +
       '<span class="num"><b class="' + (g.g >= 0 ? 'pos' : 'neg') + '">' + signed(g.g) + '</b><small>PLAY ' + signed(g.p1 != null ? g.p1 : g.p) + '</small></span></div></li>'; }
     $("t-tb-top").innerHTML = tbT.length ? tbT.map(tbRow).join("") : none; $("t-tb-bot").innerHTML = tbB.length ? tbB.map(tbRow).join("") : none;
+    tvMotion(); tvJump();
   }
+  // motion, additive only: the two big numbers count up, game bars grow from zero, the rank line draws itself, year bars rise.
+  // Anything already on screen when the page draws shows finished; reduced motion turns all of it off.
+  var tvIO = null;
+  function tvMotion(){
+    if (tvReduce || navigator.webdriver || !("IntersectionObserver" in window)) return;   // automated runs (the gate, screenshots) read the finished page
+    if (!tvIO) tvIO = new IntersectionObserver(function(es){ es.forEach(function(e){ if (!e.isIntersecting) return; tvIO.unobserve(e.target); e.target.classList.remove("tv-pre"); }); }, {threshold: .15});
+    [$("t-log"), $("t-trend"), $("t-years")].forEach(function(el){ if (!el) return; el.classList.remove("tv-pre"); var ln = el.querySelector(".ln");
+      if (ln){ try { el.style.setProperty("--len", Math.ceil(ln.getTotalLength())); } catch(x){} }
+      if (el.getBoundingClientRect().top > window.innerHeight){ el.classList.add("tv-pre"); tvIO.observe(el); } });
+    Array.prototype.forEach.call(root.querySelectorAll("#t-hero [data-count]"), function(el){
+      var to = +el.getAttribute("data-count"), fm = el.getAttribute("data-fmt"), done = el.innerHTML, t0 = null;
+      function fmt(v){ return fm === "ord" ? tvOrd(Math.max(1, Math.round(v))) : signed(v); }
+      function step(ts){ if (!el.isConnected) return; if (!t0) t0 = ts; var p = Math.min(1, (ts - t0) / 650), e = 1 - Math.pow(1 - p, 3);
+        el.innerHTML = p < 1 ? fmt(fm === "ord" ? 68 - (68 - to) * e : to * e) : done; if (p < 1) requestAnimationFrame(step); }
+      requestAnimationFrame(step); });
+  }
+  // the section bar: highlights where you are, and carries the team's name and verdict once the band has scrolled away
+  function tvJump(){
+    var j = $("tv-jump"); if (!j || curView !== "team") return;
+    var b = $("t-hero").getBoundingClientRect().bottom, cur = "t-overview";
+    j.classList.toggle("stuck", b < 70);
+    ["t-overview", "t-results", "t-trends", "t-numbers"].forEach(function(id){ var el = $(id); if (el && el.getBoundingClientRect().top < window.innerHeight * .35) cur = id; });
+    Array.prototype.forEach.call(j.querySelectorAll("a[data-tv]"), function(a){ a.classList.toggle("on", a.getAttribute("data-tv") === cur); });
+  }
+  window.addEventListener("scroll", function(){ if (curView === "team") tvJump(); }, {passive: true});
   (function(){
     var sel = $("tseason"); if (!sel) return;
     sel.addEventListener("change", function(){ tp.season = +this.value; drawTeamPage(); });
     var lastC = window.matchMedia("(max-width: 820px)").matches; window.addEventListener("resize", function(){ var c = window.matchMedia("(max-width: 820px)").matches; if (c !== lastC){ lastC = c; if (curView === "team") drawTeamPage(); } });
     $("t-log-all").addEventListener("click", function(){ tp.all = !tp.all; drawTeamPage(); });
-    $("t-years").addEventListener("click", function(e){ var g = e.target.closest("g.yr:not(.none), .yrow:not([disabled])"); if (g){ tp.season = +g.getAttribute("data-y"); $("tseason").value = String(tp.season); drawTeamPage(); } });
-    $("t-years").addEventListener("keydown", function(e){ if (e.key === "Enter" && e.target.closest("g.yr")) e.target.closest("g.yr").dispatchEvent(new MouseEvent("click", {bubbles:true})); });
+    $("t-years").addEventListener("click", function(e){ var g = e.target.closest("g.yr:not(.none)"); if (g){ tp.season = +g.getAttribute("data-y"); $("tseason").value = String(tp.season); drawTeamPage(); } });
+    $("t-years").addEventListener("keydown", function(e){ if ((e.key === "Enter" || e.key === " ") && e.target.closest("g.yr")){ e.preventDefault(); e.target.closest("g.yr").dispatchEvent(new MouseEvent("click", {bubbles:true})); } });
+    $("tv-seg").addEventListener("click", function(e){ var b = e.target.closest("button[data-v]"); if (!b) return; tp.tv = b.getAttribute("data-v"); $("tv-trends").setAttribute("data-v", tp.tv);
+      Array.prototype.forEach.call(this.querySelectorAll("button"), function(x){ x.setAttribute("aria-pressed", String(x === b)); }); });
+    $("tv-jump").addEventListener("click", function(e){ var a = e.target.closest("a[data-tv]"); if (!a) return; e.preventDefault(); var el = $(a.getAttribute("data-tv")); if (el) el.scrollIntoView({block: "start", behavior: tvReduce ? "auto" : "smooth"}); });
+    root.querySelector(".tv-more").addEventListener("click", function(e){ var b = e.target.closest(".tv-acc-b"); if (!b) return; var a = b.parentNode, o = !a.classList.contains("open"); a.classList.toggle("open", o); b.setAttribute("aria-expanded", String(o)); });
     $("t-habs").addEventListener("click", function(e){ var b = e.target.closest(".hb-tog"); if (!b) return; var c = b.closest(".hb"), o = !c.classList.contains("open");
       c.classList.toggle("open", o); b.setAttribute("aria-expanded", String(o)); b.textContent = o ? "Hide" : "What it means"; });
     $("t-log").tBodies[0].addEventListener("keydown", function(e){ if (e.key === "Enter" && e.target.classList.contains("gc")){ e.preventDefault(); e.target.click(); } });
