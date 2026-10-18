@@ -2723,7 +2723,7 @@ h2{font-family:var(--display);font-weight:900;font-size:clamp(34px,4vw,52px);lin
 .teampage .tv-more .hb .hv{font-family:var(--display);font-weight:800;font-size:26px;line-height:1;text-align:right;white-space:nowrap}
 .teampage .tv-more .hb .hv .pp i{font-style:normal;margin:0 .2em;color:var(--muted)}
 .teampage .tv-more .hb .hr{grid-column:1/-1;font-size:13px;color:var(--muted);font-weight:500}
-.teampage .tv-more .hb .hb-tog{grid-column:1/-1;justify-self:start;background:none;border:0;padding:2px 0;font-family:var(--cond);font-weight:700;font-size:12.5px;letter-spacing:.08em;text-transform:uppercase;text-decoration:underline;text-underline-offset:3px;cursor:pointer;color:var(--ink-2)}
+.teampage .tv-more .hb .hb-tog{display:block;grid-column:1/-1;justify-self:start;background:none;border:0;padding:2px 0;font-family:var(--cond);font-weight:700;font-size:12.5px;letter-spacing:.08em;text-transform:uppercase;text-decoration:underline;text-underline-offset:3px;cursor:pointer;color:var(--ink-2)}
 .teampage .tv-more .hb .hb-more{grid-column:1/-1;display:none;font-size:13.5px;color:var(--ink-2)}
 .teampage .tv-more .hb.open .hb-more{display:block}
 .teampage .tv-more .hb .hb-more p{margin:2px 0}
@@ -2811,6 +2811,11 @@ h2{font-family:var(--display);font-weight:900;font-size:clamp(34px,4vw,52px);lin
 }
 @media (max-width:370px){ .tv-v .v{font-size:60px} .tv-n .v{font-size:40px} .tv-ctl .qsearch{width:116px} }
 @media (prefers-reduced-motion:reduce){ .teampage .tv-trk i,.teampage .t-trend .ln,.teampage .t-years .bar,.tv-acc-p,.tv-me{transition:none} }
+
+/* Oct 18 2026: stat titles on the team page open their definition (hover on desktop, tap on phones), using the site's "?" popover */
+.teampage .tv-tip{all:unset;cursor:help;text-decoration:underline dotted;text-decoration-thickness:1.5px;text-underline-offset:3px;text-decoration-color:var(--rule-2)}
+.teampage .tv-tip:hover,.teampage .tv-tip[aria-expanded=true]{text-decoration-color:currentColor}
+.teampage .tv-tip:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
 </style>
 <div class="home" id="home">
 <header class="mast">
@@ -3089,8 +3094,8 @@ h2{font-family:var(--display);font-weight:900;font-size:clamp(34px,4vw,52px);lin
       <div class="t-logwrap" id="t-logwrap">
         <table class="tv-log" id="t-log">
           <thead><tr>
-            <th class="wk" scope="col"><span class="tv-sr">Week</span></th><th class="tm" scope="col"><span class="tv-sr">Opponent</span></th><th class="wl" scope="col"><span class="tv-sr">Result</span></th><th class="trk" scope="col" aria-hidden="true"><span class="tv-axis" id="t-axis"></span></th><th class="dg" scope="col">DAWG</th><th class="pl" scope="col">PLAY</th><th class="tg" scope="col"><span class="tv-sr">Label</span></th>
-            <th class="x" scope="col" title="Closing line, from this team's side">Line</th><th class="x" scope="col" title="Average margin at that line, garbage time removed">Expected</th><th class="x" scope="col" title="Final margin with garbage time removed">Margin</th><th class="x" scope="col" title="Points on drives right after a defensive stop">Cash-in</th><th class="x" scope="col" title="Scoring drives answered">Answers</th><th class="x" scope="col" title="Points added after going up 9+ in the second half">Knife twist</th><th class="x" scope="col">Starting QB</th>
+            <th class="wk" scope="col"><span class="tv-sr">Week</span></th><th class="tm" scope="col"><span class="tv-sr">Opponent</span></th><th class="wl" scope="col"><span class="tv-sr">Result</span></th><th class="trk" scope="col" aria-hidden="true"><span class="tv-axis" id="t-axis"></span></th><th class="dg" scope="col"><button type="button" class="tv-tip" data-tip="dawg" aria-expanded="false">DAWG</button></th><th class="pl" scope="col"><button type="button" class="tv-tip" data-tip="play" aria-expanded="false">PLAY</button></th><th class="tg" scope="col"><span class="tv-sr">Label</span></th>
+            <th class="x" scope="col" title="Closing line, from this team's side">Line</th><th class="x" scope="col" title="Average margin at that line, garbage time removed">Expected</th><th class="x" scope="col" title="Final margin with garbage time removed">Margin</th><th class="x" scope="col"><button type="button" class="tv-tip" data-tip="cashpts" aria-expanded="false">Cash-in</button></th><th class="x" scope="col"><button type="button" class="tv-tip" data-tip="ans" aria-expanded="false">Answers</button></th><th class="x" scope="col"><button type="button" class="tv-tip" data-tip="knife" aria-expanded="false">Knife twist</button></th><th class="x" scope="col">Starting QB</th>
           </tr></thead>
           <tbody></tbody>
         </table>
@@ -6288,6 +6293,25 @@ var FACTS = {
     play: {name: "PLAY", what: "Offense + defense", line: "Offense + defense · pts vs. expectation",
       say: "Expected points added (EPA) on every offensive and defensive snap, vs. what the pregame line implied, in the same points. Special teams aren’t in it."}
   };
+  // Oct 18 2026: hover/tap definitions for the team page's stat titles, in the site's own words (How It Works and the stat notes)
+  var TDEF = {
+    dawg: {name: "DAWG", say: "How many points better or worse a team’s scoring margin was than Vegas’s pregame expectation, with garbage time removed. A season grade is the per-game average.", f: "Scoreboard · pts vs. Vegas"},
+    cashpts: {name: "Cash-in", say: "Points on the very next drive after a stop or takeaway (punt, turnover, downs, missed field goal), outside garbage time, and how many chances.", f: "points on N drives", fb: 1},
+    play: {name: "PLAY", say: "Expected points added (EPA) on every offensive and defensive snap, vs. what the pregame line implied, in the same points. Special teams aren’t in it.", f: "Offense + defense · pts vs. Vegas"},
+    dsg: {name: "DAWG and SOFT games", say: "Each game is graded on its own. +12.3 or better is a DAWG game, +24 a Certified DAWG. −12.3 or worse is SOFT, −24 Certified SOFT. Anything in between is as expected. Labels come from DAWG only.", f: "game DAWG grade vs. ±12.3"},
+    blown: {name: "Blown leads", say: "Games this season where the team led by 7 or more at some point and still lost, out of all games where it led by 7 or more. Since 2019, about 1 in 5 of those leads get away.", f: "losses ÷ games with a 7+ lead", fb: 1},
+    pen: {name: "Penalties per game", say: "Accepted penalties per game. The stickiest habit we found: it carries over almost as well as team quality (0.5–0.6). Fewer is better. Blends this season with last, leaning on last year early in the season.", f: "penalties ÷ games", fb: 1},
+    leadEpa: {name: "Foot on the gas", say: "How well a team plays once it’s up 9+ in the second half, compared with how it plays overall, in expected points per play. Shown against the Power 4 average. Positive means it keeps attacking; negative means it lets teams hang around.", f: "EPA per play when up 9+ in the 2nd half", fb: 1},
+    go4: {name: "Goes for it", say: "How often a team goes for it on 4th and 1–3 between the 30s instead of punting or kicking. A coach’s habit: it follows the coach.", f: "go attempts ÷ (go + punt + field goal)", fb: 1},
+    leadPassAdj: {name: "Sits on a lead", say: "How much a team’s early-down pass rate drops when it leads by 9–24 in the second half, compared with close games. Bigger drop = runs the clock harder. The weakest-carrying of the habits.", f: "pass rate with a lead vs. in close games", fb: 1},
+    neuPass: {name: "Pass-first", say: "Early-down pass rate in close games (within 8 points). This is identity, not grit, but it’s one of the most stable things about a team.", f: "passes ÷ (passes + runs), 1st and 2nd down, within 8", fb: 1},
+    cash: {name: "Cash-in after stops", say: "Points on the very next drive after a stop or takeaway (punt, turnover, downs, missed field goal), outside garbage time. Here: how often that drive scored.", f: "scores ÷ drives right after a stop", fb: 1},
+    tm: {name: "Turnover margin", say: "Takeaways minus giveaways in this season’s graded games, added up from the game cards. It swings a lot from game to game.", f: "taken − given", fb: 1},
+    sr: {name: "Plays successful", say: "A play counts as successful when it gains half the yards needed on 1st down, 70% on 2nd, or all of them on 3rd or 4th (touchdowns count; turnovers don’t). Averaged over this season’s graded games.", f: "successful plays ÷ plays", fb: 1},
+    ans: {name: "Answers", say: "When the opponent scored to make it a one-score game, how often the next drive scored.", f: "scoring answers ÷ chances", fb: 1},
+    knife: {name: "Knife twist", say: "Once up 9 or more, net points from that moment on, garbage time out. Positive means the lead kept growing. It doesn’t change a grade.", f: "net points after the first 9+ lead", fb: 1}
+  };
+  function tip(k, label){ return '<button type="button" class="tv-tip" data-tip="' + k + '" aria-expanded="false">' + label + '</button>'; }
   var DEF_FOOT = "Both in points vs. Vegas’s pregame expectation. 0 = exactly what was expected. Not a power ranking or a prediction.";
   // plain-word margins for the receipts: no double negatives ("won by 25", "expected to lose by 11.2")
   function mword(m){ m = Number(m); return m > 0 ? "won by " + byN(m) : m < 0 ? "lost by " + byN(m) : "tied"; }
@@ -6796,23 +6820,24 @@ var FACTS = {
     var ph = pop.getBoundingClientRect().height; if (r.bottom + 8 + ph > window.innerHeight - 8 && r.top - 8 - ph > 8) pop.style.top = (r.top - 8 - ph) + "px";
   }
   function showPop(b, pin){
-    var k = b.getAttribute("data-mi"), d = DEF[k]; if (!d) return;
+    var tk = b.getAttribute("data-tip"), k = b.getAttribute("data-mi"), d = tk ? TDEF[tk] : DEF[k]; if (!d) return;
     if (popFor && popFor !== b) hidePop(true);
-    pop.innerHTML = '<b>' + d.name + ' <span>' + d.line + '</span></b><p>' + d.say + '</p><p class="f">' + DEF_FOOT + '</p>' + howLink(k, "How " + d.name + " is calculated");
+    pop.innerHTML = tk ? '<b>' + d.name + '</b><p>' + d.say + '</p><p class="f">' + esc(d.f) + (d.fb ? ' · A football stat, not a DAWG grade.' : '') + '</p>'
+      : '<b>' + d.name + ' <span>' + d.line + '</span></b><p>' + d.say + '</p><p class="f">' + DEF_FOOT + '</p>' + howLink(k, "How " + d.name + " is calculated");
     pop.hidden = false; placePop(b); popFor = b; popPinned = !!pin || popPinned;
     b.setAttribute("aria-expanded", "true"); b.setAttribute("aria-describedby", "mipop");
   }
   function hidePop(force){ if (popPinned && !force) return; if (popFor){ popFor.setAttribute("aria-expanded", "false"); popFor.removeAttribute("aria-describedby"); } pop.hidden = true; popFor = null; popPinned = false; }
   root.addEventListener("click", function(e){   // capture: a "?" inside a sortable heading opens its note without sorting the table
-    var b = e.target.closest && e.target.closest(".mi");
+    var b = e.target.closest && e.target.closest(".mi,.tv-tip");
     if (b){ e.preventDefault(); e.stopPropagation(); if (popFor === b && popPinned) hidePop(true); else showPop(b, true); return; }
     if (!pop.hidden && !(e.target.closest && e.target.closest(".mipop"))) hidePop(true);
   }, true);
   var HOVER = window.matchMedia && window.matchMedia("(hover: hover)").matches;
-  root.addEventListener("mouseover", function(e){ if (!HOVER) return; var b = e.target.closest && e.target.closest(".mi"); if (b && popFor !== b && !popPinned) showPop(b); });
-  root.addEventListener("mouseout", function(e){ if (!HOVER || popPinned) return; var to = e.relatedTarget; if (to && to.closest && (to.closest(".mi") === popFor || to.closest(".mipop"))) return; if (e.target.closest && (e.target.closest(".mi") || e.target.closest(".mipop"))) hidePop(); });
-  root.addEventListener("focusin", function(e){ var b = e.target.closest && e.target.closest(".mi"); if (b && popFor !== b) showPop(b); });
-  root.addEventListener("focusout", function(e){ var to = e.relatedTarget; if (popPinned || (to && to.closest && (to.closest(".mipop") || to.closest(".mi") === popFor))) return; if (e.target.closest && (e.target.closest(".mi") || e.target.closest(".mipop"))) hidePop(); });
+  root.addEventListener("mouseover", function(e){ if (!HOVER) return; var b = e.target.closest && e.target.closest(".mi,.tv-tip"); if (b && popFor !== b && !popPinned) showPop(b); });
+  root.addEventListener("mouseout", function(e){ if (!HOVER || popPinned) return; var to = e.relatedTarget; if (to && to.closest && (to.closest(".mi,.tv-tip") === popFor || to.closest(".mipop"))) return; if (e.target.closest && (e.target.closest(".mi,.tv-tip") || e.target.closest(".mipop"))) hidePop(); });
+  root.addEventListener("focusin", function(e){ var b = e.target.closest && e.target.closest(".mi,.tv-tip"); if (b && popFor !== b) showPop(b); });
+  root.addEventListener("focusout", function(e){ var to = e.relatedTarget; if (popPinned || (to && to.closest && (to.closest(".mipop") || to.closest(".mi,.tv-tip") === popFor))) return; if (e.target.closest && (e.target.closest(".mi,.tv-tip") || e.target.closest(".mipop"))) hidePop(); });
   root.addEventListener("keydown", function(e){ if (e.key === "Escape" && !pop.hidden){ var b = popFor; hidePop(true); if (b) b.focus(); } });
   window.addEventListener("scroll", function(){ if (!pop.hidden) hidePop(true); }, {passive: true});
   window.addEventListener("resize", function(){ if (!pop.hidden) hidePop(true); });
@@ -7021,6 +7046,8 @@ var FACTS = {
   var tvReduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   function tvOrd(n){ var o = ord(n); return n + '<sup>' + o.slice(String(n).length) + '</sup>'; }
   function tvChip(code){ return LBL[code] ? '<span class="tv-chip ' + code.toLowerCase() + '">' + LBL[code] + '</span>' : ''; }
+  // a rank past the halfway mark reads from the other end: 49th fewest of 68 penalties is 20th most
+  function tvRank(k, n, lo, hi){ return k <= n / 2 ? ord(k) + ' ' + lo + ' of ' + n : ord(n - k + 1) + ' ' + hi + ' of ' + n; }
   function tvItem(k, v, cls, p, extra){ return '<div class="tv-n' + (extra || '') + '"><span class="k">' + k + '</span><span class="v ' + (cls || '') + '">' + v + '</span><p>' + p + '</p></div>'; }
   function drawTeamPage(){
     var D = window.HOME; if (!tp.id || !(D.team && D.team[tp.id])) return;
@@ -7141,13 +7168,13 @@ var FACTS = {
     var Hb = T.habits, L = T.leads, hn = '', habY = cur ? '' : ' · ' + D.season;
     $("t-num-k").textContent = cur ? y + ' so far' : y + ' season';
     if (S){
-      hn += tvItem('PLAY', S.play == null ? '–' : signed(S.play), S.play == null ? '' : S.play >= 0 ? 'pos' : 'neg', 'Offense + defense vs. Vegas' + (R.pk ? '. <b>' + ord(R.pk) + ' of ' + R.pn + '.</b>' : '.') + (S.nP < S.nG ? ' ' + S.nP + ' game' + (S.nP === 1 ? '' : 's') + ' graded.' : ''), ' play');
-      hn += tvItem('DAWG / SOFT games', nd + '<em>/</em>' + ns, '', 'Out of ' + S.nG + ' graded; ' + S.nE + ' as expected.' + ((S.nCD || S.nCS) ? ' <b>' + (S.nCD ? S.nCD + ' Certified DAWG' : '') + (S.nCD && S.nCS ? ', ' : '') + (S.nCS ? S.nCS + ' Certified SOFT' : '') + '.</b>' : ''));
+      hn += tvItem(tip('play', 'PLAY'), S.play == null ? '–' : signed(S.play), S.play == null ? '' : S.play >= 0 ? 'pos' : 'neg', 'Offense + defense vs. Vegas' + (R.pk ? '. <b>' + ord(R.pk) + ' of ' + R.pn + '.</b>' : '.') + (S.nP < S.nG ? ' ' + S.nP + ' game' + (S.nP === 1 ? '' : 's') + ' graded.' : ''), ' play');
+      hn += tvItem(tip('dsg', 'DAWG / SOFT games'), nd + '<em>/</em>' + ns, '', 'Out of ' + S.nG + ' graded; ' + S.nE + ' as expected.' + ((S.nCD || S.nCS) ? ' <b>' + (S.nCD ? S.nCD + ' Certified DAWG' : '') + (S.nCD && S.nCS ? ', ' : '') + (S.nCS ? S.nCS + ' Certified SOFT' : '') + '.</b>' : ''));
     }
     if (L){ var blownAll = L.ledAll ? L.lostAll / L.ledAll : null;
-      hn += tvItem('Blown leads' + habY, L.led ? L.lost + '<em>of</em>' + L.led : '–', L.lost >= 2 ? 'neg' : L.led && !L.lost ? 'pos' : '', (L.led ? 'Games lost after leading by 7+.' : 'No 7+ leads yet.') + (L.ledAll ? ' Since 2019: <b>' + L.lostAll + ' of ' + L.ledAll + '</b> (' + Math.round(blownAll * 100) + '%). Power 4: ' + Math.round(L.baseBlown * 100) + '%.' : ''), ' blown'); }
+      hn += tvItem(tip('blown', 'Blown leads') + habY, L.led ? L.lost + '<em>of</em>' + L.led : '–', L.lost >= 2 ? 'neg' : L.led && !L.lost ? 'pos' : '', (L.led ? 'Games lost after leading by 7+.' : 'No 7+ leads yet.') + (L.ledAll ? ' Since 2019: <b>' + L.lostAll + ' of ' + L.ledAll + '</b> (' + Math.round(blownAll * 100) + '%). Power 4: ' + Math.round(L.baseBlown * 100) + '%.' : ''), ' blown'); }
     if (Hb){ var r = Hb.row, K = Hb.rank, nT = Hb.n, tone = function(k){ return K[k] <= nT / 3 ? "pos" : K[k] > nT * 2 / 3 ? "neg" : ""; };
-      hn += tvItem('Penalties a game' + habY, r.pen.toFixed(1), tone("pen"), '<b>' + ord(K.pen) + ' fewest of ' + nT + '.</b> The stickiest habit we track. This season ' + (r.pen_now == null ? '–' : r.pen_now.toFixed(1)) + ', last ' + (r.pen_last == null ? '–' : r.pen_last.toFixed(1)) + '.', ' pen'); }
+      hn += tvItem(tip('pen', 'Penalties a game') + habY, r.pen.toFixed(1), tone("pen"), '<b>' + tvRank(K.pen, nT, 'fewest', 'most') + '.</b> The stickiest habit we track. This season ' + (r.pen_now == null ? '–' : r.pen_now.toFixed(1)) + ', last ' + (r.pen_last == null ? '–' : r.pen_last.toFixed(1)) + '.', ' pen'); }
     $("t-nums").innerHTML = hn || '<p class="dim">No games for ' + esc(T.name) + ' in ' + y + '.</p>';
     $("t-nums").className = "tv-nums n" + ($("t-nums").children.length || 1);
     // more stats: team habits (the other four), with "What it means" on each
@@ -7155,32 +7182,32 @@ var FACTS = {
     $("t-hab-k").textContent = "Team habits · " + D.season;
     if (Hb){ var A = Hb.avg, f = {leadEpa: function(v){ return signed(v - A.leadEpa, 2); }, go4: function(v){ return Math.round(v * 100) + "%"; }, leadPassAdj: function(v){ return signed(v * 100, 0) + " pts"; }, neuPass: function(v){ return Math.round(v * 100) + "%"; }};
       var row = function(k, name, val, cls, rank, what){ var now = r[k + "_now"], last = r[k + "_last"];
-        return '<div class="hb"><span class="hl">' + name + '</span><span class="hv ' + cls + '">' + val + '</span><span class="hr">' + rank + '</span>' +
-          '<button type="button" class="hb-tog" aria-expanded="false" aria-controls="hbm-' + k + '">What it means</button><div class="hb-more" id="hbm-' + k + '"><p>' + what + '</p><small class="hs">This season ' + (now == null ? 'not enough plays' : f[k](now)) + ' · last season ' + (last == null ? 'n/a' : f[k](last)) + ' · ' + ord(r[k + "_pct"]) + ' percentile</small></div></div>'; };
+        return '<div class="hb"><span class="hl">' + tip(k, name) + '</span><span class="hv ' + cls + '">' + val + '</span><span class="hr">' + rank + '</span>' +
+          '<button type="button" class="hb-tog" aria-expanded="false" aria-controls="hbm-' + k + '">Season split</button><div class="hb-more" id="hbm-' + k + '"><small class="hs">This season ' + (now == null ? 'not enough plays' : f[k](now)) + ' · last season ' + (last == null ? 'n/a' : f[k](last)) + ' · ' + ord(r[k + "_pct"]) + ' percentile</small></div></div>'; };
       var sl = r.leadPassAdj - A.leadPassAdj;
       h = row("leadEpa", "Foot on the gas", signed(r.leadEpa - A.leadEpa, 2), tone("leadEpa"), ord(K.leadEpa) + " of " + nT, "How well it keeps playing once it’s up 9+ in the second half. Above zero keeps attacking.") +
-        row("go4", "Goes for it", Math.round(r.go4 * 100) + "%", "", ord(K.go4) + " most aggressive of " + nT, "How often it goes for it on 4th and 1–3 between the 30s.") +
+        row("go4", "Goes for it", Math.round(r.go4 * 100) + "%", "", tvRank(K.go4, nT, "most aggressive", "least aggressive"), "How often it goes for it on 4th and 1–3 between the 30s.") +
         row("leadPassAdj", "Sits on a lead", '<span class="pp">' + Math.round(r.neuPass * 100) + '%<i>→</i>' + Math.round((r.neuPass + r.leadPassAdj) * 100) + '%</span>', "", (sl <= -0.03 ? "Runs more than most" : sl >= 0.03 ? "Throws more than most" : "About average") + ' <span class="dim">(avg. ' + Math.round(A.neuPass * 100) + '% → ' + Math.round((A.neuPass + A.leadPassAdj) * 100) + '%)</span>', "Early-down pass rate when close, then when up 9+. Teams tend to sit back and run with a lead; this is how much.") +
-        row("neuPass", "Pass-first", Math.round(r.neuPass * 100) + "%", "", ord(K.neuPass) + " most pass-heavy of " + nT, "Early-down pass rate in close games. Style, not grit.");
+        row("neuPass", "Pass-first", Math.round(r.neuPass * 100) + "%", "", tvRank(K.neuPass, nT, "most pass-heavy", "most run-heavy"), "Early-down pass rate in close games. Style, not grit.");
     }
     $("t-habs").innerHTML = h || '<p class="dim">No habit data for ' + esc(T.name) + ' yet.</p>';
     // behind the grades: cash-in from the leads file; turnovers, success rate, answers and the knife twist added up from this season's games
     (function(){
       var G = GS.filter(function(g){ return g.dawg != null; }), sum = function(a){ return a.reduce(function(x, v){ return x + v; }, 0); }, avg = function(a){ return a.length ? sum(a) / a.length : null; };
-      var it = function(name, val, cls, sub){ return '<div class="hb"><span class="hl">' + name + '</span><span class="hv ' + (cls || '') + '">' + val + '</span><span class="hr">' + sub + '</span></div>'; };
+      var it = function(name, val, cls, sub, k, suf){ return '<div class="hb"><span class="hl">' + (k ? tip(k, name) : name) + (suf || '') + '</span><span class="hv ' + (cls || '') + '">' + val + '</span><span class="hr">' + sub + '</span></div>'; };
       var out = '';
       if (L){ var cash = L.cashN ? L.cashScores / L.cashN : null;
-        out += it('Cash-in after stops' + habY, cash == null ? '–' : Math.round(cash * 100) + '%', cash == null ? '' : cash >= L.baseCash + 0.1 ? 'pos' : cash <= L.baseCash - 0.1 ? 'neg' : '', (L.cashN ? L.cashScores + ' scores on ' + L.cashN + ' drives right after a defensive stop' : 'no chances yet') + ' · Power 4: ' + Math.round(L.baseCash * 100) + '%'); }
+        out += it('Cash-in after stops', cash == null ? '–' : Math.round(cash * 100) + '%', cash == null ? '' : cash >= L.baseCash + 0.1 ? 'pos' : cash <= L.baseCash - 0.1 ? 'neg' : '', (L.cashN ? L.cashScores + ' scores on ' + L.cashN + ' drives right after a defensive stop' : 'no chances yet') + ' · Power 4: ' + Math.round(L.baseCash * 100) + '%', 'cash', habY); }
       if (G.length){
         var tk = sum(G.map(function(g){ return g.tk || 0; })), gv = sum(G.map(function(g){ return g.gv || 0; })), tm = tk - gv;
         var SR = S.sr || {}, srs = G.filter(function(g){ return SR[g.id]; }), sr1 = avg(srs.map(function(g){ return SR[g.id][0]; })), sr2 = avg(srs.map(function(g){ return SR[g.id][1]; }));
         var aN = sum(G.map(function(g){ return g.ansN || 0; })), aY = sum(G.map(function(g){ return g.ans || 0; })), kn = G.filter(function(g){ return g.knife != null; }), kS = sum(kn.map(function(g){ return g.knife; }));
-        out += it('Turnover margin', (tm > 0 ? '+' : tm < 0 ? MINUS : '') + Math.abs(tm), tm > 0 ? 'pos' : tm < 0 ? 'neg' : '', tk + ' taken · ' + gv + ' given · ' + y);
-        if (sr1 != null) out += it('Plays successful', Math.round((sr1 + sr2) / 2) + '%', '', Math.round(sr1) + '% first halves · ' + Math.round(sr2) + '% second halves');
-        if (aN) out += it('Answers', aY + ' of ' + aN, '', 'opponent scoring drives answered with a score');
-        if (kn.length) out += it('Knife twist', signed(kS, 0), kS > 0 ? 'pos' : kS < 0 ? 'neg' : '', 'points added after going up 9+ in the second half, ' + kn.length + ' game' + (kn.length === 1 ? '' : 's'));
+        out += it('Turnover margin', (tm > 0 ? '+' : tm < 0 ? MINUS : '') + Math.abs(tm), tm > 0 ? 'pos' : tm < 0 ? 'neg' : '', tk + ' taken · ' + gv + ' given · ' + y, 'tm');
+        if (sr1 != null) out += it('Plays successful', Math.round((sr1 + sr2) / 2) + '%', '', Math.round(sr1) + '% first halves · ' + Math.round(sr2) + '% second halves', 'sr');
+        if (aN) out += it('Answers', aY + ' of ' + aN, '', 'opponent scoring drives answered with a score', 'ans');
+        if (kn.length) out += it('Knife twist', signed(kS, 0), kS > 0 ? 'pos' : kS < 0 ? 'neg' : '', 'points added after going up 9+ in the second half, ' + kn.length + ' game' + (kn.length === 1 ? '' : 's'), 'knife');
       }
-      $("t-leads").innerHTML = out ? out + '<p class="tv-note">Season totals of the per-game numbers on the game cards. They sit beside the grades; they don’t show what caused them. A play is successful when it gains half the yards needed on 1st down, 70% on 2nd, or all of them on 3rd or 4th.</p>' : '<p class="dim">Nothing to add up yet.</p>';
+      $("t-leads").innerHTML = out ? out + '<p class="tv-note">Season totals of the per-game numbers on the game cards. They sit beside the grades; they don’t show what caused them.</p>' : '<p class="dim">Nothing to add up yet.</p>';
     })();
     var tbT = T.tb.top, tbB = T.tb.bot, none = '<li class="dim">Not enough graded games yet.</li>';
     function tbRow(g){ return '<li><div class="gl-row" role="link" tabindex="0" data-gid="' + esc(g.id) + '" data-t="' + T.id + '" data-y="' + g.y + '"><span class="r">' + g.y + '</span>' +
@@ -7226,7 +7253,7 @@ var FACTS = {
     $("tv-jump").addEventListener("click", function(e){ var a = e.target.closest("a[data-tv]"); if (!a) return; e.preventDefault(); var el = $(a.getAttribute("data-tv")); if (el) el.scrollIntoView({block: "start", behavior: tvReduce ? "auto" : "smooth"}); });
     root.querySelector(".tv-more").addEventListener("click", function(e){ var b = e.target.closest(".tv-acc-b"); if (!b) return; var a = b.parentNode, o = !a.classList.contains("open"); a.classList.toggle("open", o); b.setAttribute("aria-expanded", String(o)); });
     $("t-habs").addEventListener("click", function(e){ var b = e.target.closest(".hb-tog"); if (!b) return; var c = b.closest(".hb"), o = !c.classList.contains("open");
-      c.classList.toggle("open", o); b.setAttribute("aria-expanded", String(o)); b.textContent = o ? "Hide" : "What it means"; });
+      c.classList.toggle("open", o); b.setAttribute("aria-expanded", String(o)); b.textContent = o ? "Hide" : "Season split"; });
     $("t-log").tBodies[0].addEventListener("keydown", function(e){ if (e.key === "Enter" && e.target.classList.contains("gc")){ e.preventDefault(); e.target.click(); } });
     var q = $("tfindq"), res = $("tfindres");
     q.addEventListener("input", function(){ var D = window.HOME, v = q.value.trim().toLowerCase(); if (!v){ res.hidden = true; res.innerHTML = ""; return; }
