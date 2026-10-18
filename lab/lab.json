@@ -1,0 +1,18 @@
+{
+ "version": 1,
+ "cases": [
+  {
+   "number": "001",
+   "slug": "play-to-competition",
+   "url": "/lab/001-play-to-competition/",
+   "title": "Does your team really play to its competition?",
+   "type": "original-investigation",
+   "verdict": null,
+   "version": "1.0",
+   "published": "2026-10-18",
+   "updated": null,
+   "data_cutoff": "2026-10-10",
+   "plan": null
+  }
+ ]
+}

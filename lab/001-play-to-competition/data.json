@@ -1,0 +1,143 @@
+{
+ "case": {
+  "number": "001",
+  "url": "/lab/001-play-to-competition/",
+  "type": "original-investigation"
+ },
+ "illusion": {
+  "team_seasons": 797,
+  "tougher": 1.12,
+  "easier": -0.93,
+  "gap": 2.04,
+  "ci": [
+   1.46,
+   2.62
+  ],
+  "spread_apart": 21.4,
+  "by_season": {
+   "2014": 2.75,
+   "2015": 1.59,
+   "2016": 2.1,
+   "2017": 0.64,
+   "2018": 2.99,
+   "2019": 2.17,
+   "2020": 2.34,
+   "2021": 2.01,
+   "2022": 2.11,
+   "2023": 1.07,
+   "2024": 4.07,
+   "2025": 0.76
+  }
+ },
+ "reveal": {
+  "team_seasons": 727,
+  "spread": {
+   "tougher": 1.06,
+   "easier": -1.2,
+   "gap": 2.27,
+   "ci": [
+    1.5,
+    3.05
+   ]
+  },
+  "spread_home_removed": {
+   "tougher": 0.8,
+   "easier": -0.95,
+   "gap": 1.76,
+   "ci": [
+    1.01,
+    2.48
+   ]
+  },
+  "opponent": {
+   "tougher": -0.29,
+   "easier": 0.07,
+   "gap": -0.36,
+   "ci": [
+    -1.09,
+    0.35
+   ]
+  }
+ },
+ "variation": {
+  "sd_gaps": 8.6,
+  "noise_only": 8.63,
+  "beyond_95_pct": 4.0
+ },
+ "explorer": "/lab/001-play-to-competition/explorer.json?v=e26cc0ebfd",
+ "research": {
+  "label": "Includes research grades for 2014–2018: computed with the DAWG formula, not official DAWG grades.",
+  "label_short": "research grades (2014–2018), not official DAWG grades",
+  "through": 2018
+ },
+ "teams": {
+  "alabama": "Alabama",
+  "arizona": "Arizona",
+  "arizona-state": "Arizona State",
+  "arkansas": "Arkansas",
+  "auburn": "Auburn",
+  "byu": "BYU",
+  "baylor": "Baylor",
+  "boston-college": "Boston College",
+  "california": "California",
+  "cincinnati": "Cincinnati",
+  "clemson": "Clemson",
+  "colorado": "Colorado",
+  "duke": "Duke",
+  "florida": "Florida",
+  "florida-state": "Florida State",
+  "georgia": "Georgia",
+  "georgia-tech": "Georgia Tech",
+  "houston": "Houston",
+  "illinois": "Illinois",
+  "indiana": "Indiana",
+  "iowa": "Iowa",
+  "iowa-state": "Iowa State",
+  "kansas": "Kansas",
+  "kansas-state": "Kansas State",
+  "kentucky": "Kentucky",
+  "lsu": "LSU",
+  "louisville": "Louisville",
+  "maryland": "Maryland",
+  "miami": "Miami",
+  "michigan": "Michigan",
+  "michigan-state": "Michigan State",
+  "minnesota": "Minnesota",
+  "mississippi-state": "Mississippi State",
+  "missouri": "Missouri",
+  "nc-state": "NC State",
+  "nebraska": "Nebraska",
+  "north-carolina": "North Carolina",
+  "northwestern": "Northwestern",
+  "notre-dame": "Notre Dame",
+  "ohio-state": "Ohio State",
+  "oklahoma": "Oklahoma",
+  "oklahoma-state": "Oklahoma State",
+  "ole-miss": "Ole Miss",
+  "oregon": "Oregon",
+  "penn-state": "Penn State",
+  "pittsburgh": "Pittsburgh",
+  "purdue": "Purdue",
+  "rutgers": "Rutgers",
+  "smu": "SMU",
+  "south-carolina": "South Carolina",
+  "stanford": "Stanford",
+  "syracuse": "Syracuse",
+  "tcu": "TCU",
+  "tennessee": "Tennessee",
+  "texas": "Texas",
+  "texas-am": "Texas A&M",
+  "texas-tech": "Texas Tech",
+  "ucf": "UCF",
+  "ucla": "UCLA",
+  "usc": "USC",
+  "utah": "Utah",
+  "vanderbilt": "Vanderbilt",
+  "virginia": "Virginia",
+  "virginia-tech": "Virginia Tech",
+  "wake-forest": "Wake Forest",
+  "washington": "Washington",
+  "west-virginia": "West Virginia",
+  "wisconsin": "Wisconsin"
+ }
+}
