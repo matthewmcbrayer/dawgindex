@@ -112,8 +112,8 @@ def main():
     art = lambda x: x[x.index(b"<article"):x.index(b"</article>")]
     check(art(page) == art(live_page), "Red River article (headline through method note) byte-for-byte identical to the live page on main, apart from approved corrections")
     check(b"\xc2\xb112 points" not in page and b"about 95% of them land within roughly \xc2\xb121 points" in page, "Red River carries the corrected PLAY variation (95% of single games within about \u00b121), not \u00b112")
-    nav_only = lambda x: re.sub(rb'<a href="/stories/"( aria-current="page")?>Stories</a>', b"", x).replace(b'\n.nav a[aria-current="page"]{border-bottom-color:var(--red)}', b"")
-    check(nav_only(page) == nav_only(live_page), "the only other change to the Red River page is the Stories nav link and its style")
+    nav_only = lambda x: re.sub(rb'<a href="/stories/"( aria-current="page")?>Stories</a>(<a href="/lab/">Lab</a>)?', b"", x).replace(b'\n.nav a[aria-current="page"]{border-bottom-color:var(--red)}', b"")
+    check(nav_only(page) == nav_only(live_page), "the only other change to the Red River page is the Stories and Lab nav links and their style")
     check(open(os.path.join(r, "stories/red-river-2026/og.png"), "rb").read() == live_og, "Red River og.png identical to live")
     m1 = [e for e in json.load(open(os.path.join(r, "stories/stories.json")))["stories"] if e["slug"] == "red-river-2026"][0]
     check(m1["status"] == "published" and m1["team_ids"] == ["201", "251"] and m1["team_names"] == ["Oklahoma", "Texas"], "manifest entries carry status, team IDs (Oklahoma 201, Texas 251) and team names")
@@ -287,8 +287,8 @@ def main():
 
     # ---- 7. the real repo: build only ever touches _editorial/ and stories/
     st = subprocess.run(["git", "-C", REPO, "status", "--porcelain"], capture_output=True, text=True).stdout.split("\n")
-    outside = [l for l in st if l.strip() and not re.match(r"^.. (_editorial/|stories/)", l)]
-    check(not outside, "in the real repo, every change is under _editorial/ or stories/", "; ".join(outside[:5]))
+    outside = [l for l in st if l.strip() and not re.match(r"^.. (_editorial/|stories/|lab/)", l)]
+    check(not outside, "in the real repo, every change is under _editorial/, stories/ or lab/", "; ".join(outside[:5]))
     r = copy_repo(); before = {k: v for k, v in tree(r).items() if not k.startswith("stories/")}
     os.remove(os.path.join(r, "stories/stories.json")); run(r, "build")
     after = {k: v for k, v in tree(r).items() if not k.startswith("stories/")}

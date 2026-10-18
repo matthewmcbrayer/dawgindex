@@ -1,0 +1,64 @@
+{
+ "kind": "halves",
+ "illusion": {
+  "team_seasons": 797,
+  "tougher": 1.12,
+  "easier": -0.93,
+  "gap": 2.04,
+  "ci": [
+   1.46,
+   2.62
+  ],
+  "spread_apart": 21.4,
+  "by_season": {
+   "2014": 2.75,
+   "2015": 1.59,
+   "2016": 2.1,
+   "2017": 0.64,
+   "2018": 2.99,
+   "2019": 2.17,
+   "2020": 2.34,
+   "2021": 2.01,
+   "2022": 2.11,
+   "2023": 1.07,
+   "2024": 4.07,
+   "2025": 0.76
+  }
+ },
+ "reveal": {
+  "team_seasons": 727,
+  "spread": {
+   "tougher": 1.06,
+   "easier": -1.2,
+   "gap": 2.27,
+   "ci": [
+    1.5,
+    3.05
+   ]
+  },
+  "spread_home_removed": {
+   "tougher": 0.8,
+   "easier": -0.95,
+   "gap": 1.76,
+   "ci": [
+    1.01,
+    2.48
+   ]
+  },
+  "opponent": {
+   "tougher": -0.29,
+   "easier": 0.07,
+   "gap": -0.36,
+   "ci": [
+    -1.09,
+    0.35
+   ]
+  }
+ },
+ "variation": {
+  "sd_gaps": 8.6,
+  "noise_only": 8.63,
+  "beyond_95_pct": 4.0
+ },
+ "explorer_sha256": "sha256:e26cc0ebfddf6eb0715c44dc3c7506bfe1e544e7e6f74582bd9f4541f2fff768"
+}

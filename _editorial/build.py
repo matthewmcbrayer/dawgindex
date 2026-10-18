@@ -276,6 +276,13 @@ def render_body(fm, body):
     return "\n".join("      " + ln if ln.strip() else "" for ln in out.split("\n")) + "\n"
 
 
+def lab_nav(tpl_dir):
+    """The Lab nav link appears only once the Lab has a published case (lab/lab.json, written by lab.py build).
+    Until then the Stories pages stay byte-identical to what's live: no link to an empty Lab."""
+    repo = os.path.dirname(os.path.dirname(os.path.abspath(tpl_dir)))
+    return '<a href="/lab/">Lab</a>' if os.path.isfile(os.path.join(repo, "lab", "lab.json")) else ""
+
+
 def article_head(fm):
     h = fm.get("headline") or {}
     big, sub = h.get("big") or fm["title"], h.get("sub")
@@ -311,7 +318,7 @@ def story_page(fm, body, tpl_dir, preview=False):
            "{{DESCRIPTION}}": a(fm["description"]), "{{URL}}": url, "{{SOCIAL}}": a(social), "{{OG}}": og,
            "{{DATE}}": fm["date"], "{{JSONLD}}": '<script type="application/ld+json">' + json.dumps(ld, ensure_ascii=False, separators=(",", ":")) + "</script>",
            "{{ROBOTS}}": '\n<meta name="robots" content="noindex, nofollow">' if preview else "",
-           "{{ARTICLE_HEAD}}": article_head(fm), "{{BODY}}": render_body(fm, body).rstrip("\n")}
+           "{{ARTICLE_HEAD}}": article_head(fm), "{{BODY}}": render_body(fm, body).rstrip("\n"), "{{LAB_NAV}}": lab_nav(tpl_dir)}
     for k, v in rep.items():
         page = page.replace(k, v)
     if preview:
@@ -365,7 +372,7 @@ def index_page(entries, tpl_dir, names):
         cards = '<p class="st-empty">No stories yet.</p>'
     ld = {"@context": "https://schema.org", "@type": "CollectionPage", "name": "Beyond the score · DAWG Index", "url": SITE + "/stories/",
           "hasPart": [{"@type": "NewsArticle", "headline": e["title"], "url": SITE + e["url"], "datePublished": e["date"]} for e in entries]}
-    rep = {"{{CSS}}": css, "{{CARDS}}": cards, "{{COUNT}}": str(len(entries)),
+    rep = {"{{CSS}}": css, "{{CARDS}}": cards, "{{COUNT}}": str(len(entries)), "{{LAB_NAV}}": lab_nav(tpl_dir),
            "{{OG}}": SITE + (entries[0]["og_image"] if entries else "/og.png"),
            "{{JSONLD}}": '<script type="application/ld+json">' + json.dumps(ld, ensure_ascii=False, separators=(",", ":")) + "</script>"}
     for k, v in rep.items():
