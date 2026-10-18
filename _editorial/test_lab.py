@@ -5,7 +5,7 @@ for test text, so it can pass the publish checks inside the copy. Its numbers ar
 
   python3 _editorial/test_lab.py            (needs Playwright + Chromium: cards, redirects and layouts are rendered)
 """
-import copy, html, json, mimetypes, os, re, shutil, subprocess, sys, tempfile, xml.dom.minidom
+import glob, copy, html, json, mimetypes, os, re, shutil, subprocess, sys, tempfile, xml.dom.minidom
 HERE = os.path.dirname(os.path.abspath(__file__)); REPO = os.path.dirname(HERE)
 sys.path.insert(0, HERE)
 sys.dont_write_bytecode = True
@@ -21,7 +21,16 @@ def copy_repo():
     shutil.copytree(REPO, dst, ignore=shutil.ignore_patterns(".git", "__pycache__", "lab"))
     # the ignore above also skips templates/lab; put it back
     shutil.copytree(os.path.join(REPO, "_editorial", "templates", "lab"), os.path.join(dst, "_editorial", "templates", "lab"))
+    # once a Lab case is live, the stories pages carry the Lab link; take it out so every test starts from a pre-Lab site
+    for root, _, files in os.walk(os.path.join(dst, "stories")):
+        for fn in files:
+            if fn.endswith(".html"):
+                p = os.path.join(root, fn); t = rd(p)
+                if LAB_LINK in t: open(p, "w", encoding="utf-8").write(t.replace(LAB_LINK, ""))
     return dst
+
+LAB_LINK = '<a href="/lab/">Lab</a>'
+LAB_LIVE = os.path.isfile(os.path.join(REPO, "lab", "lab.json"))   # a published Lab case is live in the real repo
 
 def run(repo, *args):
     p = subprocess.run([sys.executable, os.path.join(repo, "_editorial", "lab.py"), *args, "--repo", repo], capture_output=True, text=True)
@@ -62,7 +71,14 @@ def main():
     check(code == 0 and not os.path.exists(os.path.join(r, "lab")), "with no approved case, build writes nothing (no empty Lab)", out)
     idx = rd(os.path.join(r, "stories", "index.html"))
     check('href="/lab/"' not in idx, "Stories nav has no Lab link while the Lab is unpublished")
-    check(not os.path.exists(os.path.join(REPO, "lab")), "the real repo has no lab/ folder (nothing published)")
+    if LAB_LIVE:   # after the first approved publish: the real lab/ holds only approved, valid cases, each with its source
+        live_cases = json.loads(rd(os.path.join(REPO, "lab", "lab.json"))).get("cases", [])
+        srcs = {os.path.basename(d) for d in glob.glob(os.path.join(REPO, "_editorial", "lab", "*")) if os.path.isdir(d)}
+        p = subprocess.run([sys.executable, os.path.join(REPO, "_editorial", "lab.py"), "check", "--repo", REPO], capture_output=True, text=True)
+        check(live_cases and p.returncode == 0 and all(f'{c["number"]}-{c["slug"]}' in srcs for c in live_cases),
+              "the real repo's lab/ holds only approved cases, each with its approved source", (p.stdout + p.stderr)[-300:])
+    else:
+        check(not os.path.exists(os.path.join(REPO, "lab")), "the real repo has no lab/ folder (nothing published)")
 
     # ---- 2. the sample can't publish
     drafts = tempfile.mkdtemp(prefix="labdrafts-")
@@ -258,7 +274,7 @@ def main():
 
     # ---- 7. Stories gain the Lab nav link only now, and nothing else changes
     for p in ("stories/index.html", "stories/red-river-2026/index.html"):
-        live = rd(os.path.join(REPO, p)); now = rd(os.path.join(r, p))
+        live = rd(os.path.join(REPO, p)).replace(LAB_LINK, ""); now = rd(os.path.join(r, p))   # the live page as it was before any Lab link
         check(now.replace('<a href="/lab/">Lab</a>', "") == live and now.count('href="/lab/"') == 2, f"{p}: only change is the Lab link in header and footer")
     code, out = run(r, "build")
     check(code == 0 and "0 file(s) written" in out, "rebuilding changes nothing (byte-identical)", out[-300:])
