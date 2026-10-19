@@ -2374,11 +2374,12 @@ h2{font-family:var(--display);font-weight:900;font-size:clamp(34px,4vw,52px);lin
   .t-next .ticket .side .lg{width:72px;height:72px}.t-next .ticket .side .lg img{width:52px;height:52px}
   .t-next .ticket .stub{padding:12px 8px 12px 11px}
 }
-/* Oct 12, 2026: in-between widths. 821–1020px: the six-link nav, the date and "Find your team" didn't fit on one line (the page
-   scrolled sideways), so the date and the button's label hide there, as they already do on phones. 1101–1240px: the
+/* Oct 12, 2026: in-between widths. 821–1100px (1020 until Oct 18, when the seventh link, Stats, pushed the masthead 41px past the edge at
+   1024): the nav, the date and "Find your team" don't fit on one line (the page scrolled sideways), so the date and the button's label hide
+   there, as they already do on phones. 1101–1240px: the
    homepage's rankings stickers get a little smaller, and the slate stacks (as it already does at 1100px and below) because its
    tickets didn't fit beside the game of the week. */
-@media (min-width:821px) and (max-width:1020px){
+@media (min-width:821px) and (max-width:1100px){
   .mast-in{gap:16px}
   .asof{display:none}
   .findbtn span{display:none}.findbtn{padding:9px}
@@ -2849,11 +2850,6 @@ h2{font-family:var(--display);font-weight:900;font-size:clamp(34px,4vw,52px);lin
 .sb-pick select{border:1.5px solid var(--ink);background:var(--paper-2);color:var(--ink);font:inherit;font-size:16px;font-weight:700;padding:10px 12px;border-radius:0;width:100%}
 .sb-opts{display:flex;gap:10px;flex-wrap:wrap}
 .sb-opts .mu-seg[hidden]{display:none}
-.sb-tabs{display:flex;align-items:center;gap:8px;border-bottom:2px solid var(--ink);padding-bottom:12px;margin-bottom:22px;flex-wrap:wrap}
-.sb-tabs>button{background:transparent;border:1.5px solid var(--ink);border-radius:999px;padding:7px 16px;font-family:var(--cond);font-weight:800;font-size:13.5px;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;color:var(--ink)}
-.sb-tabs>button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
-.sb-act{margin-left:auto;display:flex;gap:18px}
-.sb-act [hidden]{display:none}
 .sb-hd{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:20px 36px;align-items:start;margin-bottom:22px}
 .sb-ttl h3{margin:0;font-family:var(--display);font-weight:900;font-size:44px;line-height:.95;text-transform:uppercase;letter-spacing:.005em}
 .sb-side{margin:8px 0 0;font-family:var(--cond);font-weight:800;font-size:14px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-2)}
@@ -2912,7 +2908,6 @@ h2{font-family:var(--display);font-weight:900;font-size:clamp(34px,4vw,52px);lin
   .sb-hd{grid-template-columns:1fr;gap:14px}
   .sb-ttl h3{font-size:34px}
   .sb-pick,.sb-pick.sb-stat{flex:1 1 100%}
-  .sb-act{margin-left:0;width:100%;justify-content:flex-start;padding-top:4px}
   .sb-lh{grid-template-columns:36px minmax(0,1fr) auto;gap:8px}
   .sb-lh .sb-ln{display:none}
   .sb-r{grid-template-columns:36px minmax(0,1fr) auto;gap:8px;min-height:50px}
@@ -3010,9 +3005,6 @@ h2{font-family:var(--display);font-weight:900;font-size:clamp(34px,4vw,52px);lin
 .sb-band.bot{background:rgba(19,18,16,.07)}
 .sb-band.top{background:rgba(47,100,192,.16)}
 @media (max-width:820px){
-  .sb-qs{flex-wrap:nowrap;overflow-x:auto;margin:0 calc(-1*var(--gut)) 12px;padding:0 var(--gut) 2px;scrollbar-width:none}
-  .sb-qs::-webkit-scrollbar{display:none}
-  .sb-qs button{flex:0 0 auto}
   .sb-ax .m{display:none}
 }
 @media (max-width:820px){ .sb-tr{white-space:normal;display:inline;-webkit-box-decoration-break:clone;box-decoration-break:clone;line-height:1.6} }
@@ -3023,21 +3015,6 @@ h2{font-family:var(--display);font-weight:900;font-size:clamp(34px,4vw,52px);lin
 .sb-top{display:flex;justify-content:space-between;align-items:flex-end;gap:12px 32px;flex-wrap:wrap;border-bottom:2px solid var(--ink);padding-bottom:14px;margin-bottom:16px}
 .sb-top h2{margin:0}
 .sb-lede{margin:0 0 4px;font-size:15px;color:var(--ink-2);max-width:460px}
-.sb-pickers{margin-bottom:10px}
-.sb-pickers .sb-qs{margin-bottom:8px}
-.sb-row2{display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px}
-.sb-row2 .sb-ks{margin:0}
-.sb-row2 .mu-seg button{min-height:34px;padding:6px 12px}
-.sb-filters{display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px;padding:10px 0;border-top:1px solid var(--rule-2);border-bottom:1px solid var(--rule-2);margin-bottom:22px}
-.sb-filters .mu-seg button{min-height:34px;padding:6px 12px}
-.sb-team{display:inline-flex;align-items:center;gap:8px;font-family:var(--cond);font-weight:800;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
-.sb-team select{border:1.5px solid var(--ink);background:var(--paper-2);color:var(--ink);font:inherit;font-family:var(--body);font-size:15px;font-weight:700;letter-spacing:0;text-transform:none;padding:6px 10px;border-radius:0;min-width:170px}
-.sb-view{display:inline-flex;border:1.5px solid var(--ink);margin-left:auto}
-.sb-view button{background:var(--paper-2);border:0;font-family:var(--cond);font-weight:800;font-size:13px;letter-spacing:.1em;text-transform:uppercase;padding:6px 12px;min-height:34px;cursor:pointer;color:var(--ink)}
-.sb-view button+button{border-left:1.5px solid var(--ink)}
-.sb-view button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
-.sb-filters .sb-act{margin-left:0;display:inline-flex;gap:14px}
-.sb-filters .sb-act .linkbtn{font-size:11.5px;color:var(--ink-2);border-bottom-width:1.5px}
 .sb-hd{margin-bottom:16px}
 .sb-qh{font-size:42px}
 /* the team card */
@@ -3090,10 +3067,6 @@ h2{font-family:var(--display);font-weight:900;font-size:clamp(34px,4vw,52px);lin
   .statspage{padding-top:22px}
   .sb-top{margin-bottom:12px}.sb-lede{font-size:14px}
   .sb-qh{font-size:30px}
-  .sb-filters{gap:8px 10px}
-  .sb-team{flex:1 1 100%}.sb-team select{flex:1;min-width:0}
-  .sb-view{margin-left:0}
-  .sb-filters .sb-act{margin-left:auto}
   .sb-card{padding:12px 14px 10px}
   .sb-c-num .v{font-size:44px}.sb-c-num .rk{font-size:28px}.sb-c-num .rk small{font-size:17px}
   .sb-c-num .avg{flex:1 1 100%}
@@ -3102,10 +3075,53 @@ h2{font-family:var(--display);font-weight:900;font-size:clamp(34px,4vw,52px);lin
   .sb-swipe{display:block;margin:0 0 6px;font-family:var(--cond);font-weight:800;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
   .sb-ax{font-size:11px}
 }
+
+/* ---------- 68 Board cleanup (Oct 18 2026, second pass): Matthew found the controls overwhelming. Questions are one row of plain tabs; the
+   headline is the question; everything that changes the board sits on one quiet line under it (offense or defense, the stat, your team,
+   which plays count); table view and sharing moved under the list. Text, not pills, so the page reads before it asks for clicks. ---------- */
+.statspage .sb-qs{display:flex;flex-wrap:wrap;gap:6px 26px;margin:0;padding:2px 0 0;border:0}
+.statspage .sb-qs button{background:none;border:0;border-radius:0;padding:6px 0 7px;border-bottom:3px solid transparent;font-family:var(--cond);font-weight:800;font-size:15px;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-2);cursor:pointer}
+.statspage .sb-qs button:hover{color:var(--ink);border-bottom-color:var(--rule-2)}
+.statspage .sb-qs button[aria-pressed="true"]{background:none;color:var(--ink);border-bottom-color:var(--red)}
+.statspage .sb-qs[hidden],.statspage .sb-ks[hidden]{display:none}
+.sb-head{margin:24px 0 18px}
+.statspage .sb-qh{font-size:42px}
+.sb-head .sb-ctl{display:flex;flex-wrap:wrap;align-items:center;gap:10px 22px;margin-top:16px;padding-top:12px;border-top:1px solid var(--rule-2)}
+.sb-head .sb-side{margin:0}
+.sb-head .sb-side button{min-height:32px;padding:5px 12px;font-size:13px}
+.sb-head .sb-side[hidden],.sb-head .sb-sel[hidden]{display:none}
+.statspage .sb-ks{display:flex;flex-wrap:wrap;gap:4px 18px;margin:0}
+.statspage .sb-ks button{background:none;border:0;border-radius:0;padding:4px 0;border-bottom:2px solid transparent;font-family:var(--body);font-weight:600;font-size:15px;letter-spacing:0;text-transform:none;color:var(--muted);cursor:pointer}
+.statspage .sb-ks button:hover{color:var(--ink)}
+.statspage .sb-ks button[aria-pressed="true"]{background:none;color:var(--ink);font-weight:700;border-bottom-color:var(--ink)}
+.sb-head .sb-opts{display:flex;flex-wrap:wrap;gap:8px 22px;margin-left:auto}
+.sb-sel{display:inline-flex;align-items:baseline;gap:8px}
+.sb-sel span{font-family:var(--cond);font-weight:800;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.sb-sel select{-webkit-appearance:none;appearance:none;border:0;border-bottom:1.5px solid var(--ink);border-radius:0;background:transparent url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='7' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5 6 6.5 11 1.5' fill='none' stroke='%23131210' stroke-width='2'/%3E%3C/svg%3E") no-repeat right 2px center;
+  padding:3px 20px 3px 0;font-family:var(--body);font-weight:700;font-size:15px;color:var(--ink);cursor:pointer;max-width:190px}
+.sb-sel select:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+.sb-tools{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:10px 24px;margin:20px 0 0;padding-top:14px;border-top:1px solid var(--rule-2)}
+.sb-tools .linkbtn{font-size:12.5px}
+.sb-sh{display:inline-flex;align-items:baseline;gap:14px}
+.sb-sh>span{font-family:var(--cond);font-weight:800;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.sb-sh [hidden]{display:none}
+.sb-back{margin:0 0 12px}
+.statspage .sb-hd{margin-bottom:16px}
+.statspage .sb-card{margin-top:0}
 @media (max-width:820px){
-  .sb-filters #sb-games{order:1}.sb-filters .sb-view{order:2;margin-left:auto}.sb-filters .sb-team{order:3}.sb-filters .sb-act{order:4;margin-left:0}
+  .statspage .sb-qs{gap:0 16px}
+  .statspage .sb-qs button{font-size:13.5px;letter-spacing:.04em;padding:5px 0 4px}
+  .sb-head{margin:20px 0 14px}
+  .statspage .sb-qh{font-size:30px}
+  .sb-head .sb-ctl{gap:10px 16px;margin-top:12px;padding-top:10px}
+  .statspage .sb-ks{flex:1 1 100%;order:2;gap:2px 16px}
+  .statspage .sb-ks button{font-size:14px}
+  .sb-head .sb-opts{flex:1 1 100%;order:3;margin-left:0;display:grid;grid-template-columns:1fr 1fr;gap:10px 16px}
+  .sb-sel{flex-direction:column;gap:2px;min-width:0}
+  .sb-sel select{max-width:none;width:100%}
+  .sb-tools{flex-direction:column;align-items:flex-start}
 }
-@media (max-width:374px){ .sb-filters .mu-seg button,.sb-view button{font-size:11.5px;padding:6px 8px;letter-spacing:.06em} .sb-filters{gap:8px 6px} }
+@media (max-width:374px){ .statspage .sb-qs{gap:2px 14px} .statspage .sb-qs button{font-size:12.5px} }
 
 /* ---------- phones (Oct 18 2026): Rankings, Stats, Teams and This Week always showing on one line, no scrolling; "More" opens a panel with
    QBs, Stories, How It Works and a team search that shows results as you type. Replaces the scrolling tab bar and the search button (which
@@ -3474,9 +3490,9 @@ h2{font-family:var(--display);font-weight:900;font-size:clamp(34px,4vw,52px);lin
     <section class="t-sec tv-sec" id="t-numbers" aria-labelledby="t-num-h">
       <div class="tv-sh"><div><span class="kicker" id="t-num-k"></span><h2 id="t-num-h" class="tv-h2">By the numbers</h2></div></div>
       <div class="tv-nums" id="t-nums"></div>
-      <!-- Oct 18 2026: where the team ranks on the 68 Board, offense and defense, each rank linking to that stat's board with this team highlighted -->
+      <!-- Oct 18 2026: where the team ranks on the All 68 Board, offense and defense, each rank linking to that stat's board with this team highlighted -->
       <div class="tv-ranks" id="t-ranks" hidden>
-        <div class="tv-rk-h"><h3 class="tv-h3">Where <span id="t-ranks-n"></span> ranks</h3><a class="link" id="t-ranks-all" href="/#stats" data-p="stats">All stats on the 68 Board <span aria-hidden="true">→</span></a></div>
+        <div class="tv-rk-h"><h3 class="tv-h3">Where <span id="t-ranks-n"></span> ranks</h3><a class="link" id="t-ranks-all" href="/#stats" data-p="stats">All stats on the All 68 Board <span aria-hidden="true">→</span></a></div>
         <p class="tv-sub" id="t-ranks-sub"></p>
         <div class="t-rk" id="t-rk" role="table" aria-label="Rank among the 68 Power 4 teams"></div>
       </div>
@@ -3498,29 +3514,28 @@ h2{font-family:var(--display);font-weight:900;font-size:clamp(34px,4vw,52px);lin
 </section>
 </main>
 
-<!-- ================= STATS (Oct 18 2026): the 68 Board. One stat at a time, every Power 4 team ranked and drawn in the pack, your team highlighted.
+<!-- ================= STATS (Oct 18 2026): the All 68 Board (named the 68 Board until the same night). One stat at a time, every Power 4 team ranked and drawn in the pack, your team highlighted.
      Football stats: /matchup-stats.json (home/matchup_data.py, the same verified all-plays numbers as Compare). Season DAWG and PLAY: HOME. ================= -->
 <main class="view" data-view="stats" hidden>
 <section class="v2page statspage" aria-labelledby="sb-h">
   <div class="wrap"><div class="sb-wrap">
     <div class="sb-top">
-      <div><span class="kicker" id="sb-kicker">Stats</span><h2 id="sb-h">The 68 Board</h2></div>
+      <div><span class="kicker" id="sb-kicker">Stats</span><h2 id="sb-h">The All 68 Board</h2></div>
       <p class="sb-lede">One football question at a time, all 68 Power 4 teams: who leads, who trails, and how much to trust the gaps.</p>
     </div>
-    <!-- 1. what you're looking at: the question, the stat inside it, and which side of the ball -->
-    <div class="sb-pickers">
-      <div class="sb-qs" id="sb-qs" role="group" aria-label="Pick a question"></div>
-      <div class="sb-row2">
+    <!-- one row of questions; under the question's headline, everything that changes the board on one quiet line (Oct 18 2026 cleanup):
+         offense or defense, the stat inside the question, your team, and which plays count. Table view, sharing and the link live under the list. -->
+    <div class="sb-qs" id="sb-qs" role="group" aria-label="Pick a question"></div>
+    <div class="sb-head">
+      <h3 class="sb-qh" id="sb-qh"></h3>
+      <div class="sb-ctl">
+        <div class="mu-seg sb-side" id="sb-side" role="group" aria-label="Offense or defense"><button type="button" data-v="o" aria-pressed="true">Offense</button><button type="button" data-v="d" aria-pressed="false">Defense</button></div>
         <div class="sb-ks" id="sb-ks" role="group" aria-label="Pick a stat" hidden></div>
-        <div class="mu-seg sb-side" id="sb-side" role="group" aria-label="Offense or defense"><button type="button" data-v="o" aria-pressed="true">With the ball</button><button type="button" data-v="d" aria-pressed="false">On defense</button></div>
+        <div class="sb-opts">
+          <label class="sb-sel" for="sb-team"><span>Your team</span><select id="sb-team"></select></label>
+          <label class="sb-sel" for="sb-count" id="sb-countl"><span>Counting</span><select id="sb-count"><option value="all">Every play</option><option value="comp">Garbage time out</option><option value="p4">Vs. Power 4 only</option></select></label>
+        </div>
       </div>
-    </div>
-    <!-- 2. filters and view: which games, your team, Board or All stats; sharing kept small at the end -->
-    <div class="sb-filters">
-      <div class="mu-seg" id="sb-games" role="group" aria-label="Which games"><button type="button" data-v="all" aria-pressed="true">All games</button><button type="button" data-v="p4" aria-pressed="false">Vs. Power 4</button></div>
-      <label class="sb-team" for="sb-team"><span>Your team</span><select id="sb-team"></select></label>
-      <div class="sb-view" role="group" aria-label="View"><button type="button" data-tab="board" aria-pressed="true">Board</button><button type="button" data-tab="table" aria-pressed="false">All stats</button></div>
-      <span class="sb-act"><button type="button" class="linkbtn" id="sb-share">Share image</button><button type="button" class="linkbtn" id="sb-copy">Copy link</button></span>
     </div>
     <p class="mu-notice" id="sb-notice" role="status" hidden></p>
     <div class="sb-board" id="sb-board">
@@ -3530,8 +3545,10 @@ h2{font-family:var(--display);font-weight:900;font-size:clamp(34px,4vw,52px);lin
       <div class="sb-lh"><span>Rank</span><span>Team</span><span class="sb-lv" id="sb-lv"></span><span class="sb-ln">Sample</span></div>
       <ol class="sb-list" id="sb-list"></ol>
       <p class="sb-more"><button type="button" class="tv-btn" id="sb-all" aria-expanded="false">Show all 68</button></p>
+      <p class="sb-tools"><button type="button" class="linkbtn" id="sb-totable">Every stat in one table</button><span class="sb-sh"><span>Share this board</span><button type="button" class="linkbtn" id="sb-share">Image</button><button type="button" class="linkbtn" id="sb-copy">Link</button></span></p>
     </div>
     <div class="sb-table" id="sb-table" hidden>
+      <p class="sb-back"><button type="button" class="linkbtn" id="sb-toboard">← Back to the board</button></p>
       <p class="tv-sub" id="sb-tsub"></p>
       <details class="sb-defs"><summary>What each column means</summary><dl id="sb-dl"></dl></details>
       <p class="sb-swipe" aria-hidden="true">Swipe sideways for every stat →</p>
@@ -3975,6 +3992,7 @@ h2{font-family:var(--display);font-weight:900;font-size:clamp(34px,4vw,52px);lin
   <section class="sec page" data-page="method" id="changes-sec" aria-labelledby="chg-h">
     <h2 id="chg-h">Changes</h2>
     <ul class="chg">
+      <li><b>Oct. 18, 2026</b> The Stats page is now the All 68 Board, with simpler controls: one row of questions, then offense or defense, the stat, your team and which plays count on one line. New question, Run or pass: yards per carry (sacks don’t count as runs) and yards per dropback (sacks count as lost yards), for offense and defense. Both held up from the first half of a season to the second in 2019–2025 about as well as the stats already on the board. A new Counting choice leaves garbage time out, using DAWG’s rule; every play is still the default. No grade or existing stat changed.</li>
       <li><b>Oct. 18, 2026</b> New Stats page, the 68 Board: every Power 4 team on one stat at a time (the 12 football stats Compare uses, plus season DAWG and PLAY), for offense or defense and all games or Power 4 opponents only, with sample sizes and how well each stat has held up over a season in the past. It also has a table of every stat, links that open a stat with your team highlighted, and share images. Team pages show where the team ranks on six of them. Football stats count every play; DAWG and PLAY keep garbage time out. No grade changed.</li>
       <li><b>Oct. 18, 2026</b> Teams with the same season DAWG grade (to one decimal) now share a rank, shown as “T-14th”, and the next rank skips. This applies everywhere a rank appears: the rankings, team pages and their rank-by-week charts, This Week, Compare, the Poll Check and share images. Before, pages broke ties in different ways, so a team could show 15th in one place and 16th in another. No grade changed.</li>
       <li><b>Oct. 18, 2026</b> Simpler team pages: four sections (overview, game results, season trends, by the numbers), with everything else under More stats. The written summaries are gone and nothing is repeated. Same data and links; no grade, rank or number changed.</li>
@@ -5228,7 +5246,7 @@ var FACTS = {
   var SLUG = {}; Object.keys(META).forEach(function(id){ SLUG[slugOf(id)] = id; });
   var linkTeam = null;
   try { var qp = new URLSearchParams(location.search).get("team"); if (qp && SLUG[qp]) linkTeam = SLUG[qp]; } catch(e){}
-  try { var _q = new URLSearchParams(location.search); window.DAWG_LINK = {compare: _q.get("compare"), view: _q.get("view"), hash: (location.hash || "").replace("#",""), stat: _q.get("stat"), side: _q.get("side"), games: _q.get("games"), hl: _q.get("hl")}; } catch(e){}
+  try { var _q = new URLSearchParams(location.search); window.DAWG_LINK = {compare: _q.get("compare"), view: _q.get("view"), hash: (location.hash || "").replace("#",""), stat: _q.get("stat"), side: _q.get("side"), games: _q.get("games"), plays: _q.get("plays"), hl: _q.get("hl")}; } catch(e){}
   if (linkTeam){ state.sel = linkTeam; state.picked = true; }
   if (!state.sel) state.sel = Object.keys(META).find(function(k){ return META[k].abbr === "BAY"; });
 
@@ -7630,7 +7648,7 @@ var FACTS = {
       hn += tvItem(tip('pen', 'Penalties a game') + habY, r.pen.toFixed(1), tone("pen"), '<b>' + tvRank(K.pen, nT, 'fewest', 'most') + '.</b> The stickiest habit we track. This season ' + (r.pen_now == null ? '–' : r.pen_now.toFixed(1)) + ', last ' + (r.pen_last == null ? '–' : r.pen_last.toFixed(1)) + '.', ' pen'); }
     $("t-nums").innerHTML = hn || '<p class="dim">No games for ' + esc(T.name) + ' in ' + y + '.</p>';
     $("t-nums").className = "tv-nums n" + ($("t-nums").children.length || 1);
-    drawTeamRanks(T, cur);   // Where [Team] ranks: the 68 Board, offense and defense
+    drawTeamRanks(T, cur);   // Where [Team] ranks: the All 68 Board, offense and defense
     // more stats: team habits (the other four), with "What it means" on each
     var h = '';
     $("t-hab-k").textContent = "Team habits · " + D.season;
@@ -8552,20 +8570,22 @@ var FACTS = {
     }, true);
   })();
 
-  // ---------- STATS: the 68 Board (Oct 18 2026; answer-first pass the same night) ----------
+  // ---------- STATS: the All 68 Board (Oct 18 2026; answer-first pass the same night) ----------
   // One football question at a time, all 68 Power 4 teams: a one-sentence answer for your team (its number in plain words, its rank, the
   // Power 4 average and how much to trust it), then the pack (Compare's strip, shaded in thirds) and the ranked list. Football stats come
   // from /matchup-stats.json (home/matchup_data.py: the same verified, all-plays numbers Compare shows); season DAWG and PLAY from HOME.
   // Nothing is recomputed except the DAWG/PLAY ranks (ranks.py rule), the "about N a game" translation (counts already in the stats file)
   // and the sampling whisker. The trust line uses Compare's own note rule (MU_RULE): strong / lean / everything else.
-  var SB_SLUG = {ypp:"yards-per-play", ppd:"points-per-drive", early:"early-downs", sack:"sack-rate", xpl:"explosive-plays", td40:"td-rate-inside-40",
+  var SB_SLUG = {ypp:"yards-per-play", ppd:"points-per-drive", ypc:"yards-per-carry", ypd:"yards-per-dropback", early:"early-downs", sack:"sack-rate", xpl:"explosive-plays", td40:"td-rate-inside-40",
                  ppt:"points-per-trip-inside-40", d3c:"third-down-rate", d3d:"third-down-distance", rz:"red-zone-td-rate", fp:"field-position", to:"turnovers", dawg:"dawg", play:"play"};
-  var SB_SHORT = {ypp:"Yds per play", ppd:"Pts per drive", early:"Early downs", sack:"Sack rate", xpl:"Explosive", td40:"TD % inside 40", ppt:"Pts per trip", d3c:"3rd-down rate",
+  var SB_SHORT = {ypp:"Yds per play", ppd:"Pts per drive", ypc:"Yds per carry", ypd:"Yds per dropback", early:"Early downs", sack:"Sack rate", xpl:"Explosive", td40:"TD % inside 40", ppt:"Pts per trip", d3c:"3rd-down rate",
                   d3d:"3rd-down distance", rz:"Red zone TD %", fp:"Start position", to:"Turnovers", dawg:"DAWG", play:"PLAY"};
   // the question each stat answers, from the side of the ball being ranked (offense, defense); DAWG and PLAY have one each
   var SB_Q = {ypp:["Which offenses gain the most per play?", "Which defenses give up the least per play?"],
     ppd:["Which offenses score the most per drive?", "Which defenses give up the fewest points per drive?"],
     early:["Which offenses move the chains before 3rd down?", "Which defenses force the most 3rd downs?"],
+    ypc:["Which offenses run the ball best?", "Which defenses stop the run?"],
+    ypd:["Which offenses throw the ball best?", "Which defenses stop the pass?"],
     sack:["Which offenses protect the quarterback?", "Which defenses get to the quarterback?"],
     xpl:["Which offenses hit the most big plays?", "Which defenses give up the fewest big plays?"],
     td40:["Which offenses finish trips inside the 40 with touchdowns?", "Which defenses keep trips inside the 40 out of the end zone?"],
@@ -8577,9 +8597,10 @@ var FACTS = {
     to:["Which offenses protect the ball?", "Which defenses take the ball away?"],
     dawg:["Which teams are playing above expectations?"], play:["Whose offense and defense are playing above expectations?"]};
   // the chips: one per football question (Compare's groups), plus DAWG grades
-  var SB_CHIP = {move:"Move the ball", protect:"Sacks", explosive:"Big plays", finish:"Finish drives", field:"Get off the field", more:"More stats", grade:"DAWG grades"};
+  var SB_CHIP = {move:"Move the ball", run:"Run or pass", protect:"Sacks", explosive:"Big plays", finish:"Finish drives", field:"3rd downs", more:"More", grade:"DAWG grades"};
   var SB_DIR = {ypp:[["Fewer yards","More yards"],["More yards allowed","Fewer allowed"]], ppd:[["Fewer points","More points"],["More points allowed","Fewer allowed"]],
-    early:[["Less often","More often"],["Allows more","Forces more 3rd downs"]], sack:[["More sacks allowed","Fewer sacks allowed"],["Fewer sacks","More sacks"]],
+    early:[["Less often","More often"],["Allows more","Forces more 3rd downs"]],
+    ypc:[["Fewer yards","More yards"],["More yards allowed","Fewer allowed"]], ypd:[["Fewer yards","More yards"],["More yards allowed","Fewer allowed"]], sack:[["More sacks allowed","Fewer sacks allowed"],["Fewer sacks","More sacks"]],
     xpl:[["Fewer big plays","More big plays"],["More allowed","Fewer allowed"]], td40:[["Fewer TDs","More TDs"],["More TDs allowed","Fewer allowed"]],
     ppt:[["Fewer points","More points"],["More points allowed","Fewer allowed"]], d3c:[["Converts less","Converts more"],["Allows more","Allows fewer"]],
     d3d:[["Longer 3rd downs","Shorter 3rd downs"],["Shorter 3rd downs","Longer 3rd downs"]], rz:[["Fewer TDs","More TDs"],["More TDs allowed","Fewer allowed"]],
@@ -8619,7 +8640,7 @@ var FACTS = {
   function sbCur(){ var m = sbM(SB.k) || sbM("ppd"); return {m: m, side: m.grade ? "o" : SB.side, view: m.grade ? "all" : SB.view}; }
   function sbQ(c){ var q = SB_Q[c.m.k] || [c.m.label]; return c.m.grade ? q[0] : q[c.side === "o" ? 0 : 1]; }
   function sbUrl(){ var c = sbCur(), u = "/?stat=" + SB_SLUG[c.m.k];
-    if (!c.m.grade && c.side === "d") u += "&side=defense"; if (!c.m.grade && c.view === "p4") u += "&games=p4"; if (SB.fav) u += "&hl=" + muSlug(SB.fav); return u + "#stats"; }
+    if (!c.m.grade && c.side === "d") u += "&side=defense"; if (!c.m.grade && c.view === "p4") u += "&games=p4"; if (!c.m.grade && c.view === "comp") u += "&plays=competitive"; if (SB.fav) u += "&hl=" + muSlug(SB.fav); return u + "#stats"; }
   function sbWriteUrl(){ try { if (/^https?:/.test(location.protocol) && curView === "stats") history.replaceState(null, "", sbUrl()); } catch(e){} }
   function sbSideTxt(c){ var m = c.m; if (m.grade) return m.label + " · points a game vs. expectation";
     var hi = (m.better === "hi") === (c.side === "o"); return m.label + " · " + (c.side === "o" ? "offense" : "defense") + " · " + (hi ? "higher" : "lower") + " is better"; }
@@ -8636,6 +8657,8 @@ var FACTS = {
       case "play": return nm + '’s offense and defense have played <b>' + Math.abs(v).toFixed(1) + ' points a game ' + (v >= 0 ? 'better' : 'worse') + '</b> than the lines expected';
       case "ypp": return o ? nm + '’s offense gains ' + V + ' yards a play' : nm + '’s defense gives up ' + V + ' yards a play';
       case "ppd": return o ? nm + '’s offense scores ' + V + ' points a drive' : nm + '’s defense gives up ' + V + ' points a drive';
+      case "ypc": return o ? nm + ' gains ' + V + ' yards a carry' : nm + '’s defense gives up ' + V + ' yards a carry';
+      case "ypd": return o ? nm + ' gains ' + V + ' yards every time it drops back to pass' : nm + '’s defense gives up ' + V + ' yards every time an offense drops back to pass';
       case "early": return o ? nm + '’s offense gets a first down before 3rd down on ' + V + ' of its sets of downs' : 'Offenses get a first down before 3rd down on ' + V + ' of their sets against ' + nm;
       case "sack": return o ? nm + '’s quarterback goes down on ' + V + ' of dropbacks' + per("sack") : nm + '’s defense gets a sack on ' + V + ' of dropbacks' + per("sack");
       case "xpl": return o ? V + ' of ' + nm + '’s plays go for 20+ yards' + per("big play") : V + ' of offenses’ plays against ' + nm + ' go for 20+ yards' + per("big play");
@@ -8671,13 +8694,13 @@ var FACTS = {
       '<p class="sb-c-say">' + say.replace(/<\/?b>/g, "") + '.</p>' +
       '<p class="sb-c-tags">' + (tr ? '<span class="sb-tr ' + tr.c + '">' + tr.t.replace(/\.$/, "") + '</span>' : '') +
         '<span class="sb-c-n">' + me.n + ' ' + esc(m.n) + (small ? ' · fewer than most' : '') + '</span></p>' +
-      (fav ? '' : '<p class="sb-pick-hint">Pick your team above to see where it stands.</p>') + '</div>';
+      (fav ? '' : '<p class="sb-pick-hint">Pick your team to see where it stands.</p>') + '</div>';
   }
   function drawStatsPage(){
     if (!MU.data && !MU.failed){ $("sb-hd").innerHTML = '<p class="dim">Loading the board…</p>'; return muLoad(drawStatsPage); }
     if (MU.failed){ $("sb-notice").hidden = false; $("sb-notice").textContent = "The stats file didn't load. Try again in a minute."; return; }
     sbGrades();
-    if (SB.link){ var L = SB.link; SB.link = null; var k = sbBySlug(L.stat); if (k) SB.k = k; if (L.side === "defense" || L.side === "d") SB.side = "d"; if (L.games === "p4") SB.view = "p4";
+    if (SB.link){ var L = SB.link; SB.link = null; var k = sbBySlug(L.stat); if (k) SB.k = k; if (L.side === "defense" || L.side === "d") SB.side = "d"; if (L.games === "p4") SB.view = "p4"; if (L.plays === "competitive") SB.view = "comp";
       var t = sbTeamBySlug(L.hl); if (t) SB.fav = t; }
     var D = window.HOME, M = D.meta;
     if (!$("sb-team").__w){ $("sb-team").__w = true;
@@ -8685,31 +8708,32 @@ var FACTS = {
       $("sb-team").innerHTML = '<option value="">None</option>' + ids.map(function(id){ return '<option value="' + id + '">' + esc(M[id].name) + '</option>'; }).join("");
     }
     var c = sbCur(), m = c.m; SB.k = m.k; $("sb-team").value = SB.fav || "";
-    // question chips, then the stats inside the picked question (only when it has more than one)
-    var groups = ["move", "protect", "explosive", "finish", "field", "grade", "more"].filter(function(q){ return sbMetrics().some(function(x){ return x.q === q; }); });
+    // the questions, then under the headline: offense or defense, the stats inside the question (only when it has more than one),
+    // your team and which plays count. The table shows every stat at once, so there the question and stat pickers go away.
+    var tbl = SB.tab === "table";
+    var groups = ["move", "run", "protect", "explosive", "finish", "field", "grade", "more"].filter(function(q){ return sbMetrics().some(function(x){ return x.q === q; }); });
     $("sb-qs").innerHTML = groups.map(function(q){ return '<button type="button" data-q="' + q + '" aria-pressed="' + (q === m.q) + '">' + esc(SB_CHIP[q] || q) + '</button>'; }).join("");
     var ks = sbMetrics().filter(function(x){ return x.q === m.q; });
     $("sb-ks").innerHTML = ks.length > 1 ? ks.map(function(x){ return '<button type="button" data-k="' + x.k + '" aria-pressed="' + (x.k === m.k) + '">' + esc(x.label) + '</button>'; }).join("") : "";
-    $("sb-ks").hidden = ks.length < 2;
-    var on = $("sb-qs").querySelector('[aria-pressed="true"]'), qs = $("sb-qs"); if (on && qs.scrollWidth > qs.clientWidth){ var d = on.getBoundingClientRect().left - qs.getBoundingClientRect().left; if (d < 24 || d + on.offsetWidth > qs.clientWidth - 24) qs.scrollLeft += d - 24; }   // phones: the picked question stays in view
-    var tbl = SB.tab === "table"; $("sb-side").hidden = $("sb-games").hidden = !!m.grade && !tbl; $("sb-qs").hidden = tbl; if (tbl) $("sb-ks").hidden = true;   // the table shows every stat: side and games apply, the stat pickers don't
+    $("sb-ks").hidden = ks.length < 2 || tbl; $("sb-qs").hidden = tbl;
+    $("sb-side").hidden = $("sb-countl").hidden = !!m.grade && !tbl;   // DAWG and PLAY grade the whole team and already leave garbage time out
     qa("#sb-side button").forEach(function(b){ b.setAttribute("aria-pressed", String(b.getAttribute("data-v") === (tbl ? SB.side : c.side))); });
-    qa("#sb-games button").forEach(function(b){ b.setAttribute("aria-pressed", String(b.getAttribute("data-v") === (tbl ? SB.view : c.view))); });
-    qa(".sb-view button").forEach(function(b){ b.setAttribute("aria-pressed", String(b.getAttribute("data-tab") === SB.tab)); });
-    $("sb-board").hidden = SB.tab !== "board"; $("sb-table").hidden = SB.tab !== "table"; $("sb-share").hidden = SB.tab !== "board";
+    $("sb-count").value = tbl ? SB.view : c.view;
+    $("sb-qh").textContent = tbl ? "All 68 teams, every stat at once" : sbQ(c);
+    $("sb-board").hidden = tbl; $("sb-table").hidden = !tbl;
     $("sb-board").setAttribute("data-k", m.k); $("sb-board").setAttribute("data-side", c.side); $("sb-board").setAttribute("data-view", c.view);
     $("sb-kicker").textContent = "Stats · " + (MU.data.week || D.week) + " · " + D.season;
     if (SB.tab === "board") sbBoard(c); else sbTable(c);
     var S = sbPts(c), ns = S.pts.map(function(p){ return p.n; }).sort(function(x, y){ return x - y; });
     $("sb-foot").innerHTML = m.grade ? 'Season grades through ' + esc(D.week) + '. Not a power ranking or a prediction. <a class="link" href="/#method" data-p="method">How it works</a>'
-      : 'A football stat, not a DAWG grade. Every play, ' + (c.view === "p4" ? 'games against Power 4 opponents only' : 'every game this season, including non-Power 4 opponents') +
+      : 'A football stat, not a DAWG grade. ' + (c.view === "comp" ? 'Garbage time left out (DAWG’s rule: a lead of more than 38 points in the 2nd quarter, 28 in the 3rd or 22 in the 4th), every game this season'
+          : 'Every play, ' + (c.view === "p4" ? 'games against Power 4 opponents only' : 'every game this season, including non-Power 4 opponents')) +
         '. Not adjusted for opponents. ' + ns[0] + '–' + ns[ns.length - 1] + ' ' + esc(m.n) + ' per team' + (m.n === "games" ? '.' : '; “fewer than most” marks the smallest tenth.');
     sbWriteUrl();
   }
   function sbBoard(c){
     var D = window.HOME, M = D.meta, m = c.m, S = sbPts(c), rel = sbRel(m), fav = SB.fav;
-    $("sb-hd").innerHTML = '<span class="kicker">' + esc(SB_CHIP[m.q] || "") + '</span><h3 class="sb-qh">' + esc(sbQ(c)) + '</h3>' +
-      sbAnswer(c, S) +
+    $("sb-hd").innerHTML = sbAnswer(c, S) +
       '<div class="sb-info"><details class="sb-how"><summary>How it’s counted</summary><p>' + esc(m.dfn) + '</p></details>' +
       '<details class="sb-rel ' + rel.c + '"><summary>' + esc(rel.t) + '</summary><p>' + esc(rel.p) + '</p></details></div>';
     // the strip: Compare's pack (same scale, same whisker), shaded in thirds of the 68, your team highlighted, logos at both ends
@@ -8755,7 +8779,7 @@ var FACTS = {
     var ids = Object.keys(M).filter(function(t){ return T[t]; });
     ids.sort(function(a, b){ var x = cell(a, sm), y = cell(b, sm), rx = x && x.r != null ? x.r : 999, ry = y && y.r != null ? y.r : 999; return ((rx - ry) * SB.sortDir) || M[a].name.localeCompare(M[b].name); });
     $("sb-dl").innerHTML = ms.map(function(m){ return '<div><dt>' + esc(SB_SHORT[m.k] || m.label) + '</dt><dd>' + esc(m.label + (m.grade ? '' : ' (' + (side === "o" ? m.off : m.def).toLowerCase() + ')') + ': ' + m.dfn) + '</dd></div>'; }).join("");
-    $("sb-tsub").textContent = (side === "o" ? "With the ball" : "On defense") + " · " + (view === "p4" ? "vs. Power 4 only" : "all games") + ". DAWG and PLAY are season grades for the whole team. Tap a column to sort by it (tap again for the other end); the small number is the rank of 68. Every value is a football stat except DAWG and PLAY.";
+    $("sb-tsub").textContent = (side === "o" ? "Offense" : "Defense") + " · " + (view === "p4" ? "vs. Power 4 only" : view === "comp" ? "garbage time out" : "every play") + ". DAWG and PLAY are season grades for the whole team. Tap a column to sort by it (tap again for the other end); the small number is the rank of 68. Every value is a football stat except DAWG and PLAY.";
     $("sb-t").tHead.innerHTML = '<tr><th class="tm" scope="col">Team</th>' + ms.map(function(m){ var on = m.k === sk;
       return '<th scope="col" class="' + (m.grade ? 'g ' : '') + (on ? 'on' : '') + '" aria-sort="' + (on ? (SB.sortDir > 0 ? "ascending" : "descending") : "none") + '"><button type="button" data-sk="' + m.k + '" title="' + esc(m.label + (m.grade ? '' : ' (' + (side === "o" ? m.off : m.def) + ')') + ': ' + m.dfn) + '">' + esc(SB_SHORT[m.k] || m.label) + (on ? (SB.sortDir > 0 ? ' ↓' : ' ↑') : '') + '</button></th>'; }).join("") + '</tr>';
     $("sb-t").tBodies[0].innerHTML = ids.map(function(t){
@@ -8773,11 +8797,11 @@ var FACTS = {
     var ns = S.pts.map(function(p){ return p.n; }).sort(function(x, y){ return x - y; });
     var body = '<div class="sb-sc"><div class="sb-sc-h"><h2 class="sc-h">' + esc(sbQ(c)) + '</h2><p>' + esc(sbSideTxt(c)) + '</p></div><div class="sb-sc-cols">' + cols + '</div></div>';
     var u = "dawgindex.com" + sbUrl();
-    return makeImage({tab: "The 68 Board", asof: "Through " + (MU.data.week || D.week) + " · " + D.season, chip: m.grade ? "Season grade" : (c.side === "o" ? "Offense" : "Defense") + (c.view === "p4" ? " · vs. P4" : " · all games"), chipOn: !m.grade && c.view === "p4",
+    return makeImage({tab: "The All 68 Board", asof: "Through " + (MU.data.week || D.week) + " · " + D.season, chip: m.grade ? "Season grade" : (c.side === "o" ? "Offense" : "Defense") + (c.view === "p4" ? " · vs. P4" : c.view === "comp" ? " · garbage time out" : " · all games"), chipOn: !m.grade && c.view !== "all",
       body: body, url: u, cls: "sbc", qr: "https://" + u, cta: "See the board",
       foot: (m.grade ? esc(m.k === "dawg" ? "DAWG = points better or worse than Vegas expected, garbage time removed." : "PLAY = offense + defense vs. expectation, garbage time removed.") + ' Season average. Not a power ranking.'
-        : 'A football stat, not a DAWG grade. ' + esc(m.dfn.split(". ")[0].replace(/\.$/, "")) + '. All plays' + (c.view === "p4" ? ', vs. Power 4 only' : '') + '. ' + ns[0] + '–' + ns[ns.length - 1] + ' ' + esc(m.n) + ' per team.')},
-      btn, "dawg-68-board-" + SB_SLUG[m.k] + (m.grade ? "" : "-" + (c.side === "o" ? "offense" : "defense")) + (c.view === "p4" && !m.grade ? "-p4" : "") + ".png", sbQ(c) + " All 68 Power 4 teams: " + u);
+        : 'A football stat, not a DAWG grade. ' + esc(m.dfn.split(". ")[0].replace(/\.$/, "")) + '. ' + (c.view === "comp" ? 'Garbage time left out' : 'All plays' + (c.view === "p4" ? ', vs. Power 4 only' : '')) + '. ' + ns[0] + '–' + ns[ns.length - 1] + ' ' + esc(m.n) + ' per team.')},
+      btn, "dawg-68-board-" + SB_SLUG[m.k] + (m.grade ? "" : "-" + (c.side === "o" ? "offense" : "defense")) + (c.view === "p4" && !m.grade ? "-p4" : c.view === "comp" && !m.grade ? "-no-garbage-time" : "") + ".png", sbQ(c) + " All 68 Power 4 teams: " + u);
   }
   (function(){
     if (!$("sb-qs")) return;
@@ -8786,13 +8810,14 @@ var FACTS = {
     $("sb-ks").addEventListener("click", function(e){ var b = e.target.closest("button[data-k]"); if (!b) return; SB.k = b.getAttribute("data-k"); SB.all = false; drawStatsPage(); });
     $("sb-team").addEventListener("change", function(){ SB.fav = this.value || null; try { if (SB.fav) localStorage.setItem("dawg-myteam", SB.fav); else localStorage.removeItem("dawg-myteam"); } catch(e){} drawStatsPage(); });
     $("sb-side").addEventListener("click", function(e){ var b = e.target.closest("button[data-v]"); if (!b) return; SB.side = b.getAttribute("data-v"); drawStatsPage(); });
-    $("sb-games").addEventListener("click", function(e){ var b = e.target.closest("button[data-v]"); if (!b) return; SB.view = b.getAttribute("data-v"); drawStatsPage(); });
-    root.querySelector(".sb-view").addEventListener("click", function(e){ var b = e.target.closest("button[data-tab]"); if (!b) return; SB.tab = b.getAttribute("data-tab"); if (SB.tab === "table" && !SB.sortK){ SB.sortK = SB.k; SB.sortDir = 1; } drawStatsPage(); });
+    $("sb-count").addEventListener("change", function(){ SB.view = this.value; drawStatsPage(); });
+    $("sb-totable").addEventListener("click", function(){ SB.tab = "table"; if (!SB.sortK){ SB.sortK = SB.k; SB.sortDir = 1; } drawStatsPage(); $("sb-qh").scrollIntoView({block: "start"}); });
+    $("sb-toboard").addEventListener("click", function(){ SB.tab = "board"; drawStatsPage(); $("sb-qh").scrollIntoView({block: "start"}); });
     $("sb-all").addEventListener("click", function(){ SB.all = !SB.all; drawStatsPage(); });
     $("sb-t").addEventListener("click", function(e){ var b = e.target.closest("button[data-sk]"); if (!b) return; var k = b.getAttribute("data-sk"); if (SB.sortK === k) SB.sortDir = -SB.sortDir; else { SB.sortK = k; SB.sortDir = 1; } drawStatsPage(); });
     $("sb-share").addEventListener("click", function(){ if (this.disabled) return; if (sbShare(this) === false) this.textContent = "Share unavailable"; });
     $("sb-copy").addEventListener("click", function(){ var btn = this, url = location.origin + sbUrl();
-      function ok(){ btn.textContent = "Link copied"; setTimeout(function(){ btn.textContent = "Copy link"; }, 1800); }
+      function ok(){ btn.textContent = "Link copied"; setTimeout(function(){ btn.textContent = "Link"; }, 1800); }
       try { navigator.clipboard.writeText(url).then(ok, function(){ prompt("Copy this link:", url); }); } catch(e){ prompt("Copy this link:", url); } });
     // tap a dot on the strip to highlight that team for this visit (the Your team menu is what remembers a team)
     $("sb-pack").addEventListener("click", function(e){ var el = e.target.closest(".mp-strip"); if (!el) return; var P = MU.packs["sb-mp"]; if (!P) return;
