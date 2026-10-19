@@ -1,0 +1,45 @@
+{
+ "number": "001",
+ "slug": "play-to-competition",
+ "type": "original-investigation",
+ "status": "published",
+ "title": "Does your team really play to its competition?",
+ "topic": "Favorites & underdogs",
+ "dek": "It looks that way. But the betting line may be creating the illusion.",
+ "description": "Sorted by the spread, teams look about 2 points better against tougher opponents. Sorted by how strong the opponent looked before kickoff, the gap disappears.",
+ "short_answer": "College football teams appear to perform better against tougher competition when we define toughness using that game’s betting spread. But when we estimate opponent strength independently of that game’s line, the apparent advantage disappears.",
+ "card_line": "By the spread, teams look 2 points better vs. tough opponents. By the opponent, it’s gone.",
+ "version": "1.0",
+ "data_lock": {
+  "snapshot": "sha256:52c915ceb1b971c13f016e17b7bcd0c41ccfb0093095e55942efb5cbf4c0a835",
+  "cutoff": "2026-10-10",
+  "label": "Data through Oct 10, 2026"
+ },
+ "methods": {
+  "dawg": "V3.0",
+  "case": "1.0"
+ },
+ "checks": "Exploratory: the question and how to measure it were chosen while looking at the data, not planned in advance. Every number in this article was then reproduced independently from the raw data by a second analysis that never saw the first one’s code or results.",
+ "scope_change": "LAB 001 started as a different question: do programs carry a play-down pattern from one season to the next? That version was planned in advance; it found no evidence that they do. We changed the question to the within-season version here after seeing those results. Before exploring it, we had already seen one related number: how much a team’s big-favorite results vary from season to season beyond chance, which was very little.",
+ "versions": [
+  {
+   "version": "1.0",
+   "date": "2026-10-18",
+   "change": "First published"
+  }
+ ],
+ "corrections": [],
+ "research_datasets": [
+  {
+   "name": "2014–18 research grades",
+   "span": "2014–2018",
+   "provenance": "Graded with the DAWG V3.0 formula unchanged, using frozen curve fits (the 2017 fit for 2014–17, the 2018 fit for 2018). The same script reproduces every published 2019–25 grade exactly. Lines for 2014–16 can’t be checked against an independent book.",
+   "label": "Includes research grades for 2014–2018: computed with the DAWG formula, not official DAWG grades.",
+   "label_short": "research grades (2014–2018), not official DAWG grades"
+  }
+ ],
+ "approved_by": "Matthew McBrayer",
+ "approved_at": "2026-10-18",
+ "published": "2026-10-18",
+ "approved_hash": "sha256:d64811c036e5043687f4a658c9af1976359bf2ccd0a514cfe9c88d2eb7f75ab1"
+}

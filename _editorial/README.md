@@ -76,3 +76,23 @@ A pull quote.
 **Season-average noise.** "Random swings alone put an n-game average anywhere within about ±X points of zero (a 95% range)", with X = 1.96 × 14.1 / √n for DAWG and 1.96 × 10.5 / √n for PLAY.
 
 **Story cards.** Homepage, team pages and /stories/ all use one card: a simple thumbnail, the headline (`card_title`, 60 characters max) printed under it, then a slim row with category, team logos and date. The thumbnail never contains the headline. It shows one thing: team logos plus one number (`stat`), a final score with an optional second row such as yards (`score`), or a team's short run of DAWG results as bars (`games`). No dense charts, tiny labels or source lines; it has to read at 360px wide. `thumbs.py` stamps thumb.png with a hash of the `thumb:` block, and the build refuses a thumb.png that's missing or out of date. `python3 _editorial/build.py preview` also writes `preview-card-desktop.png` and `preview-card-phone.png` so the card can be checked before approval. `card_style` and `card_teaser` are retired.
+
+## The DAWG Lab (`lab.py`)
+
+Lab cases live in `_editorial/lab/NNN-slug/` (case.json, case.md, data.json, plan.md) and build into `lab/`. Same rules as
+Stories: approval on record, private previews outside the repo, byte-identical rebuilds, nothing deleted.
+
+- `python3 _editorial/lab.py sample` writes a SAMPLE case to /home/claude/lab-drafts. It can't be approved or built.
+- `python3 _editorial/lab.py preview DRAFT_DIR` renders privately to /home/claude/lab-preview (noindex, marked Preview).
+- `python3 _editorial/lab.py approve DRAFT_DIR --by "Matthew McBrayer"` only after Matthew's explicit OK.
+- `python3 _editorial/lab.py build` writes nothing until a case is approved (no empty Lab). The Stories nav gains its Lab
+  link in the same build, and not before.
+- Team copy is descriptive by default; habit words are refused unless the case carries a supported team finding.
+- Tests: `python3 _editorial/test_lab.py`.
+- Safeguards demo: `python3 _editorial/lab_safeguards.py REPORT.md` runs every publish refusal (and one valid approved case)
+  through the real build on a throwaway copy and writes a pass/fail table.
+- Team headlines are written per investigation in case.json (`presentation.team_headlines`: within, outside, below, none)
+  and approved with the research. The approval stores a fingerprint of the case, its data and its plan; any later edit
+  stops the build until `lab.py reapprove NNN-slug --by "Matthew McBrayer"`.
+- `lab.py preview DRAFT --look production --out DIR` renders a private preview without the banners (still noindex,
+  still sample data, small Sample data tags kept on charts) to judge the live look.
