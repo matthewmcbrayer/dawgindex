@@ -1108,7 +1108,7 @@ h2{font-family:var(--display);font-weight:900;font-size:clamp(34px,4vw,52px);lin
 
 /* ---------- beyond the score (editorial; published stories only, from /stories/stories.json) ---------- */
 /* one card size everywhere: the story thumbnail first, the headline second, then category and date */
-.beyond{padding:52px 0 56px;border-bottom:2px solid var(--ink)}
+.beyond{padding:52px 0 56px;border-top:2px solid var(--ink)}   /* sits below the slate (Oct 24 2026): stories are not weekly */
 .beyond .sechead-note .link{margin-left:4px}
 .bt-grid{display:grid;grid-template-columns:repeat(var(--n,3),minmax(0,1fr));gap:24px;align-items:stretch}
 .bt-card{display:flex;flex-direction:column;border:2px solid var(--ink);background:var(--paper-2);text-decoration:none;color:inherit;transition:transform .15s,box-shadow .15s;min-width:0}
@@ -3236,14 +3236,6 @@ h2{font-family:var(--display);font-weight:900;font-size:clamp(34px,4vw,52px);lin
   </div>
 </section>
 
-<!-- ================= BEYOND THE SCORE: published stories from /stories/stories.json (filled by home.js; hidden until a story loads) ================= -->
-<section class="beyond" id="beyond-sec" aria-labelledby="bt-h" hidden>
-  <div class="wrap">
-    <div class="sechead"><div><span class="kicker">DAWG editorial</span><h2 id="bt-h">Beyond the score</h2></div><p class="sechead-note">Original stories built on DAWG's numbers. <a class="link" href="/stories/">All stories <span aria-hidden="true">→</span></a></p></div>
-    <div class="bt-grid" id="bt-grid"></div>
-  </div>
-</section>
-
 <!-- ================= RANKINGS ================= -->
 <section class="rank" id="rankings-sec" aria-labelledby="rank-h">
   <div class="wrap">
@@ -3354,6 +3346,14 @@ h2{font-family:var(--display);font-weight:900;font-size:clamp(34px,4vw,52px);lin
       <div class="slate-list" id="slate"></div>
     </div>
     <div class="pollfoot"><a class="link" href="/#week" data-p="week">This week’s slate and Compare <span aria-hidden="true">→</span></a></div>
+  </div>
+</section>
+
+<!-- ================= BEYOND THE SCORE: published stories from /stories/stories.json (filled by home.js; hidden until a story loads) ================= -->
+<section class="beyond" id="beyond-sec" aria-labelledby="bt-h" hidden>
+  <div class="wrap">
+    <div class="sechead"><div><span class="kicker">DAWG editorial</span><h2 id="bt-h">Beyond the score</h2></div><p class="sechead-note">Original stories built on DAWG's numbers. <a class="link" href="/stories/">All stories <span aria-hidden="true">→</span></a></p></div>
+    <div class="bt-grid" id="bt-grid"></div>
   </div>
 </section>
 
