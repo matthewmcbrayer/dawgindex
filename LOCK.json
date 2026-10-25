@@ -1,14 +1,19 @@
 {
- "acquired": "2026-10-25T15:27:46Z",
- "expires": "2026-10-25T16:47:46Z",
- "holder": "sunday",
- "note": "source main",
- "run": "sunday-20261025T152745Z-8ac1",
- "state": "held",
+ "last": {
+  "detail": "SUNDAY: deploy: commit and push the published site",
+  "finished": "2026-10-25T15:43:04Z",
+  "holder": "sunday",
+  "result": "ok",
+  "run": "sunday-20261025T152745Z-8ac1"
+ },
+ "state": "free",
  "sunday": {
-  "result": "running",
+  "detail": "SUNDAY: deploy: commit and push the published site",
+  "finished": "2026-10-25T15:43:04Z",
+  "result": "ok",
   "run": "sunday-20261025T152745Z-8ac1",
-  "started": "2026-10-25T15:27:46Z"
+  "started": "2026-10-25T15:27:46Z",
+  "week": "Week 8"
  },
  "version": 1
 }
