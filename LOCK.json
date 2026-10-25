@@ -1,17 +1,12 @@
 {
- "acquired": "2026-10-25T19:31:50Z",
- "expires": "2026-10-25T20:31:50Z",
- "holder": "site",
  "last": {
-  "detail": "SUNDAY: deploy: commit and push the published site",
-  "finished": "2026-10-25T15:43:04Z",
-  "holder": "sunday",
+  "detail": "AP poll refresh",
+  "finished": "2026-10-25T19:32:37Z",
+  "holder": "site",
   "result": "ok",
-  "run": "sunday-20261025T152745Z-8ac1"
+  "run": "site-20261025T193149Z-8151"
  },
- "note": "AP poll refresh",
- "run": "site-20261025T193149Z-8151",
- "state": "held",
+ "state": "free",
  "sunday": {
   "detail": "SUNDAY: deploy: commit and push the published site",
   "finished": "2026-10-25T15:43:04Z",
