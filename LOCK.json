@@ -1,0 +1,14 @@
+{
+ "acquired": "2026-10-25T15:27:46Z",
+ "expires": "2026-10-25T16:47:46Z",
+ "holder": "sunday",
+ "note": "source main",
+ "run": "sunday-20261025T152745Z-8ac1",
+ "state": "held",
+ "sunday": {
+  "result": "running",
+  "run": "sunday-20261025T152745Z-8ac1",
+  "started": "2026-10-25T15:27:46Z"
+ },
+ "version": 1
+}
