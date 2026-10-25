@@ -6972,18 +6972,20 @@ var FACTS = {
   // ---------- the week in four ----------
   function drawFour(D){
     var R = D.rankings, byId = {}; R.forEach(function(r){ byId[r.id] = r; });
-    // The Read: the highest-ranked AP team the poll check marks "Above Vegas" (ranked and a top-12 DAWG team)
-    var legit = R.filter(function(r){ return r.flag === "legit" && r.ap; }).sort(function(a,b){ return a.ap - b.ap; })[0];
+    // A team that lost this week never gets a positive highlight (Matthew, Oct 25 2026): skip it for The Read and Biggest move.
+    var lostWk = {}; D.games.forEach(function(g){ if (g.pf < g.pa) lostWk[g.t] = true; });
+    // The Read: the highest-ranked AP team the poll check marks "Above Vegas" (ranked and a top-12 DAWG team) that didn't lose this week
+    var legit = R.filter(function(r){ return r.flag === "legit" && r.ap && !lostWk[r.id]; }).sort(function(a,b){ return a.ap - b.ap; })[0];
     var facts = legit ? (D.facts[legit.id] || []).slice(0, 3) : [];
     function band(id){ return 'style="--tc:' + teamColor(D, id) + '"'; }   // each highlight carries its team's color as a band across the top
     var ed = D.read && byId[D.read.tid] ? D.read : null;   // this week's hand-written read (home_data editorial_read: only when written for this week)
-    var c1 = ed ? '<div class="col tcol" ' + band(ed.tid).replace('style="', 'style="--c:var(--red);') + '><div class="k">The read</div><h3>' + esc(ed.h) + '</h3><p>' + esc(ed.p) + '</p>' +
+    var c1 = !ed && !legit ? '' : ed ? '<div class="col tcol" ' + band(ed.tid).replace('style="', 'style="--c:var(--red);') + '><div class="k">The read</div><h3>' + esc(ed.h) + '</h3><p>' + esc(ed.p) + '</p>' +
       (ed.href ? '<a class="link" href="' + esc(ed.href) + '">' + esc(ed.label || "Read the story") + ' <span aria-hidden="true">→</span></a>' : tlink(ed.tid, byId[ed.tid].name, "link") + esc(byId[ed.tid].name) + ' page <span aria-hidden="true">→</span></a>') + '</div>'
       : '<div class="col tcol" ' + band(legit.id).replace('style="', 'style="--c:var(--red);') + '><div class="k">The read</div><h3>' + esc(legit.name) + ': ranked, and playing above Vegas.</h3>' +
       '<p>AP No. ' + legit.ap + ' and <b>' + ordT(legit.rk, legit.tie) + ' of ' + D.n + '</b> Power 4 teams at living up to expectations, at <b>' + signed(legit.dawg) + '</b> per game (PLAY ' + signed(legit.play) + '). ' + esc(facts.filter(function(f){ return !/^Best in the/.test(f); })[0] || "") + '</p>' +
       tlink(legit.id, legit.name, "link") + esc(legit.name) + ' page <span aria-hidden="true">→</span></a></div>';
     // Biggest move
-    var mv = R.filter(function(r){ return r.delta != null; }).sort(function(a,b){ return b.delta - a.delta; })[0];
+    var mv = R.filter(function(r){ return r.delta != null && !lostWk[r.id]; }).sort(function(a,b){ return b.delta - a.delta; })[0];
     var mg = D.games.filter(function(g){ return g.t === mv.id; })[0];
     var c2 = '<div class="col tcol" ' + band(mv.id).replace('style="', 'style="--c:var(--blue);') + '><div class="k">Biggest move</div><div class="bigstat">' + signed(mv.delta, 0) + logo(mv.id) + '</div>' +
       '<h3>' + esc(mv.name) + ': ' + ord(mv.prev) + ' to ' + ordT(mv.rk, mv.tie) + '.</h3>' +
