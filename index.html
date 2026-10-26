@@ -3164,6 +3164,15 @@ h2{font-family:var(--display);font-weight:900;font-size:clamp(34px,4vw,52px);lin
   .v-home .mn-res a{color:var(--paper)}.v-home .mn-res a:hover,.v-home .mn-res a:focus{background:rgba(244,234,210,.12)}.v-home .mn-res .none{color:var(--hc-dim)}
 }
 @media (max-width:374px){ .mast .nav > *{font-size:12.5px;letter-spacing:.03em} }
+
+/* Poll Check cards (Oct 25): the logo sits in a fixed round badge sized per logo (blogo / HOME.logoFit) so no logo touches the ring,
+   and the verdict stamp stays on one line in the band between the badge and the team name */
+.pcard .plg{flex:0 0 auto;width:52px;height:52px;border-radius:50%;background:var(--paper-2);border:1.5px solid var(--ink);display:grid;place-items:center;overflow:hidden}
+.pcard .plg img{padding:0;border:0;border-radius:0;background:none;object-fit:contain;margin:auto}
+.pcard .verdict{position:relative;top:auto;right:auto;align-self:flex-end;white-space:nowrap;margin:auto 4px 6px 0;transform:rotate(-6deg)}
+.pcard .verdict~.nm,.pcard .verdict+.nm{margin-top:0}
+.pcard .dr{flex-wrap:wrap;row-gap:0}.pcard .dr b{white-space:nowrap}
+@media (max-width:760px){ .pcard .plg{width:46px;height:46px} }
 </style>
 <div class="home" id="home">
 <header class="mast">
@@ -7224,9 +7233,9 @@ var FACTS = {
     var sleepers = R.filter(function(r){ return !r.ap && r.flag === "sleeper"; }).slice(0, 2);
     var V = {legit:"Above Vegas", fraud:"Below Vegas", sleeper:"Unranked, above Vegas"};
     function card(r, sl){
-      return '<a class="pcard' + (sl ? ' sleeper-card' : '') + '" href="' + teamUrl(r.name) + '" data-team="' + r.id + '"><div class="top"><div class="ap">' + (r.ap ? r.ap : 'NR') + '<small>' + (r.ap ? 'AP poll' : 'Unranked') + '</small></div>' + logo(r.id) + '</div>' +
-        '<div class="nm">' + esc(r.name) + '</div><div class="dr"><b>' + ordT(r.rk, r.tie) + '</b> of ' + D.n + ' · DAWG ' + signed(r.dawg) + '</div>' +
-        (r.flag ? '<div class="verdict ' + r.flag + '">' + V[r.flag] + '</div>' : '') + '</a>';
+      return '<a class="pcard' + (sl ? ' sleeper-card' : '') + '" href="' + teamUrl(r.name) + '" data-team="' + r.id + '"><div class="top"><div class="ap">' + (r.ap ? r.ap : 'NR') + '<small>' + (r.ap ? 'AP poll' : 'Unranked') + '</small></div><span class="plg">' + blogo(r.id) + '</span></div>' +
+        (r.flag ? '<div class="verdict ' + r.flag + '">' + (sl ? "Above Vegas" : V[r.flag]) + '</div>' : '') +
+        '<div class="nm">' + esc(r.name) + '</div><div class="dr"><b>' + ordT(r.rk, r.tie) + '</b> of ' + D.n + ' · DAWG ' + signed(r.dawg) + '</div></a>';   // a blue card already reads "NR / Unranked" above its stamp
     }
     $("pollstrip").innerHTML = ranked.map(function(r){ return card(r, false); }).join("") + sleepers.map(function(r){ return card(r, true); }).join("");
     // the full table: every ranked Power 4 team plus the single best unranked team, exactly as the Poll Check page lists them
