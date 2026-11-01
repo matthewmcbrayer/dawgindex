@@ -1,4 +1,7 @@
 {
+ "acquired": "2026-11-01T16:18:51Z",
+ "expires": "2026-11-01T17:38:51Z",
+ "holder": "sunday",
  "last": {
   "detail": "AP poll refresh",
   "finished": "2026-10-25T19:32:37Z",
@@ -6,14 +9,13 @@
   "result": "ok",
   "run": "site-20261025T193149Z-8151"
  },
- "state": "free",
+ "note": "source main",
+ "run": "sunday-20261101T161850Z-02ac",
+ "state": "held",
  "sunday": {
-  "detail": "SUNDAY: deploy: commit and push the published site",
-  "finished": "2026-10-25T15:43:04Z",
-  "result": "ok",
-  "run": "sunday-20261025T152745Z-8ac1",
-  "started": "2026-10-25T15:27:46Z",
-  "week": "Week 8"
+  "result": "running",
+  "run": "sunday-20261101T161850Z-02ac",
+  "started": "2026-11-01T16:18:51Z"
  },
  "version": 1
 }
