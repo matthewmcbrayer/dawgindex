@@ -1,6 +1,6 @@
 {
- "acquired": "2026-11-08T22:35:45Z",
- "expires": "2026-11-08T23:35:45Z",
+ "acquired": "2026-11-08T23:52:17Z",
+ "expires": "2026-11-09T00:52:17Z",
  "holder": "site",
  "last": {
   "detail": "SUNDAY: deploy: commit and push the published site",
@@ -10,7 +10,7 @@
   "run": "sunday-20261108T183243Z-69f0"
  },
  "note": "AP poll refresh",
- "run": "site-20261108T223544Z-4d1d",
+ "run": "site-20261108T235216Z-2834",
  "state": "held",
  "sunday": {
   "detail": "SUNDAY: deploy: commit and push the published site",
@@ -21,9 +21,9 @@
   "week": "Week 10"
  },
  "takeover": {
-  "at": "2026-11-08T22:35:45Z",
-  "expired": "2026-11-08T21:28:52Z",
-  "from": "site-20261108T202851Z-3b0e"
+  "at": "2026-11-08T23:52:17Z",
+  "expired": "2026-11-08T23:35:45Z",
+  "from": "site-20261108T223544Z-4d1d"
  },
  "version": 1
 }
