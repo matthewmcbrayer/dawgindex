@@ -1,21 +1,19 @@
 {
- "acquired": "2026-11-08T16:18:18Z",
- "expires": "2026-11-08T17:38:18Z",
- "holder": "sunday",
  "last": {
-  "detail": "AP poll refresh",
-  "finished": "2026-11-01T20:32:05Z",
-  "holder": "site",
-  "result": "ok",
-  "run": "site-20261101T203113Z-6c55"
+  "detail": "SUNDAY: build + test + local publish: weekly2.sh",
+  "finished": "2026-11-08T16:29:44Z",
+  "holder": "sunday",
+  "result": "failed",
+  "run": "sunday-20261108T161817Z-7ec0"
  },
- "note": "source main",
- "run": "sunday-20261108T161817Z-7ec0",
- "state": "held",
+ "state": "free",
  "sunday": {
-  "result": "running",
+  "detail": "SUNDAY: build + test + local publish: weekly2.sh",
+  "finished": "2026-11-08T16:29:44Z",
+  "result": "failed",
   "run": "sunday-20261108T161817Z-7ec0",
-  "started": "2026-11-08T16:18:18Z"
+  "started": "2026-11-08T16:18:18Z",
+  "week": ""
  },
  "version": 1
 }
