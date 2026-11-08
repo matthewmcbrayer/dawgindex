@@ -1,21 +1,19 @@
 {
- "acquired": "2026-11-08T18:32:44Z",
- "expires": "2026-11-08T19:52:44Z",
- "holder": "sunday",
  "last": {
-  "detail": "SUNDAY: build + test + local publish: weekly2.sh",
-  "finished": "2026-11-08T16:29:44Z",
+  "detail": "SUNDAY: deploy: commit and push the published site",
+  "finished": "2026-11-08T18:44:11Z",
   "holder": "sunday",
-  "result": "failed",
-  "run": "sunday-20261108T161817Z-7ec0"
+  "result": "ok",
+  "run": "sunday-20261108T183243Z-69f0"
  },
- "note": "source main",
- "run": "sunday-20261108T183243Z-69f0",
- "state": "held",
+ "state": "free",
  "sunday": {
-  "result": "running",
+  "detail": "SUNDAY: deploy: commit and push the published site",
+  "finished": "2026-11-08T18:44:11Z",
+  "result": "ok",
   "run": "sunday-20261108T183243Z-69f0",
-  "started": "2026-11-08T18:32:44Z"
+  "started": "2026-11-08T18:32:44Z",
+  "week": "Week 10"
  },
  "version": 1
 }
