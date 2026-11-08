@@ -674,7 +674,7 @@ v3.0,2019,2019-11-16,USC,California,away,41,17,-4.0,4.2,24,7,7,19.8,DAWG,graded,
 v3.0,2019,2019-11-16,Alabama,Mississippi State,away,38,7,-19.0,18.7,31,0,0,12.3,DAWG,graded,pbp,44,31,0.6802,0.2759,11,ok,0,21,3,1,1,17,1,0,Road · Full house
 v3.0,2019,2019-11-16,Mississippi State,Alabama,home,7,38,19.0,-18.7,-31,0,0,-12.3,SOFT,graded,pbp,31,44,-0.6802,-0.2759,-11,ok,0,0,0,0,1,,0,1,Top-10 opponent
 v3.0,2019,2019-11-16,Florida State,Alabama State,home,49,12,-41.0,30.6,23,14,0,-7.6,AS EXPECTED,graded,pbp,38,65,0.1605,0.5953,-16,ok,0,21,6,2,2,12,2,2,FCS opponent
-v3.0,2019,2019-11-16,Florida,Missouri,away,23,6,-6.5,6.8,17,0,0,10.2,AS EXPECTED,graded,pbp,62,68,0.2398,0.0944,7,ok,0,10,10,2,2,7,1,0,Road · Full house
+v3.0,2019,2019-11-16,Florida,Missouri,away,23,6,-6.5,6.8,17,0,0,10.2,AS EXPECTED,graded,pbp,62,68,0.2398,0.0944,7,ok,0,10,10,2,2,7,1,0,Road
 v3.0,2019,2019-11-16,Georgia Tech,Virginia Tech,home,0,45,6.0,-6.3,-31,0,14,-24.7,CERTIFIED SOFT,graded,pbp,25,33,-1.0311,-0.0871,-19,ok,0,0,2,0,1,,0,2,
 v3.0,2019,2019-11-16,Georgia,Auburn,away,21,14,-3.0,3.1,7,0,0,3.9,AS EXPECTED,graded,pbp,64,86,-0.0672,0.0436,-6,ok,0,21,11,0,1,-7,1,0,Road · Full house · Ranked opponent
 v3.0,2019,2019-11-16,Iowa State,Texas,home,23,21,-7.0,7.3,2,0,0,-5.3,AS EXPECTED,graded,pbp,79,66,-0.0597,0.1016,-8,ok,0,16,10,0,2,-8,0,1,Ranked opponent
@@ -6425,3 +6425,65 @@ v3.0,2026,2026-10-31,Indiana,Minnesota,home,23,16,-20.5,19.2,7,0,0,-12.2,AS EXPE
 v3.0,2026,2026-10-31,Notre Dame,Navy,neutral,35,13,-30.5,26.4,22,0,0,-4.4,AS EXPECTED,graded,pbp,59,56,0.3164,0.4673,-6,ok,0,14,3,2,3,7,0,0,Group of 5 opponent
 v3.0,2026,2026-10-31,Arizona State,BYU,away,20,27,17.5,-17.1,-7,0,0,10.1,AS EXPECTED,graded,pbp,76,60,0.0469,-0.2681,16,ok,0,17,5,0,3,,2,1,Road · Full house · Top-10 opponent
 v3.0,2026,2026-10-31,Louisville,Stanford,home,52,24,-22.5,20.7,28,0,0,7.3,AS EXPECTED,graded,pbp,57,45,0.1106,0.3447,-9,ok,0,21,6,3,4,0,2,1,
+v3.0,2026,2026-11-06,Arizona,TCU,home,29,28,-6.0,6.6,1,0,0,-5.6,AS EXPECTED,graded,pbp,70,62,-0.0324,0.0919,-6,ok,0,10,5,2,4,-9,1,1,Night
+v3.0,2026,2026-11-06,Nebraska,Illinois,away,13,24,-4.5,5.0,-11,0,0,-16.0,SOFT,graded,pbp,74,65,-0.0824,0.0689,-8,ok,0,7,4,0,2,,0,0,Road · Night · Full house
+v3.0,2026,2026-11-06,SMU,Virginia Tech,home,51,28,-6.0,6.6,24,7,8,17.4,DAWG,graded,pbp,53,51,0.1734,0.0919,3,ok,0,31,6,2,2,14,2,1,Night
+v3.0,2026,2026-11-06,Virginia Tech,SMU,away,28,51,6.0,-6.6,-24,8,7,-17.4,SOFT,graded,pbp,51,53,-0.1734,-0.0919,-3,ok,0,7,1,0,2,,1,2,Road · Night · Full house
+v3.0,2026,2026-11-06,TCU,Arizona,away,28,29,6.0,-6.6,-1,0,0,5.6,AS EXPECTED,graded,pbp,62,70,0.0324,-0.0919,6,ok,0,14,4,1,5,,1,1,Road · Night · Ranked opponent
+v3.0,2026,2026-11-06,Illinois,Nebraska,home,24,13,4.5,-5.0,11,0,0,16.0,DAWG,graded,pbp,65,74,0.0824,-0.0689,8,ok,0,14,6,1,2,-3,0,0,Night
+v3.0,2026,2026-11-07,Boston College,Florida State,home,24,31,5.5,-6.0,-7,0,0,-1.0,AS EXPECTED,graded,pbp,61,72,-0.0867,-0.0843,0,ok,0,10,4,1,5,-17,1,2,
+v3.0,2026,2026-11-07,Maryland,Purdue,away,34,29,5.5,-6.0,5,0,0,11.0,AS EXPECTED,graded,pbp,45,80,0.3751,-0.0843,21,ok,0,14,3,2,6,-4,1,1,Road
+v3.0,2026,2026-11-07,Michigan State,Michigan,away,15,6,14.0,-14.4,9,0,0,23.4,DAWG,graded,pbp,75,52,0.1334,-0.2145,16,ok,0,15,9,0,0,0,4,0,Road · Night · Full house
+v3.0,2026,2026-11-07,Michigan,Michigan State,home,6,15,-14.0,14.4,-9,0,0,-23.4,SOFT,graded,pbp,52,75,-0.1334,0.2145,-16,ok,0,0,5,0,1,,0,4,Night
+v3.0,2026,2026-11-07,Minnesota,UCLA,home,20,34,3.5,-3.9,-14,0,0,-10.1,AS EXPECTED,graded,pbp,65,55,-0.1348,-0.0536,-4,ok,0,17,6,1,3,,2,1,Top-10 opponent
+v3.0,2026,2026-11-07,Missouri,Texas,home,20,34,2.5,-2.8,-14,0,0,-11.2,AS EXPECTED,graded,pbp,68,69,-0.135,-0.0383,-5,ok,0,10,6,1,5,,1,1,Top-10 opponent
+v3.0,2026,2026-11-07,Ole Miss,Georgia,home,7,42,3.5,-3.9,-35,7,7,-31.1,CERTIFIED SOFT,graded,pbp,47,51,-0.5663,-0.0536,-18,ok,0,0,1,0,1,,0,2,Night · Top-10 opponent
+v3.0,2026,2026-11-07,Duke,NC State,away,41,3,-4.5,5.0,35,3,0,30.0,CERTIFIED DAWG,graded,pbp,54,37,0.4642,0.0689,13,ok,0,17,3,0,1,24,0,0,Road · Full house
+v3.0,2026,2026-11-07,NC State,Duke,home,3,41,4.5,-5.0,-35,0,3,-30.0,CERTIFIED SOFT,graded,pbp,37,54,-0.4642,-0.0689,-13,ok,0,0,1,1,1,,0,0,
+v3.0,2026,2026-11-07,North Carolina,UConn,away,38,21,-7.5,8.2,17,0,0,8.8,AS EXPECTED,graded,pbp,74,66,0.2024,0.1149,4,ok,0,14,6,3,3,3,3,1,Road · Full house · Group of 5 opponent
+v3.0,2026,2026-11-07,Wake Forest,Merrimack,home,77,0,-46.5,33.4,42,35,0,8.6,AS EXPECTED,graded,pbp,40,23,1.2377,0.7124,12,ok,0,28,4,0,0,29,2,0,FCS opponent
+v3.0,2026,2026-11-07,Rutgers,Wisconsin,away,10,31,19.5,-18.5,-21,0,0,-2.5,AS EXPECTED,graded,pbp,60,53,-0.2151,-0.2988,3,ok,0,0,3,2,3,,1,0,Road
+v3.0,2026,2026-11-07,Syracuse,Clemson,home,13,18,1.5,-1.7,-5,0,0,-3.3,AS EXPECTED,graded,pbp,73,63,-0.0023,-0.023,1,ok,0,10,5,1,4,,1,1,
+v3.0,2026,2026-11-07,Ohio State,Oregon,home,28,41,-7.5,8.2,-21,8,0,-29.2,CERTIFIED SOFT,graded,pbp,53,71,-0.3199,0.1149,-20,ok,0,14,6,0,2,-35,0,1,Ranked opponent
+v3.0,2026,2026-11-07,Oklahoma State,Kansas State,away,66,28,-7.0,7.6,42,10,14,34.4,CERTIFIED DAWG,graded,pbp,46,37,0.7483,0.1072,20,ok,0,28,7,1,1,28,3,2,Road · Full house
+v3.0,2026,2026-11-07,Auburn,Arkansas,home,26,23,-10.5,11.2,3,0,0,-8.2,AS EXPECTED,graded,pbp,74,74,0.0481,0.1609,-6,ok,0,17,6,2,4,,2,0,
+v3.0,2026,2026-11-07,Oklahoma,Florida,away,23,7,4.0,-4.4,16,0,0,20.4,DAWG,graded,pbp,73,48,0.307,-0.0613,16,ok,0,20,7,1,1,6,2,0,Road · Night · Full house · Ranked opponent
+v3.0,2026,2026-11-07,UCF,Kansas,away,33,32,6.0,-6.6,1,0,0,7.6,AS EXPECTED,graded,pbp,68,70,-0.1408,-0.0919,-2,ok,0,17,7,2,4,-11,2,2,Road
+v3.0,2026,2026-11-07,Penn State,Washington,away,28,25,2.5,-2.8,3,0,0,5.8,AS EXPECTED,graded,pbp,64,58,-0.0038,-0.0383,2,ok,0,14,4,1,1,-8,1,0,Road · Full house
+v3.0,2026,2026-11-07,Cincinnati,Houston,away,24,31,10.0,-10.7,-7,0,0,3.7,AS EXPECTED,graded,pbp,71,59,-0.0696,-0.1532,4,ok,0,10,2,0,3,,0,1,Road · Ranked opponent
+v3.0,2026,2026-11-07,Clemson,Syracuse,away,18,13,-1.5,1.7,5,0,0,3.3,AS EXPECTED,graded,pbp,63,73,0.0023,0.023,-1,ok,0,3,7,2,3,-7,1,1,Road
+v3.0,2026,2026-11-07,Iowa,Northwestern,away,24,10,-3.0,3.3,14,0,0,10.7,AS EXPECTED,graded,pbp,54,69,-0.0154,0.046,-3,ok,0,10,7,0,0,0,0,2,Road · Night
+v3.0,2026,2026-11-07,Kansas,UCF,home,32,33,-6.0,6.6,-1,0,0,-7.6,AS EXPECTED,graded,pbp,70,68,0.1408,0.0919,2,ok,0,24,6,0,3,,2,2,
+v3.0,2026,2026-11-07,Kansas State,Oklahoma State,home,28,66,7.0,-7.6,-42,14,10,-34.4,CERTIFIED SOFT,graded,pbp,37,46,-0.7483,-0.1072,-20,ok,0,0,2,1,2,,2,3,
+v3.0,2026,2026-11-07,Vanderbilt,Mississippi State,away,25,23,3.0,-3.3,2,0,0,5.3,AS EXPECTED,graded,pbp,79,55,0.0655,-0.046,5,ok,0,22,9,0,0,-8,1,0,Road
+v3.0,2026,2026-11-07,Baylor,Iowa State,home,42,31,-10.0,10.7,11,0,0,0.3,AS EXPECTED,graded,pbp,65,81,-0.0495,0.1532,-11,ok,0,28,6,0,1,0,0,0,
+v3.0,2026,2026-11-07,Miami,Notre Dame,away,24,31,7.5,-8.2,-7,0,0,1.2,AS EXPECTED,graded,pbp,71,69,-0.0786,-0.1149,2,ok,0,7,6,0,1,,0,2,Road · Night · Full house · Ranked opponent
+v3.0,2026,2026-11-07,Texas A&M,South Carolina,away,9,17,6.5,-7.1,-8,0,0,-0.9,AS EXPECTED,graded,pbp,86,59,-0.129,-0.0996,-2,ok,0,6,7,0,2,,1,0,Road · Full house · Ranked opponent
+v3.0,2026,2026-11-07,Houston,Cincinnati,home,31,24,-10.0,10.7,7,0,0,-3.7,AS EXPECTED,graded,pbp,59,71,0.0696,0.1532,-4,ok,0,7,2,3,4,-7,1,0,
+v3.0,2026,2026-11-07,Oregon,Ohio State,away,41,28,7.5,-8.2,21,0,8,29.2,CERTIFIED DAWG,graded,pbp,71,53,0.3199,-0.1149,20,ok,0,28,9,0,1,11,1,0,Road · Full house · Ranked opponent
+v3.0,2026,2026-11-07,Purdue,Maryland,home,29,34,-5.5,6.0,-5,0,0,-11.0,AS EXPECTED,graded,pbp,80,45,-0.3751,0.0843,-21,ok,0,6,4,1,2,-14,1,1,
+v3.0,2026,2026-11-07,Texas,Missouri,away,34,20,-2.5,2.8,14,0,0,11.2,AS EXPECTED,graded,pbp,69,68,0.135,0.0383,5,ok,0,20,8,3,4,0,1,1,Road · Full house · Ranked opponent
+v3.0,2026,2026-11-07,BYU,Utah,away,20,28,4.0,-4.4,-8,0,0,-3.6,AS EXPECTED,graded,pbp,64,62,-0.0621,-0.0613,0,ok,0,17,7,0,3,,2,4,Road · Full house · Top-10 opponent
+v3.0,2026,2026-11-07,Utah,BYU,home,28,20,-4.0,4.4,8,0,0,3.6,AS EXPECTED,graded,pbp,62,64,0.0621,0.0613,0,ok,0,21,7,0,3,-6,4,2,Top-10 opponent
+v3.0,2026,2026-11-07,South Carolina,Texas A&M,home,17,9,-6.5,7.1,8,0,0,0.9,AS EXPECTED,graded,pbp,59,86,0.129,0.0996,2,ok,0,10,7,1,3,,0,1,
+v3.0,2026,2026-11-07,UCLA,Minnesota,away,34,20,-3.5,3.9,14,0,0,10.1,AS EXPECTED,graded,pbp,55,65,0.1348,0.0536,4,ok,0,17,8,3,4,4,1,2,Road
+v3.0,2026,2026-11-07,Tennessee,Kentucky,home,34,6,-6.5,7.1,28,0,0,20.9,DAWG,graded,pbp,52,69,0.3956,0.0996,13,ok,0,28,8,1,1,14,3,0,Night · Top-10 opponent
+v3.0,2026,2026-11-07,Washington,Penn State,home,25,28,-2.5,2.8,-3,0,0,-5.8,AS EXPECTED,graded,pbp,58,64,0.0038,0.0383,-2,ok,0,17,5,0,1,,0,1,
+v3.0,2026,2026-11-07,Texas Tech,West Virginia,home,53,48,-16.5,16.3,5,0,0,-11.3,AS EXPECTED,graded,pbp,80,74,-0.0692,0.2528,-18,ok,0,17,5,4,8,-6,0,0,Night
+v3.0,2026,2026-11-07,Wisconsin,Rutgers,home,31,10,-19.5,18.5,21,0,0,2.5,AS EXPECTED,graded,pbp,53,60,0.2151,0.2988,-3,ok,0,27,7,1,2,7,0,1,
+v3.0,2026,2026-11-07,West Virginia,Texas Tech,away,48,53,16.5,-16.3,-5,0,0,11.3,AS EXPECTED,graded,pbp,74,80,0.0692,-0.2528,18,ok,0,17,6,3,6,,0,0,Road · Night · Full house · Ranked opponent
+v3.0,2026,2026-11-07,Alabama,LSU,away,31,13,6.0,-6.6,18,0,0,24.6,CERTIFIED DAWG,graded,pbp,52,81,0.1454,-0.0919,12,ok,0,21,6,1,3,7,1,0,Road · Full house · Ranked opponent
+v3.0,2026,2026-11-07,Mississippi State,Vanderbilt,home,23,25,-3.0,3.3,-2,0,0,-5.3,AS EXPECTED,graded,pbp,55,79,-0.0655,0.046,-5,ok,0,10,5,0,1,,0,1,
+v3.0,2026,2026-11-07,Colorado,Arizona State,away,10,20,3.0,-3.3,-10,0,0,-6.7,AS EXPECTED,graded,pbp,67,64,-0.1448,-0.046,-5,ok,0,3,5,0,1,,0,1,Road · Full house
+v3.0,2026,2026-11-07,Florida State,Boston College,away,31,24,-5.5,6.0,7,0,0,1.0,AS EXPECTED,graded,pbp,72,61,0.0867,0.0843,0,ok,0,21,4,1,2,,2,1,Road
+v3.0,2026,2026-11-07,Florida,Oklahoma,home,7,23,-4.0,4.4,-16,0,0,-20.4,SOFT,graded,pbp,48,73,-0.307,0.0613,-16,ok,0,7,4,0,1,,0,2,Night
+v3.0,2026,2026-11-07,Georgia Tech,Louisville,home,17,44,14.5,-14.8,-34,7,0,-19.2,SOFT,graded,pbp,56,51,-0.477,-0.2222,-10,ok,0,0,0,0,2,,0,1,Night
+v3.0,2026,2026-11-07,Georgia,Ole Miss,away,42,7,-3.5,3.9,35,7,7,31.1,CERTIFIED DAWG,graded,pbp,51,47,0.5663,0.0536,18,ok,0,28,5,0,0,21,2,0,Road · Night · Full house · Top-10 opponent
+v3.0,2026,2026-11-07,Iowa State,Baylor,away,31,42,10.0,-10.7,-11,0,0,-0.3,AS EXPECTED,graded,pbp,81,65,0.0495,-0.1532,11,ok,0,10,5,1,2,-21,0,0,Road
+v3.0,2026,2026-11-07,Northwestern,Iowa,home,10,24,3.0,-3.3,-14,0,0,-10.7,AS EXPECTED,graded,pbp,69,54,0.0154,-0.046,3,ok,0,10,5,0,1,,2,0,Night · Ranked opponent
+v3.0,2026,2026-11-07,Arkansas,Auburn,away,23,26,10.5,-11.2,-3,0,0,8.2,AS EXPECTED,graded,pbp,74,74,-0.0481,-0.1609,6,ok,0,10,7,3,4,-13,0,2,Road · Full house
+v3.0,2026,2026-11-07,Notre Dame,Miami,home,31,24,-7.5,8.2,7,0,0,-1.2,AS EXPECTED,graded,pbp,69,71,0.0786,0.1149,-2,ok,0,28,6,0,3,-3,2,0,Night · Top-10 opponent
+v3.0,2026,2026-11-07,Arizona State,Colorado,home,20,10,-3.0,3.3,10,0,0,6.7,AS EXPECTED,graded,pbp,64,67,0.1448,0.046,5,ok,0,17,7,0,0,0,1,0,
+v3.0,2026,2026-11-07,Kentucky,Tennessee,away,6,34,6.5,-7.1,-28,0,0,-20.9,SOFT,graded,pbp,69,52,-0.3956,-0.0996,-13,ok,0,3,4,1,3,,0,3,Road · Night · Full house · Ranked opponent
+v3.0,2026,2026-11-07,Louisville,Georgia Tech,away,44,17,-14.5,14.8,34,0,7,19.2,DAWG,graded,pbp,51,56,0.477,0.2222,10,ok,0,27,5,1,1,20,1,0,Road · Night
+v3.0,2026,2026-11-07,LSU,Alabama,home,13,31,-6.0,6.6,-18,0,0,-24.6,CERTIFIED SOFT,graded,pbp,81,52,-0.1454,0.0919,-12,ok,0,7,4,1,3,,0,1,Top-10 opponent
