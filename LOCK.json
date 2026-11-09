@@ -1,17 +1,12 @@
 {
- "acquired": "2026-11-09T22:19:47Z",
- "expires": "2026-11-09T23:19:47Z",
- "holder": "site",
  "last": {
-  "detail": "AP poll refresh: step 4d lock check failed (lock expired before push); site not published",
-  "finished": "2026-11-09T02:50:46Z",
+  "detail": "CFP rankings switch",
+  "finished": "2026-11-09T22:20:54Z",
   "holder": "site",
-  "result": "failed",
-  "run": "site-20261108T235216Z-2834"
+  "result": "ok",
+  "run": "site-20261109T221946Z-b3ae"
  },
- "note": "CFP rankings switch (poll refresh path)",
- "run": "site-20261109T221946Z-b3ae",
- "state": "held",
+ "state": "free",
  "sunday": {
   "detail": "SUNDAY: deploy: commit and push the published site",
   "finished": "2026-11-08T18:44:11Z",
