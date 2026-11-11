@@ -1,4 +1,7 @@
 {
+ "acquired": "2026-11-11T03:08:53Z",
+ "expires": "2026-11-11T04:08:53Z",
+ "holder": "site",
  "last": {
   "detail": "CFP rankings switch",
   "finished": "2026-11-09T22:20:54Z",
@@ -6,7 +9,9 @@
   "result": "ok",
   "run": "site-20261109T221946Z-b3ae"
  },
- "state": "free",
+ "note": "poll refresh",
+ "run": "site-20261111T030852Z-d441",
+ "state": "held",
  "sunday": {
   "detail": "SUNDAY: deploy: commit and push the published site",
   "finished": "2026-11-08T18:44:11Z",
