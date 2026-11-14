@@ -1,4 +1,7 @@
 {
+ "acquired": "2026-11-14T16:18:40Z",
+ "expires": "2026-11-14T17:18:40Z",
+ "holder": "site",
  "last": {
   "detail": "poll refresh",
   "finished": "2026-11-11T03:09:23Z",
@@ -6,7 +9,9 @@
   "result": "ok",
   "run": "site-20261111T030852Z-d441"
  },
- "state": "free",
+ "note": "kickoff times after FAA ground stop",
+ "run": "site-20261114T161839Z-e7f7",
+ "state": "held",
  "sunday": {
   "detail": "SUNDAY: deploy: commit and push the published site",
   "finished": "2026-11-08T18:44:11Z",
