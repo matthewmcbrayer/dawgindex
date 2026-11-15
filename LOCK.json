@@ -1,21 +1,19 @@
 {
- "acquired": "2026-11-15T16:18:53Z",
- "expires": "2026-11-15T17:38:53Z",
- "holder": "sunday",
  "last": {
-  "detail": "kickoff times after FAA ground stop",
-  "finished": "2026-11-14T16:20:25Z",
-  "holder": "site",
+  "detail": "SUNDAY: deploy: commit and push the published site",
+  "finished": "2026-11-15T16:29:41Z",
+  "holder": "sunday",
   "result": "ok",
-  "run": "site-20261114T161839Z-e7f7"
+  "run": "sunday-20261115T161852Z-31b7"
  },
- "note": "source main",
- "run": "sunday-20261115T161852Z-31b7",
- "state": "held",
+ "state": "free",
  "sunday": {
-  "result": "running",
+  "detail": "SUNDAY: deploy: commit and push the published site",
+  "finished": "2026-11-15T16:29:41Z",
+  "result": "ok",
   "run": "sunday-20261115T161852Z-31b7",
-  "started": "2026-11-15T16:18:53Z"
+  "started": "2026-11-15T16:18:53Z",
+  "week": "Week 11"
  },
  "version": 1
 }
