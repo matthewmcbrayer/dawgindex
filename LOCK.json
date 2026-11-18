@@ -1,4 +1,7 @@
 {
+ "acquired": "2026-11-18T04:04:05Z",
+ "expires": "2026-11-18T05:04:05Z",
+ "holder": "site",
  "last": {
   "detail": "SUNDAY: deploy: commit and push the published site",
   "finished": "2026-11-15T16:29:41Z",
@@ -6,7 +9,9 @@
   "result": "ok",
   "run": "sunday-20261115T161852Z-31b7"
  },
- "state": "free",
+ "note": "poll refresh",
+ "run": "site-20261118T040404Z-0c72",
+ "state": "held",
  "sunday": {
   "detail": "SUNDAY: deploy: commit and push the published site",
   "finished": "2026-11-15T16:29:41Z",
